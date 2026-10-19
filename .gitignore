@@ -1,0 +1,16 @@
+# Visual Studio / .NET / Rider
+.vs/
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Backups
+*.bak
+*.bak-*
+
+# Logs & temp
+*.log
+.tmp/

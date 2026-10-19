@@ -1,0 +1,423 @@
+<!--
+    图标规范全场景测试与展示窗口 (Icon Gallery Test Window)
+    覆盖测试场景：
+      1. 尺寸梯度阶梯 (Micro 12px -> Hero 32px)
+      2. 矢量几何图形展示库 (搜索/关闭/勾选/添加/编辑/删除/刷新/设置/筛选/导入导出/复制/文件/文件夹/折叠/语义)
+      3. 动态着色与状态反转契约 (主按钮白字白标、次要按钮深标、危险按钮红标、幽灵图标按钮悬停态)
+      4. 纯图标按钮矩阵 (Button.Icon 24px/28px/34px，悬停/按下/禁用/危险变色)
+      5. 图标与文字混排间距 (4px/6px/8px 对齐、垂直居中)
+      6. 业务集成场景 (带清除按钮的搜索框、表格行内操作、Tab 标头图标、状态通知栏)
+-->
+<Window x:Class="OpenCAD.WpfStyles.Samples.IconGalleryWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="OpenCAD WPF 图标系统全场景测试矩阵"
+        Width="1000" Height="860"
+        MinWidth="800" MinHeight="650"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Theme/Theme.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid Margin="{StaticResource Layout.WindowPadding}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- 页面顶部标题 -->
+        <Border Grid.Row="0" BorderBrush="{StaticResource Brush.Border}" BorderThickness="0,0,0,1" Padding="0,0,0,12" Margin="0,0,0,12">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Path Data="{StaticResource Icon.Geo.Settings}" Style="{StaticResource Icon.Medium}" Margin="0,0,8,0" />
+                        <TextBlock Text="WPF 图标系统规范测试套件 (Icon System Suite)" Style="{StaticResource Text.Title}" FontWeight="SemiBold" />
+                    </StackPanel>
+                    <TextBlock Text="严格遵循 24x24 矢量网格、动态上下文前景继承、尺寸阶梯与 ToolTip 无障碍契约。"
+                               Style="{StaticResource Text.Caption}" Margin="28,4,0,0" />
+                </StackPanel>
+                
+                <!-- 顶部快捷操作 -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Style="{StaticResource Button.Icon}" ToolTip="刷新画廊 (F5)" Margin="0,0,4,0">
+                        <Path Data="{StaticResource Icon.Geo.Refresh}" Style="{StaticResource Icon.Regular}" />
+                    </Button>
+                    <Button Style="{StaticResource Button.Icon}" ToolTip="筛选器" Margin="0,0,4,0">
+                        <Path Data="{StaticResource Icon.Geo.Filter}" Style="{StaticResource Icon.Regular}" />
+                    </Button>
+                    <Button Style="{StaticResource Button.Icon.Danger}" ToolTip="清空所有测试缓存">
+                        <Path Data="{StaticResource Icon.Geo.Trash}" Style="{StaticResource Icon.Regular}" />
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- 主内容：单层滚动 -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel>
+
+                <!-- ==========================================
+                     测试场景 1：尺寸阶梯验证 (12 -> 32)
+                     ========================================== -->
+                <GroupBox Header="1. 图标尺寸阶梯 (Icon Size Hierarchy)">
+                    <StackPanel>
+                        <TextBlock Text="验证各标准尺寸下的栅格渲染清晰度与像素对齐效果：" Style="{StaticResource Text.Caption}" Margin="0,0,0,10" />
+                        <WrapPanel Orientation="Horizontal">
+                            
+                            <!-- Micro 12px -->
+                            <Border BorderBrush="{StaticResource Brush.Border}" BorderThickness="1" CornerRadius="{StaticResource Radius.Card}" Padding="10" Margin="0,0,12,8" Width="135">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <Path Data="{StaticResource Icon.Geo.Settings}" Style="{StaticResource Icon.Micro}" Margin="0,6" />
+                                    <TextBlock Text="Micro (12px)" Style="{StaticResource Text.Caption}" HorizontalAlignment="Center" />
+                                    <TextBlock Text="徽章/节点标记" Style="{StaticResource Text.Hint}" HorizontalAlignment="Center" Margin="0,2,0,0" />
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Small 14px -->
+                            <Border BorderBrush="{StaticResource Brush.Border}" BorderThickness="1" CornerRadius="{StaticResource Radius.Card}" Padding="10" Margin="0,0,12,8" Width="135">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <Path Data="{StaticResource Icon.Geo.Settings}" Style="{StaticResource Icon.Small}" Margin="0,5" />
+                                    <TextBlock Text="Small (14px)" Style="{StaticResource Text.Caption}" HorizontalAlignment="Center" />
+                                    <TextBlock Text="表格紧凑/尾缀" Style="{StaticResource Text.Hint}" HorizontalAlignment="Center" Margin="0,2,0,0" />
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Regular 16px (默认) -->
+                            <Border BorderBrush="{StaticResource Brush.Accent}" BorderThickness="1" Background="{StaticResource Brush.Accent.Subtle}" CornerRadius="{StaticResource Radius.Card}" Padding="10" Margin="0,0,12,8" Width="145">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <Path Data="{StaticResource Icon.Geo.Settings}" Style="{StaticResource Icon.Regular}" Margin="0,4" />
+                                    <TextBlock Text="Regular (16px) ★" Style="{StaticResource Text.Caption}" FontWeight="Bold" HorizontalAlignment="Center" Foreground="{StaticResource Brush.Accent}" />
+                                    <TextBlock Text="按钮/菜单基准" Style="{StaticResource Text.Hint}" HorizontalAlignment="Center" Margin="0,2,0,0" />
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Medium 20px -->
+                            <Border BorderBrush="{StaticResource Brush.Border}" BorderThickness="1" CornerRadius="{StaticResource Radius.Card}" Padding="10" Margin="0,0,12,8" Width="135">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <Path Data="{StaticResource Icon.Geo.Settings}" Style="{StaticResource Icon.Medium}" Margin="0,2" />
+                                    <TextBlock Text="Medium (20px)" Style="{StaticResource Text.Caption}" HorizontalAlignment="Center" />
+                                    <TextBlock Text="工具栏/操作条" Style="{StaticResource Text.Hint}" HorizontalAlignment="Center" Margin="0,2,0,0" />
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Large 24px -->
+                            <Border BorderBrush="{StaticResource Brush.Border}" BorderThickness="1" CornerRadius="{StaticResource Radius.Card}" Padding="10" Margin="0,0,12,8" Width="135">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <Path Data="{StaticResource Icon.Geo.Settings}" Style="{StaticResource Icon.Large}" />
+                                    <TextBlock Text="Large (24px)" Style="{StaticResource Text.Caption}" HorizontalAlignment="Center" />
+                                    <TextBlock Text="通知/卡片主标" Style="{StaticResource Text.Hint}" HorizontalAlignment="Center" Margin="0,2,0,0" />
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Hero 32px -->
+                            <Border BorderBrush="{StaticResource Brush.Border}" BorderThickness="1" CornerRadius="{StaticResource Radius.Card}" Padding="10" Margin="0,0,12,8" Width="135">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <Path Data="{StaticResource Icon.Geo.Settings}" Style="{StaticResource Icon.Hero}" />
+                                    <TextBlock Text="Hero (32px)" Style="{StaticResource Text.Caption}" HorizontalAlignment="Center" />
+                                    <TextBlock Text="引导/空状态" Style="{StaticResource Text.Hint}" HorizontalAlignment="Center" Margin="0,2,0,0" />
+                                </StackPanel>
+                            </Border>
+                        </WrapPanel>
+                    </StackPanel>
+                </GroupBox>
+
+                <!-- ==========================================
+                     测试场景 2：动态着色与状态反转契约 (绝不白底白标/深底黑标)
+                     ========================================== -->
+                <GroupBox Header="2. 动态着色契约验证 (Dynamic Inversion Contract)">
+                    <StackPanel>
+                        <TextBlock Text="验证同一 Path 图标放入不同背景与状态控件内时，自动正确变色：" Style="{StaticResource Text.Caption}" Margin="0,0,0,10" />
+                        <WrapPanel Orientation="Horizontal">
+                            
+                            <!-- 主按钮：蓝底白标 (Brush.OnAccent) -->
+                            <Button Style="{StaticResource Button.Primary}" Margin="0,0,10,8">
+                                <StackPanel Orientation="Horizontal">
+                                    <Path Data="{StaticResource Icon.Geo.Download}" Style="{StaticResource Icon.Regular}" Margin="0,0,6,0" />
+                                    <TextBlock Text="主按钮 (白标)" VerticalAlignment="Center" />
+                                </StackPanel>
+                            </Button>
+
+                            <!-- 禁用主按钮：灰底灰标 (Brush.Text.Disabled) -->
+                            <Button Style="{StaticResource Button.Primary}" IsEnabled="False" Margin="0,0,10,8">
+                                <StackPanel Orientation="Horizontal">
+                                    <Path Data="{StaticResource Icon.Geo.Download}" Style="{StaticResource Icon.Regular}" Margin="0,0,6,0" />
+                                    <TextBlock Text="主按钮禁用" VerticalAlignment="Center" />
+                                </StackPanel>
+                            </Button>
+
+                            <!-- 次要按钮：白底深标，悬停高亮 -->
+                            <Button Style="{StaticResource Button.Secondary}" Margin="0,0,10,8">
+                                <StackPanel Orientation="Horizontal">
+                                    <Path Data="{StaticResource Icon.Geo.Refresh}" Style="{StaticResource Icon.Regular}" Margin="0,0,6,0" />
+                                    <TextBlock Text="次按钮 (深标)" VerticalAlignment="Center" />
+                                </StackPanel>
+                            </Button>
+
+                            <!-- 危险按钮：红边红标 -->
+                            <Button Style="{StaticResource Button.Danger}" Margin="0,0,10,8">
+                                <StackPanel Orientation="Horizontal">
+                                    <Path Data="{StaticResource Icon.Geo.Trash}" Style="{StaticResource Icon.Regular}" Margin="0,0,6,0" />
+                                    <TextBlock Text="删除项目" VerticalAlignment="Center" />
+                                </StackPanel>
+                            </Button>
+
+                            <!-- 文本按钮 -->
+                            <Button Style="{StaticResource Button.Text}" Margin="0,0,10,8">
+                                <StackPanel Orientation="Horizontal">
+                                    <Path Data="{StaticResource Icon.Geo.Edit}" Style="{StaticResource Icon.Regular}" Margin="0,0,6,0" />
+                                    <TextBlock Text="编辑详情" VerticalAlignment="Center" />
+                                </StackPanel>
+                            </Button>
+
+                            <!-- 紧凑小号主按钮 -->
+                            <Button Style="{StaticResource Button.Primary.Small}" Margin="0,0,10,8">
+                                <StackPanel Orientation="Horizontal">
+                                    <Path Data="{StaticResource Icon.Geo.Plus}" Style="{StaticResource Icon.Small}" Margin="0,0,4,0" />
+                                    <TextBlock Text="新建" VerticalAlignment="Center" />
+                                </StackPanel>
+                            </Button>
+
+                        </WrapPanel>
+                    </StackPanel>
+                </GroupBox>
+
+                <!-- ==========================================
+                     测试场景 3：纯图标按钮矩阵与状态覆盖
+                     ========================================== -->
+                <GroupBox Header="3. 纯图标按钮状态矩阵 (IconButton &amp; ToolTip Matrix)">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <!-- 表头 -->
+                        <TextBlock Grid.Column="0" Text="规格 / 类型" Style="{StaticResource Text.Label}" Margin="8,4" />
+                        <TextBlock Grid.Column="1" Text="默认态 (Normal)" Style="{StaticResource Text.Label}" Margin="8,4" />
+                        <TextBlock Grid.Column="2" Text="操作组 (Hover/Active)" Style="{StaticResource Text.Label}" Margin="8,4" />
+                        <TextBlock Grid.Column="3" Text="禁用态 (Disabled)" Style="{StaticResource Text.Label}" Margin="8,4" />
+
+                        <!-- 行 1: Button.Icon 标准 (28x28) -->
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="标准 (28px - Button.Icon)" VerticalAlignment="Center" Style="{StaticResource Text.Caption}" Margin="8,6" />
+                        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="8,6">
+                            <Button Style="{StaticResource Button.Icon}" ToolTip="设置参数">
+                                <Path Data="{StaticResource Icon.Geo.Settings}" Style="{StaticResource Icon.Regular}" />
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal" Margin="8,6">
+                            <Button Style="{StaticResource Button.Icon}" ToolTip="添加新图纸" Margin="0,0,4,0">
+                                <Path Data="{StaticResource Icon.Geo.Plus}" Style="{StaticResource Icon.Regular}" />
+                            </Button>
+                            <Button Style="{StaticResource Button.Icon}" ToolTip="复制路径" Margin="0,0,4,0">
+                                <Path Data="{StaticResource Icon.Geo.Copy}" Style="{StaticResource Icon.Regular}" />
+                            </Button>
+                            <Button Style="{StaticResource Button.Icon.Danger}" ToolTip="删除图层">
+                                <Path Data="{StaticResource Icon.Geo.Trash}" Style="{StaticResource Icon.Regular}" />
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Grid.Row="1" Grid.Column="3" Orientation="Horizontal" Margin="8,6">
+                            <Button Style="{StaticResource Button.Icon}" IsEnabled="False" ToolTip="无法设置（已禁用）">
+                                <Path Data="{StaticResource Icon.Geo.Settings}" Style="{StaticResource Icon.Regular}" />
+                            </Button>
+                        </StackPanel>
+
+                        <!-- 行 2: Button.Icon.Small (24x24) -->
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="紧凑 (24px - Button.Icon.Small)" VerticalAlignment="Center" Style="{StaticResource Text.Caption}" Margin="8,6" />
+                        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="8,6">
+                            <Button Style="{StaticResource Button.Icon.Small}" ToolTip="搜索">
+                                <Path Data="{StaticResource Icon.Geo.Search}" Style="{StaticResource Icon.Small}" />
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal" Margin="8,6">
+                            <Button Style="{StaticResource Button.Icon.Small}" ToolTip="编辑字段" Margin="0,0,4,0">
+                                <Path Data="{StaticResource Icon.Geo.Edit}" Style="{StaticResource Icon.Small}" />
+                            </Button>
+                            <Button Style="{StaticResource Button.Icon.Danger.Small}" ToolTip="删除记录">
+                                <Path Data="{StaticResource Icon.Geo.Close}" Style="{StaticResource Icon.Small}" />
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Grid.Row="2" Grid.Column="3" Orientation="Horizontal" Margin="8,6">
+                            <Button Style="{StaticResource Button.Icon.Small}" IsEnabled="False" ToolTip="已锁定不可删除">
+                                <Path Data="{StaticResource Icon.Geo.Close}" Style="{StaticResource Icon.Small}" />
+                            </Button>
+                        </StackPanel>
+
+                        <!-- 行 3: Button.Icon.Large (34x34) -->
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="大号 (34px - Button.Icon.Large)" VerticalAlignment="Center" Style="{StaticResource Text.Caption}" Margin="8,6" />
+                        <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Margin="8,6">
+                            <Button Style="{StaticResource Button.Icon.Large}" ToolTip="打开工作区">
+                                <Path Data="{StaticResource Icon.Geo.Folder}" Style="{StaticResource Icon.Medium}" />
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Grid.Row="3" Grid.Column="2" Orientation="Horizontal" Margin="8,6">
+                            <Button Style="{StaticResource Button.Icon.Large}" ToolTip="导出模型" Margin="0,0,4,0">
+                                <Path Data="{StaticResource Icon.Geo.Download}" Style="{StaticResource Icon.Medium}" />
+                            </Button>
+                            <Button Style="{StaticResource Button.Icon.Large}" ToolTip="上传到云端">
+                                <Path Data="{StaticResource Icon.Geo.Upload}" Style="{StaticResource Icon.Medium}" />
+                            </Button>
+                        </StackPanel>
+                        <StackPanel Grid.Row="3" Grid.Column="3" Orientation="Horizontal" Margin="8,6">
+                            <Button Style="{StaticResource Button.Icon.Large}" IsEnabled="False" ToolTip="当前离线不可同步">
+                                <Path Data="{StaticResource Icon.Geo.Upload}" Style="{StaticResource Icon.Medium}" />
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </GroupBox>
+
+                <!-- ==========================================
+                     测试场景 4：语义提示与通知卡片
+                     ========================================== -->
+                <GroupBox Header="4. 语义着色与状态反馈 (Semantic State Badges)">
+                    <StackPanel>
+                        <Grid Margin="0,0,0,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            
+                            <!-- 成功提示条 -->
+                            <Border Grid.Column="0" Background="#F0FDF4" BorderBrush="#BBF7D0" BorderThickness="1" CornerRadius="{StaticResource Radius.Card}" Padding="12,10" Margin="0,0,8,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <Path Data="{StaticResource Icon.Geo.SuccessCircle}" Style="{StaticResource Icon.Medium.Success}" Margin="0,0,8,0" />
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="图纸模型校验通过" FontWeight="SemiBold" Foreground="{StaticResource Brush.Success}" />
+                                        <TextBlock Text="未检测到重叠实体或未闭合线段。" Style="{StaticResource Text.Caption}" Margin="0,2,0,0" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- 警告提示条 -->
+                            <Border Grid.Column="1" Background="#FFFBEB" BorderBrush="#FDE68A" BorderThickness="1" CornerRadius="{StaticResource Radius.Card}" Padding="12,10" Margin="8,0,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <Path Data="{StaticResource Icon.Geo.WarningTriangle}" Style="{StaticResource Icon.Medium.Warning}" Margin="0,0,8,0" />
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="检测到图层命名未标准化" FontWeight="SemiBold" Foreground="{StaticResource Brush.Warning}" />
+                                        <TextBlock Text="3 个外部导入图层与团队模板冲突。" Style="{StaticResource Text.Caption}" Margin="0,2,0,0" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            
+                            <!-- 错误阻断条 -->
+                            <Border Grid.Column="0" Background="{StaticResource Brush.Danger.Subtle}" BorderBrush="#FECACA" BorderThickness="1" CornerRadius="{StaticResource Radius.Card}" Padding="12,10" Margin="0,0,8,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <Path Data="{StaticResource Icon.Geo.ErrorCircle}" Style="{StaticResource Icon.Medium.Danger}" Margin="0,0,8,0" />
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="文件读取失败" FontWeight="SemiBold" Foreground="{StaticResource Brush.Danger}" />
+                                        <TextBlock Text="DXF 解析器遇到非法的 ASCII 编码段落。" Style="{StaticResource Text.Caption}" Margin="0,2,0,0" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- 信息通知条 -->
+                            <Border Grid.Column="1" Background="{StaticResource Brush.Accent.Subtle}" BorderBrush="#BFDBFE" BorderThickness="1" CornerRadius="{StaticResource Radius.Card}" Padding="12,10" Margin="8,0,0,0">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <Path Data="{StaticResource Icon.Geo.Info}" Style="{StaticResource Icon.Medium.Info}" Margin="0,0,8,0" />
+                                    <StackPanel VerticalAlignment="Center">
+                                        <TextBlock Text="新版几何内核就绪" FontWeight="SemiBold" Foreground="{StaticResource Brush.Accent}" />
+                                        <TextBlock Text="重绘引擎已升级至 v2.4，运算性能提升 30%。" Style="{StaticResource Text.Caption}" Margin="0,2,0,0" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </StackPanel>
+                </GroupBox>
+
+                <!-- ==========================================
+                     测试场景 5：复杂业务控件集成 (输入框/表格/Tab)
+                     ========================================== -->
+                <GroupBox Header="5. 业务控件复合集成 (Real-world Integration)">
+                    <StackPanel>
+                        <!-- 带内嵌图标与清除按钮的搜索框 -->
+                        <TextBlock Text="带前缀与后缀图标按钮的输入组合：" Style="{StaticResource Text.Caption}" Margin="0,0,0,6" />
+                        <Grid Width="380" HorizontalAlignment="Left" Margin="0,0,0,12">
+                            <TextBox Padding="28,0,28,0" Text="Part_Bracket_Assembly_v3.dwg" />
+                            <!-- 前缀放大镜 -->
+                            <Path Data="{StaticResource Icon.Geo.Search}" Style="{StaticResource Icon.Small}"
+                                  HorizontalAlignment="Left" Margin="8,0,0,0"
+                                  IsHitTestVisible="False" Opacity="0.6" />
+                            <!-- 后缀一键清除按钮 -->
+                            <Button Style="{StaticResource Button.Icon.Small}"
+                                    HorizontalAlignment="Right" Margin="0,0,3,0"
+                                    ToolTip="清空输入内容">
+                                <Path Data="{StaticResource Icon.Geo.Close}" Style="{StaticResource Icon.Small}" />
+                            </Button>
+                        </Grid>
+
+                        <!-- 带图标的选项卡 (TabControl) -->
+                        <TextBlock Text="Tab 标头混排图标：" Style="{StaticResource Text.Caption}" Margin="0,0,0,6" />
+                        <TabControl Height="120">
+                            <TabItem>
+                                <TabItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Path Data="{StaticResource Icon.Geo.File}" Style="{StaticResource Icon.Regular}" Margin="0,0,6,0" />
+                                        <TextBlock Text="图纸清单 (12)" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </TabItem.Header>
+                                <Border Padding="10">
+                                    <TextBlock Text="当前图纸文件列表视图，支持拖拽排序与批量操作。" Style="{StaticResource Text.Body}" />
+                                </Border>
+                            </TabItem>
+                            <TabItem>
+                                <TabItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Path Data="{StaticResource Icon.Geo.Settings}" Style="{StaticResource Icon.Regular}" Margin="0,0,6,0" />
+                                        <TextBlock Text="转换参数" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </TabItem.Header>
+                                <Border Padding="10">
+                                    <TextBlock Text="DXF 转换参数配置面板。" Style="{StaticResource Text.Body}" />
+                                </Border>
+                            </TabItem>
+                        </TabControl>
+                    </StackPanel>
+                </GroupBox>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- 底部栏 -->
+        <Border Grid.Row="2" BorderBrush="{StaticResource Brush.Border}" BorderThickness="0,1,0,0" Padding="0,12,0,0" Margin="0,12,0,0">
+            <Grid>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Path Data="{StaticResource Icon.Geo.Check}" Style="{StaticResource Icon.Small}" Margin="0,0,6,0" />
+                    <TextBlock Text="图标系统契约已挂载: OpenCAD WPF Design System" Style="{StaticResource Text.Caption}" VerticalAlignment="Center" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Content="关闭" IsCancel="True" MinWidth="72" Margin="0,0,8,0" />
+                    <Button Content="导出测试报告" Style="{StaticResource Button.Primary}">
+                        <StackPanel Orientation="Horizontal">
+                            <Path Data="{StaticResource Icon.Geo.Download}" Style="{StaticResource Icon.Regular}" Margin="0,0,6,0" />
+                            <TextBlock Text="完成验证" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
