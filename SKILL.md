@@ -181,14 +181,16 @@ Rules:
          VerticalAlignment="Stretch" />
 ```
 
-### R10. Icon contracts: vector, dynamic foreground, accessibility
+### R10. Icon contracts: Google Material Symbols & dynamic foreground
 
-- **No bitmap/PNG icons**: all icons use 24x24 `StreamGeometry` paths (`Icon.Geo.*`) to avoid DPI blur.
-- **Dynamic foreground inheritance**: icon `Fill` must bind to `(TextElement.Foreground)` with `Stretch="Uniform"`. Never hardcode `Fill="#..."`.
+- **Official Material Symbols standard**: all icons are derived from Google Material Symbols (Apache 2.0 license, commercially free), designed on a standard 24x24 optical viewport (`StreamGeometry Icon.Geo.*`).
+- **No bitmap/PNG icons**: strictly vector geometry to avoid DPI blur across 100%–200% displays.
+- **Dynamic foreground inheritance**: icon `Fill` binds to `(TextElement.Foreground)` with `Stretch="Uniform"`. Never hardcode `Fill="#..."`.
 - **Icon size steps**: only use `Icon.Size.Micro` (12), `Icon.Size.Small` (14), `Icon.Size.Regular` (16 - default), `Icon.Size.Medium` (20), `Icon.Size.Large` (24), `Icon.Size.Hero` (32).
 - **Icon buttons**: use `Button.Icon` (28x28), `Button.Icon.Small` (24x24), or `Button.Icon.Large` (34x34).
 - **ToolTip required**: all icon-only buttons must provide a descriptive `ToolTip`.
 - **Icon-text gap**: use 6px horizontal gap between icon and text (`Margin="0,0,6,0"`).
+
 
 ### R11. Layout hierarchy & toolbar rules
 

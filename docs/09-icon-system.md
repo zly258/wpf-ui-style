@@ -1,8 +1,12 @@
-# 09. 图标设计与使用规范 (Icon System Specification)
+# 09. 图标设计与使用规范 (Google Material Symbols Standard)
 
 在工业 CAD 插件及工程桌面应用（如 OpenCADTranslate、EngineeringAI、auto_inventor 等）中，图标用于提供直观的功能认知、状态指示和工具交互。
 
-本规范规定图标的统一尺寸阶梯、栅格比例、几何路径标准、动态着色机制以及交互控件封装规范，彻底杜绝图标变形、边缘发虚、明暗主题失控、按钮白底白字或深底黑标等可用性问题。
+本系统**全面采用 Google Material Symbols 官方图标体系**（开源许可证：**Apache License 2.0**，允许自由商用、修改与分发）：
+- 统一基于 **24×24 视口网格（24px Optical Size）**；
+- 官方规范权重为 **Weight 400 (Regular) / Fill-based**，具备跨分辨率极高清晰度与抗锯齿能力；
+- 图标通过矢量 `StreamGeometry` 引入，并通过 WPF 动态画刷绑定，保证在明暗主题、主按钮（蓝底纯白）、禁用态（自动置灰）以及悬停态下 100% 正确着色。
+
 
 ---
 
@@ -138,35 +142,41 @@
 
 ---
 
-## 6. 图标资源清单 (Icon Geometry Registry)
+## 6. 官方图标资源映射清单 (Google Material Symbols Registry)
 
-所有几何 Path 保存在 `Theme/Icons.xaml`，以 `Icon.Geo.*` 为唯一前缀。包含但不限于以下通用几何：
+所有几何 Path 提取自官方 Google Material Symbols (Apache 2.0)，保存在 `Theme/Icons.xaml`，以 `Icon.Geo.*` 为统一 XAML 键名：
 
-1. **通用操作**:
-   - `Icon.Geo.Search` (搜索)
-   - `Icon.Geo.Close` (关闭/清除)
-   - `Icon.Geo.Check` (勾选/成功)
-   - `Icon.Geo.Plus` (添加/新建)
-   - `Icon.Geo.Edit` (编辑/修改)
-   - `Icon.Geo.Trash` (删除/清空)
-   - `Icon.Geo.Refresh` (刷新/同步)
-   - `Icon.Geo.Settings` (设置/配置)
-   - `Icon.Geo.Filter` (筛选/过滤)
-   - `Icon.Geo.Download` (下载/导出)
-   - `Icon.Geo.Upload` (上传/导入)
-   - `Icon.Geo.Copy` (复制/剪切板)
-   - `Icon.Geo.Folder` (文件夹/打开)
-   - `Icon.Geo.File` (单文件)
+| XAML 资源键名 | Material Symbol 官方原名 | 分类 | 用途 |
+|---|---|---|---|
+| `Icon.Geo.Search` | `search` | Action | 搜索框前缀、查找 |
+| `Icon.Geo.Close` | `close` | Action | 弹窗关闭、输入框一键清除 |
+| `Icon.Geo.Check` | `check` | Action | 确认、已选完成 |
+| `Icon.Geo.Plus` | `add` | Action | 新增词条、新建图纸 |
+| `Icon.Geo.Edit` | `edit` | Action | 编辑详情、修改行 |
+| `Icon.Geo.Trash` | `delete` | Action | 删除记录、清空 |
+| `Icon.Geo.Refresh` | `refresh` | Action | 刷新数据、重新翻译 |
+| `Icon.Geo.Settings` | `settings` | Action | 系统设置、首选项 |
+| `Icon.Geo.Filter` | `filter_alt` | Action | 列表数据过滤 |
+| `Icon.Geo.Download` | `download` | Action | 导出 CSV、保存文件 |
+| `Icon.Geo.Upload` | `upload` | Action | 导入 CSV、上传图纸 |
+| `Icon.Geo.Copy` | `content_copy` | Action | 一键复制译文/文本 |
+| `Icon.Geo.Folder` | `folder` | File | 打开文件夹/目录选择 |
+| `Icon.Geo.File` | `description` | File | 图纸文件、单条文档 |
+| `Icon.Geo.ChevronDown` | `expand_more` | Navigation | 树节点/折叠面板展开 |
+| `Icon.Geo.ChevronUp` | `expand_less` | Navigation | 树节点/折叠面板收起 |
+| `Icon.Geo.ChevronLeft` | `chevron_left` | Navigation | 上一页、后退 |
+| `Icon.Geo.ChevronRight` | `chevron_right` | Navigation | 下一页、前进 |
+| `Icon.Geo.Info` | `info` | Semantic | 规则说明、版本信息提示 |
+| `Icon.Geo.SuccessCircle` | `check_circle` | Semantic | 校验成功、导出完成 |
+| `Icon.Geo.WarningTriangle` | `warning` | Semantic | 命名冲突、参数警告 |
+| `Icon.Geo.ErrorCircle` | `cancel` | Semantic | 解析失败、严重错误阻断 |
 
-2. **方向与折叠**:
-   - `Icon.Geo.ChevronDown` / `ChevronUp` / `ChevronLeft` / `ChevronRight`
-   - `Icon.Geo.ArrowLeft` / `ArrowRight`
+### 6.1 如何扩展引入新的 Material Symbols 图标？
+1. 访问官方图标库：[Google Fonts / Material Symbols](https://fonts.google.com/icons)；
+2. 选择图标，选择 **24px / Fill 0 或 Fill 1 / Weight 400**；
+3. 复制其 `<path d="..." />` 中的路径数据字符串；
+4. 在 `Theme/Icons.xaml` 中声明 `<StreamGeometry x:Key="Icon.Geo.新名称">官方path数据</StreamGeometry>` 即可全工程复用。
 
-3. **状态反馈**:
-   - `Icon.Geo.Info` (信息提示 - 圆圈 i)
-   - `Icon.Geo.SuccessCircle` (成功完成 - 圆圈勾)
-   - `Icon.Geo.WarningTriangle` (警告注意 - 三角叹号)
-   - `Icon.Geo.ErrorCircle` (错误阻断 - 圆圈叉)
 
 ---
 

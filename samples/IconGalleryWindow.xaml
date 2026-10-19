@@ -41,11 +41,12 @@
                 <StackPanel>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <Path Data="{StaticResource Icon.Geo.Settings}" Style="{StaticResource Icon.Medium}" Margin="0,0,8,0" />
-                        <TextBlock Text="WPF 图标系统规范测试套件 (Icon System Suite)" Style="{StaticResource Text.Title}" FontWeight="SemiBold" />
+                        <TextBlock Text="Google Material Symbols 图标系统测试套件" Style="{StaticResource Text.Title}" FontWeight="SemiBold" />
                     </StackPanel>
-                    <TextBlock Text="严格遵循 24x24 矢量网格、动态上下文前景继承、尺寸阶梯与 ToolTip 无障碍契约。"
+                    <TextBlock Text="官方 Apache 2.0 开源几何、24x24 视口网格、动态上下文前景继承、尺寸阶梯与 ToolTip 契约。"
                                Style="{StaticResource Text.Caption}" Margin="28,4,0,0" />
                 </StackPanel>
+
                 
                 <!-- 顶部快捷操作 -->
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">

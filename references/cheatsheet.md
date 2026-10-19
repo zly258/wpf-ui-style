@@ -100,7 +100,11 @@ pwsh ./tools/LayoutCheck.ps1 -Root "D:\your\project"
 
 ---
 
-## 图标系统速查
+## 图标系统速查 (Google Material Symbols 规范)
+
+### 官方规范基准
+- **数据来源**：Google Material Symbols（Apache 2.0 开源许可，自由商用）。
+- **坐标视口**：统一 24×24 视口网格，`Stretch="Uniform"`，`SnapsToDevicePixels="True"`。
 
 ### 图标尺寸阶梯
 - `Icon.Size.Micro` (12px): 状态徽章、角标
@@ -115,4 +119,5 @@ pwsh ./tools/LayoutCheck.ps1 -Root "D:\your\project"
 - 默认继承宿主 `(TextElement.Foreground)`，主按钮自动纯白，禁用自动变灰。
 - 纯图标按钮必带 `ToolTip`。
 - 图标按钮尺寸矩阵：`Button.Icon.Small` (24px) / `Button.Icon` (28px) / `Button.Icon.Large` (34px)。
+
 
