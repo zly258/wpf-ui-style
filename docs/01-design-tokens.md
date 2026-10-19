@@ -172,10 +172,13 @@
 | `Layout.WindowPadding` | 16 | 窗口内容边距 |
 | `Layout.GroupPadding` | 12 | GroupBox 内边距 |
 | `Layout.FormRowMargin` | `0,4,0,4` | 表单行上下间距 |
-| `Layout.ButtonPadding` | `14,0` | 按钮左右内边距 |
-| `Layout.InputPadding` | `8,0` | 单行输入框 |
-| `Layout.InputPadding.Multiline` | `8,6` | 多行输入框 |
+| `Layout.ButtonPadding` | `10,0` | 按钮左右内边距（防长文挤压） |
+| `Layout.InputPadding` | `6,0` | 单行输入框（预留充分文字空间） |
+| `Layout.InputPadding.Multiline` | `6,6` | 多行输入框 |
 | `Layout.ListItemPadding` | `8,6` | 列表项 |
+
+> 提示：按钮、输入框内部 Padding 严格控制在 6–10px 以内，严禁设置过大（如 14px 以上或过大上下 Padding），避免在高 DPI 或中英双语下文字截断、字符末尾丢失。
+
 
 间距梯度：**2 / 4 / 6 / 8 / 12 / 16 / 24 / 32**。
 不要使用 5、7、9、13、17 等奇数间距（图标微调除外）。

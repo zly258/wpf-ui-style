@@ -199,6 +199,14 @@ Rules:
   - Destructive actions must use `Button.Danger` and be separated by at least 12–16px.
   - Search box should feature an icon prefix (`Icon.Geo.Search`) and clear action (`Button.Icon.Small`).
 
+### R12. Padding bounds & text clipping prevention
+
+- **Button horizontal padding**: `Layout.ButtonPadding` must not exceed `10,0` (compact `8,0`). Never use 14px+ on buttons, which squeezes multilingual labels and triggers truncation.
+- **Single-line input vertical padding**: single-line `TextBox` / `PasswordBox` must use `Layout.InputPadding` (`6,0`) with `VerticalContentAlignment="Center"`. Avoid top/bottom padding to prevent clipping descenders (`g`, `j`, `y`).
+- **ComboBox padding**: use `6,0,22,0` to leave room for the dropdown arrow without squashing the selected text.
+- **Multiline padding**: keep multiline `TextBox` padding at `6,6` (`Layout.InputPadding.Multiline`) for clean text flow.
+
+
 
 
 ## Workflow

@@ -207,10 +207,11 @@
     <Thickness x:Key="Layout.WindowPadding">16</Thickness>
     <Thickness x:Key="Layout.GroupPadding">12</Thickness>
     <Thickness x:Key="Layout.FormRowMargin">0,4,0,4</Thickness>
-    <Thickness x:Key="Layout.ButtonPadding">14,0</Thickness>
-    <Thickness x:Key="Layout.InputPadding">8,0</Thickness>
-    <Thickness x:Key="Layout.InputPadding.Multiline">8,6</Thickness>
+    <Thickness x:Key="Layout.ButtonPadding">10,0</Thickness>
+    <Thickness x:Key="Layout.InputPadding">6,0</Thickness>
+    <Thickness x:Key="Layout.InputPadding.Multiline">6,6</Thickness>
     <Thickness x:Key="Layout.ListItemPadding">8,6</Thickness>
+
 
     <CornerRadius x:Key="Radius.Small">2</CornerRadius>
     <CornerRadius x:Key="Radius.Card">4</CornerRadius>

@@ -531,8 +531,29 @@ pack://application:,,,/YourAssembly;component/Theme/Theme.xaml
 2. 破坏性操作使用 `Button.Danger`（红边红字，悬停浅红底深红字），且在布局上与其他操作隔开至少 12–16px。
 3. 批量次要操作保留 `Button.Secondary`，且统一搭配矢量图标（加号、上传、下载、垃圾桶）。
 
+---
 
-## 15. 字体混用导致文字发虚
+## 17. 控件 Padding 过大导致文字截断与视效局促
+
+**症状**
+
+单行输入框、按钮或表格单元格文字垂直方向被切掉上下部分（如字母 g、j、y 底部被吃掉），或左右稍长一点文字末尾就变成点点点，甚至连中文也显示不完整。
+
+**根因**
+
+- 控件固定了高度（如 30px / 34px），但给内部 `Padding` 设得太大（如上下设了 6px–8px，或左右设了 14px 以上）。
+- 内边距将内容呈现区域挤压得过小，导致 `PART_ContentHost` 视口容纳不下正常字号及行高。
+
+**修复**
+
+- 单行 `TextBox` / `PasswordBox` 垂直方向不要设置大 padding，统一使用 `Layout.InputPadding`（设为 `6,0`），垂直对齐使用 `VerticalContentAlignment="Center"`。
+- 按钮左右 Padding 设为 `10,0`（紧凑小按钮设为 `8,0`），为文本与图标预留充足横向空间。
+- ComboBox 右侧留出 22px 给下拉箭头，左侧留 6px 即可（`Padding="6,0,22,0"`）。
+
+---
+
+## 18. 字体混用导致文字发虚
+
 
 **症状**
 
@@ -558,7 +579,7 @@ pack://application:,,,/YourAssembly;component/Theme/Theme.xaml
 
 ---
 
-## 16. 主题文件重复合并导致覆盖
+## 19. 主题文件重复合并导致覆盖
 
 **症状**
 
@@ -583,7 +604,8 @@ pack://application:,,,/YourAssembly;component/Theme/Theme.xaml
 
 ---
 
-## 17. 长文本把布局撑破
+## 20. 长文本把布局撑破
+
 
 **症状**
 

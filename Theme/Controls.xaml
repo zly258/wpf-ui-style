@@ -208,27 +208,28 @@
     <!-- 小号按钮 -->
     <Style x:Key="Button.Primary.Small" TargetType="{x:Type Button}" BasedOn="{StaticResource Button.Primary}">
         <Setter Property="Height" Value="{StaticResource Layout.ControlHeight.Small}" />
-        <Setter Property="MinWidth" Value="56" />
-        <Setter Property="Padding" Value="10,0" />
+        <Setter Property="MinWidth" Value="48" />
+        <Setter Property="Padding" Value="8,0" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Caption}" />
     </Style>
     <Style x:Key="Button.Secondary.Small" TargetType="{x:Type Button}" BasedOn="{StaticResource Button.Secondary}">
         <Setter Property="Height" Value="{StaticResource Layout.ControlHeight.Small}" />
-        <Setter Property="MinWidth" Value="56" />
-        <Setter Property="Padding" Value="10,0" />
+        <Setter Property="MinWidth" Value="48" />
+        <Setter Property="Padding" Value="8,0" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Caption}" />
     </Style>
     <Style x:Key="Button.Text.Small" TargetType="{x:Type Button}" BasedOn="{StaticResource Button.Text}">
         <Setter Property="Height" Value="{StaticResource Layout.ControlHeight.Small}" />
-        <Setter Property="Padding" Value="8,0" />
+        <Setter Property="Padding" Value="6,0" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Caption}" />
     </Style>
     <Style x:Key="Button.Danger.Small" TargetType="{x:Type Button}" BasedOn="{StaticResource Button.Danger}">
         <Setter Property="Height" Value="{StaticResource Layout.ControlHeight.Small}" />
-        <Setter Property="MinWidth" Value="56" />
-        <Setter Property="Padding" Value="10,0" />
+        <Setter Property="MinWidth" Value="48" />
+        <Setter Property="Padding" Value="8,0" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Caption}" />
     </Style>
+
 
     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource Button.Secondary}" />
 
@@ -424,8 +425,9 @@
         <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Height" Value="{StaticResource Layout.ControlHeight}" />
-        <Setter Property="Padding" Value="8,0,24,0" />
+        <Setter Property="Padding" Value="6,0,22,0" />
         <Setter Property="Cursor" Value="Hand" />
+
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="Template">
             <Setter.Value>
