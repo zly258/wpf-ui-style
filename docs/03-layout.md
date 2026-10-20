@@ -132,7 +132,7 @@
 - 输入列 `*`，不要在输入框上写死宽度。
 - 两列之间留 12–16。
 - 标签左对齐，垂直居中。
-- 同一行的控件高度一致（34 或 30）。
+- 同一行的控件高度一致（36 或 32）。
 - 长文本说明放在输入框下方，使用 `Text.Hint`，左对齐到输入列。
 
 ### 3.2 单列长表单
@@ -156,11 +156,11 @@
 ```xml
 <GroupBox Header="翻译范围">
     <WrapPanel>
-        <CheckBox Content="单行文本" Width="130" />
-        <CheckBox Content="多行文本" Width="130" />
-        <CheckBox Content="引线文本" Width="130" />
-        <CheckBox Content="块属性" Width="130" />
-        <CheckBox Content="表格单元格" Width="130" />
+        <CheckBox Content="单行文本" Width="140" />
+        <CheckBox Content="多行文本" Width="140" />
+        <CheckBox Content="引线文本" Width="140" />
+        <CheckBox Content="块属性" Width="140" />
+        <CheckBox Content="表格单元格" Width="140" />
     </WrapPanel>
 </GroupBox>
 ```
@@ -175,7 +175,7 @@
 
 - 一个窗口最多 3 层视觉层级：窗口 → GroupBox/Expander → 表单行。
 - 不要 `GroupBox` 套 `GroupBox` 再套 `Border`；视觉噪音大。
-- 分组标题使用 `Text.Section` 或 GroupBox Header，字号 14.5。
+- 分组标题使用 `Text.Section` 或 GroupBox Header，字号 15.5。
 - 分组之间间距 12–16。
 - 高级选项使用 `Expander` 收起，默认折叠；不要把低频参数全部铺开。
 
@@ -185,8 +185,8 @@
 
 - 一个对话框只允许一个 `Button.Primary`。
 - 危险操作使用 `Button.Danger`，并与普通操作拉开 12–16 间距。
-- 图标按钮最小 28×28；不要小于 24×24。
-- 按钮高度统一 34；工具条可用 30。
+- 图标按钮最小 30×30；不要小于 26×26。
+- 按钮高度统一 36；工具条可用 32。
 - 按钮文字用动词：保存、取消、开始翻译、加载失败项。
 - 不要用“确定/是/否”以外的模糊词；危险操作必须写清楚对象。
 
@@ -196,8 +196,8 @@
 
 ### 6.1 列表
 
-- 行高 26（`Layout.RowHeight`）。
-- 表头 28（`Layout.HeaderHeight`）。
+- 行高 30（`Layout.RowHeight`）。
+- 表头 32（`Layout.HeaderHeight`）。
 - 列宽：短序号 40–56，名称/路径 `*`，状态 80–100。
 - 长文本列使用 `TextTrimming="CharacterEllipsis"` 或 `ToolTip` 显示完整内容。
 - 不要在列表项里放多层嵌套控件；一行最多一个主文本 + 一个次要文本 + 一个状态标签。
@@ -257,7 +257,7 @@
 
 - 窗口根设置 `TextOptions.TextFormattingMode="Display"`。
 - `UseLayoutRounding="True"`、`SnapsToDevicePixels="True"`。
-- 不要使用小于 12px 的字号。
+- 不要使用小于 13.5px 的字号（Caption 为 14px，Code 为 13.5px）。
 - 100% / 125% / 150% / 200% DPI 都要检查：
   - 1px 边框是否发虚；
   - 按钮文字是否被裁切；
@@ -323,25 +323,16 @@
          Height="Auto" />
 ```
 
-```
-
-`Layout.LogMinHeight` / `Layout.LogMaxHeight` 默认是 120 / 240。
-
 ### 11.3 错误写法
 
 ```xml
-<!-- 错误 1：StackPanel 里 Stretch 不起作用，MinHeight 过大仍会撑高 -->
+<!-- 错误 1：StackPanel 里放一个想填满的输入框，Stretch 不生效 -->
 <StackPanel>
-    <TextBox AcceptsReturn="True" VerticalAlignment="Stretch" MinHeight="300" />
+    <TextBox AcceptsReturn="True" VerticalAlignment="Stretch" />
 </StackPanel>
 
-<!-- 错误 2：Grid 的 * 行里放表单输入框，默认 Stretch 会填满整行 -->
-<Grid>
-    <Grid.RowDefinitions>
-        <RowDefinition Height="*" />
-    </Grid.RowDefinitions>
-    <TextBox AcceptsReturn="True" />
-</Grid>
+<!-- 错误 2：给所有多行输入统一写死 MinHeight，导致小窗口被撑爆 -->
+<TextBox Style="{StaticResource TextBox.Multiline}" MinHeight="180" />
 
 <!-- 错误 3：Height 不支持 * -->
 <TextBox Height="*" />

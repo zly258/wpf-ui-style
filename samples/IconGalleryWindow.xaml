@@ -76,7 +76,7 @@
                         <WrapPanel Orientation="Horizontal">
                             
                             <!-- Micro 12px -->
-                            <Border BorderBrush="{StaticResource Brush.Border}" BorderThickness="1" CornerRadius="{StaticResource Radius.Card}" Padding="10" Margin="0,0,12,8" Width="135">
+                            <Border BorderBrush="{StaticResource Brush.Border}" BorderThickness="1" CornerRadius="{StaticResource Radius.Card}" Padding="10" Margin="0,0,12,8" Width="150">
                                 <StackPanel HorizontalAlignment="Center">
                                     <Path Data="{StaticResource Icon.Geo.Settings}" Style="{StaticResource Icon.Micro}" Margin="0,6" />
                                     <TextBlock Text="Micro (12px)" Style="{StaticResource Text.Caption}" HorizontalAlignment="Center" />
@@ -85,7 +85,7 @@
                             </Border>
 
                             <!-- Small 14px -->
-                            <Border BorderBrush="{StaticResource Brush.Border}" BorderThickness="1" CornerRadius="{StaticResource Radius.Card}" Padding="10" Margin="0,0,12,8" Width="135">
+                            <Border BorderBrush="{StaticResource Brush.Border}" BorderThickness="1" CornerRadius="{StaticResource Radius.Card}" Padding="10" Margin="0,0,12,8" Width="150">
                                 <StackPanel HorizontalAlignment="Center">
                                     <Path Data="{StaticResource Icon.Geo.Settings}" Style="{StaticResource Icon.Small}" Margin="0,5" />
                                     <TextBlock Text="Small (14px)" Style="{StaticResource Text.Caption}" HorizontalAlignment="Center" />
@@ -94,7 +94,7 @@
                             </Border>
 
                             <!-- Regular 16px (默认) -->
-                            <Border BorderBrush="{StaticResource Brush.Accent}" BorderThickness="1" Background="{StaticResource Brush.Accent.Subtle}" CornerRadius="{StaticResource Radius.Card}" Padding="10" Margin="0,0,12,8" Width="145">
+                            <Border BorderBrush="{StaticResource Brush.Accent}" BorderThickness="1" Background="{StaticResource Brush.Accent.Subtle}" CornerRadius="{StaticResource Radius.Card}" Padding="10" Margin="0,0,12,8" Width="160">
                                 <StackPanel HorizontalAlignment="Center">
                                     <Path Data="{StaticResource Icon.Geo.Settings}" Style="{StaticResource Icon.Regular}" Margin="0,4" />
                                     <TextBlock Text="Regular (16px) ★" Style="{StaticResource Text.Caption}" FontWeight="Bold" HorizontalAlignment="Center" Foreground="{StaticResource Brush.Accent}" />
@@ -103,7 +103,7 @@
                             </Border>
 
                             <!-- Medium 20px -->
-                            <Border BorderBrush="{StaticResource Brush.Border}" BorderThickness="1" CornerRadius="{StaticResource Radius.Card}" Padding="10" Margin="0,0,12,8" Width="135">
+                            <Border BorderBrush="{StaticResource Brush.Border}" BorderThickness="1" CornerRadius="{StaticResource Radius.Card}" Padding="10" Margin="0,0,12,8" Width="150">
                                 <StackPanel HorizontalAlignment="Center">
                                     <Path Data="{StaticResource Icon.Geo.Settings}" Style="{StaticResource Icon.Medium}" Margin="0,2" />
                                     <TextBlock Text="Medium (20px)" Style="{StaticResource Text.Caption}" HorizontalAlignment="Center" />
@@ -112,7 +112,7 @@
                             </Border>
 
                             <!-- Large 24px -->
-                            <Border BorderBrush="{StaticResource Brush.Border}" BorderThickness="1" CornerRadius="{StaticResource Radius.Card}" Padding="10" Margin="0,0,12,8" Width="135">
+                            <Border BorderBrush="{StaticResource Brush.Border}" BorderThickness="1" CornerRadius="{StaticResource Radius.Card}" Padding="10" Margin="0,0,12,8" Width="150">
                                 <StackPanel HorizontalAlignment="Center">
                                     <Path Data="{StaticResource Icon.Geo.Settings}" Style="{StaticResource Icon.Large}" />
                                     <TextBlock Text="Large (24px)" Style="{StaticResource Text.Caption}" HorizontalAlignment="Center" />
@@ -121,7 +121,7 @@
                             </Border>
 
                             <!-- Hero 32px -->
-                            <Border BorderBrush="{StaticResource Brush.Border}" BorderThickness="1" CornerRadius="{StaticResource Radius.Card}" Padding="10" Margin="0,0,12,8" Width="135">
+                            <Border BorderBrush="{StaticResource Brush.Border}" BorderThickness="1" CornerRadius="{StaticResource Radius.Card}" Padding="10" Margin="0,0,12,8" Width="150">
                                 <StackPanel HorizontalAlignment="Center">
                                     <Path Data="{StaticResource Icon.Geo.Settings}" Style="{StaticResource Icon.Hero}" />
                                     <TextBlock Text="Hero (32px)" Style="{StaticResource Text.Caption}" HorizontalAlignment="Center" />

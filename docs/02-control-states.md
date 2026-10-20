@@ -201,6 +201,8 @@ WPF 会按声明顺序应用 `Trigger`，后声明的覆盖前面的。不要靠
 - 禁用时勾选符号改为 `Brush.Text.Disabled`，不要保留白色。
 - 文本通过 `ContentPresenter TextElement.Foreground="{TemplateBinding Foreground}"` 传递。
 - 不要用 `Opacity` 表示禁用。
+- **方框/圆环尺寸固定为 `Layout.CheckBox.Size` / `Layout.RadioButton.Size`（16×16），不得缩小**；勾选符号使用圆头端点、描边 ≥1.8px，方框与文字间距 8px。
+
 
 ---
 

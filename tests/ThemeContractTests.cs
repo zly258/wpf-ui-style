@@ -57,6 +57,52 @@ namespace OpenCAD.WpfStyles.Tests
         private static string IconsPath => Path.Combine(StylesRoot, "Theme", "Icons.xaml");
 
         [Fact]
+        public void Typography_IsUnifiedMicrosoftYaHeiWithGlobalScale()
+        {
+            XDocument tokens = Load(TokensPath);
+
+            string font = tokens.Root.Elements()
+                .FirstOrDefault(e => e.Name.LocalName == "FontFamily"
+                    && (string)e.Attribute(X + "Key") == "Font.Ui")?.Value ?? "";
+
+            Assert.Contains("Microsoft YaHei", font);
+
+            var sizes = tokens.Root.Elements()
+                .Where(e => e.Name.LocalName == "Double")
+                .ToDictionary(e => (string)e.Attribute(X + "Key") ?? "", e => e.Value);
+
+            Assert.Equal("14.5", sizes["FontSize.Body"]);
+            Assert.Equal("14", sizes["FontSize.Caption"]);
+            Assert.Equal("13.5", sizes["FontSize.Code"]);
+            Assert.Equal("15.5", sizes["FontSize.Title"]);
+        }
+
+        [Fact]
+        public void CheckBox_And_RadioButton_HitTargetsAreAtLeast16()
+        {
+            XDocument tokens = Load(TokensPath);
+            var doubles = tokens.Root.Elements()
+                .Where(e => e.Name.LocalName == "Double")
+                .ToDictionary(e => (string)e.Attribute(X + "Key") ?? "", e => double.Parse(e.Value));
+
+            Assert.True(doubles["Layout.CheckBox.Size"] >= 16);
+            Assert.True(doubles["Layout.RadioButton.Size"] >= 16);
+
+            XDocument controls = Load(ControlsPath);
+            XElement checkBoxTemplate = controls.Descendants()
+                .FirstOrDefault(e => e.Name.LocalName == "Border"
+                    && (string)e.Attribute(X + "Name") == "Box");
+            Assert.NotNull(checkBoxTemplate);
+            Assert.Contains("Layout.CheckBox.Size", (string)checkBoxTemplate.Attribute("Width") ?? "");
+
+            XElement radioTemplate = controls.Descendants()
+                .FirstOrDefault(e => e.Name.LocalName == "Border"
+                    && (string)e.Attribute(X + "Name") == "Ring");
+            Assert.NotNull(radioTemplate);
+            Assert.Contains("Layout.RadioButton.Size", (string)radioTemplate.Attribute("Width") ?? "");
+        }
+
+        [Fact]
         public void IconBase_BindsToForegroundAndUniformStretch()
         {
             XElement iconBase = FindKeyedStyle(IconsPath, "Icon.Base");

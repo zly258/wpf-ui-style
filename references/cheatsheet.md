@@ -8,6 +8,21 @@
 4. 白字只压在 `Accent` / `Accent.Hover` / `Accent.Pressed` / `Danger*` / `Tooltip.Background`。
 5. 选中+悬停用 `MultiTrigger`，不要依赖触发器顺序。
 
+## 字体与字号（全局统一，不写本地字体）
+
+| 令牌 | 值 |
+|---|---|
+| `Font.Ui` | `Microsoft YaHei`（唯一字体栈） |
+| `FontSize.Title` / `Section` | 15.5 |
+| `FontSize.Body` | 14.5 |
+| `FontSize.Caption` | 14 |
+| `FontSize.Code` | 13.5 |
+| `LineHeight.Body` / `Caption` | 23 / 22 |
+
+- 业务 XAML 禁止出现 `FontFamily`，禁止写 `FontSize="13"` 字面量。
+- 复选框 / 单选框不得小于 **16×16**（`Layout.CheckBox.Size`）。
+- 字号变化后必须同步检查：控件高度（36/32）、行高（30）、表头（32）、Tab/Menu/ToolTip/DataGrid 内边距。
+
 ## 状态速查
 
 | 状态 | 背景 | 前景 |
@@ -117,6 +132,6 @@ pwsh ./tools/LayoutCheck.ps1 -Root "D:\your\project"
 - **严禁写死 Fill="#..."**。
 - 默认继承宿主 `(TextElement.Foreground)`，主按钮自动纯白，禁用自动变灰。
 - 纯图标按钮必带 `ToolTip`。
-- 图标按钮尺寸矩阵：`Button.Icon.Small` (24px) / `Button.Icon` (28px) / `Button.Icon.Large` (34px)。
+- 图标按钮尺寸矩阵：`Button.Icon.Small` (26px) / `Button.Icon` (30px) / `Button.Icon.Large` (36px)。
 
 

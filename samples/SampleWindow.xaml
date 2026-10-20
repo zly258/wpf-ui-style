@@ -37,10 +37,10 @@
                 <GroupBox Header="翻译服务">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="96" />
+                            <ColumnDefinition Width="104" />
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="16" />
-                            <ColumnDefinition Width="96" />
+                            <ColumnDefinition Width="104" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
@@ -86,12 +86,12 @@
                 <!-- 选项 -->
                 <GroupBox Header="翻译范围">
                     <WrapPanel>
-                        <CheckBox Content="单行文本" IsChecked="True" Width="130" />
-                        <CheckBox Content="多行文本" IsChecked="True" Width="130" />
-                        <CheckBox Content="引线文本" IsChecked="True" Width="130" />
-                        <CheckBox Content="块属性" IsChecked="True" Width="130" />
-                        <CheckBox Content="表格单元格" IsChecked="True" Width="130" />
-                        <CheckBox Content="尺寸文字" Width="130" />
+                        <CheckBox Content="单行文本" IsChecked="True" Width="140" />
+                        <CheckBox Content="多行文本" IsChecked="True" Width="140" />
+                        <CheckBox Content="引线文本" IsChecked="True" Width="140" />
+                        <CheckBox Content="块属性" IsChecked="True" Width="140" />
+                        <CheckBox Content="表格单元格" IsChecked="True" Width="140" />
+                        <CheckBox Content="尺寸文字" Width="140" />
                     </WrapPanel>
                 </GroupBox>
 

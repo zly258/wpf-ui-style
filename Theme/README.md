@@ -198,7 +198,7 @@ public SettingsWindow()
 
 - 确认 Window 根设置了 `TextFormattingMode="Display"`。
 - 确认没有局部 `FontFamily`。
-- 确认没有非整数 `FontSize`（本规范使用 13.5，可接受；不要用 13.37）。
+- 确认没有非整数 `FontSize`（本规范使用 13.5–15.5，可接受；不要用 13.37）。
 
 ### 主按钮文字变深
 

@@ -65,14 +65,14 @@ WPF 默认 ToolTip 使用系统颜色，在 CAD 深色主题或高对比度模�
 OpenCADTranslate 使用 `TextFormattingMode="Ideal"`；EngineeringAI 使用 `Display`。
 小字号（12px）在 100% DPI 下 `Ideal` 可能发虚。
 
-建议：统一 `Display`，字号提升到 13.5。
+建议：统一 `Display`，字号提升到 14.5。
 
 #### 6. 控件高度偏小
 
 当前按钮/输入框高度约 26，EngineeringAI 是 34。
 在 125%/150% DPI 下 26 高的按钮文字容易拥挤。
 
-建议：统一 `Layout.ControlHeight=34`，小号 30。
+建议：统一 `Layout.ControlHeight=36`，小号 32。
 
 ---
 
@@ -119,7 +119,7 @@ EngineeringAI 的隐式 `CheckBox` 样式没有自定义模板，依赖系统模
 
 建议：使用本规范的 CheckBox/RadioButton 模板，确保方框、勾选、禁用态可控。
 
-#### 4. 字体大小 13.5 / 控件高度 34
+#### 4. 字体大小 14.5 / 控件高度 36
 
 这是当前三个项目里最成熟的尺寸体系，建议作为基线。
 OpenCADTranslate 需要从 12/26 迁移过来。
@@ -193,8 +193,8 @@ OpenCADTranslate 需要从 12/26 迁移过来。
 
 | 问题 | 影响项目 | 建议 |
 |---|---|---|
-| 控件高度 26 / 28 / 34 混用 | 三个项目 | 统一 34，紧凑用 30 |
-| 字号 12 / 13 / 13.5 混用 | 三个项目 | 统一 Body 13.5、Caption 13 |
+| 控件高度 26 / 28 / 34 混用 | 三个项目 | 统一 36，紧凑用 32 |
+| 字号 12 / 13 / 13.5 混用 | 三个项目 | 统一 Body 14.5、Caption 14 |
 | Accent 两种蓝 | OpenCADTranslate / auto_inventor | CAD 插件统一 `#2F6F9F` |
 | 禁用文字过浅 | OpenCADTranslate / EngineeringAI | 统一 `#667085` |
 | 隐式 TextBlock 硬编码 | OpenCADTranslate | 改为 `(TextElement.Foreground)` |

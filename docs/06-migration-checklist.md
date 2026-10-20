@@ -27,7 +27,11 @@
    - ComboBox 弹层、DataGrid 单元格、ListBox 选中态。
 8. **修 ToolTip**
    - 深底白字或浅底深字，二者必须成对。
-9. **验证**
+9. **统一字体与字号**
+   - 删除所有局部 `FontFamily`，只保留 `Tokens.xaml` 的 `Font.Ui`（Microsoft YaHei）。
+   - 删除所有 `FontSize="…"` 字面量，改用 `FontSize.Title/Section/Body/Caption/Code`。
+   - 复选框/单选框不得小于 16×16；字号放大后同步检查控件高度（36/32）、行高（30）、表头（32）与内边距。
+10. **验证**
    - 运行 `ContrastCheck.ps1`。
    - 运行 `ThemeContractTests.cs`。
    - 100%/125%/150% DPI 截图。

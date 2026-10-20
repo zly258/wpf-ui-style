@@ -168,32 +168,39 @@
          3. 字体与字号
          统一字体栈，禁止在业务窗口里混用其他字体。
          ============================================================ -->
-    <FontFamily x:Key="Font.Ui">Microsoft YaHei UI, Microsoft YaHei, Segoe UI</FontFamily>
+    <FontFamily x:Key="Font.Ui">Microsoft YaHei, Microsoft YaHei UI, Segoe UI</FontFamily>
 
-    <sys:Double x:Key="FontSize.Title">14.5</sys:Double>
-    <sys:Double x:Key="FontSize.Section">14.5</sys:Double>
-    <sys:Double x:Key="FontSize.Body">13.5</sys:Double>
-    <sys:Double x:Key="FontSize.Caption">13</sys:Double>
-    <sys:Double x:Key="FontSize.Code">12.5</sys:Double>
+    <!-- 全局字号在历史基线上统一 +1，提升 100%~150% DPI 下的可读性。
+         业务 XAML 禁止再写 FontFamily/FontSize 字面量，一律继承本表。 -->
+    <sys:Double x:Key="FontSize.Title">15.5</sys:Double>
+    <sys:Double x:Key="FontSize.Section">15.5</sys:Double>
+    <sys:Double x:Key="FontSize.Body">14.5</sys:Double>
+    <sys:Double x:Key="FontSize.Caption">14</sys:Double>
+    <sys:Double x:Key="FontSize.Code">13.5</sys:Double>
 
-    <sys:Double x:Key="LineHeight.Body">21</sys:Double>
-    <sys:Double x:Key="LineHeight.Caption">20</sys:Double>
+    <sys:Double x:Key="LineHeight.Body">23</sys:Double>
+    <sys:Double x:Key="LineHeight.Caption">22</sys:Double>
+
 
     <!-- ============================================================
          4. 布局尺寸
          ============================================================ -->
-    <sys:Double x:Key="Layout.ControlHeight">34</sys:Double>
-    <sys:Double x:Key="Layout.ControlHeight.Small">30</sys:Double>
+    <sys:Double x:Key="Layout.ControlHeight">36</sys:Double>
+    <sys:Double x:Key="Layout.ControlHeight.Small">32</sys:Double>
+    <!-- 可选上限：仅在业务确实需要限制表单多行输入高度时使用；
+         TextBox.Multiline 本身不强制 MinHeight，避免撑爆小窗口。 -->
     <sys:Double x:Key="Layout.InputMinHeight">110</sys:Double>
     <sys:Double x:Key="Layout.InputMaxHeight">180</sys:Double>
     <sys:Double x:Key="Layout.LogMinHeight">120</sys:Double>
     <sys:Double x:Key="Layout.LogMaxHeight">240</sys:Double>
-    <sys:Double x:Key="Layout.TagHeight">24</sys:Double>
-    <sys:Double x:Key="Layout.IconButton.Micro">24</sys:Double>
-    <sys:Double x:Key="Layout.IconButton.Small">28</sys:Double>
-    <sys:Double x:Key="Layout.IconButton.Large">34</sys:Double>
-    <sys:Double x:Key="Layout.RowHeight">26</sys:Double>
-    <sys:Double x:Key="Layout.HeaderHeight">28</sys:Double>
+    <sys:Double x:Key="Layout.TagHeight">26</sys:Double>
+    <sys:Double x:Key="Layout.IconButton.Micro">26</sys:Double>
+    <sys:Double x:Key="Layout.IconButton.Small">30</sys:Double>
+    <sys:Double x:Key="Layout.IconButton.Large">36</sys:Double>
+    <sys:Double x:Key="Layout.RowHeight">30</sys:Double>
+    <sys:Double x:Key="Layout.HeaderHeight">32</sys:Double>
+    <sys:Double x:Key="Layout.CheckBox.Size">16</sys:Double>
+    <sys:Double x:Key="Layout.RadioButton.Size">16</sys:Double>
 
     <!-- 图标标准尺寸阶梯 (Icon Sizing Hierarchy) -->
     <sys:Double x:Key="Icon.Size.Micro">12</sys:Double>
@@ -210,7 +217,7 @@
     <Thickness x:Key="Layout.ButtonPadding">10,0</Thickness>
     <Thickness x:Key="Layout.InputPadding">6,0</Thickness>
     <Thickness x:Key="Layout.InputPadding.Multiline">6,6</Thickness>
-    <Thickness x:Key="Layout.ListItemPadding">8,6</Thickness>
+    <Thickness x:Key="Layout.ListItemPadding">10,6</Thickness>
 
 
     <CornerRadius x:Key="Radius.Small">2</CornerRadius>

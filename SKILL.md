@@ -138,17 +138,20 @@ Forbidden:
 
 - Business XAML: only `Brush.*`, `FontSize.*`, `Layout.*`, `Radius.*`.
 - Never `#FF...` in a window.
-- Never a local `FontFamily`; the Window style provides `Font.Ui`.
+- Never a local `FontFamily`; the Window style provides `Font.Ui` (Microsoft YaHei).
+- Never a literal `FontSize="13"` in a window; use `FontSize.Body` / `Caption` / `Title`.
 
 ### R7. One control height
 
-Use `Layout.ControlHeight` (34) or `Layout.ControlHeight.Small` (30).
-Do not mix 26 / 28 / 34 in the same dialog.
+Use `Layout.ControlHeight` (36) or `Layout.ControlHeight.Small` (32).
+Do not mix 30 / 32 / 36 in the same dialog.
+Row height is `Layout.RowHeight` (30); table header is `Layout.HeaderHeight` (32).
 
 ### R8. One primary action per view
 
 Only one `Button.Primary` per dialog/section. Everything else is
 `Button.Secondary`, `Button.Text`, or `Button.Danger`.
+
 
 ### R9. Multiline text adaptability & no forced MinHeight
 
@@ -184,6 +187,14 @@ Only one `Button.Primary` per dialog/section. Everything else is
 - **Single-line input vertical padding**: single-line `TextBox` / `PasswordBox` must use `Layout.InputPadding` (`6,0`) with `VerticalContentAlignment="Center"`. Avoid top/bottom padding to prevent clipping descenders (`g`, `j`, `y`).
 - **ComboBox padding**: use `6,0,22,0` to leave room for the dropdown arrow without squashing the selected text.
 - **Multiline padding**: keep multiline `TextBox` padding at `6,6` (`Layout.InputPadding.Multiline`) for clean text flow.
+
+### R13. Unified typography & hit-target sizes
+
+- **Single font stack**: `Font.Ui` is defined once in `Tokens.xaml` as `Microsoft YaHei` (fallbacks YaHei UI / Segoe UI). Never declare a different `FontFamily` anywhere in business XAML.
+- **Global font scale**: Title/Section `15.5`, Body `14.5`, Caption `14`, Code `13.5`; line heights `23` / `22`. Do not override per-window.
+- **Checkbox / RadioButton**: must render at least `Layout.CheckBox.Size` / `Layout.RadioButton.Size` (16×16). Never shrink to 12–14px; check glyph uses round caps and ≥1.8px stroke.
+- **When font size changes, re-check**: control heights, row heights, tab/menu padding, tooltip padding, and DataGrid cell padding in the same pass.
+
 
 
 

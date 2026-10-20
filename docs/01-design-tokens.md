@@ -112,21 +112,23 @@
 
 | 令牌 | 值 | 用途 |
 |---|---|---|
-| `Font.Ui` | `Microsoft YaHei UI, Microsoft YaHei, Segoe UI` | 全局唯一字体栈 |
-| `FontSize.Title` | 14.5 | 窗口标题、页面标题 |
-| `FontSize.Section` | 14.5 | 分组标题 |
-| `FontSize.Body` | 13.5 | 正文、按钮、输入框 |
-| `FontSize.Caption` | 13 | 说明、表头、Tooltip |
-| `FontSize.Code` | 12.5 | 日志、代码、Schema 预览 |
-| `LineHeight.Body` | 21 | 正文行高 |
-| `LineHeight.Caption` | 20 | 说明行高 |
+| `Font.Ui` | `Microsoft YaHei, Microsoft YaHei UI, Segoe UI` | 全局唯一字体栈（默认微软雅黑） |
+| `FontSize.Title` | 15.5 | 窗口标题、页面标题 |
+| `FontSize.Section` | 15.5 | 分组标题 |
+| `FontSize.Body` | 14.5 | 正文、按钮、输入框 |
+| `FontSize.Caption` | 14 | 说明、表头、Tooltip |
+| `FontSize.Code` | 13.5 | 日志、代码、Schema 预览 |
+| `LineHeight.Body` | 23 | 正文行高 |
+| `LineHeight.Caption` | 22 | 说明行高 |
 
 **规则：**
 
+- **字体只定义一次**：仅在 `Tokens.xaml` 的 `Font.Ui` 声明；业务 XAML 禁止写任何 `FontFamily`。
+- **字号只引用令牌**：业务 XAML 禁止写 `FontSize="13"` 之类的字面量。
 - 一个窗口最多使用 3 种字号：Title/Section、Body、Caption。
 - 不要用 `FontWeight="Bold"`；需要强调时用 `SemiBold`。
 - 不要混用 Consolas、Arial、宋体；代码/日志也使用 `Font.Ui`，避免字体跳变。
-- 不要在子元素上设置 `FontFamily`；从 Window 继承。
+- 字号提升后，控件高度、行高、内边距必须同步放大，避免文字被挤压或裁切。
 
 ---
 
@@ -136,14 +138,20 @@
 
 | 令牌 | 值 | 用途 |
 |---|---|---|
-| `Layout.ControlHeight` | 34 | 按钮、输入框、下拉框、密码框 |
-| `Layout.ControlHeight.Small` | 30 | 小号按钮、工具条 |
-| `Layout.TagHeight` | 24 | 标签、徽章 |
-| `Layout.IconButton.Small` | 28 | 行内图标按钮（标准 28px） |
-| `Layout.RowHeight` | 26 | 列表/表格行 |
-| `Layout.HeaderHeight` | 28 | 表格表头 |
+| `Layout.ControlHeight` | 36 | 按钮、输入框、下拉框、密码框 |
+| `Layout.ControlHeight.Small` | 32 | 小号按钮、工具条 |
+| `Layout.TagHeight` | 26 | 标签、徽章 |
+| `Layout.IconButton.Micro` | 26 | 紧凑图标按钮 |
+| `Layout.IconButton.Small` | 30 | 标准行内图标按钮 |
+| `Layout.IconButton.Large` | 36 | 大号工具条图标按钮 |
+| `Layout.RowHeight` | 30 | 列表/表格行 |
+| `Layout.HeaderHeight` | 32 | 表格表头 |
+| `Layout.CheckBox.Size` | 16 | 复选框方框 |
+| `Layout.RadioButton.Size` | 16 | 单选框圆环 |
 
-> 同一窗口内不要混用 26/28/34。需要紧凑时整组使用 Small。
+> 同一窗口内不要混用 30/32/36。需要紧凑时整组使用 Small。
+> 复选框/单选框不得小于 16×16，否则 125% DPI 下难以辨认与点击。
+
 
 ### 4.1.1 图标尺寸阶梯 (Icon Sizing)
 
@@ -160,9 +168,9 @@
 
 | 令牌 | 按钮宽高 (px) | 适用图标尺寸 | 用途 |
 |---|---|---|---|
-| `Layout.IconButton.Micro` | 24 | 14 (`Icon.Size.Small`) | 紧凑表格操作、搜索框清除按钮 |
-| `Layout.IconButton.Small` | 28 | 16 (`Icon.Size.Regular`) | 标准工具条按钮、面板小操作 |
-| `Layout.IconButton.Large` | 34 | 20 (`Icon.Size.Medium`) | 大号主工具条按钮 |
+| `Layout.IconButton.Micro` | 26 | 14 (`Icon.Size.Small`) | 紧凑表格操作、搜索框清除按钮 |
+| `Layout.IconButton.Small` | 30 | 16 (`Icon.Size.Regular`) | 标准工具条按钮、面板小操作 |
+| `Layout.IconButton.Large` | 36 | 20 (`Icon.Size.Medium`) | 大号主工具条按钮 |
 
 
 ### 4.2 间距
@@ -175,7 +183,8 @@
 | `Layout.ButtonPadding` | `10,0` | 按钮左右内边距（防长文挤压） |
 | `Layout.InputPadding` | `6,0` | 单行输入框（预留充分文字空间） |
 | `Layout.InputPadding.Multiline` | `6,6` | 多行输入框 |
-| `Layout.ListItemPadding` | `8,6` | 列表项 |
+| `Layout.ListItemPadding` | `10,6` | 列表项 |
+
 
 > 提示：按钮、输入框内部 Padding 严格控制在 6–10px 以内，严禁设置过大（如 14px 以上或过大上下 Padding），避免在高 DPI 或中英双语下文字截断、字符末尾丢失。
 
