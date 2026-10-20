@@ -277,61 +277,52 @@
 
 ---
 
-## 11. 多行文本高度约束
+## 11. 多行文本高度与自适应原则 (Multiline Height Principles)
 
-这是实际项目里非常常见的一类布局问题：多行文本框/日志框默认 `VerticalAlignment="Stretch"`，
-放进 `Grid` 的 `Height="*"` 行后会**撑满整行**，把表单、按钮或日志区挤到不合理的位置；
-放进 `StackPanel` 时 `Stretch` 又不起作用，设置 `MinHeight` 过大同样会把布局撑坏。
+多行输入框（`TextBox.Multiline`）如果**强行硬编码全局 `MinHeight`**，会造成严重的可用性灾难：
+1. **撑爆宿主小窗体**：在分辨率较低（如 1366x768）、高 DPI 缩放（150%）或嵌入式小面板中，强制 110px 以上的 `MinHeight` 会直接将下方的操作按钮、状态栏挤出可视区。
+2. **产生双层滚动条与滚动死锁**：外层 `ScrollViewer` 与内层强制高度的 `TextBox` 滚动争抢，导致用户滚动滚轮时内容忽动忽停，误以为“输入框被冻结或显示不全”。
+3. **内容较少时严重留白**：仅输入一两行字时，下方出现巨大僵死空白。
 
-### 11.1 三条硬约束
+### 11.1 三项弹性自适应原则
 
-1. **表单里的多行输入框**：
-   - `Height="Auto"`；
-   - 必须设置 `MinHeight`（80–110）和 `MaxHeight`（140–180）；
-   - `VerticalAlignment="Top"`；
-   - `VerticalContentAlignment="Top"`；
-   - 不要依赖 `Stretch`。
-
-2. **日志/代码只读框**：
-   - 放在专用的 `Grid` 行 `Height="*"` 中；
-   - `MinHeight=120`、`MaxHeight=240`；
-   - 这里允许 `VerticalAlignment="Stretch"`，因为它的职责就是填充剩余区域；
-   - 不要在 `StackPanel` 里放一个要“填满”的日志框。
-
-3. **换行 TextBlock**：
-   - `TextWrapping="Wrap"` 时使用 `VerticalAlignment="Top"`；
-   - 不要设置固定 `Height`；
-   - 在 `Grid` 的 `Auto` 行里让它自然撑高；
-   - 不要把大段说明文字放在 `Height="*"` 行里居中。
+1. **样式库默认解除 `MinHeight` / `MaxHeight` 硬限制**：
+   - `TextBox.Multiline` 基础样式中，`MinHeight="0"`，`Height="Auto"`。让控件能够根据父容器（Grid 行、卡片）或者文本实际行数自然延展，绝不强行锁死尺寸。
+2. **表单内多行输入（跟随行高或自然增高）**：
+   - 放在 `Grid` 的 `Height="Auto"` 行中，依靠内部打字行数自然撑高，或者由业务根据弹窗尺寸局部决定是否设置 `Height`。
+   - `VerticalAlignment="Top"`，`TextWrapping="Wrap"`，`AcceptsReturn="True"`。
+3. **分栏/对照型全高文本区（如翻译原文/译文、日志）**：
+   - 放在独立的 `Grid` `Height="*"` 行中；
+   - 显式声明 `VerticalAlignment="Stretch"`，使其 100% 充满该分区的所有可用空间；
+   - 随着主窗口拉伸/缩放，文本框完全同步拉大，内容一览无余，绝无多余僵死空白。
 
 ### 11.2 正确写法
 
-表单多行输入：
-
 ```xml
-<TextBox Style="{StaticResource TextBox.Multiline}"
-         Height="Auto"
-         MinHeight="90"
-         MaxHeight="160"
-         VerticalAlignment="Top" />
-```
-
-日志区：
-
-```xml
+<!-- 场景 A：对照视图 / 专用分栏（拉伸充满 * 行，最推荐） -->
 <Grid>
     <Grid.RowDefinitions>
-        <RowDefinition Height="Auto" /> <!-- 表单 -->
-        <RowDefinition Height="*" />    <!-- 日志填充 -->
-        <RowDefinition Height="Auto" /> <!-- 按钮 -->
+        <RowDefinition Height="*" />     <!-- 原文区自适应填充 -->
+        <RowDefinition Height="Auto" />  <!-- 操作栏 -->
+        <RowDefinition Height="*" />     <!-- 译文区自适应填充 -->
     </Grid.RowDefinitions>
 
-    <TextBox Grid.Row="1"
-             Style="{StaticResource TextBox.Code}"
-             MinHeight="{StaticResource Layout.LogMinHeight}"
-             MaxHeight="{StaticResource Layout.LogMaxHeight}"
+    <TextBox Grid.Row="0"
+             Style="{StaticResource TextBox.Multiline}"
+             VerticalAlignment="Stretch" />
+
+    <TextBox Grid.Row="2"
+             Style="{StaticResource TextBox.Multiline}"
+             IsReadOnly="True"
              VerticalAlignment="Stretch" />
 </Grid>
+
+<!-- 场景 B：嵌入表单中的普通多行输入（自然高度，无死锁） -->
+<TextBox Style="{StaticResource TextBox.Multiline}"
+         VerticalAlignment="Top"
+         Height="Auto" />
+```
+
 ```
 
 `Layout.LogMinHeight` / `Layout.LogMaxHeight` 默认是 120 / 240。

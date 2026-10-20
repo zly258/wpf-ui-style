@@ -24,26 +24,25 @@
 | ComboBoxItem Selected | `Brush.Accent.Subtle` | `Brush.Text.Primary` |
 | ToolTip | `Brush.Tooltip.Background` | `Brush.Tooltip.Foreground` |
 
-## 多行文本高度
+## 多行文本高度与自适应
 
 ```xml
-<!-- 表单多行输入：不要撑满 -->
+<!-- 方案 A：分栏/比对/日志（拉伸充满 * 行，无裁切） -->
 <TextBox Style="{StaticResource TextBox.Multiline}"
-         Height="Auto" MinHeight="90" MaxHeight="160"
-         VerticalAlignment="Top" />
-
-<!-- 日志：允许填充 -->
-<TextBox Grid.Row="1" Style="{StaticResource TextBox.Code}"
-         MinHeight="120" MaxHeight="240"
          VerticalAlignment="Stretch" />
+
+<!-- 方案 B：普通表单多行输入（自适应自然高度，无死锁） -->
+<TextBox Style="{StaticResource TextBox.Multiline}"
+         Height="Auto"
+         VerticalAlignment="Top" />
 ```
 
 规则：
-
-- 表单行 `Auto`，日志/列表/表格行 `*`。
-- 多行输入 `Top`，日志 `Stretch`。
+- `TextBox.Multiline` 默认不设全局 `MinHeight`（避免撑爆小窗体和内部滚动打架）。
+- 对照视图/日志放在 `*` 行并设置 `VerticalAlignment="Stretch"`。
+- 表单多行放在 `Auto` 行并设置 `VerticalAlignment="Top"`。
 - 不要写 `Height="*"`。
-- 不要在 `StackPanel` 里放一个要“填满”的日志框。
+
 
 ## 布局骨架
 

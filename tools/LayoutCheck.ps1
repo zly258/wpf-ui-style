@@ -92,16 +92,16 @@ foreach ($file in $files) {
         if (-not $isMultiline) { continue }
 
         $line = Get-LineNumber $text $m.Index
-        $hasMin = $attrs -match 'MinHeight\s*='
-        $hasMax = $attrs -match 'MaxHeight\s*='
-        if (-not $hasMin -or -not $hasMax) {
-            Report 'WARN' $file.FullName $line 'Multiline TextBox should set MinHeight and MaxHeight (form: 80-110 / 140-180; log: 120 / 240)'
-        }
-
-        if (-not $isLog -and $attrs -match 'VerticalAlignment\s*=\s*"Stretch"') {
-            Report 'WARN' $file.FullName $line 'Form multiline TextBox uses VerticalAlignment="Stretch"; use Top; Stretch is only for dedicated log rows'
+        
+        # 针对只读日志框，建议设置上限防止无限撑大
+        if ($isLog) {
+            $hasMax = $attrs -match 'MaxHeight\s*='
+            if (-not $hasMax) {
+                Report 'WARN' $file.FullName $line 'Log/Code TextBox should preferably set MaxHeight (e.g. 240) to prevent unbounded growth'
+            }
         }
     }
+
 
     # 4. Wrapped TextBlock stretching
     foreach ($m in [regex]::Matches($text, '(?s)<TextBlock\b(?<attrs>.*?)>')) {

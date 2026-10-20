@@ -150,36 +150,13 @@ Do not mix 26 / 28 / 34 in the same dialog.
 Only one `Button.Primary` per dialog/section. Everything else is
 `Button.Secondary`, `Button.Text`, or `Button.Danger`.
 
-### R9. Multiline text must not stretch by default
+### R9. Multiline text adaptability & no forced MinHeight
 
-A multiline `TextBox` defaults to `VerticalAlignment="Stretch"`. Inside a
-`Grid` row with `Height="*"` it fills the whole row and breaks the layout.
-Inside a `StackPanel` the stretch has no effect, but a large `MinHeight`
-still makes the form too tall.
+- **No forced global MinHeight**: `TextBox.Multiline` defaults to `MinHeight="0"`, `Height="Auto"`. Never impose hardcoded min-height in theme styles that causes window overflow or scrollbar fighting.
+- **Form multiline input**: place in `Grid` `Height="Auto"` rows with `VerticalAlignment="Top"`. Let content or view dictate height.
+- **Dedicated comparison / log / content panels**: place in dedicated `Grid` `Height="*"` rows with `VerticalAlignment="Stretch"` so it naturally fills available viewport space without clipping.
+- **Never use `Height="*"` on a control**: only `RowDefinition`/`ColumnDefinition` can take `*`.
 
-Rules:
-
-- Form multiline input:
-  `Height="Auto"`, `MinHeight` 80–110, `MaxHeight` 140–180,
-  `VerticalAlignment="Top"`, `VerticalContentAlignment="Top"`.
-- Read-only log/code box:
-  place it in a dedicated `Grid` row `Height="*"`;
-  `MinHeight` 120–240; `VerticalAlignment="Stretch"` is allowed there.
-- Wrapped `TextBlock`: `VerticalAlignment="Top"`; no fixed `Height`.
-- Never use `Height="*"` on a control.
-- Only list/table/log/ScrollViewer should occupy a `*` row.
-
-```xml
-<!-- form input -->
-<TextBox Style="{StaticResource TextBox.Multiline}"
-         Height="Auto" MinHeight="90" MaxHeight="160"
-         VerticalAlignment="Top" />
-
-<!-- log -->
-<TextBox Grid.Row="1" Style="{StaticResource TextBox.Code}"
-         MinHeight="120" MaxHeight="240"
-         VerticalAlignment="Stretch" />
-```
 
 ### R10. Icon contracts: Google Material Symbols & dynamic foreground
 

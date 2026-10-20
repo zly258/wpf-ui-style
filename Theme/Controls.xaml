@@ -321,8 +321,7 @@
 
     <Style x:Key="TextBox.Multiline" TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBox.Base}">
         <Setter Property="Height" Value="Auto" />
-        <Setter Property="MinHeight" Value="{StaticResource Layout.InputMinHeight}" />
-        <Setter Property="MaxHeight" Value="{StaticResource Layout.InputMaxHeight}" />
+        <Setter Property="MinHeight" Value="0" />
         <Setter Property="Padding" Value="{StaticResource Layout.InputPadding.Multiline}" />
         <Setter Property="AcceptsReturn" Value="True" />
         <Setter Property="TextWrapping" Value="Wrap" />
@@ -330,6 +329,7 @@
         <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
         <Setter Property="Template" Value="{StaticResource TextBox.Multiline.Template}" />
     </Style>
+
 
     <Style x:Key="TextBox.Code" TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBox.Multiline}">
         <Setter Property="Background" Value="{StaticResource Brush.SurfaceSunken}" />
