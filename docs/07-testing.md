@@ -12,7 +12,11 @@
 
 ```powershell
 pwsh ./tools/ContrastCheck.ps1
+# 或直接运行 Python（CI / Linux / macOS）
+python tools/ContrastCheck.py
 ```
+
+`.ps1` 只是薄包装，会自动探测 `py -3` → `python3` → `python`；逻辑在 `ContrastCheck.py`（仅标准库）。
 
 输出示例：
 
@@ -30,8 +34,10 @@ All contrast checks passed.
 
 - `0`：全部通过。
 - `1`：有组合低于最低要求。
+- `2`：仅 `.ps1` 包装——本机未找到 Python 3。
 
-新增颜色时，必须在脚本的 `$Pairs` 中登记组合。
+新增颜色时，必须在 `tools/ContrastCheck.py` 的 `PAIRS` 中登记组合。
+
 
 ---
 
@@ -39,17 +45,22 @@ All contrast checks passed.
 
 ```powershell
 pwsh ./tools/LayoutCheck.ps1 -Root "D:\workspace\inventor\OpenCADTranslate"
+# 或直接运行 Python
+python tools/LayoutCheck.py --root . --strict
 ```
+
+逻辑在 `LayoutCheck.py`（仅标准库），`.ps1` 同样只是薄包装。
 
 检查项：
 
 - 控件上的 `Height="*"`（只允许 `RowDefinition`/`ColumnDefinition`）。
-- 多行 `TextBox`（`AcceptsReturn` / `TextBox.Multiline` / `TextBox.Code`）是否设置 `MinHeight`/`MaxHeight`。
-- 表单多行输入是否误用 `VerticalAlignment="Stretch"`。
+- 只读日志/代码 `TextBox` 是否设置 `MaxHeight`（防止无限撑大）。
 - 换行 `TextBlock` 是否误用 `Stretch`。
 - 业务窗口是否嵌套 `ScrollViewer`。
+- 多行 `TextBox` 不再强制要求 `MinHeight`（全局硬限制会导致小窗口被撑爆）。
 
-默认只把“错误”作为失败；警告需要人工判断。CI 中可以使用 `-Strict` 让警告也失败。
+默认只把“错误”作为失败；警告需要人工判断。CI 中可以使用 `-Strict`（或 `--strict`）让警告也失败。
+
 
 ---
 

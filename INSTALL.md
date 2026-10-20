@@ -213,15 +213,21 @@ window.Resources.MergedDictionaries.Add(new ResourceDictionary
 安装到用户级后：
 
 ```powershell
-# 对比度
+# 对比度（.ps1 会自动探测 py -3 / python3 / python）
 pwsh "$HOME/.agents/skills/wpf-ui-style/tools/ContrastCheck.ps1"
 
 # 布局（多行文本撑满、Height="*" 等）
 pwsh "$HOME/.agents/skills/wpf-ui-style/tools/LayoutCheck.ps1" -Root "D:\your\project"
 
+# 也可以直接运行 Python（CI / Linux / macOS）
+python "$HOME/.agents/skills/wpf-ui-style/tools/ContrastCheck.py"
+python "$HOME/.agents/skills/wpf-ui-style/tools/LayoutCheck.py" --root "D:\your\project"
+
 # 契约测试（复制到测试项目后）
 dotnet test
 ```
+
+> 校验脚本需要 Python 3（仅标准库，无需 `pip install`）。安装脚本 `install.ps1` 本身不依赖 Python。
 
 项目级安装时把路径换成 `.zcode/skills/wpf-ui-style/...` 或对应客户端路径。
 
@@ -238,8 +244,8 @@ dotnet test
 | 布局/多行文本规则 | `docs/03-layout.md` |
 | 常见错误 | `docs/04-common-pitfalls.md` |
 | 速查与代码片段 | `references/cheatsheet.md`、`references/xaml-snippets.md` |
-| 对比度阈值 | `tools/ContrastCheck.ps1` 的 `$pairs` |
-| 布局检查规则 | `tools/LayoutCheck.ps1` |
+| 对比度阈值 | `tools/ContrastCheck.py` 的 `PAIRS` |
+| 布局检查规则 | `tools/LayoutCheck.py` |
 
 修改后重新安装并加 `-Force`，让已安装的副本更新：
 

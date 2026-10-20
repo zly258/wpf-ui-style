@@ -49,8 +49,9 @@ See `INSTALL.md` for the full client table, parameters, verification and uninsta
 - `Theme/Controls.xaml` / `Theme/DataControls.xaml` — 控件样式。
 - `Theme/Icons.xaml` — 24x24 矢量几何、尺寸与状态样式、图标按钮。
 - `docs/09-icon-system.md` — 图标设计与使用规范。
-- `tools/ContrastCheck.ps1` — 对比度检查。
-- `tools/LayoutCheck.ps1` — 多行文本/布局反模式检查。
+- `tools/ContrastCheck.py` — 对比度检查逻辑（Python 3 标准库）。
+- `tools/LayoutCheck.py` — 多行文本/布局反模式检查逻辑（Python 3 标准库）。
+- `tools/ContrastCheck.ps1` / `tools/LayoutCheck.ps1` — 薄包装，自动探测 `py -3` / `python3` / `python` 后转调 `.py`。
 - `tests/ThemeContractTests.cs` — xUnit 契约测试模板。
 
 ## Source of truth

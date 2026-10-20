@@ -1,4 +1,7 @@
 import re, math, urllib.request, json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
 
 ICONS = {
     "Search": "search",
@@ -190,6 +193,6 @@ for key, name in ICONS.items():
     except Exception as e:
         print(f"FAIL {key} {name}: {e}")
 
-with open("icon_paths.json", "w", encoding="utf-8") as f:
+with open(ROOT / "icon_paths.json", "w", encoding="utf-8") as f:
     json.dump(results, f, ensure_ascii=False, indent=1)
-print("saved", len(results))
+print("saved", len(results), "->", ROOT / "icon_paths.json")

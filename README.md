@@ -27,7 +27,7 @@
 - 速查：`references/cheatsheet.md`。
 - 代码片段：`references/xaml-snippets.md`。
 - 可执行主题：`Theme/Theme.xaml`。
-- 校验工具：`tools/ContrastCheck.ps1`、`tools/LayoutCheck.ps1`。
+- 校验工具：`tools/ContrastCheck.py`、`tools/LayoutCheck.py`（附 `.ps1` 薄包装，原命令不变）。
 - 契约测试：`tests/ThemeContractTests.cs`。
 
 一键安装：
@@ -97,8 +97,11 @@ wpf-styles/
 │  ├─ SampleWindow.xaml              ← 推荐布局示例
 │  └─ README.md
 ├─ tools/
-│  ├─ ContrastCheck.ps1              ← 对比度自动检查
-│  └─ LayoutCheck.ps1                ← 多行文本/布局反模式检查
+│  ├─ ContrastCheck.py               ← 对比度自动检查（Python 3 标准库）
+│  ├─ LayoutCheck.py                 ← 多行文本/布局反模式检查
+│  ├─ ContrastCheck.ps1              ← 薄包装（自动探测 Python）
+│  ├─ LayoutCheck.ps1                ← 薄包装（自动探测 Python）
+│  └─ README.md                      ← 脚本分工与调用方式
 └─ tests/
    └─ ThemeContractTests.cs          ← 可复制到 xUnit 项目的契约测试
 ```
@@ -219,15 +222,22 @@ public static void Apply(Window window)
 - 禁用文字：WCAG 不强制，但本规范要求 ≥ **3:1**，建议 ≥ 4.5:1。
 - 白字压品牌色：本规范所有 Accent/Danger 组合均 ≥ 5.3:1。
 
-运行：
+运行（`.ps1` 是薄包装，会自动探测 `py -3` / `python3` / `python`）：
 
 ```powershell
 pwsh ./tools/ContrastCheck.ps1
 pwsh ./tools/LayoutCheck.ps1 -Root "D:\workspace\inventor\OpenCADTranslate"
 ```
 
-`LayoutCheck.ps1` 会检查多行文本撑满、控件 `Height="*"`、换行文本 `Stretch`、
-嵌套 `ScrollViewer` 等布局反模式。
+也可以直接调用 Python（CI / Linux / macOS 推荐）：
+
+```bash
+python tools/ContrastCheck.py
+python tools/LayoutCheck.py --root . --strict
+```
+
+`LayoutCheck` 会检查多行文本撑满、控件 `Height="*"`、换行文本 `Stretch`、
+嵌套 `ScrollViewer` 等布局反模式。脚本分工见 [tools/README.md](tools/README.md)。
 
 完整色值与实测比值见 [docs/05-accessibility-contrast.md](docs/05-accessibility-contrast.md)，
 布局约束见 [docs/03-layout.md](docs/03-layout.md)。

@@ -1,6 +1,8 @@
 import json, re
+from pathlib import Path
 
-paths = json.load(open("icon_paths.json", encoding="utf-8"))
+ROOT = Path(__file__).resolve().parent.parent
+paths = json.load(open(ROOT / "icon_paths.json", encoding="utf-8"))
 
 GROUPS = [
     ("1. 常用业务操作 (Actions)", [
@@ -72,11 +74,11 @@ for title, items in GROUPS:
 
 block = "\n".join(lines)
 
-src = open("Theme/Icons.xaml", encoding="utf-8").read()
+src = open(ROOT / "Theme" / "Icons.xaml", encoding="utf-8").read()
 start_marker = "    <!-- =============================================================================="
 end_marker = "    <!-- ============================================================\n         4. 图标基础样式"
 si = src.index(start_marker)
 ei = src.index(end_marker)
 new = src[:si] + block + "\n" + src[ei:]
-open("Theme/Icons.xaml", "w", encoding="utf-8", newline="\n").write(new)
+open(ROOT / "Theme" / "Icons.xaml", "w", encoding="utf-8", newline="\n").write(new)
 print("spliced; icons:", len(paths))
