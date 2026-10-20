@@ -1,4 +1,4 @@
-# OpenCAD WPF UI 样式规范
+# WPF UI Skills
 
 面向 AutoCAD / Inventor 插件与桌面工具的 WPF 视觉与交互规范。
 

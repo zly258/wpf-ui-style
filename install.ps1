@@ -555,7 +555,7 @@ function Get-RuleBody {
     param([string]$SkillPath)
     $body = @'
 <!-- BEGIN wpf-ui-style -->
-# WPF UI Style
+# WPF UI Skills
 
 When editing WPF/XAML in this project, follow the `wpf-ui-style` skill.
 
@@ -588,7 +588,7 @@ function Get-RuleContent {
         'cursor' {
             return @"
 ---
-description: WPF UI style rules for OpenCAD projects (tokens, states, layout, contrast).
+description: WPF UI Skills rules (tokens, states, layout, contrast).
 globs: "**/*.xaml"
 alwaysApply: false
 ---
@@ -613,7 +613,7 @@ function Get-AgentBlock {
     param([string]$SkillPath)
     $block = @'
 <!-- BEGIN wpf-ui-style -->
-## WPF UI Style
+## WPF UI Skills
 
 When editing WPF/XAML in this repository, read and follow:
 `{{SKILL_PATH}}/SKILL.md`
@@ -624,8 +624,8 @@ Key rules:
 - No `Opacity` for disabled; use disabled background/foreground tokens.
 - White text only on Accent/Danger/Tooltip dark backgrounds.
 - Selected + hover uses `MultiTrigger`.
-- Multiline TextBox: `Height="Auto"` + `MinHeight`/`MaxHeight` + `VerticalAlignment="Top"`;
-  only logs/lists/tables/ScrollViewer may fill a `Grid` `*` row.
+- Multiline TextBox: no global `MinHeight`; use `VerticalAlignment="Stretch"` in a `*` row for
+  comparison/log panels, or `VerticalAlignment="Top"` in an `Auto` row for forms.
 - Run `{{SKILL_PATH}}/tools/ContrastCheck.ps1` and
   `{{SKILL_PATH}}/tools/LayoutCheck.ps1 -Root <project>` before finishing.
 <!-- END wpf-ui-style -->

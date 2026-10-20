@@ -1,6 +1,6 @@
 # 安装与配置
 
-`wpf-styles` 本身就是一个 skill：入口是 `SKILL.md`，附带主题、文档、检查工具和测试模板。
+WPF UI Skills（仓库目录 `wpf-styles`）本身就是一个 skill：入口是 `SKILL.md`，附带主题、文档、检查工具和测试模板。
 `install.ps1` 会把整套内容安装到主流 AI 编码客户端，并为不支持 skill 的客户端写入规则文件或
 `AGENTS.md` 标记块。
 

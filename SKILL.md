@@ -1,9 +1,9 @@
 ---
 name: wpf-ui-style
-description: Apply and audit the OpenCAD WPF UI style system (tokens, control states, layout, contrast). Use when creating or modifying WPF/XAML windows, styles, resource dictionaries, themes, buttons, inputs, lists, data grids, dialogs, or when fixing unreadable text caused by foreground/background/hover/selected/disabled conflicts. 也适用于中文场景：WPF 样式规范、布局规范、前景与背景冲突、悬停背景看不清、选中项白字、禁用按钮不可读、多行文本框撑满布局、对比度检查。
+description: Apply and audit the WPF UI Skills style system (tokens, control states, layout, contrast). Use when creating or modifying WPF/XAML windows, styles, resource dictionaries, themes, buttons, inputs, lists, data grids, dialogs, or when fixing unreadable text caused by foreground/background/hover/selected/disabled conflicts. 也适用于中文场景：WPF 样式规范、布局规范、前景与背景冲突、悬停背景看不清、选中项白字、禁用按钮不可读、多行文本框撑满布局、对比度检查。
 ---
 
-# WPF UI Style Skill
+# WPF UI Skills
 
 ## When to use
 
