@@ -103,6 +103,28 @@ namespace OpenCAD.WpfStyles.Tests
         }
 
         [Fact]
+        public void IconGeometry_UsesUniform24ViewportAnchor()
+        {
+            XDocument icons = Load(IconsPath);
+
+            var geometries = icons.Root.Elements()
+                .Where(e => e.Name.LocalName == "StreamGeometry"
+                    && ((string)e.Attribute(X + "Key") ?? "").StartsWith("Icon.Geo."))
+                .ToList();
+
+            Assert.NotEmpty(geometries);
+
+            foreach (XElement geo in geometries)
+            {
+                string key = (string)geo.Attribute(X + "Key");
+                string data = geo.Value.Trim();
+
+                // 零面积锚点保证 Stretch="Uniform" 始终按完整 24x24 视口缩放
+                Assert.EndsWith("M0,0 L24,24", data);
+            }
+        }
+
+        [Fact]
         public void IconBase_BindsToForegroundAndUniformStretch()
         {
             XElement iconBase = FindKeyedStyle(IconsPath, "Icon.Base");

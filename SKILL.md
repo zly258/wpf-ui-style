@@ -164,12 +164,16 @@ Only one `Button.Primary` per dialog/section. Everything else is
 ### R10. Icon contracts: Google Material Symbols & dynamic foreground
 
 - **Official Material Symbols standard**: all icons are derived from Google Material Symbols (Apache 2.0 license, commercially free), designed on a standard 24x24 optical viewport (`StreamGeometry Icon.Geo.*`).
+- **Balanced weight**: use **Outlined / Weight 400 / Grade 0 / Optical Size 24**. Never mix Filled with Outlined, and never use 200 (too thin, breaks at 16px) or 700 (too heavy, fights the text).
+- **Uniform optical size**: every geometry ends with the zero-area anchor `M0,0 L24,24` so `Stretch="Uniform"` always maps the full 24x24 viewport. Without it, chevrons get blown up to the size of a gear.
+- **Line-control strokes**: checkbox tick 1.6px, dropdown/expander chevrons 1.5px, round caps and joins. Keep them visually equal to icon weight.
 - **No bitmap/PNG icons**: strictly vector geometry to avoid DPI blur across 100%–200% displays.
 - **Dynamic foreground inheritance**: icon `Fill` binds to `(TextElement.Foreground)` with `Stretch="Uniform"`. Never hardcode `Fill="#..."`.
 - **Icon size steps**: only use `Icon.Size.Micro` (12), `Icon.Size.Small` (14), `Icon.Size.Regular` (16 - default), `Icon.Size.Medium` (20), `Icon.Size.Large` (24), `Icon.Size.Hero` (32).
-- **Icon buttons**: use `Button.Icon` (28x28), `Button.Icon.Small` (24x24), or `Button.Icon.Large` (34x34).
+- **Icon buttons**: use `Button.Icon` (30x30), `Button.Icon.Small` (26x26), or `Button.Icon.Large` (36x36).
 - **ToolTip required**: all icon-only buttons must provide a descriptive `ToolTip`.
 - **Icon-text gap**: use 6px horizontal gap between icon and text (`Margin="0,0,6,0"`).
+
 
 
 ### R11. Layout hierarchy & toolbar rules

@@ -118,7 +118,9 @@ pwsh ./tools/LayoutCheck.ps1 -Root "D:\your\project"
 
 ### 官方规范基准
 - **数据来源**：Google Material Symbols（Apache 2.0 开源许可，自由商用）。
-- **坐标视口**：统一 24×24 视口网格，`Stretch="Uniform"`，`SnapsToDevicePixels="True"`。
+- **视觉重量**：统一 **Outlined / Weight 400 / Grade 0 / Optical Size 24**——不过粗（700）也不过细（200）。
+- **坐标视口**：统一 24×24 视口网格，每条几何末尾带 `M0,0 L24,24` 锚点，`Stretch="Uniform"`，`SnapsToDevicePixels="True"`。
+- **线型控件**：复选框勾 1.6px，下拉/折叠箭头 1.5px，圆头端点。
 
 ### 图标尺寸阶梯
 - `Icon.Size.Micro` (12px): 状态徽章、角标
