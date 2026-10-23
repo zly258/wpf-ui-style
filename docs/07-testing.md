@@ -66,7 +66,9 @@ python tools/LayoutCheck.py --root . --strict
 
 ## 2. 主题契约测试
 
-`tests/ThemeContractTests.cs` 是可复制到 xUnit 项目的模板。
+`tests/` 是一个可直接运行的 xUnit 工程（`WpfStyleContractTests.csproj`）。
+在仓库根目录执行 `dotnet test tests/WpfStyleContractTests.csproj` 即可；
+也可以把 `ThemeContractTests.cs` 复制到业务项目的测试目录。
 
 覆盖：
 
@@ -78,11 +80,11 @@ python tools/LayoutCheck.py --root . --strict
 
 使用：
 
-1. 把文件复制到项目的测试目录。
-2. 确认 `StylesRoot` 能找到 `wpf-styles` 目录：
+1. 在仓库根目录运行 `dotnet test tests/WpfStyleContractTests.csproj`。
+2. 如果复制到业务项目，确认 `StylesRoot` 能找到 `wpf-styles` 目录：
    - 默认从测试输出目录向上查找；
    - 或设置环境变量 `WPF_STYLES_ROOT`。
-3. `dotnet test`。
+3. CI 中执行同样的命令。
 
 > 建议把契约测试放在 CI 中。任何把 `TextBlock.Foreground` 改回静态色、
 > 把禁用态改回 `Opacity`、或把 `Button.Primary` 改成非白字的提交都会失败。

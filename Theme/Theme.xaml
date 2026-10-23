@@ -10,13 +10,14 @@
                 </ResourceDictionary.MergedDictionaries>
             </ResourceDictionary>
 
-        Controls.xaml / DataControls.xaml 内部各自合并了 Tokens.xaml，
-        因此这里不需要重复合并 Tokens。
+        Controls.xaml / DataControls.xaml / Icons.xaml / Extras.xaml 内部
+        各自合并了 Tokens.xaml，因此这里不需要重复合并 Tokens。
     -->
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Controls.xaml" />
         <ResourceDictionary Source="DataControls.xaml" />
         <ResourceDictionary Source="Icons.xaml" />
+        <ResourceDictionary Source="Extras.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
 </ResourceDictionary>

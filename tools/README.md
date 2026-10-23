@@ -5,7 +5,7 @@
 | 文件 | 语言 | 职责 |
 |---|---|---|
 | `ContrastCheck.py` | Python 3（仅标准库） | WCAG 对比度检查，逻辑唯一实现 |
-| `LayoutCheck.py` | Python 3（仅标准库） | XAML 布局反模式扫描，逻辑唯一实现 |
+| `LayoutCheck.py` | Python 3（仅标准库） | XAML 布局与令牌使用扫描，逻辑唯一实现 |
 | `ContrastCheck.ps1` | PowerShell | **薄包装**：探测 `py -3` → `python3` → `python` 并转调 `.py` |
 | `LayoutCheck.ps1` | PowerShell | **薄包装**：同上 |
 | `_fetch_material_icons.py` | Python 3 | 从 Google Fonts 抓取 Material Symbols Outlined 并转换到 24 视口 |
@@ -40,6 +40,26 @@ python tools/LayoutCheck.py --root . --strict
 
 - 仅使用 Python 3 标准库，无需 `pip install`。
 - 退出码：`0` 通过；`1` 校验失败；`2`（仅 `.ps1` 包装）未找到 Python 3。
+
+## 4.1 LayoutCheck 检查项
+
+**错误（ERROR，退出码 1）**
+
+| 检查 | 说明 |
+|---|---|
+| 控件上的 `Height="*"` | 只有 `RowDefinition` / `ColumnDefinition` 允许 `*` |
+| 业务 XAML 硬编码色值 | `#RGB` / `#RRGGBB` / `#AARRGGBB` 只允许出现在 `Theme/` 里 |
+| 业务 XAML 本地 `FontFamily` | 字体栈由 Window 样式统一提供，禁止局部覆盖 |
+
+**警告（WARN，`--strict` 下才失败）**
+
+| 检查 | 说明 |
+|---|---|
+| 日志/代码 TextBox 缺 `MaxHeight` | 可能导致高度无界增长 |
+| `TextWrapping="Wrap"` 配 `VerticalAlignment="Stretch"` | 建议用 `Top` |
+| 嵌套 `ScrollViewer` | 一处窗口只保留一层垂直滚动 |
+
+主题目录（`Theme/`）会被跳过色值与字体检查——它是色值的唯一来源，本就该直接写 `#RRGGBB`。
 
 ## 5. 扩展图标
 

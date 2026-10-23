@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>WpfStylePreview</RootNamespace>
+    <AssemblyName>WpfStylePreview</AssemblyName>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <!-- App.xaml.cs 自带 Main（支持无头截图导出），用它作为唯一入口点。 -->
+    <GenerateProgramFile>false</GenerateProgramFile>
+    <StartupObject>WpfStylePreview.App</StartupObject>
+    <!-- 不让 SDK 把 App.xaml 当 ApplicationDefinition（那会自动生成一个 Main），
+         让它按普通 Page 编译即可；Application.Resources 仍由 InitializeComponent 加载。 -->
+    <EnableDefaultApplicationDefinition>false</EnableDefaultApplicationDefinition>
+  </PropertyGroup>
+
+  <!-- 主题文件来自仓库根目录的 Theme/，用 Link 挂进程序集资源，避免复制副本。 -->
+  <ItemGroup>
+    <Page Include="..\Theme\Tokens.xaml" Link="Theme\Tokens.xaml" />
+    <Page Include="..\Theme\Controls.xaml" Link="Theme\Controls.xaml" />
+    <Page Include="..\Theme\DataControls.xaml" Link="Theme\DataControls.xaml" />
+    <Page Include="..\Theme\Icons.xaml" Link="Theme\Icons.xaml" />
+    <Page Include="..\Theme\Extras.xaml" Link="Theme\Extras.xaml" />
+    <Page Include="..\Theme\Theme.xaml" Link="Theme\Theme.xaml" />
+  </ItemGroup>
+
+</Project>

@@ -12,7 +12,7 @@
 演示与测试图标系统的全场景约束：
 - **尺寸阶梯**：Micro (12px) / Small (14px) / Regular (16px) / Medium (20px) / Large (24px) / Hero (32px)。
 - **动态着色契约**：同一矢量 Path 放入主按钮（自动白标）、次按钮（深色标）、禁用按钮（浅灰标）、危险按钮（红标）。
-- **纯图标按钮矩阵**：`Button.Icon` (28px)、`Button.Icon.Small` (24px)、`Button.Icon.Large` (34px)、`Button.Icon.Danger`，覆盖正常、悬停、禁用态与 ToolTip 提示。
+- **纯图标按钮矩阵**：`Button.Icon` (30px)、`Button.Icon.Small` (26px)、`Button.Icon.Large` (36px)、`Button.Icon.Danger`，覆盖正常、悬停、禁用态与 ToolTip 提示。
 - **语义状态提示**：成功 (Success)、警告 (Warning)、危险 (Danger)、信息 (Info) 的通知卡片图标组合。
 - **业务集成**：带清除按钮的搜索框复合控件、TabControl 图标选项卡、工具条组合。
 

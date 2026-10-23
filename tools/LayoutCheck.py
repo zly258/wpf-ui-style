@@ -3,6 +3,7 @@
 
 Scans .xaml files and reports:
   - Height="*" on controls (only RowDefinition/ColumnDefinition allow *).
+  - Hardcoded color literals and local FontFamily in business XAML.
   - Read-only log/code TextBox without MaxHeight (warning).
   - Wrapped TextBlock with VerticalAlignment="Stretch" (warning).
   - Nested ScrollViewer (warning).
@@ -24,9 +25,14 @@ from pathlib import Path
 EXCLUDE_DIRS = {"obj", "bin", ".build", "output", "dist", "node_modules"}
 THEME_FILE_RE = re.compile(r"(WindowTheme|Styles|UnifiedTheme)\.xaml$", re.IGNORECASE)
 TAG_RE = re.compile(r"<([A-Za-z0-9_:]+)\b(.*?)>", re.DOTALL)
+COMMENT_RE = re.compile(r"<!--.*?-->", re.DOTALL)
+# #RGB / #RRGGBB / #AARRGGBB used as an attribute value. Requiring the leading
+# quote keeps text such as "Issue #123" from being reported as a color.
+COLOR_LITERAL_RE = re.compile(r'(?<=["\'])#(?:[0-9A-Fa-f]{8}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{3})\b')
+FONTFAMILY_RE = re.compile(r'FontFamily\s*=\s*"[^"]{2,}"')
 TEXTBOX_RE = re.compile(r"<TextBox\b(.*?)>", re.DOTALL)
 TEXTBLOCK_RE = re.compile(r"<TextBlock\b(.*?)>", re.DOTALL)
-SCROLLVIEWER_RE = re.compile(r"<ScrollViewer(?=[\s/>])|</ScrollViewer>")
+SCROLLVIEWER_TAG_RE = re.compile(r"<ScrollViewer\b[^>]*?/?>|</ScrollViewer>", re.DOTALL)
 
 errors = 0
 warnings = 0
@@ -34,6 +40,20 @@ warnings = 0
 
 def line_number(text: str, index: int) -> int:
     return text.count("\n", 0, index) + 1
+
+
+def comment_ranges(text: str) -> list[tuple[int, int]]:
+    """Character ranges covered by XML comments, including multi-line ones."""
+    return [(m.start(), m.end()) for m in COMMENT_RE.finditer(text)]
+
+
+def in_ranges(index: int, ranges: list[tuple[int, int]]) -> bool:
+    for start, end in ranges:
+        if start > index:
+            break
+        if start <= index < end:
+            return True
+    return False
 
 
 def report(level: str, path: Path, line: int, message: str) -> None:
@@ -62,6 +82,7 @@ def is_theme_file(path: Path) -> bool:
 
 def check_file(path: Path) -> None:
     text = path.read_text(encoding="utf-8", errors="replace")
+    comments = comment_ranges(text)
 
     # 1. Height="*" on a control
     for match in TAG_RE.finditer(text):
@@ -112,15 +133,47 @@ def check_file(path: Path) -> None:
             'Wrapped TextBlock uses VerticalAlignment="Stretch"; use Top so it does not center/stretch in a flexible row',
         )
 
-    # 4. Nested ScrollViewer (skip theme/style templates: ComboBox popups legitimately nest)
+    # 4. Hardcoded color literals in business XAML.
+    #    Theme files are the single source of truth for color and may contain them;
+    #    business windows must reference Brush.* / Color.* tokens instead.
+    if not is_theme_file(path):
+        for match in COLOR_LITERAL_RE.finditer(text):
+            if in_ranges(match.start(), comments):
+                continue
+            line = line_number(text, match.start())
+            report(
+                "ERROR",
+                path,
+                line,
+                f"Hardcoded color '{match.group(0)}'; use a Brush.* / Color.* token from Theme/Tokens.xaml",
+            )
+
+    # 5. Local FontFamily in business XAML: the Window style provides Font.Ui.
+    if not is_theme_file(path):
+        for match in FONTFAMILY_RE.finditer(text):
+            if in_ranges(match.start(), comments):
+                continue
+            line = line_number(text, match.start())
+            report(
+                "ERROR",
+                path,
+                line,
+                "Local FontFamily; inherit Font.Ui from the Window style and do not override the font stack",
+            )
+
+    # 6. Nested ScrollViewer (skip theme/style templates: ComboBox popups legitimately nest)
     if is_theme_file(path):
         return
 
     depth = 0
-    for match in SCROLLVIEWER_RE.finditer(text):
-        if match.group(0).startswith("</"):
+    for match in SCROLLVIEWER_TAG_RE.finditer(text):
+        token = match.group(0)
+        if token.startswith("</"):
             if depth > 0:
                 depth -= 1
+            continue
+        # A self-closing <ScrollViewer ... /> does not open a scope.
+        if token.rstrip().endswith("/>"):
             continue
         depth += 1
         if depth > 1:

@@ -246,7 +246,7 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
-    <!-- 标准 28x28 图标按钮 (默认) -->
+    <!-- 标准 30x30 图标按钮 (默认) → Layout.IconButton.Small -->
     <Style x:Key="Button.Icon" TargetType="{x:Type Button}">
         <Setter Property="Width" Value="{StaticResource Layout.IconButton.Small}" />
         <Setter Property="Height" Value="{StaticResource Layout.IconButton.Small}" />
@@ -261,14 +261,16 @@
         <Setter Property="Template" Value="{StaticResource IconButton.Template}" />
     </Style>
 
-    <!-- 紧凑 24x24 图标按钮 (表格行、输入框尾部) -->
+    <!-- 紧凑 26x26 图标按钮 (表格行、输入框尾部)
+         注意：样式名是 Small，但用的是 Micro 令牌 (26)。
+         尺寸阶梯是 Micro < Small < Large，这里的 "Small" 指"比默认的更小"。 -->
     <Style x:Key="Button.Icon.Small" TargetType="{x:Type Button}" BasedOn="{StaticResource Button.Icon}">
         <Setter Property="Width" Value="{StaticResource Layout.IconButton.Micro}" />
         <Setter Property="Height" Value="{StaticResource Layout.IconButton.Micro}" />
         <Setter Property="Tag" Value="{StaticResource Radius.Small}" />
     </Style>
 
-    <!-- 大号 34x34 图标按钮 (主工具条) -->
+    <!-- 大号 36x36 图标按钮 (主工具条) -->
     <Style x:Key="Button.Icon.Large" TargetType="{x:Type Button}" BasedOn="{StaticResource Button.Icon}">
         <Setter Property="Width" Value="{StaticResource Layout.IconButton.Large}" />
         <Setter Property="Height" Value="{StaticResource Layout.IconButton.Large}" />

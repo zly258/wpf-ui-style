@@ -28,7 +28,7 @@
 - 代码片段：`references/xaml-snippets.md`。
 - 可执行主题：`Theme/Theme.xaml`。
 - 校验工具：`tools/ContrastCheck.py`、`tools/LayoutCheck.py`（附 `.ps1` 薄包装，原命令不变）。
-- 契约测试：`tests/ThemeContractTests.cs`。
+- 契约测试：`tests/`（`dotnet test tests/WpfStyleContractTests.csproj`）。
 
 一键安装：
 
@@ -79,6 +79,8 @@ wpf-styles/
 │  ├─ Tokens.xaml                    ← 唯一色值、字体、尺寸、圆角、文本样式
 │  ├─ Controls.xaml                  ← 按钮、输入框、下拉框、复选、分组、Tab、ToolTip…
 │  ├─ DataControls.xaml              ← ListBox、ListView、DataGrid、TreeView
+│  ├─ Icons.xaml                     ← 24x24 图标几何、尺寸阶梯、图标按钮
+│  ├─ Extras.xaml                    ← Slider、DatePicker、Menu、ToolBar、Card、Badge…
 │  ├─ Theme.xaml                     ← 唯一推荐入口
 │  └─ README.md                      ← 主题文件使用说明
 ├─ docs/
@@ -96,6 +98,7 @@ wpf-styles/
 ├─ samples/
 │  ├─ SampleWindow.xaml              ← 推荐布局示例
 │  └─ README.md
+├─ preview/                          ← 可运行的 WPF 预览工程（dotnet run）
 ├─ tools/
 │  ├─ ContrastCheck.py               ← 对比度自动检查（Python 3 标准库）
 │  ├─ LayoutCheck.py                 ← 多行文本/布局反模式检查
@@ -103,7 +106,8 @@ wpf-styles/
 │  ├─ LayoutCheck.ps1                ← 薄包装（自动探测 Python）
 │  └─ README.md                      ← 脚本分工与调用方式
 └─ tests/
-   └─ ThemeContractTests.cs          ← 可复制到 xUnit 项目的契约测试
+   ├─ ThemeContractTests.cs          ← xUnit 契约测试
+   └─ WpfStyleContractTests.csproj   ← 可直接 dotnet test
 ```
 
 ---
@@ -187,7 +191,7 @@ public static void Apply(Window window)
    后声明的触发器覆盖前面的，容易出现浅底白字。
 
 6. **多行文本不要默认撑满。**
-   表单多行输入：`Height="Auto"` + `MinHeight`/`MaxHeight` + `VerticalAlignment="Top"`。
+   表单多行输入：`Height="Auto"` + `VerticalAlignment="Top"`，不要强制 `MinHeight`。
    只有日志/列表/表格/主内容 ScrollViewer 才放在 `Grid` 的 `*` 行。
    禁止在控件上写 `Height="*"`。
 
@@ -286,7 +290,7 @@ Skill 会按以下顺序工作：
    `docs/03-layout.md`、`docs/04-common-pitfalls.md`。
 3. 用 `Theme/Theme.xaml` 替换局部样式。
 4. 运行 `tools/ContrastCheck.ps1` 和 `tools/LayoutCheck.ps1`。
-5. 用 `tests/ThemeContractTests.cs` 做回归检查。
+5. 用 `dotnet test tests/WpfStyleContractTests.csproj` 做回归检查。
 
 如果客户端只支持规则文件（Windsurf、Cline、Roo、Kilo、Continue、JetBrains 等），
 安装器会写入精简规则并指向已安装的 `SKILL.md`；如果只选了规则型客户端，

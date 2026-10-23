@@ -126,7 +126,7 @@
                                        VerticalAlignment="Top" />
                             <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="4"
                                      Style="{StaticResource TextBox.Multiline}"
-                                     MinHeight="80" MaxHeight="120"
+                                     MaxHeight="120"
                                      Margin="0,4" />
                         </Grid>
                     </StackPanel>

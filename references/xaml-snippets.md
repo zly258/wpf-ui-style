@@ -31,14 +31,14 @@
 
 <!-- 多行表单：不要撑满 -->
 <TextBox Style="{StaticResource TextBox.Multiline}"
-         Height="Auto" MinHeight="90" MaxHeight="160"
+         Height="Auto"
          VerticalAlignment="Top"
          Text="{Binding Notes}" />
 
 <!-- 只读日志：允许填充 -->
 <TextBox Grid.Row="1"
          Style="{StaticResource TextBox.Code}"
-         MinHeight="120" MaxHeight="240"
+         MaxHeight="240"
          VerticalAlignment="Stretch"
          Text="{Binding Log}" />
 ```
@@ -130,7 +130,7 @@
 
     <TextBox Grid.Row="1"
              Style="{StaticResource TextBox.Code}"
-             MinHeight="120" MaxHeight="240"
+             MaxHeight="240"
              VerticalAlignment="Stretch" />
 
     <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right"

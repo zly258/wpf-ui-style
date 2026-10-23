@@ -1,0 +1,397 @@
+<Window x:Class="WpfStylePreview.ControlsGalleryWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="WPF UI Skills · 控件全览"
+        Width="1120" Height="940"
+        MinWidth="860" MinHeight="620"
+        WindowStartupLocation="CenterScreen">
+
+    <Border Background="{StaticResource Brush.WindowBackground}">
+        <Grid Margin="{StaticResource Layout.WindowPadding}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0" BorderBrush="{StaticResource Brush.Border}" BorderThickness="0,0,0,1"
+                    Padding="0,0,0,12" Margin="0,0,0,12">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Path Data="{StaticResource Icon.Geo.Settings}" Style="{StaticResource Icon.Medium}" Margin="0,0,8,0" />
+                            <TextBlock Text="控件全览" Style="{StaticResource Text.Title}" FontWeight="SemiBold" />
+                        </StackPanel>
+                        <TextBlock Text="每个控件都给出正常态与禁用/只读态；所有颜色、字号、尺寸均来自 Theme/Tokens.xaml。"
+                                   Style="{StaticResource Text.Caption}" Margin="28,4,0,0" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Button Style="{StaticResource Button.Icon}" ToolTip="刷新" Margin="0,0,4,0">
+                            <Path Data="{StaticResource Icon.Geo.Refresh}" Style="{StaticResource Icon.Regular}" />
+                        </Button>
+                        <Button Style="{StaticResource Button.Icon.Danger}" ToolTip="清空">
+                            <Path Data="{StaticResource Icon.Geo.Trash}" Style="{StaticResource Icon.Regular}" />
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <ScrollViewer Grid.Row="1" Style="{StaticResource ScrollViewer.Base}"
+                          VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <StackPanel>
+
+                    <!-- 1. 按钮家族 -->
+                    <GroupBox Header="1. 按钮家族（主 / 次 / 文本 / 危险 / 图标 / 开关）">
+                        <StackPanel>
+                            <WrapPanel Margin="0,0,0,10">
+                                <Button Content="次按钮" Margin="0,0,8,8" />
+                                <Button Style="{StaticResource Button.Primary}" Content="主按钮" Margin="0,0,8,8" />
+                                <Button Style="{StaticResource Button.Text}" Content="文本按钮" Margin="0,0,8,8" />
+                                <Button Style="{StaticResource Button.Danger}" Content="危险按钮" Margin="0,0,8,8" />
+                                <Button Style="{StaticResource Button.Primary.Small}" Content="小号主" Margin="0,0,8,8" />
+                                <Button Style="{StaticResource Button.Secondary.Small}" Content="小号次" Margin="0,0,8,8" />
+                                <Button Style="{StaticResource Button.Text.Small}" Content="小号文本" Margin="0,0,8,8" />
+                                <Button Style="{StaticResource Button.Danger.Small}" Content="小号危险" Margin="0,0,8,8" />
+                            </WrapPanel>
+
+                            <WrapPanel Margin="0,0,0,10">
+                                <Button Style="{StaticResource Button.Icon}" ToolTip="设置" Margin="0,0,6,8">
+                                    <Path Data="{StaticResource Icon.Geo.Settings}" Style="{StaticResource Icon.Regular}" />
+                                </Button>
+                                <Button Style="{StaticResource Button.Icon.Small}" ToolTip="复制" Margin="0,0,6,8">
+                                    <Path Data="{StaticResource Icon.Geo.Copy}" Style="{StaticResource Icon.Small}" />
+                                </Button>
+                                <Button Style="{StaticResource Button.Icon.Large}" ToolTip="下载" Margin="0,0,6,8">
+                                    <Path Data="{StaticResource Icon.Geo.Download}" Style="{StaticResource Icon.Medium}" />
+                                </Button>
+                                <Button Style="{StaticResource Button.Icon.Danger}" ToolTip="删除" Margin="0,0,6,8">
+                                    <Path Data="{StaticResource Icon.Geo.Trash}" Style="{StaticResource Icon.Regular}" />
+                                </Button>
+                                <Button Style="{StaticResource Button.Icon.Danger.Small}" ToolTip="移除" Margin="0,0,24,8">
+                                    <Path Data="{StaticResource Icon.Geo.Close}" Style="{StaticResource Icon.Small}" />
+                                </Button>
+
+                                <Button Style="{StaticResource Button.Icon}" IsEnabled="False" ToolTip="禁用态" Margin="0,0,6,8">
+                                    <Path Data="{StaticResource Icon.Geo.Settings}" Style="{StaticResource Icon.Regular}" />
+                                </Button>
+                                <Button Style="{StaticResource Button.Icon.Danger}" IsEnabled="False" ToolTip="禁用态">
+                                    <Path Data="{StaticResource Icon.Geo.Trash}" Style="{StaticResource Icon.Regular}" />
+                                </Button>
+                            </WrapPanel>
+
+                            <WrapPanel>
+                                <ToggleButton Content="切换按钮" IsChecked="True" Margin="0,0,8,8" />
+                                <ToggleButton Content="切换按钮" Margin="0,0,8,8" />
+                                <ToggleButton Content="切换按钮" IsEnabled="False" Margin="0,0,24,8" />
+
+                                <ToggleButton Style="{StaticResource ToggleSwitch}" Content="自动保存"
+                                              IsChecked="True" Margin="0,0,16,8" />
+                                <ToggleButton Style="{StaticResource ToggleSwitch}" Content="离线模式" Margin="0,0,16,8" />
+                                <ToggleButton Style="{StaticResource ToggleSwitch}" Content="只读锁定"
+                                              IsEnabled="False" Margin="0,0,0,8" />
+                            </WrapPanel>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <!-- 2. 文本输入 -->
+                    <GroupBox Header="2. 文本输入（单行 / 多行 / 富文本 / 密码）">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="96" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="16" />
+                                <ColumnDefinition Width="96" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="单行" Style="{StaticResource Text.Label}" />
+                            <TextBox Grid.Column="1" Margin="0,4" Text="可编辑文本" />
+
+                            <TextBlock Grid.Column="3" Text="只读" Style="{StaticResource Text.Label}" />
+                            <TextBox Grid.Row="0" Grid.Column="4" Margin="0,4" Text="只读文本"
+                                     IsReadOnly="True" />
+
+                            <TextBlock Grid.Row="1" Text="禁用" Style="{StaticResource Text.Label}" />
+                            <TextBox Grid.Row="1" Grid.Column="1" Margin="0,4" Text="禁用文本"
+                                     IsEnabled="False" />
+
+                            <TextBlock Grid.Row="1" Grid.Column="3" Text="密码" Style="{StaticResource Text.Label}" />
+                            <PasswordBox Grid.Row="1" Grid.Column="4" Margin="0,4" />
+
+                            <TextBlock Grid.Row="2" Text="多行" Style="{StaticResource Text.Label}"
+                                       VerticalAlignment="Top" />
+                            <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4" Margin="0,4"
+                                     Style="{StaticResource TextBox.Multiline}"
+                                     VerticalAlignment="Top" MaxHeight="140"
+                                     Text="多行输入放在 Auto 行、VerticalAlignment=Top，靠内容自然增高，不写死全局 MinHeight。" />
+
+                            <TextBlock Grid.Row="3" Text="代码日志" Style="{StaticResource Text.Label}"
+                                       VerticalAlignment="Top" />
+                            <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4" Margin="0,4"
+                                     Style="{StaticResource TextBox.Code}"
+                                     MinHeight="{StaticResource Layout.LogMinHeight}"
+                                     MaxHeight="{StaticResource Layout.LogMaxHeight}"
+                                     Text="[10:00:01] 开始处理 A-001.dwg&#x0a;[10:00:03] 已翻译 42 条文本&#x0a;[10:00:04] 写回图纸完成" />
+
+                            <TextBlock Grid.Row="4" Text="富文本" Style="{StaticResource Text.Label}"
+                                       VerticalAlignment="Top" />
+                            <RichTextBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="4" Margin="0,4"
+                                         MaxHeight="150" VerticalAlignment="Top">
+                                <FlowDocument>
+                                    <Paragraph>
+                                        富文本框沿用同一套令牌：
+                                        <Bold>加粗</Bold>、
+                                        <Italic>斜体</Italic>、
+                                        <Span Foreground="{StaticResource Brush.Accent}">强调色文本</Span>。
+                                    </Paragraph>
+                                    <Paragraph>
+                                        悬停边框变深，聚焦边框变蓝，禁用走 Control.Disabled + Text.Disabled。
+                                    </Paragraph>
+                                </FlowDocument>
+                            </RichTextBox>
+                        </Grid>
+                    </GroupBox>
+
+                    <!-- 3. 选择与数值 -->
+                    <GroupBox Header="3. 选择、数值与日期">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="96" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="16" />
+                                <ColumnDefinition Width="96" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="下拉框" Style="{StaticResource Text.Label}" />
+                            <ComboBox Grid.Column="1" Margin="0,4" SelectedIndex="0">
+                                <ComboBoxItem Content="英语（en）" />
+                                <ComboBoxItem Content="中文（zh）" />
+                                <ComboBoxItem Content="俄语（ru）" />
+                                <ComboBoxItem Content="德语（de）" />
+                            </ComboBox>
+
+                            <TextBlock Grid.Column="3" Text="下拉禁用" Style="{StaticResource Text.Label}" />
+                            <ComboBox Grid.Row="0" Grid.Column="4" Margin="0,4" IsEnabled="False" SelectedIndex="0">
+                                <ComboBoxItem Content="不可选" />
+                            </ComboBox>
+
+                            <TextBlock Grid.Row="1" Text="日期" Style="{StaticResource Text.Label}" />
+                            <DatePicker Grid.Row="1" Grid.Column="1" Margin="0,4" />
+
+                            <TextBlock Grid.Row="1" Grid.Column="3" Text="日期禁用" Style="{StaticResource Text.Label}" />
+                            <DatePicker Grid.Row="1" Grid.Column="4" Margin="0,4" IsEnabled="False" />
+
+                            <TextBlock Grid.Row="2" Text="滑杆" Style="{StaticResource Text.Label}" />
+                            <Grid Grid.Row="2" Grid.Column="1" Margin="0,4">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Slider Value="62" />
+                                <TextBlock Grid.Column="1" Text="62%" Style="{StaticResource Text.Caption}"
+                                           VerticalAlignment="Center" Margin="10,0,0,0" />
+                            </Grid>
+
+                            <TextBlock Grid.Row="2" Grid.Column="3" Text="滑杆禁用" Style="{StaticResource Text.Label}" />
+                            <Slider Grid.Row="2" Grid.Column="4" Margin="0,4" Value="30" IsEnabled="False" />
+
+                            <TextBlock Grid.Row="3" Text="进度" Style="{StaticResource Text.Label}" />
+                            <StackPanel Grid.Row="3" Grid.Column="1" Margin="0,4">
+                                <ProgressBar Height="8" Value="62" Margin="0,0,0,6" />
+                                <ProgressBar Height="8" Value="100" Margin="0,0,0,6" />
+                                <ProgressBar Height="8" IsIndeterminate="True" />
+                            </StackPanel>
+
+                            <TextBlock Grid.Row="3" Grid.Column="3" Text="单选" Style="{StaticResource Text.Label}"
+                                       VerticalAlignment="Top" />
+                            <StackPanel Grid.Row="3" Grid.Column="4" Margin="0,4">
+                                <RadioButton Content="覆盖同名文件" IsChecked="True" />
+                                <RadioButton Content="自动重命名" />
+                                <RadioButton Content="跳过已存在" IsEnabled="False" />
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox>
+
+                    <!-- 4. 复选框与状态标签 -->
+                    <GroupBox Header="4. 复选框组与状态标签">
+                        <StackPanel>
+                            <WrapPanel Margin="0,0,0,12">
+                                <CheckBox Content="单行文本" IsChecked="True" Width="140" />
+                                <CheckBox Content="多行文本" IsChecked="True" Width="140" />
+                                <CheckBox Content="引线文本" IsChecked="True" Width="140" />
+                                <CheckBox Content="块属性" Width="140" />
+                                <CheckBox Content="表格单元格" IsChecked="True" Width="140" />
+                                <CheckBox Content="尺寸文字（禁用）" IsEnabled="False" Width="160" />
+                            </WrapPanel>
+
+                            <TextBlock Text="状态标签（Badge）：浅底深字，靠颜色 + 文字共同表达状态。"
+                                       Style="{StaticResource Text.Caption}" Margin="0,0,0,8" />
+                            <WrapPanel>
+                                <Border Style="{StaticResource Badge.Idle}" Margin="0,0,8,8">
+                                    <TextBlock Text="待处理" Style="{StaticResource BadgeText.Idle}" />
+                                </Border>
+                                <Border Style="{StaticResource Badge.Active}" Margin="0,0,8,8">
+                                    <TextBlock Text="翻译中" Style="{StaticResource BadgeText.Active}" />
+                                </Border>
+                                <Border Style="{StaticResource Badge.Done}" Margin="0,0,8,8">
+                                    <TextBlock Text="已完成" Style="{StaticResource BadgeText.Done}" />
+                                </Border>
+                                <Border Style="{StaticResource Badge.Stopped}" Margin="0,0,8,8">
+                                    <TextBlock Text="已中止" Style="{StaticResource BadgeText.Stopped}" />
+                                </Border>
+                                <Border Style="{StaticResource Badge.Failed}" Margin="0,0,8,8">
+                                    <TextBlock Text="失败" Style="{StaticResource BadgeText.Failed}" />
+                                </Border>
+                            </WrapPanel>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <!-- 5. 菜单与工具栏 -->
+                    <GroupBox Header="5. 菜单与工具栏">
+                        <StackPanel>
+                            <Menu Margin="0,0,0,10">
+                                <MenuItem Header="文件">
+                                    <MenuItem Header="打开图纸" InputGestureText="Ctrl+O" IsChecked="True" />
+                                    <MenuItem Header="保存" InputGestureText="Ctrl+S" />
+                                    <MenuItem Header="导出 DXF" IsEnabled="False" />
+                                </MenuItem>
+                                <MenuItem Header="编辑">
+                                    <MenuItem Header="撤销" InputGestureText="Ctrl+Z" />
+                                    <MenuItem Header="重做" InputGestureText="Ctrl+Y" />
+                                </MenuItem>
+                                <MenuItem Header="帮助" />
+                            </Menu>
+
+                            <ToolBarTray Margin="0,0,0,10">
+                                <ToolBar>
+                                    <Button Content="打开" Margin="0,0,6,0" />
+                                    <Button Content="保存" Margin="0,0,6,0" />
+                                    <Separator Margin="0,0,6,0" />
+                                    <Button Style="{StaticResource Button.Icon}" ToolTip="刷新">
+                                        <Path Data="{StaticResource Icon.Geo.Refresh}" Style="{StaticResource Icon.Regular}" />
+                                    </Button>
+                                    <Button Style="{StaticResource Button.Icon}" ToolTip="筛选">
+                                        <Path Data="{StaticResource Icon.Geo.Filter}" Style="{StaticResource Icon.Regular}" />
+                                    </Button>
+                                    <Button Style="{StaticResource Button.Icon.Danger}" ToolTip="删除">
+                                        <Path Data="{StaticResource Icon.Geo.Trash}" Style="{StaticResource Icon.Regular}" />
+                                    </Button>
+                                </ToolBar>
+                            </ToolBarTray>
+
+                            <TextBlock Text="工具栏：一个主操作 + 次操作，危险操作用红色图标并与其他操作拉开间距。"
+                                       Style="{StaticResource Text.Hint}" />
+                        </StackPanel>
+                    </GroupBox>
+
+                    <!-- 6. 树与列表 -->
+                    <GroupBox Header="6. 树、列表与表格">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="240" />
+                                <ColumnDefinition Width="12" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <TreeView Height="200">
+                                <TreeViewItem Header="装配体" IsExpanded="True">
+                                    <TreeViewItem Header="A-001 总装图" />
+                                    <TreeViewItem Header="A-002 零件图" IsSelected="True" />
+                                    <TreeViewItem Header="子部件" IsExpanded="True">
+                                        <TreeViewItem Header="B-011 支架" />
+                                        <TreeViewItem Header="B-012 法兰" />
+                                    </TreeViewItem>
+                                </TreeViewItem>
+                                <TreeViewItem Header="工程图">
+                                    <TreeViewItem Header="A-003 明细表" />
+                                </TreeViewItem>
+                            </TreeView>
+
+                            <StackPanel Grid.Column="2">
+                                <ListView Height="200">
+                                    <ListViewItem Content="A-001 总装图.dwg" />
+                                    <ListViewItem Content="A-002 零件图.dwg" IsSelected="True" />
+                                    <ListViewItem Content="A-003 明细表.dwg" />
+                                    <ListViewItem Content="A-004 焊接图.dwg" />
+                                    <ListViewItem Content="A-005 液压原理图.dwg" />
+                                </ListView>
+                            </StackPanel>
+                        </Grid>
+                    </GroupBox>
+
+                    <!-- 7. 提示类 -->
+                    <GroupBox Header="7. 提示、分隔与空状态">
+                        <StackPanel>
+                            <TextBlock Text="把鼠标悬停在下面任一控件上，ToolTip 为深底白字：" Style="{StaticResource Text.Caption}" />
+                            <WrapPanel Margin="0,8,0,12">
+                                <Button Content="悬停看提示" Margin="0,0,8,0"
+                                        ToolTip="深底白字提示框，最大宽度 460，内边距 10,6。" />
+                                <Button Content="长提示" Margin="0,0,8,0"
+                                        ToolTip="这是一个较长的提示文本，用于验证 ToolTip 在达到最大宽度后是否正确换行，并且不会超出屏幕边界。" />
+                                <Button Content="禁用也有提示" IsEnabled="False"
+                                        ToolTip="禁用控件同样提供说明，帮助用户理解为什么不可用。" />
+                            </WrapPanel>
+
+                            <Separator Margin="0,0,0,12" />
+
+                            <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                                <StackPanel>
+                                    <TextBlock Text="空状态：用 Text.Secondary 居中说明，并给出下一步动作。" Style="{StaticResource Text.Caption}" />
+                                    <Border Height="120" Margin="0,8,0,0"
+                                            Background="{StaticResource Brush.SurfaceSunken}"
+                                            BorderBrush="{StaticResource Brush.Border}"
+                                            BorderThickness="1"
+                                            CornerRadius="{StaticResource Radius.Card}">
+                                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <Path Data="{StaticResource Icon.Geo.Folder}" Style="{StaticResource Icon.Hero}" Margin="0,0,0,8" />
+                                            <TextBlock Text="暂无术语，点击“新增词条”或导入 CSV。"
+                                                       Style="{StaticResource Text.Hint}"
+                                                       HorizontalAlignment="Center" />
+                                        </StackPanel>
+                                    </Border>
+                                </StackPanel>
+                            </Border>
+
+                            <TextBlock Text="超链接：" Style="{StaticResource Text.Caption}" Margin="0,0,0,6" />
+                            <TextBlock Style="{StaticResource Text.Body}">
+                                <Hyperlink>查看设计规范文档</Hyperlink>
+                            </TextBlock>
+                        </StackPanel>
+                    </GroupBox>
+
+                </StackPanel>
+            </ScrollViewer>
+
+            <Border Grid.Row="2" BorderBrush="{StaticResource Brush.Border}" BorderThickness="0,1,0,0"
+                    Padding="0,12,0,0" Margin="0,12,0,0">
+                <Grid>
+                    <TextBlock Text="控件高度统一 36（工具条 32），行高 30，表头 32。"
+                               Style="{StaticResource Text.Caption}" VerticalAlignment="Center" />
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Content="关闭" IsCancel="True" MinWidth="72" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+        </Grid>
+    </Border>
+</Window>

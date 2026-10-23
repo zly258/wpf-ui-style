@@ -443,8 +443,41 @@ function Backup-File {
     param([string]$Path)
     $stamp = Get-Date -Format 'yyyyMMdd-HHmmss'
     $backup = "$Path.bak-$stamp"
-    Copy-Item -LiteralPath $Path -Destination $backup -Force
+    # -Recurse is required for directories; without it the backup is an empty
+    # folder and a failed reinstall cannot be rolled back.
+    Copy-Item -LiteralPath $Path -Destination $backup -Recurse -Force
     return $backup
+}
+
+# Directories that must never be copied into an installed skill folder.
+$script:SkillCopyExcludeDirs = @('.git', '.vs', '.idea', 'bin', 'obj', '__pycache__')
+
+function Copy-SkillTree {
+    param([string]$SourcePath, [string]$TargetPath)
+
+    $sourceRoot = (Resolve-Path -LiteralPath $SourcePath).ProviderPath.TrimEnd('\')
+    New-Item -ItemType Directory -Force -Path $TargetPath | Out-Null
+
+    foreach ($file in Get-ChildItem -LiteralPath $sourceRoot -Recurse -File -Force) {
+        $relative = $file.FullName.Substring($sourceRoot.Length).TrimStart('\')
+        $parts = $relative -split '[\\/]'
+        $excluded = $false
+        for ($i = 0; $i -lt $parts.Count - 1; $i++) {
+            if ($script:SkillCopyExcludeDirs -contains $parts[$i].ToLowerInvariant()) {
+                $excluded = $true
+                break
+            }
+        }
+        if ($excluded) { continue }
+        if ($file.Name -like '*.bak-*' -or $file.Name -like '*.user') { continue }
+
+        $destination = Join-Path $TargetPath $relative
+        $destinationDir = Split-Path -Parent $destination
+        if (-not (Test-Path -LiteralPath $destinationDir)) {
+            New-Item -ItemType Directory -Force -Path $destinationDir | Out-Null
+        }
+        Copy-Item -LiteralPath $file.FullName -Destination $destination -Force
+    }
 }
 
 function Copy-SkillFolder {
@@ -481,7 +514,7 @@ function Copy-SkillFolder {
 
     if (-not $Preview) {
         New-Item -ItemType Directory -Force -Path $TargetPath | Out-Null
-        Copy-Item -LiteralPath $SourcePath -Destination $target -Recurse -Force
+        Copy-SkillTree $SourcePath $target
     }
 
     return @{ Status = if ($Preview) { 'DRY' } else { 'OK' }; Detail = $detail }
@@ -571,8 +604,9 @@ Non-negotiable rules:
 2. Never use `Opacity` for disabled; use `Brush.Control.Disabled` + `Brush.Text.Disabled`.
 3. White text only on Accent / Accent.Hover / Accent.Pressed / Danger / Danger.Hover / Danger.Pressed / Tooltip dark backgrounds.
 4. Selected + hover must use `MultiTrigger`; selected list rows use `Brush.Selection` + `Brush.Text.Primary`.
-5. Multiline TextBox: `Height="Auto"` + `MinHeight`/`MaxHeight` + `VerticalAlignment="Top"`.
-   Only logs/lists/tables/ScrollViewer may occupy a `Grid` `*` row. Never use `Height="*"` on a control.
+5. Multiline TextBox: no forced `MinHeight`. Forms use `Height="Auto"` + `VerticalAlignment="Top"`;
+   logs/comparison panels use `VerticalAlignment="Stretch"` in a dedicated `Grid` `*` row with `MaxHeight`.
+   Only logs/lists/tables/ScrollViewer may occupy a `*` row. Never use `Height="*"` on a control.
 6. Before finishing, run `{{SKILL_PATH}}/tools/ContrastCheck.ps1` and
    `{{SKILL_PATH}}/tools/LayoutCheck.ps1 -Root <project>`.
 <!-- END wpf-ui-style -->
@@ -724,6 +758,14 @@ foreach ($name in $selected) {
     }
 }
 
+# `auto` detection often matches both a native client (ZCode/Claude/Copilot)
+# and the generic ~/.agents root. Installing both makes those clients list the
+# same skill twice, so prefer the native directory when one is available.
+if ($Clients -eq 'auto') {
+    $selected = @($selected | Where-Object { $_ -ne 'agents' })
+    if ($selected.Count -eq 0) { $selected = @('agents') }
+}
+
 # ---------------------------------------------------------------------------
 # Build actions
 # ---------------------------------------------------------------------------
@@ -746,6 +788,21 @@ foreach ($scopeName in $scopes) {
                 Frontmatter = $action.Frontmatter
                 BestEffort = [bool]$action.BestEffort
             }
+        }
+    }
+}
+
+# Under `auto`, drop the generic ~/.agents/skills fallback for a scope when a
+# native skill directory is also being installed (Copilot lists both). Keeping
+# both makes the client show the same skill twice.
+if ($Clients -eq 'auto') {
+    foreach ($scopeName in $scopes) {
+        $scopeSkills = @($actions | Where-Object { $_.Scope -eq $scopeName -and $_.Kind -eq 'Skill' })
+        $nativeSkills = @($scopeSkills | Where-Object { $_.RawPath -notmatch '(^|[\\/])\.agents[\\/]skills$' })
+        if ($nativeSkills.Count -gt 0) {
+            $actions = @($actions | Where-Object {
+                -not ($_.Scope -eq $scopeName -and $_.Kind -eq 'Skill' -and $_.RawPath -match '(^|[\\/])\.agents[\\/]skills$')
+            })
         }
     }
 }

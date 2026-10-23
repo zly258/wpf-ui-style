@@ -61,6 +61,10 @@ pwsh ./install.ps1 -Scope Global -Clients all -Force
 `auto` 的检测依据是各客户端的配置目录（如 `~/.zcode`、`~/.cursor`、`~/.workbuddy`）。
 如果一个都没检测到，会回退到通用 `agents`（`~/.agents/skills`）。
 
+`auto` 会优先安装到客户端的原生 skill 目录；如果同时检测到通用 `agents`
+或 Copilot 的 `~/.agents/skills` 回退目录，会跳过通用回退，避免同一技能在客户端里
+被列出两次。需要同时保留通用目录时，显式写 `-Clients agents,zcode`。
+
 ---
 
 ## 3. 支持的客户端
@@ -163,8 +167,11 @@ wpf-ui-style/
 ├─ docs/                    ← 详细规范
 ├─ references/              ← 速查与 XAML 片段
 ├─ samples/                 ← 示例窗口
+├─ preview/                 ← 可运行的 WPF 预览工程
 ├─ tools/                   ← 对比度/布局检查
-└─ tests/                   ← xUnit 契约测试模板
+├─ tests/                   ← 可直接运行的 xUnit 契约测试
+├─ NOTICE.md                ← 第三方归属（Material Symbols）
+└─ licenses/                ← Apache 2.0 许可证文本
 ```
 
 对于规则型客户端，还会写入：

@@ -653,8 +653,6 @@ pack://application:,,,/YourAssembly;component/Theme/Theme.xaml
 ```xml
 <TextBox Style="{StaticResource TextBox.Multiline}"
          Height="Auto"
-         MinHeight="90"
-         MaxHeight="160"
          VerticalAlignment="Top" />
 ```
 
@@ -669,7 +667,6 @@ pack://application:,,,/YourAssembly;component/Theme/Theme.xaml
 
 <TextBox Grid.Row="1"
          Style="{StaticResource TextBox.Code}"
-         MinHeight="120"
          MaxHeight="240"
          VerticalAlignment="Stretch" />
 ```

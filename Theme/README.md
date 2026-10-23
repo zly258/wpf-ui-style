@@ -5,13 +5,14 @@
 | 文件 | 内容 |
 |---|---|
 | `Tokens.xaml` | `Color.*`、`Brush.*`、`Font*`、`Layout.*`、`Radius.*`、`Text.*`、`Icon.Size.*` |
-| `Controls.xaml` | Window、TextBlock/AccessText、Button、TextBox、PasswordBox、ComboBox、CheckBox、RadioButton、GroupBox、Expander、Tab、ToolTip、ProgressBar、StatusBar、ScrollBar、GridSplitter、Menu |
+| `Controls.xaml` | Window、TextBlock/AccessText、Button、TextBox、PasswordBox、ComboBox、CheckBox、RadioButton、GroupBox、Expander、Tab、ToolTip、ProgressBar、StatusBar、ScrollBar、GridSplitter、ContextMenu |
 | `DataControls.xaml` | ListBox、ListView、DataGrid、TreeView、ScrollViewer.Base |
 | `Icons.xaml` | 24x24 矢量几何图形 (`Icon.Geo.*`)、基础与尺寸样式 (`Icon.*`)、图标按钮 (`Button.Icon*`) |
-| `Theme.xaml` | 唯一推荐入口，合并 Controls + DataControls + Icons |
+| `Extras.xaml` | Slider、DatePicker、RichTextBox、ToggleButton、ToggleSwitch、Menu/MenuItem、ToolBar、Card、Badge |
+| `Theme.xaml` | 唯一推荐入口，合并 Controls + DataControls + Icons + Extras |
 
-`Controls.xaml`、`DataControls.xaml` 和 `Icons.xaml` 各自合并了 `Tokens.xaml`，
-所以 `Theme.xaml` 不再重复合并 Tokens。
+`Controls.xaml`、`DataControls.xaml`、`Icons.xaml` 和 `Extras.xaml` 各自合并了
+`Tokens.xaml`，所以 `Theme.xaml` 不再重复合并 Tokens。
 
 ---
 
@@ -100,7 +101,7 @@ public SettingsWindow()
 </ResourceDictionary.MergedDictionaries>
 ```
 
-顺序必须是：**Tokens → Controls → DataControls**。
+顺序必须是：**Tokens → Controls → DataControls → Icons → Extras**。
 
 如果使用 `Theme.xaml`，内部已经处理好。
 
@@ -146,6 +147,8 @@ public SettingsWindow()
 - `ListViewItem`
 - `DataGrid` / `DataGridRow` / `DataGridCell` / `DataGridColumnHeader`
 - `TreeView` / `TreeViewItem`
+- `Menu`
+- `ToolBarTray`
 
 ---
 

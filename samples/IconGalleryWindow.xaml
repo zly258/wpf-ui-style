@@ -4,7 +4,7 @@
       1. 尺寸梯度阶梯 (Micro 12px -> Hero 32px)
       2. 矢量几何图形展示库 (搜索/关闭/勾选/添加/编辑/删除/刷新/设置/筛选/导入导出/复制/文件/文件夹/折叠/语义)
       3. 动态着色与状态反转契约 (主按钮白字白标、次要按钮深标、危险按钮红标、幽灵图标按钮悬停态)
-      4. 纯图标按钮矩阵 (Button.Icon 24px/28px/34px，悬停/按下/禁用/危险变色)
+      4. 纯图标按钮矩阵 (Button.Icon.Small 26px / Button.Icon 30px / Button.Icon.Large 36px，悬停/按下/禁用/危险变色)
       5. 图标与文字混排间距 (4px/6px/8px 对齐、垂直居中)
       6. 业务集成场景 (带清除按钮的搜索框、表格行内操作、Tab 标头图标、状态通知栏)
 -->
@@ -216,8 +216,8 @@
                         <TextBlock Grid.Column="2" Text="操作组 (Hover/Active)" Style="{StaticResource Text.Label}" Margin="8,4" />
                         <TextBlock Grid.Column="3" Text="禁用态 (Disabled)" Style="{StaticResource Text.Label}" Margin="8,4" />
 
-                        <!-- 行 1: Button.Icon 标准 (28x28) -->
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="标准 (28px - Button.Icon)" VerticalAlignment="Center" Style="{StaticResource Text.Caption}" Margin="8,6" />
+                        <!-- 行 1: Button.Icon 标准 (30x30) -->
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="标准 (30px - Button.Icon)" VerticalAlignment="Center" Style="{StaticResource Text.Caption}" Margin="8,6" />
                         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="8,6">
                             <Button Style="{StaticResource Button.Icon}" ToolTip="设置参数">
                                 <Path Data="{StaticResource Icon.Geo.Settings}" Style="{StaticResource Icon.Regular}" />
@@ -240,8 +240,8 @@
                             </Button>
                         </StackPanel>
 
-                        <!-- 行 2: Button.Icon.Small (24x24) -->
-                        <TextBlock Grid.Row="2" Grid.Column="0" Text="紧凑 (24px - Button.Icon.Small)" VerticalAlignment="Center" Style="{StaticResource Text.Caption}" Margin="8,6" />
+                        <!-- 行 2: Button.Icon.Small (26x26) -->
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="紧凑 (26px - Button.Icon.Small)" VerticalAlignment="Center" Style="{StaticResource Text.Caption}" Margin="8,6" />
                         <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="8,6">
                             <Button Style="{StaticResource Button.Icon.Small}" ToolTip="搜索">
                                 <Path Data="{StaticResource Icon.Geo.Search}" Style="{StaticResource Icon.Small}" />
@@ -261,8 +261,8 @@
                             </Button>
                         </StackPanel>
 
-                        <!-- 行 3: Button.Icon.Large (34x34) -->
-                        <TextBlock Grid.Row="3" Grid.Column="0" Text="大号 (34px - Button.Icon.Large)" VerticalAlignment="Center" Style="{StaticResource Text.Caption}" Margin="8,6" />
+                        <!-- 行 3: Button.Icon.Large (36x36) -->
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="大号 (36px - Button.Icon.Large)" VerticalAlignment="Center" Style="{StaticResource Text.Caption}" Margin="8,6" />
                         <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Margin="8,6">
                             <Button Style="{StaticResource Button.Icon.Large}" ToolTip="打开工作区">
                                 <Path Data="{StaticResource Icon.Geo.Folder}" Style="{StaticResource Icon.Medium}" />
@@ -296,7 +296,7 @@
                             </Grid.ColumnDefinitions>
                             
                             <!-- 成功提示条 -->
-                            <Border Grid.Column="0" Background="#F0FDF4" BorderBrush="#BBF7D0" BorderThickness="1" CornerRadius="{StaticResource Radius.Card}" Padding="12,10" Margin="0,0,8,0">
+                            <Border Grid.Column="0" Background="{StaticResource Brush.Success.Subtle}" BorderBrush="{StaticResource Brush.Success}" BorderThickness="1" CornerRadius="{StaticResource Radius.Card}" Padding="12,10" Margin="0,0,8,0">
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                     <Path Data="{StaticResource Icon.Geo.SuccessCircle}" Style="{StaticResource Icon.Medium.Success}" Margin="0,0,8,0" />
                                     <StackPanel VerticalAlignment="Center">
@@ -307,7 +307,7 @@
                             </Border>
 
                             <!-- 警告提示条 -->
-                            <Border Grid.Column="1" Background="#FFFBEB" BorderBrush="#FDE68A" BorderThickness="1" CornerRadius="{StaticResource Radius.Card}" Padding="12,10" Margin="8,0,0,0">
+                            <Border Grid.Column="1" Background="{StaticResource Brush.Warning.Subtle}" BorderBrush="{StaticResource Brush.Warning}" BorderThickness="1" CornerRadius="{StaticResource Radius.Card}" Padding="12,10" Margin="8,0,0,0">
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                     <Path Data="{StaticResource Icon.Geo.WarningTriangle}" Style="{StaticResource Icon.Medium.Warning}" Margin="0,0,8,0" />
                                     <StackPanel VerticalAlignment="Center">
@@ -325,7 +325,7 @@
                             </Grid.ColumnDefinitions>
                             
                             <!-- 错误阻断条 -->
-                            <Border Grid.Column="0" Background="{StaticResource Brush.Danger.Subtle}" BorderBrush="#FECACA" BorderThickness="1" CornerRadius="{StaticResource Radius.Card}" Padding="12,10" Margin="0,0,8,0">
+                            <Border Grid.Column="0" Background="{StaticResource Brush.Danger.Subtle}" BorderBrush="{StaticResource Brush.Danger}" BorderThickness="1" CornerRadius="{StaticResource Radius.Card}" Padding="12,10" Margin="0,0,8,0">
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                     <Path Data="{StaticResource Icon.Geo.ErrorCircle}" Style="{StaticResource Icon.Medium.Danger}" Margin="0,0,8,0" />
                                     <StackPanel VerticalAlignment="Center">
@@ -336,7 +336,7 @@
                             </Border>
 
                             <!-- 信息通知条 -->
-                            <Border Grid.Column="1" Background="{StaticResource Brush.Accent.Subtle}" BorderBrush="#BFDBFE" BorderThickness="1" CornerRadius="{StaticResource Radius.Card}" Padding="12,10" Margin="8,0,0,0">
+                            <Border Grid.Column="1" Background="{StaticResource Brush.Accent.Subtle}" BorderBrush="{StaticResource Brush.Accent}" BorderThickness="1" CornerRadius="{StaticResource Radius.Card}" Padding="12,10" Margin="8,0,0,0">
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                     <Path Data="{StaticResource Icon.Geo.Info}" Style="{StaticResource Icon.Medium.Info}" Margin="0,0,8,0" />
                                     <StackPanel VerticalAlignment="Center">
@@ -411,10 +411,10 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button Content="关闭" IsCancel="True" MinWidth="72" Margin="0,0,8,0" />
-                    <Button Content="导出测试报告" Style="{StaticResource Button.Primary}">
+                    <Button Style="{StaticResource Button.Primary}">
                         <StackPanel Orientation="Horizontal">
                             <Path Data="{StaticResource Icon.Geo.Download}" Style="{StaticResource Icon.Regular}" Margin="0,0,6,0" />
-                            <TextBlock Text="完成验证" VerticalAlignment="Center" />
+                            <TextBlock Text="导出测试报告" VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
                 </StackPanel>

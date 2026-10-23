@@ -96,11 +96,11 @@
 
 ### 3.3 语义图标着色契约 (R-ICON-2)
 状态通知、校验提示等具有固定业务含义的图标，使用对应的语义画刷：
-- **Success (成功)**: `Brush.Success` (#15803D)
-- **Warning (警告)**: `Brush.Warning` (#B45309)
-- **Danger / Error (错误/危险)**: `Brush.Danger` (#B91C1C)
-- **Info / Accent (提示/品牌)**: `Brush.Accent` (#1765AD)
-- **Muted (弱化辅助)**: `Brush.Text.Tertiary` (#9CA3AF)
+- **Success (成功)**: `Brush.Success` (#2A704E)
+- **Warning (警告)**: `Brush.Warning` (#7A5A1E)
+- **Danger / Error (错误/危险)**: `Brush.Danger` (#B43B32)
+- **Info / Accent (提示/品牌)**: `Brush.Accent` (#2F6F9F)
+- **Muted (弱化辅助)**: `Brush.Text.Secondary` (#4B5563)
 
 ---
 
@@ -118,10 +118,10 @@
 ### 4.2 图标按钮交互状态规范 (R-ICON-3)
 图标按钮默认应为“幽灵形态”（Ghost/Transparent），当鼠标悬停或激活时才显示底色微反馈：
 - **Normal (默认态)**: 背景 `Transparent`，前景 `Brush.Text.Secondary`，边框 `Transparent`。
-- **Hover (悬停态)**: 背景 `Brush.Control.Hover` (#EAEAEA)，前景 `Brush.Text.Primary`。
-- **Pressed (按下态)**: 背景 `Brush.Control.Pressed` (#DFDFDF)，前景 `Brush.Text.Primary`。
-- **Disabled (禁用态)**: 背景 `Transparent`，前景 `Brush.Text.Disabled` (#9CA3AF)，光标 `Arrow`。
-- **Checked (切换激活态)**: 背景 `Brush.Accent.Subtle` (#E8F2FA)，前景 `Brush.Accent`，边框 `Brush.Accent`。
+- **Hover (悬停态)**: 背景 `Brush.Control.Hover` (#F0F3F6)，前景 `Brush.Text.Primary`。
+- **Pressed (按下态)**: 背景 `Brush.Control.Pressed` (#E4E8EE)，前景 `Brush.Text.Primary`。
+- **Disabled (禁用态)**: 背景 `Transparent`，前景 `Brush.Text.Disabled` (#667085)，光标 `Arrow`。
+- **Checked (切换激活态)**: 背景 `Brush.Accent.Subtle` (#E4EEF5)，前景 `Brush.Accent`，边框 `Brush.Accent`。
 
 ### 4.3 必须提供 ToolTip 无障碍访问 (R-ICON-4)
 纯图标按钮（没有文字说明）**必须显式提供 `ToolTip`**，严禁出现没有任何文字提示的纯图标交互：

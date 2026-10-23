@@ -98,12 +98,13 @@ OpenCADTranslate 使用 `TextFormattingMode="Ideal"`；EngineeringAI 使用 `Dis
 
 ### 风险点
 
-#### 1. 禁用文字对比度不足
+#### 1. 禁用文字对比度不足（已修复）
 
-`Color.TextDisabled = #9CA3AF`，在 `Color.ControlDisabled = #F2F4F7` 上约 2.2:1。
+历史上 `Color.TextDisabled = #9CA3AF`，在 `Color.ControlDisabled = #F2F4F7` 上约 2.2:1，
 禁用控件虽然 WCAG 豁免，但实际很难看清。
 
-建议：改为 `#667085`（约 4.51:1），并同步更新对比度测试。
+现已改為 `#667085`（约 4.51:1，见 `Theme/Tokens.xaml`），`tools/ContrastCheck.py`
+已同步覆盖该组合并通过。
 
 #### 2. 部分 keyed 文本样式带显式前景
 
@@ -193,31 +194,33 @@ OpenCADTranslate 需要从 12/26 迁移过来。
 
 | 问题 | 影响项目 | 建议 |
 |---|---|---|
-| 控件高度 26 / 28 / 34 混用 | 三个项目 | 统一 36，紧凑用 32 |
+| 控件高度不统一（历史 26 / 28 / 34） | 三个项目 | 统一 36，紧凑用 32 |
 | 字号 12 / 13 / 13.5 混用 | 三个项目 | 统一 Body 14.5、Caption 14 |
 | Accent 两种蓝 | OpenCADTranslate / auto_inventor | CAD 插件统一 `#2F6F9F` |
 | 禁用文字过浅 | OpenCADTranslate / EngineeringAI | 统一 `#667085` |
 | 隐式 TextBlock 硬编码 | OpenCADTranslate | 改为 `(TextElement.Foreground)` |
 | 选中项白字压浅底 | auto_inventor 潜在 | `MultiTrigger` + 浅底深字 |
 | ToolTip 未统一 | OpenCADTranslate | 深底白字 |
-| 多行文本默认 Stretch / 缺少 MaxHeight | OpenCADTranslate / auto_inventor | 表单 Top + Min/Max；只有日志放在 `*` 行 |
+| 多行文本默认 Stretch / 缺少 MaxHeight | OpenCADTranslate / auto_inventor | 表单 Top（不强制 MinHeight）；只有日志放在 `*` 行并设 MaxHeight |
 | 主题入口不统一 | 三个项目 | 统一 `Theme/Theme.xaml` |
 
 ### 多行文本高度问题明细
 
 `LayoutCheck.ps1` 在 OpenCADTranslate 中报告了以下位置：
 
-- `BatchProgressWindow.xaml` 日志框：缺少 `MinHeight`/`MaxHeight`。
-- `SettingsWindow.xaml`（AutoCAD/Inventor）系统提示词多行框：缺少 `MinHeight`/`MaxHeight`。
-- `TextTranslationWindow.xaml` 输入/输出多行框：缺少 `MinHeight`/`MaxHeight`，
-  且使用了 `VerticalAlignment="Stretch"`。
-- `DrawingTranslationWindow.xaml` 日志框：缺少 `MinHeight`/`MaxHeight`。
+- `BatchProgressWindow.xaml` 日志框：缺少 `MaxHeight`，高度无界。
+- `SettingsWindow.xaml`（AutoCAD/Inventor）系统提示词多行框：表单输入缺少
+  `VerticalAlignment="Top"`，不应靠 `MinHeight` 撑高度。
+- `TextTranslationWindow.xaml` 输入/输出多行框：表单输入使用了
+  `VerticalAlignment="Stretch"`，应改为 `Top`。
+- `DrawingTranslationWindow.xaml` 日志框：缺少 `MaxHeight`，高度无界。
 
 建议：
 
-- 表单输入（系统提示词、翻译输入）：`Height="Auto"` + `MinHeight`/`MaxHeight` + `VerticalAlignment="Top"`。
-- 日志框：放在专用 `*` 行，设置 `MinHeight=120`、`MaxHeight=240`，允许 `Stretch`。
-- 不要在 `StackPanel` 里给日志框设置很大的 `MinHeight`。
+- 表单输入（系统提示词、翻译输入）：`Height="Auto"` + `VerticalAlignment="Top"`，
+  不强制 `MinHeight`。
+- 日志框：放在专用 `*` 行，设置 `MaxHeight=240`，允许 `Stretch`。
+- 不要用 `MinHeight` 撑高度；用 `Grid` 行和 `MaxHeight` 控制。
 
 ---
 

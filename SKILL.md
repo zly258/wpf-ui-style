@@ -48,11 +48,13 @@ See `INSTALL.md` for the full client table, parameters, verification and uninsta
 - `Theme/Tokens.xaml` — 颜色、字体、尺寸、圆角。
 - `Theme/Controls.xaml` / `Theme/DataControls.xaml` — 控件样式。
 - `Theme/Icons.xaml` — 24x24 矢量几何、尺寸与状态样式、图标按钮。
+- `Theme/Extras.xaml` — Slider、DatePicker、RichTextBox、ToggleButton、Menu、ToolBar、Card、Badge 等补充控件样式。
+- `preview/` — 可运行的 WPF 预览工程（交互窗口 + 离屏截图），用于真机验证主题。
 - `docs/09-icon-system.md` — 图标设计与使用规范。
 - `tools/ContrastCheck.py` — 对比度检查逻辑（Python 3 标准库）。
 - `tools/LayoutCheck.py` — 多行文本/布局反模式检查逻辑（Python 3 标准库）。
 - `tools/ContrastCheck.ps1` / `tools/LayoutCheck.ps1` — 薄包装，自动探测 `py -3` / `python3` / `python` 后转调 `.py`。
-- `tests/ThemeContractTests.cs` — xUnit 契约测试模板。
+- `tests/` — xUnit 契约测试，可直接 `dotnet test tests/WpfStyleContractTests.csproj`。
 
 ## Source of truth
 
@@ -62,10 +64,11 @@ Read these files before writing XAML:
 2. `Theme/Controls.xaml` — buttons, inputs, ComboBox, CheckBox, RadioButton, GroupBox, Expander, Tab, ToolTip, ProgressBar, ScrollBar.
 3. `Theme/DataControls.xaml` — ListBox, ListView, DataGrid, TreeView.
 4. `Theme/Icons.xaml` — 24x24 矢量几何图形、尺寸阶梯、图标按钮。
-5. `docs/02-control-states.md` — state matrix.
-6. `docs/03-layout.md` — layout and multiline height constraints.
-7. `docs/04-common-pitfalls.md` — known failure modes.
-8. `docs/09-icon-system.md` — 图标系统尺寸与着色契约。
+5. `Theme/Extras.xaml` — Slider、DatePicker、RichTextBox、ToggleButton、Menu、ToolBar、Card、Badge。
+6. `docs/02-control-states.md` — state matrix.
+7. `docs/03-layout.md` — layout and multiline height constraints.
+8. `docs/04-common-pitfalls.md` — known failure modes.
+9. `docs/09-icon-system.md` — 图标系统尺寸与着色契约。
 
 Do not invent a new palette or a new control template if an existing style fits.
 Extend `Tokens.xaml` or the relevant theme file instead.
@@ -145,7 +148,8 @@ Forbidden:
 ### R7. One control height
 
 Use `Layout.ControlHeight` (36) or `Layout.ControlHeight.Small` (32).
-Do not mix 30 / 32 / 36 in the same dialog.
+Do not mix 30 / 32 / 36 for control heights in the same dialog
+(icon buttons follow R10 and are separate).
 Row height is `Layout.RowHeight` (30); table header is `Layout.HeaderHeight` (32).
 
 ### R8. One primary action per view
@@ -171,7 +175,7 @@ Only one `Button.Primary` per dialog/section. Everything else is
 - **No bitmap/PNG icons**: strictly vector geometry to avoid DPI blur across 100%–200% displays.
 - **Dynamic foreground inheritance**: icon `Fill` binds to `(TextElement.Foreground)` with `Stretch="Uniform"`. Never hardcode `Fill="#..."`.
 - **Icon size steps**: only use `Icon.Size.Micro` (12), `Icon.Size.Small` (14), `Icon.Size.Regular` (16 - default), `Icon.Size.Medium` (20), `Icon.Size.Large` (24), `Icon.Size.Hero` (32).
-- **Icon buttons**: use `Button.Icon` (30x30), `Button.Icon.Small` (26x26), or `Button.Icon.Large` (36x36).
+- **Icon buttons**: use `Button.Icon` (30x30, token `Layout.IconButton.Small`), `Button.Icon.Small` (26x26, token `Layout.IconButton.Micro`), or `Button.Icon.Large` (36x36, token `Layout.IconButton.Large`). Style names describe relative size; token names describe the ladder — check the token before overriding.
 - **ToolTip required**: all icon-only buttons must provide a descriptive `ToolTip`.
 - **Icon-text gap**: use 6px horizontal gap between icon and text (`Margin="0,0,6,0"`).
 
@@ -197,7 +201,7 @@ Only one `Button.Primary` per dialog/section. Everything else is
 
 - **Single font stack**: `Font.Ui` is defined once in `Tokens.xaml` as `Microsoft YaHei` (fallbacks YaHei UI / Segoe UI). Never declare a different `FontFamily` anywhere in business XAML.
 - **Global font scale**: Title/Section `15.5`, Body `14.5`, Caption `14`, Code `13.5`; line heights `23` / `22`. Do not override per-window.
-- **Checkbox / RadioButton**: must render at least `Layout.CheckBox.Size` / `Layout.RadioButton.Size` (16×16). Never shrink to 12–14px; check glyph uses round caps and ≥1.8px stroke.
+- **Checkbox / RadioButton**: must render at least `Layout.CheckBox.Size` / `Layout.RadioButton.Size` (16×16). Never shrink to 12–14px; check glyph uses round caps and 1.6px stroke.
 - **When font size changes, re-check**: control heights, row heights, tab/menu padding, tooltip padding, and DataGrid cell padding in the same pass.
 
 
@@ -230,14 +234,15 @@ Only one `Button.Primary` per dialog/section. Everything else is
 
 5. **Check contrast**
    - Run `pwsh ./tools/ContrastCheck.ps1`.
-   - Copy/run `tests/ThemeContractTests.cs` in the project test suite.
+   - Run `dotnet test tests/WpfStyleContractTests.csproj` (or copy the test into the project suite).
    - Manually check the 100% / 125% / 150% DPI screenshots.
 
 6. **Check layout**
    - Run `pwsh ./tools/LayoutCheck.ps1 -Root <project>`.
-   - Fix all errors (controls with `Height="*"`, multiline inputs without
-     `MinHeight`/`MaxHeight`).
-   - Review warnings for wrapped text and nested scroll viewers.
+   - Fix all errors (controls with `Height="*"`, hardcoded colors, local
+     `FontFamily`).
+   - Review warnings: log/code `TextBox` without `MaxHeight`, wrapped text and
+     nested scroll viewers.
 
 7. **Report**
    - List the files changed.
@@ -261,7 +266,7 @@ Only one `Button.Primary` per dialog/section. Everything else is
 - [ ] Disabled text contrast ≥ 3:1.
 - [ ] Focus indicator contrast ≥ 3:1.
 - [ ] Control heights use `Layout.ControlHeight*`.
-- [ ] Multiline `TextBox` uses `Height="Auto"` + `MinHeight`/`MaxHeight` + `VerticalAlignment="Top"`.
+- [ ] Form multiline `TextBox` uses `Height="Auto"` + `VerticalAlignment="Top"`; no forced `MinHeight`.
 - [ ] Only list/table/log/ScrollViewer occupies a `Grid` `*` row.
 - [ ] No `Height="*"` on a control.
 - [ ] `ContrastCheck.ps1` passes.
@@ -281,8 +286,8 @@ Only one `Button.Primary` per dialog/section. Everything else is
 | ToolTip black on black | default/system colors | set both `Background` and `Foreground` |
 | CheckBox disabled text stays dark | ContentPresenter doesn’t bind foreground | `TextElement.Foreground="{TemplateBinding Foreground}"` |
 | DataGrid selected cell is blue with dark text | cell selection overrides row | cell `IsSelected` → transparent background + `Text.Primary` |
-| Multiline TextBox fills the whole window | default `Stretch` in a `*` row | `Height="Auto"` + `MinHeight`/`MaxHeight` + `VerticalAlignment="Top"` |
-| Form becomes too tall after adding a text area | large `MinHeight` inside `StackPanel` | `MaxHeight` + dedicated `*` row for logs only |
+| Multiline TextBox fills the whole window | default `Stretch` in a `*` row | `Height="Auto"` + `VerticalAlignment="Top"` (no `MinHeight`) |
+| Form becomes too tall after adding a text area | large `MinHeight` inside `StackPanel` | drop the `MinHeight`; add `MaxHeight` only to logs in a dedicated `*` row |
 | Theme works in one window, not another | merged dictionary order / assembly name | merge `Theme/Theme.xaml` once at app or window scope; verify pack URI |
 
 ## Definition of done

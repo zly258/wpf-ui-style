@@ -91,7 +91,7 @@
 日志区：
 
 - 使用 `TextBox` + `TextBox.Code` 或 `TextBox.Multiline`。
-- `MinHeight=140`、`MaxHeight=240`。
+- 放在专用 `*` 行并设置 `MaxHeight=240`；不要写死 `MinHeight`。
 - `IsReadOnly=True`、`TextWrapping=Wrap`、`VerticalScrollBarVisibility=Auto`。
 - 不要用 `RichTextBox` 做日志，除非需要富文本；普通日志用 TextBox 更稳。
 
@@ -354,7 +354,8 @@ pwsh ./tools/LayoutCheck.ps1 -Root "D:\your\project"
 脚本会提示：
 
 - 控件上的 `Height="*"`；
-- 多行 `TextBox` 缺少 `MinHeight`/`MaxHeight`；
+- 日志/代码 `TextBox` 缺少 `MaxHeight`；
+- 业务 XAML 里的硬编码色值与本地 `FontFamily`；
 - `TextWrapping="Wrap"` 的 `TextBlock` 使用 `VerticalAlignment="Stretch"`；
 - 嵌套 `ScrollViewer`。
 
