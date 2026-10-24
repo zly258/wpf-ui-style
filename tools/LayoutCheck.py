@@ -24,6 +24,8 @@ from pathlib import Path
 
 EXCLUDE_DIRS = {"obj", "bin", ".build", "output", "dist", "node_modules"}
 THEME_FILE_RE = re.compile(r"(WindowTheme|Styles|UnifiedTheme)\.xaml$", re.IGNORECASE)
+# Default theme file names recognized without --theme-file.
+THEME_FILE_DEFAULTS = ["windowtheme.xaml", "styles.xaml", "unifiedtheme.xaml"]
 TAG_RE = re.compile(r"<([A-Za-z0-9_:]+)\b(.*?)>", re.DOTALL)
 COMMENT_RE = re.compile(r"<!--.*?-->", re.DOTALL)
 # #RGB / #RRGGBB / #AARRGGBB used as an attribute value. Requiring the leading
@@ -74,13 +76,13 @@ def iter_xaml_files(root: Path):
         yield path
 
 
-def is_theme_file(path: Path) -> bool:
-    if THEME_FILE_RE.search(path.name):
+def is_theme_file(path: Path, theme_dirs: set[str], theme_files: set[str]) -> bool:
+    if path.name.lower() in theme_files:
         return True
-    return any(part.lower() == "theme" for part in path.parts[:-1])
+    return any(part.lower() in theme_dirs for part in path.parts[:-1])
 
 
-def check_file(path: Path) -> None:
+def check_file(path: Path, theme_dirs: set[str], theme_files: set[str]) -> None:
     text = path.read_text(encoding="utf-8", errors="replace")
     comments = comment_ranges(text)
 
@@ -100,18 +102,23 @@ def check_file(path: Path) -> None:
         )
 
     # 2. Read-only log/code TextBox without MaxHeight
+    #    - A TextBox styled with TextBox.Code is skipped: the theme style itself
+    #      carries MaxHeight (Layout.LogMaxHeight).
+    #    - A single-line IsReadOnly TextBox is not a log; only multiline readonly
+    #      boxes are treated as logs.
     for match in TEXTBOX_RE.finditer(text):
         attrs = match.group(1)
-        is_log = bool(re.search(r"TextBox\.Code", attrs) or re.search(r'IsReadOnly\s*=\s*"True"', attrs))
+        if "TextBox.Code" in attrs:
+            continue
         is_multiline = (
-            is_log
-            or bool(re.search(r'AcceptsReturn\s*=\s*"True"', attrs))
+            bool(re.search(r'AcceptsReturn\s*=\s*"True"', attrs))
             or "TextBox.Multiline" in attrs
         )
-        if not is_multiline:
+        is_log = is_multiline and bool(re.search(r'IsReadOnly\s*=\s*"True"', attrs))
+        if not is_log:
             continue
 
-        if is_log and not re.search(r"MaxHeight\s*=", attrs):
+        if not re.search(r"MaxHeight\s*=", attrs):
             report(
                 "WARN",
                 path,
@@ -136,7 +143,7 @@ def check_file(path: Path) -> None:
     # 4. Hardcoded color literals in business XAML.
     #    Theme files are the single source of truth for color and may contain them;
     #    business windows must reference Brush.* / Color.* tokens instead.
-    if not is_theme_file(path):
+    if not is_theme_file(path, theme_dirs, theme_files):
         for match in COLOR_LITERAL_RE.finditer(text):
             if in_ranges(match.start(), comments):
                 continue
@@ -149,7 +156,7 @@ def check_file(path: Path) -> None:
             )
 
     # 5. Local FontFamily in business XAML: the Window style provides Font.Ui.
-    if not is_theme_file(path):
+    if not is_theme_file(path, theme_dirs, theme_files):
         for match in FONTFAMILY_RE.finditer(text):
             if in_ranges(match.start(), comments):
                 continue
@@ -162,7 +169,7 @@ def check_file(path: Path) -> None:
             )
 
     # 6. Nested ScrollViewer (skip theme/style templates: ComboBox popups legitimately nest)
-    if is_theme_file(path):
+    if is_theme_file(path, theme_dirs, theme_files):
         return
 
     depth = 0
@@ -189,8 +196,17 @@ def check_file(path: Path) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description="XAML layout checker for common WPF mistakes")
     parser.add_argument("--root", "-Root", "-root", default=".")
+    parser.add_argument(
+        "--theme-dir", "-ThemeDir", "-theme-dir", action="append", default=[],
+        help="Directory name treated as theme/style source (may contain literals). Repeatable.")
+    parser.add_argument(
+        "--theme-file", "-ThemeFile", "-theme-file", action="append", default=[],
+        help="File name treated as theme/style source (may contain literals). Repeatable.")
     parser.add_argument("--strict", "-Strict", "-strict", action="store_true")
     args = parser.parse_args()
+
+    theme_dirs = {d.lower() for d in args.theme_dir} | {"theme"}
+    theme_files = {f.lower() for f in args.theme_file} | {m.lower() for m in THEME_FILE_DEFAULTS}
 
     root = Path(args.root)
     if not root.exists():
@@ -208,7 +224,7 @@ def main() -> int:
     print()
 
     for path in files:
-        check_file(path)
+        check_file(path, theme_dirs, theme_files)
 
     print()
     print(f"Errors: {errors}   Warnings: {warnings}")

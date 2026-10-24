@@ -180,7 +180,9 @@
 | `Layout.WindowPadding` | 16 | 窗口内容边距 |
 | `Layout.GroupPadding` | 12 | GroupBox 内边距 |
 | `Layout.FormRowMargin` | `0,4,0,4` | 表单行上下间距 |
+| `Layout.ButtonMinWidth` / `Layout.ButtonMinWidth.Small` | `72` / `52` | 按钮最小宽度（由主题样式引用） |
 | `Layout.ButtonPadding` | `10,0` | 按钮左右内边距（防长文挤压） |
+| `Layout.LogMaxHeight` | `240` | 日志/代码 TextBox 可选高度上限（见 R9，不强制 MinHeight） |
 | `Layout.InputPadding` | `6,0` | 单行输入框（预留充分文字空间） |
 | `Layout.InputPadding.Multiline` | `6,6` | 多行输入框 |
 | `Layout.ListItemPadding` | `10,6` | 列表项 |
@@ -214,7 +216,6 @@
 | `Text.Section` | 分组标题 | 带显式前景，只用于静态文本 |
 | `Text.Body` | 正文 | 带显式前景 |
 | `Text.Caption` | 说明 | 带次要前景 |
-| `Text.Hint` | 提示/帮助 | 同 Caption |
 | `Text.Label` | 表单标签 | 带主前景 |
 | `Text.Danger` / `Text.Success` / `Text.Warning` | 语义文字 | 带语义色 |
 | `Text.Code` | 代码/日志 | 使用 UI 字体，不用等宽 |

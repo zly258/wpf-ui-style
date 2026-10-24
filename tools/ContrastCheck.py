@@ -21,6 +21,7 @@ KEY_ATTR = f"{{{XAML_NS}}}Key"
 
 # (foreground key, background key, minimum ratio, label)
 # Min: 4.5 for normal text, 3.0 for disabled text / non-text focus.
+# Not checked (decorative, WCAG-exempt): ScrollThumb*, OverlayChip*.
 PAIRS = [
     # 正文 / 次要文字
     ("Color.TextPrimary", "Color.WindowBackground", 4.5, "Text.Primary / WindowBackground"),
@@ -55,6 +56,20 @@ PAIRS = [
     ("Color.Warning", "Color.WarningSubtle", 4.5, "Warning / Warning.Subtle"),
     # Tooltip
     ("Color.TooltipForeground", "Color.TooltipBackground", 4.5, "Tooltip.Foreground / Tooltip.Background"),
+    # 徽章（状态标签前景/背景对）
+    ("Color.BadgeIdleForeground", "Color.BadgeIdleBackground", 4.5, "Badge.Idle fg/bg"),
+    ("Color.BadgeActiveForeground", "Color.BadgeActiveBackground", 4.5, "Badge.Active fg/bg"),
+    ("Color.BadgeDoneForeground", "Color.BadgeDoneBackground", 4.5, "Badge.Done fg/bg"),
+    ("Color.BadgeStoppedForeground", "Color.BadgeStoppedBackground", 4.5, "Badge.Stopped fg/bg"),
+    ("Color.BadgeFailedForeground", "Color.BadgeFailedBackground", 4.5, "Badge.Failed fg/bg"),
+    # 禁用文字在其他常见表面上（WCAG 豁免，但要求至少 3:1）
+    ("Color.TextDisabled", "Color.Surface", 3.0, "Text.Disabled / Surface"),
+    ("Color.TextDisabled", "Color.SurfaceAlt", 3.0, "Text.Disabled / SurfaceAlt"),
+    ("Color.TextDisabled", "Color.SurfaceSunken", 3.0, "Text.Disabled / SurfaceSunken"),
+    # 次要文字在交互/选中浅底上
+    ("Color.TextSecondary", "Color.AccentSubtle", 4.5, "Text.Secondary / Accent.Subtle"),
+    ("Color.TextSecondary", "Color.Selection", 4.5, "Text.Secondary / Selection"),
+    ("Color.TextSecondary", "Color.ControlHover", 4.5, "Text.Secondary / Control.Hover"),
     # 焦点（非文字 3:1）
     ("Color.Focus", "Color.Surface", 3.0, "Focus / Surface"),
     ("Color.Focus", "Color.WindowBackground", 3.0, "Focus / WindowBackground"),

@@ -113,6 +113,7 @@
                                 <Grid>
                                     <TextBox Style="{StaticResource TextBox.Multiline}"
                                              IsReadOnly="True"
+                                             MaxHeight="{StaticResource Layout.LogMaxHeight}"
                                              VerticalAlignment="Stretch"
                                              Text="技术要求：&#x0a;1. 装配前去除所有毛刺与锐边。&#x0a;2. 未注倒角 C0.5，未注圆角 R2。&#x0a;3. 表面处理：发黑。" />
                                     <Button Style="{StaticResource Button.Icon}"
@@ -146,38 +147,36 @@
                                           HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                                           ResizeBehavior="PreviousAndNext" />
 
-                            <ScrollViewer Grid.Column="2" Style="{StaticResource ScrollViewer.Base}">
-                                <StackPanel Margin="12,0,0,0">
-                                    <TextBlock Text="A-001 总装图" Style="{StaticResource Text.Section}" Margin="0,0,0,4" />
-                                    <TextBlock Text="路径：D:\Projects\A-001.dwg" Style="{StaticResource Text.Hint}" Margin="0,0,0,10" />
+                            <StackPanel Grid.Column="2" Margin="12,0,0,0">
+                                <TextBlock Text="A-001 总装图" Style="{StaticResource Text.Section}" Margin="0,0,0,4" />
+                                <TextBlock Text="路径：D:\Projects\A-001.dwg" Style="{StaticResource Text.Caption}" Margin="0,0,0,10" />
 
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="84" />
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                        </Grid.RowDefinitions>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="84" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
 
-                                        <TextBlock Text="文本数" Style="{StaticResource Text.Label}" />
-                                        <TextBlock Grid.Column="1" Text="42" Style="{StaticResource Text.Body}" />
+                                    <TextBlock Text="文本数" Style="{StaticResource Text.Label}" />
+                                    <TextBlock Grid.Column="1" Text="42" Style="{StaticResource Text.Body}" />
 
-                                        <TextBlock Grid.Row="1" Text="状态" Style="{StaticResource Text.Label}" />
-                                        <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource Badge.Done}">
-                                            <TextBlock Text="已完成" Style="{StaticResource BadgeText.Done}" />
-                                        </Border>
+                                    <TextBlock Grid.Row="1" Text="状态" Style="{StaticResource Text.Label}" />
+                                    <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource Badge.Done}">
+                                        <TextBlock Text="已完成" Style="{StaticResource BadgeText.Done}" />
+                                    </Border>
 
-                                        <TextBlock Grid.Row="2" Text="说明" Style="{StaticResource Text.Label}"
-                                                   VerticalAlignment="Top" />
-                                        <TextBlock Grid.Row="2" Grid.Column="1" Style="{StaticResource Text.Body}"
-                                                   Margin="0,6,0,0"
-                                                   Text="该图纸已完成翻译，术语库命中 12 条，全部写回原图。" />
-                                    </Grid>
-                                </StackPanel>
-                            </ScrollViewer>
+                                    <TextBlock Grid.Row="2" Text="说明" Style="{StaticResource Text.Label}"
+                                               VerticalAlignment="Top" />
+                                    <TextBlock Grid.Row="2" Grid.Column="1" Style="{StaticResource Text.Body}"
+                                               Margin="0,6,0,0"
+                                               Text="该图纸已完成翻译，术语库命中 12 条，全部写回原图。" />
+                                </Grid>
+                            </StackPanel>
                         </Grid>
                     </GroupBox>
 
@@ -186,7 +185,7 @@
                         <UniformGrid Columns="4" Margin="0">
                             <Border Style="{StaticResource Card}" Margin="0,0,10,10">
                                 <StackPanel>
-                                    <TextBlock Text="待处理图纸" Style="{StaticResource Text.Hint}" />
+                                    <TextBlock Text="待处理图纸" Style="{StaticResource Text.Caption}" />
                                     <TextBlock Text="128" Style="{StaticResource Text.Title}" Margin="0,4,0,0" />
                                     <Border Style="{StaticResource Badge.Active}" Margin="0,8,0,0">
                                         <TextBlock Text="进行中" Style="{StaticResource BadgeText.Active}" />
@@ -196,7 +195,7 @@
 
                             <Border Style="{StaticResource Card}" Margin="0,0,10,10">
                                 <StackPanel>
-                                    <TextBlock Text="已翻译文本" Style="{StaticResource Text.Hint}" />
+                                    <TextBlock Text="已翻译文本" Style="{StaticResource Text.Caption}" />
                                     <TextBlock Text="3,482" Style="{StaticResource Text.Title}" Margin="0,4,0,0" />
                                     <Border Style="{StaticResource Badge.Done}" Margin="0,8,0,0">
                                         <TextBlock Text="已完成" Style="{StaticResource BadgeText.Done}" />
@@ -206,7 +205,7 @@
 
                             <Border Style="{StaticResource Card}" Margin="0,0,10,10">
                                 <StackPanel>
-                                    <TextBlock Text="术语命中" Style="{StaticResource Text.Hint}" />
+                                    <TextBlock Text="术语命中" Style="{StaticResource Text.Caption}" />
                                     <TextBlock Text="642" Style="{StaticResource Text.Title}" Margin="0,4,0,0" />
                                     <Border Style="{StaticResource Badge.Idle}" Margin="0,8,0,0">
                                         <TextBlock Text="待处理" Style="{StaticResource BadgeText.Idle}" />
@@ -216,7 +215,7 @@
 
                             <Border Style="{StaticResource Card}" Margin="0,0,0,10">
                                 <StackPanel>
-                                    <TextBlock Text="失败项" Style="{StaticResource Text.Hint}" />
+                                    <TextBlock Text="失败项" Style="{StaticResource Text.Caption}" />
                                     <TextBlock Text="7" Style="{StaticResource Text.Title}" Margin="0,4,0,0" />
                                     <Border Style="{StaticResource Badge.Failed}" Margin="0,8,0,0">
                                         <TextBlock Text="需复查" Style="{StaticResource BadgeText.Failed}" />
@@ -242,49 +241,47 @@
                                 <ListBoxItem Content="高级" />
                             </ListBox>
 
-                            <ScrollViewer Grid.Column="2" Style="{StaticResource ScrollViewer.Base}">
-                                <StackPanel>
-                                    <TextBlock Text="翻译服务" Style="{StaticResource Text.Section}" Margin="0,0,0,10" />
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="翻译服务" Style="{StaticResource Text.Section}" Margin="0,0,0,10" />
 
-                                    <Grid>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="96" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Text="服务地址" Style="{StaticResource Text.Label}" />
+                                    <TextBox Grid.Column="1" Margin="0,4" Text="http://127.0.0.1:21894/v1" />
+
+                                    <TextBlock Grid.Row="1" Text="模型名称" Style="{StaticResource Text.Label}" />
+                                    <TextBox Grid.Row="1" Grid.Column="1" Margin="0,4" Text="hy-mt2:1.8b-8k" />
+
+                                    <TextBlock Grid.Row="2" Text="并发数" Style="{StaticResource Text.Label}" />
+                                    <Grid Grid.Row="2" Grid.Column="1" Margin="0,4">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="96" />
                                             <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                        </Grid.RowDefinitions>
-
-                                        <TextBlock Text="服务地址" Style="{StaticResource Text.Label}" />
-                                        <TextBox Grid.Column="1" Margin="0,4" Text="http://127.0.0.1:21894/v1" />
-
-                                        <TextBlock Grid.Row="1" Text="模型名称" Style="{StaticResource Text.Label}" />
-                                        <TextBox Grid.Row="1" Grid.Column="1" Margin="0,4" Text="hy-mt2:1.8b-8k" />
-
-                                        <TextBlock Grid.Row="2" Text="并发数" Style="{StaticResource Text.Label}" />
-                                        <Grid Grid.Row="2" Grid.Column="1" Margin="0,4">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="Auto" />
-                                            </Grid.ColumnDefinitions>
-                                            <Slider Value="4" Maximum="16" />
-                                            <TextBlock Grid.Column="1" Text="4" Style="{StaticResource Text.Caption}"
-                                                       VerticalAlignment="Center" Margin="10,0,0,0" />
-                                        </Grid>
+                                        <Slider Value="4" Maximum="16" />
+                                        <TextBlock Grid.Column="1" Text="4" Style="{StaticResource Text.Caption}"
+                                                   VerticalAlignment="Center" Margin="10,0,0,0" />
                                     </Grid>
+                                </Grid>
 
-                                    <Expander Header="高级参数" IsExpanded="False" Margin="0,12,0,0">
-                                        <StackPanel>
-                                            <TextBlock Text="以下参数一般保持默认即可。" Style="{StaticResource Text.Hint}" Margin="0,0,0,8" />
-                                            <CheckBox Content="跳过已是目标语言的文本" IsChecked="True" Margin="0,0,0,6" />
-                                            <CheckBox Content="保留尺寸公差符号" IsChecked="True" Margin="0,0,0,6" />
-                                            <CheckBox Content="失败自动重试" />
-                                        </StackPanel>
-                                    </Expander>
-                                </StackPanel>
-                            </ScrollViewer>
+                                <Expander Header="高级参数" IsExpanded="False" Margin="0,12,0,0">
+                                    <StackPanel>
+                                        <TextBlock Text="以下参数一般保持默认即可。" Style="{StaticResource Text.Caption}" Margin="0,0,0,8" />
+                                        <CheckBox Content="跳过已是目标语言的文本" IsChecked="True" Margin="0,0,0,6" />
+                                        <CheckBox Content="保留尺寸公差符号" IsChecked="True" Margin="0,0,0,6" />
+                                        <CheckBox Content="失败自动重试" />
+                                    </StackPanel>
+                                </Expander>
+                            </StackPanel>
                         </Grid>
                     </GroupBox>
 

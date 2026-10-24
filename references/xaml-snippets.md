@@ -125,7 +125,7 @@
         <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
 
-    <TextBlock Grid.Row="0" Style="{StaticResource Text.Hint}"
+    <TextBlock Grid.Row="0" Style="{StaticResource Text.Caption}"
                Text="处理日志" Margin="0,0,0,6" />
 
     <TextBox Grid.Row="1"
@@ -146,7 +146,7 @@
 ```xml
 <Expander Header="高级设置" IsExpanded="False">
     <StackPanel>
-        <TextBlock Style="{StaticResource Text.Hint}"
+        <TextBlock Style="{StaticResource Text.Caption}"
                    Text="以下参数一般保持默认即可。" Margin="0,0,0,8" />
         <Grid>
             <Grid.ColumnDefinitions>
@@ -307,7 +307,7 @@
 
     <!-- 底部栏 -->
     <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
-        <Button Content="关闭" IsCancel="True" MinWidth="72" />
+        <Button Content="关闭" IsCancel="True" />
     </StackPanel>
 </Grid>
 ```

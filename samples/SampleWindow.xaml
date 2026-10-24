@@ -24,7 +24,7 @@
         <StackPanel Grid.Row="0" Margin="0,0,0,12">
             <TextBlock Text="图纸翻译" Style="{StaticResource Text.Title}" />
             <TextBlock Text="选择目标目录和翻译范围，然后开始处理。"
-                       Style="{StaticResource Text.Hint}" Margin="0,4,0,0" />
+                       Style="{StaticResource Text.Caption}" Margin="0,4,0,0" />
         </StackPanel>
 
         <!-- 内容：只保留一层垂直滚动 -->
@@ -98,7 +98,7 @@
                 <!-- 高级设置：默认折叠 -->
                 <Expander Header="高级设置" IsExpanded="False">
                     <StackPanel>
-                        <TextBlock Style="{StaticResource Text.Hint}"
+                        <TextBlock Style="{StaticResource Text.Caption}"
                                    Text="以下参数一般保持默认即可。" Margin="0,0,0,8" />
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -158,7 +158,6 @@
                 <GroupBox Header="处理日志">
                     <TextBox Style="{StaticResource TextBox.Code}"
                              Text="[10:00:01] 开始处理 A-001 总装图.dwg&#x0a;[10:00:03] 已翻译 42 条文本"
-                             MinHeight="{StaticResource Layout.LogMinHeight}"
                              MaxHeight="{StaticResource Layout.LogMaxHeight}" />
                 </GroupBox>
 
@@ -167,7 +166,7 @@
 
         <!-- 底部操作栏 -->
         <Grid Grid.Row="2" Margin="0,12,0,0">
-            <TextBlock Style="{StaticResource Text.Hint}"
+            <TextBlock Style="{StaticResource Text.Caption}"
                        Text="就绪" VerticalAlignment="Center" />
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Content="取消" IsCancel="True" Margin="0,0,8,0" />

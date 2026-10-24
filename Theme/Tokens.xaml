@@ -92,6 +92,8 @@
     <Color x:Key="Color.OverlayChipGlyph">#FF3C3C3C</Color>
     <Color x:Key="Color.OverlayChipHover">#F2B43B32</Color>
 
+    <!-- 以下为下游业务预留的浮层/遮罩资源（本主题文件自身不引用）。
+         Color.Shadow：浮层投影；Color.OverlayChip*：图片/画布上的悬浮角标。 -->
     <Color x:Key="Color.Shadow">#FF1F2933</Color>
 
     <!-- ============================================================
@@ -187,11 +189,8 @@
          ============================================================ -->
     <sys:Double x:Key="Layout.ControlHeight">36</sys:Double>
     <sys:Double x:Key="Layout.ControlHeight.Small">32</sys:Double>
-    <!-- 可选上限：仅在业务确实需要限制表单多行输入高度时使用；
-         TextBox.Multiline 本身不强制 MinHeight，避免撑爆小窗口。 -->
-    <sys:Double x:Key="Layout.InputMinHeight">110</sys:Double>
-    <sys:Double x:Key="Layout.InputMaxHeight">180</sys:Double>
-    <sys:Double x:Key="Layout.LogMinHeight">120</sys:Double>
+    <!-- 日志/代码 TextBox 的可选高度上限（见 R9：只对日志限制 MaxHeight，
+         不强制 MinHeight，避免撑爆小窗口）。 -->
     <sys:Double x:Key="Layout.LogMaxHeight">240</sys:Double>
     <sys:Double x:Key="Layout.TagHeight">26</sys:Double>
     <sys:Double x:Key="Layout.IconButton.Micro">26</sys:Double>
@@ -214,6 +213,8 @@
     <Thickness x:Key="Layout.WindowPadding">16</Thickness>
     <Thickness x:Key="Layout.GroupPadding">12</Thickness>
     <Thickness x:Key="Layout.FormRowMargin">0,4,0,4</Thickness>
+    <sys:Double x:Key="Layout.ButtonMinWidth">72</sys:Double>
+    <sys:Double x:Key="Layout.ButtonMinWidth.Small">52</sys:Double>
     <Thickness x:Key="Layout.ButtonPadding">10,0</Thickness>
     <Thickness x:Key="Layout.InputPadding">6,0</Thickness>
     <Thickness x:Key="Layout.InputPadding.Multiline">6,6</Thickness>
@@ -265,10 +266,6 @@
         <Setter Property="Foreground" Value="{StaticResource Brush.Text.Secondary}" />
         <Setter Property="TextWrapping" Value="Wrap" />
         <Setter Property="LineHeight" Value="{StaticResource LineHeight.Caption}" />
-    </Style>
-
-    <Style x:Key="Text.Hint" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource Text.Caption}">
-        <Setter Property="Foreground" Value="{StaticResource Brush.Text.Secondary}" />
     </Style>
 
     <Style x:Key="Text.Label" TargetType="{x:Type TextBlock}">

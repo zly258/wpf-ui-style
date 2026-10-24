@@ -159,7 +159,7 @@
                             </Grid>
 
                             <!-- 错误态：红边 + 红字提示 -->
-                            <TextBlock Text="单位（非法值示例）" Style="{StaticResource Text.Hint}" Margin="0,8,0,4" />
+                            <TextBlock Text="单位（非法值示例）" Style="{StaticResource Text.Caption}" Margin="0,8,0,4" />
                             <TextBox Text="milimeter"
                                      BorderBrush="{StaticResource Brush.Danger}"
                                      HorizontalAlignment="Left" Width="240" />
@@ -193,7 +193,7 @@
                                 </Button>
                             </Grid>
                             <TextBlock Text="图标按钮 26×26，图标 14px；图标与文字间距统一 6px。"
-                                       Style="{StaticResource Text.Hint}" Margin="0,8,0,0" />
+                                       Style="{StaticResource Text.Caption}" Margin="0,8,0,0" />
                         </StackPanel>
                     </GroupBox>
 
@@ -381,7 +381,7 @@
                         <StackPanel>
                             <Expander Header="高级设置" IsExpanded="True" Margin="0,0,0,12">
                                 <StackPanel>
-                                    <TextBlock Text="以下参数一般保持默认即可。" Style="{StaticResource Text.Hint}" Margin="0,0,0,8" />
+                                    <TextBlock Text="以下参数一般保持默认即可。" Style="{StaticResource Text.Caption}" Margin="0,0,0,8" />
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="96" />

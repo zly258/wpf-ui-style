@@ -80,7 +80,7 @@
                                 <StackPanel HorizontalAlignment="Center">
                                     <Path Data="{StaticResource Icon.Geo.Settings}" Style="{StaticResource Icon.Micro}" Margin="0,6" />
                                     <TextBlock Text="Micro (12px)" Style="{StaticResource Text.Caption}" HorizontalAlignment="Center" />
-                                    <TextBlock Text="徽章/节点标记" Style="{StaticResource Text.Hint}" HorizontalAlignment="Center" Margin="0,2,0,0" />
+                                    <TextBlock Text="徽章/节点标记" Style="{StaticResource Text.Caption}" HorizontalAlignment="Center" Margin="0,2,0,0" />
                                 </StackPanel>
                             </Border>
 
@@ -89,7 +89,7 @@
                                 <StackPanel HorizontalAlignment="Center">
                                     <Path Data="{StaticResource Icon.Geo.Settings}" Style="{StaticResource Icon.Small}" Margin="0,5" />
                                     <TextBlock Text="Small (14px)" Style="{StaticResource Text.Caption}" HorizontalAlignment="Center" />
-                                    <TextBlock Text="表格紧凑/尾缀" Style="{StaticResource Text.Hint}" HorizontalAlignment="Center" Margin="0,2,0,0" />
+                                    <TextBlock Text="表格紧凑/尾缀" Style="{StaticResource Text.Caption}" HorizontalAlignment="Center" Margin="0,2,0,0" />
                                 </StackPanel>
                             </Border>
 
@@ -98,7 +98,7 @@
                                 <StackPanel HorizontalAlignment="Center">
                                     <Path Data="{StaticResource Icon.Geo.Settings}" Style="{StaticResource Icon.Regular}" Margin="0,4" />
                                     <TextBlock Text="Regular (16px) ★" Style="{StaticResource Text.Caption}" FontWeight="Bold" HorizontalAlignment="Center" Foreground="{StaticResource Brush.Accent}" />
-                                    <TextBlock Text="按钮/菜单基准" Style="{StaticResource Text.Hint}" HorizontalAlignment="Center" Margin="0,2,0,0" />
+                                    <TextBlock Text="按钮/菜单基准" Style="{StaticResource Text.Caption}" HorizontalAlignment="Center" Margin="0,2,0,0" />
                                 </StackPanel>
                             </Border>
 
@@ -107,7 +107,7 @@
                                 <StackPanel HorizontalAlignment="Center">
                                     <Path Data="{StaticResource Icon.Geo.Settings}" Style="{StaticResource Icon.Medium}" Margin="0,2" />
                                     <TextBlock Text="Medium (20px)" Style="{StaticResource Text.Caption}" HorizontalAlignment="Center" />
-                                    <TextBlock Text="工具栏/操作条" Style="{StaticResource Text.Hint}" HorizontalAlignment="Center" Margin="0,2,0,0" />
+                                    <TextBlock Text="工具栏/操作条" Style="{StaticResource Text.Caption}" HorizontalAlignment="Center" Margin="0,2,0,0" />
                                 </StackPanel>
                             </Border>
 
@@ -116,7 +116,7 @@
                                 <StackPanel HorizontalAlignment="Center">
                                     <Path Data="{StaticResource Icon.Geo.Settings}" Style="{StaticResource Icon.Large}" />
                                     <TextBlock Text="Large (24px)" Style="{StaticResource Text.Caption}" HorizontalAlignment="Center" />
-                                    <TextBlock Text="通知/卡片主标" Style="{StaticResource Text.Hint}" HorizontalAlignment="Center" Margin="0,2,0,0" />
+                                    <TextBlock Text="通知/卡片主标" Style="{StaticResource Text.Caption}" HorizontalAlignment="Center" Margin="0,2,0,0" />
                                 </StackPanel>
                             </Border>
 
@@ -125,7 +125,7 @@
                                 <StackPanel HorizontalAlignment="Center">
                                     <Path Data="{StaticResource Icon.Geo.Settings}" Style="{StaticResource Icon.Hero}" />
                                     <TextBlock Text="Hero (32px)" Style="{StaticResource Text.Caption}" HorizontalAlignment="Center" />
-                                    <TextBlock Text="引导/空状态" Style="{StaticResource Text.Hint}" HorizontalAlignment="Center" Margin="0,2,0,0" />
+                                    <TextBlock Text="引导/空状态" Style="{StaticResource Text.Caption}" HorizontalAlignment="Center" Margin="0,2,0,0" />
                                 </StackPanel>
                             </Border>
                         </WrapPanel>

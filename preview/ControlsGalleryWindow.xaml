@@ -141,7 +141,6 @@
                                        VerticalAlignment="Top" />
                             <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4" Margin="0,4"
                                      Style="{StaticResource TextBox.Code}"
-                                     MinHeight="{StaticResource Layout.LogMinHeight}"
                                      MaxHeight="{StaticResource Layout.LogMaxHeight}"
                                      Text="[10:00:01] 开始处理 A-001.dwg&#x0a;[10:00:03] 已翻译 42 条文本&#x0a;[10:00:04] 写回图纸完成" />
 
@@ -299,7 +298,7 @@
                             </ToolBarTray>
 
                             <TextBlock Text="工具栏：一个主操作 + 次操作，危险操作用红色图标并与其他操作拉开间距。"
-                                       Style="{StaticResource Text.Hint}" />
+                                       Style="{StaticResource Text.Caption}" />
                         </StackPanel>
                     </GroupBox>
 
@@ -364,7 +363,7 @@
                                         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                                             <Path Data="{StaticResource Icon.Geo.Folder}" Style="{StaticResource Icon.Hero}" Margin="0,0,0,8" />
                                             <TextBlock Text="暂无术语，点击“新增词条”或导入 CSV。"
-                                                       Style="{StaticResource Text.Hint}"
+                                                       Style="{StaticResource Text.Caption}"
                                                        HorizontalAlignment="Center" />
                                         </StackPanel>
                                     </Border>

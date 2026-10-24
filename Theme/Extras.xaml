@@ -8,6 +8,10 @@
     -->
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Tokens.xaml" />
+        <!-- 模板/BasedOn 通过 StaticResource 引用 Icons/Controls 中的资源，
+             必须在本文件作用域内可见 -->
+        <ResourceDictionary Source="Icons.xaml" />
+        <ResourceDictionary Source="Controls.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <!-- ============================================================
@@ -111,7 +115,7 @@
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
         <Setter Property="Height" Value="{StaticResource Layout.ControlHeight}" />
-        <Setter Property="MinWidth" Value="72" />
+        <Setter Property="MinWidth" Value="{StaticResource Layout.ButtonMinWidth}" />
         <Setter Property="Padding" Value="{StaticResource Layout.ButtonPadding}" />
         <Setter Property="Background" Value="{StaticResource Brush.Surface}" />
         <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />

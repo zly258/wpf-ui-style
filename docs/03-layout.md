@@ -72,12 +72,12 @@
         <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>
 
-    <TextBlock Grid.Row="0" Style="{StaticResource Text.Hint}"
+    <TextBlock Grid.Row="0" Style="{StaticResource Text.Caption}"
                Text="添加要处理的图纸，或直接拖放文件。" Margin="0,0,0,8" />
 
     <ListView Grid.Row="1" MinHeight="180" />
 
-    <TextBlock Grid.Row="2" Style="{StaticResource Text.Hint}"
+    <TextBlock Grid.Row="2" Style="{StaticResource Text.Caption}"
                Text="就绪" Margin="0,8,0,8" />
 
     <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
@@ -133,15 +133,15 @@
 - 两列之间留 12–16。
 - 标签左对齐，垂直居中。
 - 同一行的控件高度一致（36 或 32）。
-- 长文本说明放在输入框下方，使用 `Text.Hint`，左对齐到输入列。
+- 长文本说明放在输入框下方，使用 `Text.Caption`，左对齐到输入列。
 
 ### 3.2 单列长表单
 
 ```xml
 <StackPanel>
-    <TextBlock Text="名称列标题" Style="{StaticResource Text.Hint}" />
+    <TextBlock Text="名称列标题" Style="{StaticResource Text.Caption}" />
     <TextBox Margin="0,4,0,10" Text="{Binding BomNameColumnTitles}" />
-    <TextBlock Text="跳过列标题" Style="{StaticResource Text.Hint}" />
+    <TextBlock Text="跳过列标题" Style="{StaticResource Text.Caption}" />
     <TextBox Margin="0,4,0,0" Text="{Binding BomSkipColumnTitles}" />
 </StackPanel>
 ```
@@ -230,7 +230,7 @@
 
 ```xml
 <TextBlock Text="暂无术语。点击“新增词条”或“导入 CSV”。"
-           Style="{StaticResource Text.Hint}"
+           Style="{StaticResource Text.Caption}"
            HorizontalAlignment="Center"
            VerticalAlignment="Center" />
 ```
@@ -440,7 +440,7 @@ pwsh ./tools/LayoutCheck.ps1 -Root "D:\your\project"
 
     <!-- 4. 底部右下角退出 -->
     <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
-        <Button Content="关闭" IsCancel="True" MinWidth="72" />
+        <Button Content="关闭" IsCancel="True" />
     </StackPanel>
 </Grid>
 ```

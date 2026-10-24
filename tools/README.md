@@ -36,6 +36,10 @@ python tools/LayoutCheck.py --root . --strict
 
 参数同时兼容 PowerShell 风格（`-Root`、`-Strict`、`-TokensPath`）和 Unix 风格（`--root`、`--strict`、`--tokens`）。
 
+LayoutCheck 识别主题文件的方式：默认 `theme` 目录及 `WindowTheme/Styles/UnifiedTheme.xaml`
+文件名；若项目的主题文件命名不同，可用 `-ThemeDir <目录名>` / `-ThemeFile <文件名>`
+（可重复）追加豁免，这些文件内允许出现颜色字面量与本地 FontFamily。
+
 ## 4. 依赖与退出码
 
 - 仅使用 Python 3 标准库，无需 `pip install`。

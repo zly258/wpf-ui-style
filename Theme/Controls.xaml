@@ -82,7 +82,7 @@
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
         <Setter Property="FontWeight" Value="Normal" />
         <Setter Property="Height" Value="{StaticResource Layout.ControlHeight}" />
-        <Setter Property="MinWidth" Value="72" />
+        <Setter Property="MinWidth" Value="{StaticResource Layout.ButtonMinWidth}" />
         <Setter Property="Padding" Value="{StaticResource Layout.ButtonPadding}" />
         <Setter Property="Background" Value="{StaticResource Brush.Surface}" />
         <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />
@@ -208,13 +208,13 @@
     <!-- 小号按钮 -->
     <Style x:Key="Button.Primary.Small" TargetType="{x:Type Button}" BasedOn="{StaticResource Button.Primary}">
         <Setter Property="Height" Value="{StaticResource Layout.ControlHeight.Small}" />
-        <Setter Property="MinWidth" Value="52" />
+        <Setter Property="MinWidth" Value="{StaticResource Layout.ButtonMinWidth.Small}" />
         <Setter Property="Padding" Value="8,0" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Caption}" />
     </Style>
     <Style x:Key="Button.Secondary.Small" TargetType="{x:Type Button}" BasedOn="{StaticResource Button.Secondary}">
         <Setter Property="Height" Value="{StaticResource Layout.ControlHeight.Small}" />
-        <Setter Property="MinWidth" Value="52" />
+        <Setter Property="MinWidth" Value="{StaticResource Layout.ButtonMinWidth.Small}" />
         <Setter Property="Padding" Value="8,0" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Caption}" />
     </Style>
@@ -225,7 +225,7 @@
     </Style>
     <Style x:Key="Button.Danger.Small" TargetType="{x:Type Button}" BasedOn="{StaticResource Button.Danger}">
         <Setter Property="Height" Value="{StaticResource Layout.ControlHeight.Small}" />
-        <Setter Property="MinWidth" Value="52" />
+        <Setter Property="MinWidth" Value="{StaticResource Layout.ButtonMinWidth.Small}" />
         <Setter Property="Padding" Value="8,0" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Caption}" />
     </Style>
@@ -236,40 +236,10 @@
     <!-- ============================================================
          2. TextBox / PasswordBox
          ============================================================ -->
-    <ControlTemplate x:Key="TextBox.SingleLine.Template" TargetType="{x:Type TextBox}">
-        <Border x:Name="Bd"
-                Background="{TemplateBinding Background}"
-                BorderBrush="{TemplateBinding BorderBrush}"
-                BorderThickness="{TemplateBinding BorderThickness}"
-                CornerRadius="{StaticResource Radius.Small}"
-                SnapsToDevicePixels="True">
-            <ScrollViewer x:Name="PART_ContentHost"
-                          Focusable="False"
-                          Margin="{TemplateBinding Padding}"
-                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                          HorizontalScrollBarVisibility="{TemplateBinding HorizontalScrollBarVisibility}"
-                          VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}" />
-        </Border>
-        <ControlTemplate.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Border.Strong}" />
-            </Trigger>
-            <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Focus}" />
-            </Trigger>
-            <Trigger Property="IsReadOnly" Value="True">
-                <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.SurfaceAlt}" />
-                <Setter Property="Foreground" Value="{StaticResource Brush.Text.Secondary}" />
-            </Trigger>
-            <Trigger Property="IsEnabled" Value="False">
-                <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Control.Disabled}" />
-                <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Border}" />
-                <Setter Property="Foreground" Value="{StaticResource Brush.Text.Disabled}" />
-            </Trigger>
-        </ControlTemplate.Triggers>
-    </ControlTemplate>
-
-    <ControlTemplate x:Key="TextBox.Multiline.Template" TargetType="{x:Type TextBox}">
+    <!-- 共享文本框模板：TextBox（单行/多行）与 PasswordBox 复用同一模板，
+         避免状态触发器（hover / focus / readonly / disabled）多处同步。
+         注意：模板 TargetType 为 Control，供跨控件类型共享。 -->
+    <ControlTemplate x:Key="TextBox.Template" TargetType="{x:Type Control}">
         <Border x:Name="Bd"
                 Background="{TemplateBinding Background}"
                 BorderBrush="{TemplateBinding BorderBrush}"
@@ -279,8 +249,9 @@
             <ScrollViewer x:Name="PART_ContentHost"
                           Focusable="False"
                           Margin="{TemplateBinding Padding}"
-                          HorizontalScrollBarVisibility="{TemplateBinding HorizontalScrollBarVisibility}"
-                          VerticalScrollBarVisibility="{TemplateBinding VerticalScrollBarVisibility}" />
+                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                          HorizontalScrollBarVisibility="{Binding HorizontalScrollBarVisibility, RelativeSource={RelativeSource TemplatedParent}}"
+                          VerticalScrollBarVisibility="{Binding VerticalScrollBarVisibility, RelativeSource={RelativeSource TemplatedParent}}" />
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
@@ -289,10 +260,10 @@
             <Trigger Property="IsKeyboardFocusWithin" Value="True">
                 <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Focus}" />
             </Trigger>
-            <Trigger Property="IsReadOnly" Value="True">
+            <DataTrigger Binding="{Binding IsReadOnly, RelativeSource={RelativeSource TemplatedParent}}" Value="True">
                 <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.SurfaceAlt}" />
                 <Setter Property="Foreground" Value="{StaticResource Brush.Text.Secondary}" />
-            </Trigger>
+            </DataTrigger>
             <Trigger Property="IsEnabled" Value="False">
                 <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Control.Disabled}" />
                 <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Border}" />
@@ -316,7 +287,7 @@
         <Setter Property="CaretBrush" Value="{StaticResource Brush.Text.Primary}" />
         <Setter Property="SelectionBrush" Value="{StaticResource Brush.Accent}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
-        <Setter Property="Template" Value="{StaticResource TextBox.SingleLine.Template}" />
+        <Setter Property="Template" Value="{StaticResource TextBox.Template}" />
     </Style>
 
     <Style x:Key="TextBox.Multiline" TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBox.Base}">
@@ -327,7 +298,6 @@
         <Setter Property="TextWrapping" Value="Wrap" />
         <Setter Property="VerticalContentAlignment" Value="Top" />
         <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
-        <Setter Property="Template" Value="{StaticResource TextBox.Multiline.Template}" />
     </Style>
 
 
@@ -335,7 +305,7 @@
         <Setter Property="Background" Value="{StaticResource Brush.SurfaceSunken}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Code}" />
         <Setter Property="MinHeight" Value="0" />
-        <Setter Property="MaxHeight" Value="220" />
+        <Setter Property="MaxHeight" Value="{StaticResource Layout.LogMaxHeight}" />
         <Setter Property="IsReadOnly" Value="True" />
     </Style>
 
@@ -355,36 +325,7 @@
         <Setter Property="CaretBrush" Value="{StaticResource Brush.Text.Primary}" />
         <Setter Property="SelectionBrush" Value="{StaticResource Brush.Accent}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type PasswordBox}">
-                    <Border x:Name="Bd"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="{StaticResource Radius.Small}"
-                            SnapsToDevicePixels="True">
-                        <ScrollViewer x:Name="PART_ContentHost"
-                                      Focusable="False"
-                                      Margin="{TemplateBinding Padding}"
-                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Border.Strong}" />
-                        </Trigger>
-                        <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Focus}" />
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Control.Disabled}" />
-                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Border}" />
-                            <Setter Property="Foreground" Value="{StaticResource Brush.Text.Disabled}" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
+        <Setter Property="Template" Value="{StaticResource TextBox.Template}" />
     </Style>
 
     <Style TargetType="{x:Type PasswordBox}" BasedOn="{StaticResource PasswordBox.Base}" />
@@ -919,6 +860,23 @@
         <Setter Property="Background" Value="{StaticResource Brush.SurfaceAlt}" />
         <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />
         <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ProgressBar}">
+                    <Border x:Name="PART_Track"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{StaticResource Radius.Card}"
+                            SnapsToDevicePixels="True">
+                        <Border x:Name="PART_Indicator"
+                                Background="{TemplateBinding Foreground}"
+                                CornerRadius="{StaticResource Radius.Card}"
+                                HorizontalAlignment="Left" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style TargetType="{x:Type StatusBar}">
@@ -1050,7 +1008,7 @@
     </Style>
 
     <!-- ============================================================
-         11. Menu / ContextMenu（基础项；复杂子菜单请单独测试键盘导航）
+         11. Menu / ContextMenu（含子菜单弹层；复杂键盘导航请单独测试）
          ============================================================ -->
     <Style TargetType="{x:Type ContextMenu}">
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
@@ -1059,7 +1017,23 @@
         <Setter Property="Background" Value="{StaticResource Brush.Surface}" />
         <Setter Property="BorderBrush" Value="{StaticResource Brush.Border.Strong}" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Padding" Value="6" />
+        <Setter Property="Padding" Value="4" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ContextMenu}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{StaticResource Radius.Card}"
+                            Padding="{TemplateBinding Padding}"
+                            SnapsToDevicePixels="True">
+                        <StackPanel IsItemsHost="True"
+                                    KeyboardNavigation.DirectionalNavigation="Cycle" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style TargetType="{x:Type Menu}">
@@ -1069,21 +1043,102 @@
         <Setter Property="Background" Value="{StaticResource Brush.Surface}" />
     </Style>
 
+    <!-- MenuItem 共享模板：支持顶层与子菜单两种角色（含箭头与弹层）。
+         分隔线（Separator）沿用全局样式。 -->
     <Style TargetType="{x:Type MenuItem}">
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
         <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Padding" Value="10,6" />
-        <Style.Triggers>
-            <Trigger Property="IsHighlighted" Value="True">
-                <Setter Property="Background" Value="{StaticResource Brush.Control.Hover}" />
-                <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
-            </Trigger>
-            <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground" Value="{StaticResource Brush.Text.Disabled}" />
-            </Trigger>
-        </Style.Triggers>
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type MenuItem}">
+                    <Grid>
+                        <Border x:Name="Bd"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="{StaticResource Radius.Small}"
+                                Padding="{TemplateBinding Padding}"
+                                SnapsToDevicePixels="True">
+                        <DockPanel LastChildFill="True">
+                            <Path x:Name="Arrow"
+                                  DockPanel.Dock="Right"
+                                  Width="8" Height="8"
+                                  Margin="8,0,0,0"
+                                  Data="M 0,0 L 4,4 L 8,0"
+                                  Stroke="{StaticResource Brush.Text.Secondary}"
+                                  StrokeThickness="1.5"
+                                  StrokeStartLineCap="Round"
+                                  StrokeEndLineCap="Round"
+                                  StrokeLineJoin="Round"
+                                  VerticalAlignment="Center"
+                                  Visibility="Collapsed" />
+                            <TextBlock x:Name="GestureText"
+                                       DockPanel.Dock="Right"
+                                       Margin="24,0,0,0"
+                                       VerticalAlignment="Center"
+                                       FontSize="{StaticResource FontSize.Caption}"
+                                       Foreground="{StaticResource Brush.Text.Secondary}"
+                                       Text="{TemplateBinding InputGestureText}" />
+                            <ContentPresenter x:Name="IconSite"
+                                              DockPanel.Dock="Left"
+                                              ContentSource="Icon"
+                                              VerticalAlignment="Center"
+                                              Margin="0,0,6,0"
+                                              TextElement.Foreground="{TemplateBinding Foreground}" />
+                            <ContentPresenter ContentSource="Header"
+                                              VerticalAlignment="Center"
+                                              RecognizesAccessKey="True"
+                                              TextElement.Foreground="{TemplateBinding Foreground}" />
+                        </DockPanel>
+                        </Border>
+                        <Popup x:Name="PART_Popup"
+                               AllowsTransparency="True"
+                               Focusable="False"
+                               IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                               Placement="Bottom"
+                               PopupAnimation="Fade">
+                            <Border Background="{StaticResource Brush.Surface}"
+                                    BorderBrush="{StaticResource Brush.Border.Strong}"
+                                    BorderThickness="1"
+                                    CornerRadius="{StaticResource Radius.Card}"
+                                    Padding="4"
+                                    Margin="0,2,0,0"
+                                    SnapsToDevicePixels="True">
+                                <StackPanel IsItemsHost="True"
+                                            KeyboardNavigation.DirectionalNavigation="Cycle" />
+                            </Border>
+                        </Popup>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Role" Value="SubmenuHeader">
+                            <Setter TargetName="Arrow" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="PART_Popup" Property="Placement" Value="Right" />
+                            <Setter TargetName="PART_Popup" Property="Margin" Value="2,0,0,0" />
+                        </Trigger>
+                        <Trigger Property="Role" Value="TopLevelHeader">
+                            <Setter TargetName="Arrow" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                        <Trigger Property="Icon" Value="{x:Null}">
+                            <Setter TargetName="IconSite" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                        <Trigger Property="InputGestureText" Value="">
+                            <Setter TargetName="GestureText" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+                        <Trigger Property="IsHighlighted" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Control.Hover}" />
+                            <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="{StaticResource Brush.Text.Disabled}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
+
+    <!-- 子菜单弹层直接内联在 MenuItem 模板中（PART_Popup）。 -->
 
 </ResourceDictionary>
