@@ -31,22 +31,18 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <StackPanel>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="图纸协同处理与制造调度看板" Style="{StaticResource Text.Title}" FontWeight="SemiBold" />
-                            <Border Background="{StaticResource Brush.Success.Subtle}"
-                                    CornerRadius="{StaticResource Radius.Small}"
-                                    Padding="6,2"
-                                    Margin="10,0,0,0"
-                                    VerticalAlignment="Center">
-                                <TextBlock Text="实时监控运行中"
-                                           FontSize="{StaticResource FontSize.Caption}"
-                                           Foreground="{StaticResource Brush.Success}"
-                                           FontWeight="SemiBold" />
-                            </Border>
-                        </StackPanel>
-                        <TextBlock Text="集中展示批处理吞吐量、节点并发、质检合格率及告警事件流。"
-                                   Style="{StaticResource Text.Caption}" Margin="0,3,0,0" />
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="图纸协同处理与制造调度看板" Style="{StaticResource Text.Title}" FontWeight="SemiBold" />
+                        <Border Background="{StaticResource Brush.Success.Subtle}"
+                                CornerRadius="{StaticResource Radius.Small}"
+                                Padding="6,2"
+                                Margin="10,0,0,0"
+                                VerticalAlignment="Center">
+                            <TextBlock Text="实时监控运行中"
+                                       FontSize="{StaticResource FontSize.Caption}"
+                                       Foreground="{StaticResource Brush.Success}"
+                                       FontWeight="SemiBold" />
+                        </Border>
                     </StackPanel>
 
                     <!-- 右侧控制 -->
@@ -228,7 +224,7 @@
 
                     <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                         <Button Style="{StaticResource Button.Text.Small}" Content="清空已完成队列" Margin="0,0,8,0" Click="BtnClearFinished_Click" />
-                        <Button Style="{StaticResource Button.Text.Small}" Content="导出运行日志" Click="BtnExportLog_Click" />
+                        <Button Style="{StaticResource Button.Text.Small}" Content="查看运行日志" Click="BtnExportLog_Click" />
                     </StackPanel>
                 </Grid>
             </Border>

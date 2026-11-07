@@ -665,6 +665,12 @@ Non-negotiable rules:
 9. Compact by default: body text 12px, control height 32px, form row spacing 3px, window
    padding 12px. Do not enlarge fonts or spacing to create hierarchy — show more rows and
    columns per screen instead.
+10. Strict 4-zone layout and single action entry: Zone 1 Header (title + global Save/Export),
+    Zone 2 Filter (pure search inputs, <=4 filters), Zone 3 Workspace/Toolbar (batch actions enabled
+    only with selection; view toggles), Zone 4 Footer (metrics & pagination). Never duplicate
+    actions like "Export" or "Save" across multiple zones.
+11. Zero redundancy text: no AI tutorial chatter (never write "Here you can..." or "Demo...").
+    Keep labels and table column headers crisp and non-repetitive.
 <!-- END wpf-ui-style -->
 '@
     $display = $SkillPath.Replace('\', '/')

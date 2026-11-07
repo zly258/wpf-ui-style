@@ -16,7 +16,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <!-- 1. 页头：标题与说明 -->
+            <!-- 1. 页头：主标题与全局操作入口 -->
             <Border Grid.Row="0"
                     BorderBrush="{StaticResource Brush.Border}"
                     BorderThickness="0,0,0,1"
@@ -28,28 +28,23 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <StackPanel>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="BOM 物料清单与制造工艺管理" Style="{StaticResource Text.Title}" FontWeight="SemiBold" />
-                            <TextBlock Text="复杂可编辑表格 · 紧凑排版"
-                                       Style="{StaticResource Text.Caption}"
-                                       Margin="12,0,0,0"
-                                       VerticalAlignment="Center" />
-                        </StackPanel>
-                        <TextBlock Text="演示复选框联动、可编辑文本、下拉框单元格（Material/Status）、数值靠右、状态徽章、展开详情行以及分页汇总。"
-                                   Style="{StaticResource Text.Caption}"
-                                   Margin="0,4,0,0" />
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="BOM 物料与制造工艺清单" Style="{StaticResource Text.Title}" FontWeight="SemiBold" />
+                        <Border Margin="12,0,0,0" Background="{StaticResource Brush.SurfaceAlt}"
+                                Padding="8,2" CornerRadius="{StaticResource Radius.Small}">
+                            <TextBlock Text="装配体: DOC-0001_示例装配体" Style="{StaticResource Text.Caption}" />
+                        </Border>
                     </StackPanel>
 
-                    <!-- 右侧辅助说明 -->
-                    <TextBlock Grid.Column="1"
-                               Text="支持双击单元格就地编辑 / Tab 键切换"
-                               Style="{StaticResource Text.Caption}"
-                               VerticalAlignment="Bottom" />
+                    <!-- 全局操作单一入口：导出与保存变更统一在页头右侧 -->
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Button Content="导出清单 (CSV)" Style="{StaticResource Button.Secondary}" Margin="0,0,8,0" Click="BtnExport_Click" />
+                        <Button Content="保存变更" Style="{StaticResource Button.Primary}" Click="BtnSave_Click" />
+                    </StackPanel>
                 </Grid>
             </Border>
 
-            <!-- 2. 筛选过滤栏 -->
+            <!-- 2. 筛选过滤栏：纯粹收窄检索范围，不混杂数据操作 -->
             <Border Grid.Row="1"
                     Background="{StaticResource Brush.Surface}"
                     BorderBrush="{StaticResource Brush.Border}"
@@ -78,7 +73,7 @@
                              TextChanged="TxtSearch_TextChanged" />
 
                     <!-- 材质筛选 -->
-                    <TextBlock Grid.Column="3" Text="材质种类" Style="{StaticResource Text.Label}" VerticalAlignment="Center" />
+                    <TextBlock Grid.Column="3" Text="材质" Style="{StaticResource Text.Label}" VerticalAlignment="Center" />
                     <ComboBox x:Name="CmbMaterialFilter" Grid.Column="4" VerticalAlignment="Center"
                               SelectionChanged="CmbFilter_SelectionChanged">
                         <ComboBoxItem Content="全部材质" IsSelected="True" />
@@ -90,7 +85,7 @@
                     </ComboBox>
 
                     <!-- 状态筛选 -->
-                    <TextBlock Grid.Column="6" Text="审核状态" Style="{StaticResource Text.Label}" VerticalAlignment="Center" />
+                    <TextBlock Grid.Column="6" Text="状态" Style="{StaticResource Text.Label}" VerticalAlignment="Center" />
                     <ComboBox x:Name="CmbStatusFilter" Grid.Column="7" VerticalAlignment="Center"
                               SelectionChanged="CmbFilter_SelectionChanged">
                         <ComboBoxItem Content="全部状态" IsSelected="True" />
@@ -100,14 +95,14 @@
                         <ComboBoxItem Content="已驳回" />
                     </ComboBox>
 
-                    <!-- 重置操作 -->
+                    <!-- 重置 -->
                     <StackPanel Grid.Column="9" Orientation="Horizontal" VerticalAlignment="Center">
                         <Button Content="重置筛选" Style="{StaticResource Button.Secondary}" Click="BtnResetFilter_Click" />
                     </StackPanel>
                 </Grid>
             </Border>
 
-            <!-- 3. 批量操作与视图控制工具栏 -->
+            <!-- 3. 表格工具栏：左侧为局部/批量操作（选中有物料时点亮），右侧为视图控制 -->
             <Grid Grid.Row="2" Margin="0,0,0,8">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -122,11 +117,9 @@
                     <TextBlock x:Name="TxtSelectedSummary" Text="未选择项" Style="{StaticResource Text.Caption}" VerticalAlignment="Center" />
                 </StackPanel>
 
-                <!-- 右侧视图与数据操作 -->
+                <!-- 右侧表格视图控制（展开/折叠明细） -->
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                    <Button Content="展开全部明细" Style="{StaticResource Button.Secondary}" Margin="0,0,8,0" Click="BtnToggleAllDetails_Click" />
-                    <Button Content="导出清单 (CSV)" Style="{StaticResource Button.Secondary}" Margin="0,0,8,0" Click="BtnExport_Click" />
-                    <Button Content="保存变更" Style="{StaticResource Button.Primary}" Click="BtnSave_Click" />
+                    <Button Content="展开全部明细" Style="{StaticResource Button.Secondary}" Click="BtnToggleAllDetails_Click" />
                 </StackPanel>
             </Grid>
 
