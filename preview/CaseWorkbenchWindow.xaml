@@ -70,7 +70,7 @@
                         <TextBlock Text="ASM-0482_减速箱总成.iam" Style="{StaticResource Text.Body}" FontWeight="SemiBold" VerticalAlignment="Center" Margin="0,0,16,0" />
 
                         <TextBlock Text="工作坐标系：" Style="{StaticResource Text.Label}" VerticalAlignment="Center" Margin="0,0,6,0" />
-                        <ComboBox Width="110" Height="28" SelectedIndex="0" VerticalAlignment="Center" Margin="0,0,16,0">
+                        <ComboBox Style="{StaticResource ComboBox.Small}" Width="110" SelectedIndex="0" VerticalAlignment="Center" Margin="0,0,16,0">
                             <ComboBoxItem Content="世界原点" />
                             <ComboBoxItem Content="主轴法兰面" />
                             <ComboBoxItem Content="底座基准面" />
@@ -83,7 +83,7 @@
                     <!-- 右侧视口模式切换 -->
                     <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="视口模式：" Style="{StaticResource Text.Caption}" VerticalAlignment="Center" Margin="0,0,6,0" />
-                        <ComboBox Width="90" Height="28" SelectedIndex="0" VerticalAlignment="Center">
+                        <ComboBox Style="{StaticResource ComboBox.Small}" Width="90" SelectedIndex="0" VerticalAlignment="Center">
                             <ComboBoxItem Content="带边着色" />
                             <ComboBoxItem Content="线框模型" />
                             <ComboBoxItem Content="真实渲染" />

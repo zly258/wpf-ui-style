@@ -41,6 +41,7 @@ namespace WpfStylePreview
 
         public CaseEditableTableWindow()
         {
+            DataContext = this;
             InitializeComponent();
             InitSampleData();
             SetupColumnComboBox();

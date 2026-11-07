@@ -381,6 +381,11 @@ namespace WpfStylePreview
             root.Arrange(new Rect(0, 0, w, h));
             root.UpdateLayout();
 
+            // 再次以确定尺寸测量与排版，确保包含星号列（Star Column）的 DataGrid 正确重算占满列宽
+            root.Measure(new Size(w, h));
+            root.Arrange(new Rect(0, 0, w, h));
+            root.UpdateLayout();
+
             // 布局完成后让窗口自己做一次状态自检（编辑态、弹层内容等）
             var afterLayout = t.GetMethod("AfterLayout",
                 BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);

@@ -3,6 +3,7 @@
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="Tokens.xaml" />
+        <ResourceDictionary Source="Controls.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <!--
@@ -173,6 +174,7 @@
         <Setter Property="GridLinesVisibility" Value="Horizontal" />
         <Setter Property="CanUserResizeRows" Value="False" />
         <Setter Property="SelectionUnit" Value="FullRow" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
     </Style>
 
@@ -228,7 +230,7 @@
         <!-- 左内边距必须与 DataGridColumnHeader 的 8px 严格一致，
              保证单元格文字与表头文字完全垂直对齐。 -->
         <Setter Property="Padding" Value="8,0" />
-        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Template" Value="{StaticResource DataGridCell.Template}" />
         <Style.Triggers>
@@ -252,6 +254,20 @@
         </Style.Triggers>
     </Style>
 
+    <!-- 表头拖拽分隔手柄：完全透明，不产生任何多余黑线、阴影或立体边框 -->
+    <Style x:Key="DataGridColumnHeader.Gripper" TargetType="{x:Type Thumb}">
+        <Setter Property="Width" Value="8" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Cursor" Value="SizeWE" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Thumb}">
+                    <Border Background="Transparent" Padding="0" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <ControlTemplate x:Key="DataGridColumnHeader.Template" TargetType="{x:Type DataGridColumnHeader}">
         <Grid SnapsToDevicePixels="True">
             <Border Background="{TemplateBinding Background}"
@@ -264,9 +280,9 @@
                                   SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
             </Border>
             <Thumb x:Name="PART_LeftHeaderGripper" HorizontalAlignment="Left"
-                   Width="2" Margin="0" Cursor="SizeWE" Background="Transparent" />
+                   Style="{StaticResource DataGridColumnHeader.Gripper}" />
             <Thumb x:Name="PART_RightHeaderGripper" HorizontalAlignment="Right"
-                   Width="2" Margin="0" Cursor="SizeWE" Background="Transparent" />
+                   Style="{StaticResource DataGridColumnHeader.Gripper}" />
         </Grid>
     </ControlTemplate>
 
@@ -356,7 +372,7 @@
     </Style>
 
     <!-- 表格单元格专用下拉框（单次点击直接展开，高度与宽度 100% 占满行可用空间） -->
-    <Style x:Key="DataGrid.Cell.ComboBox" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
+    <Style x:Key="DataGrid.Cell.ComboBox" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource ComboBox.Base}">
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
         <Setter Property="Height" Value="Auto" />
@@ -384,7 +400,7 @@
     </Style>
 
     <!-- 表格编辑态：下拉框（适配原生 DataGridComboBoxColumn，高度占满单元格） -->
-    <Style x:Key="DataGrid.Editing.ComboBox" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
+    <Style x:Key="DataGrid.Editing.ComboBox" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource ComboBox.Base}">
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
         <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />

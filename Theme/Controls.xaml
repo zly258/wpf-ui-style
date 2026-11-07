@@ -432,6 +432,7 @@
         <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Height" Value="{StaticResource Layout.ControlHeight}" />
+        <Setter Property="MinHeight" Value="0" />
         <Setter Property="Padding" Value="5,0,20,0" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
@@ -442,7 +443,17 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ComboBox}">
                     <Grid>
+                        <!-- 覆盖全局隐式 ToggleButton 的 Height=32 和 MinWidth=72，
+                             确保 ToggleButton 100% 随宿主 ComboBox 的尺寸伸展，
+                             彻底杜绝在 28px/紧凑尺寸下边框被挤出可视区或截断的恶性 Bug。 -->
                         <ToggleButton x:Name="ToggleButton"
+                                      Height="Auto"
+                                      MinHeight="0"
+                                      MinWidth="0"
+                                      Margin="0"
+                                      Padding="0"
+                                      HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Stretch"
                                       Background="{TemplateBinding Background}"
                                       BorderBrush="{TemplateBinding BorderBrush}"
                                       BorderThickness="{TemplateBinding BorderThickness}"
@@ -527,6 +538,12 @@
     </Style>
 
     <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource ComboBox.Base}" />
+
+    <!-- 紧凑型下拉框：适配工具栏、属性栏与紧凑表单（高度 28px） -->
+    <Style x:Key="ComboBox.Small" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource ComboBox.Base}">
+        <Setter Property="Height" Value="{StaticResource Layout.ControlHeight.Small}" />
+        <Setter Property="MinHeight" Value="0" />
+    </Style>
 
     <Style TargetType="{x:Type ComboBoxItem}">
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />

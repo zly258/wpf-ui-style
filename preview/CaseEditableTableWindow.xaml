@@ -153,11 +153,13 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <!-- 列 2：序号（默认左对齐，与表头一致） -->
+                    <!-- 列 2：序号（只读居中） -->
                     <DataGridTextColumn Header="序号"
                                         Binding="{Binding Index}"
-                                        Width="50"
-                                        IsReadOnly="True" />
+                                        Width="52"
+                                        IsReadOnly="True"
+                                        HeaderStyle="{StaticResource DataGridColumnHeader.Center}"
+                                        ElementStyle="{StaticResource DataGrid.Element.TextCenter}" />
 
                     <!-- 列 3：物料编码（可编辑，编辑态 100% 占满） -->
                     <DataGridTextColumn Header="物料编码"
@@ -183,35 +185,38 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <!-- 列 6：数量（默认左对齐，与表头一致） -->
+                    <!-- 列 6：数量（数值靠右，编辑态 100% 占满） -->
                     <DataGridTextColumn Header="数量 (件)"
                                         Binding="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
-                                        Width="80"
-                                        EditingElementStyle="{StaticResource DataGrid.Editing.TextBox}" />
+                                        Width="84"
+                                        HeaderStyle="{StaticResource DataGridColumnHeader.Right}"
+                                        ElementStyle="{StaticResource DataGrid.Element.TextRight}"
+                                        EditingElementStyle="{StaticResource DataGrid.Editing.TextBoxRight}" />
 
-                    <!-- 列 7：单价（默认左对齐，与表头一致） -->
+                    <!-- 列 7：单价（数值靠右，编辑态 100% 占满） -->
                     <DataGridTextColumn Header="单价 (元)"
                                         Binding="{Binding UnitPrice, Mode=TwoWay, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}"
-                                        Width="88"
-                                        EditingElementStyle="{StaticResource DataGrid.Editing.TextBox}" />
+                                        Width="90"
+                                        HeaderStyle="{StaticResource DataGridColumnHeader.Right}"
+                                        ElementStyle="{StaticResource DataGrid.Element.TextRight}"
+                                        EditingElementStyle="{StaticResource DataGrid.Editing.TextBoxRight}" />
 
-                    <!-- 列 8：带复选框单元格：关键部件（默认左对齐） -->
-                    <DataGridTemplateColumn Header="关键部件" Width="76">
+                    <!-- 列 8：带复选框单元格：关键部件（居中） -->
+                    <DataGridTemplateColumn Header="关键部件" Width="80" HeaderStyle="{StaticResource DataGridColumnHeader.Center}">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <CheckBox IsChecked="{Binding IsCritical, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                          HorizontalAlignment="Left"
-                                          VerticalAlignment="Center"
+                                          Style="{StaticResource DataGrid.Element.CheckBox}"
                                           ToolTip="标记为关键受力件或关键控制部件" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <!-- 列 9：状态徽章展示（默认左对齐，与表头对齐） -->
-                    <DataGridTemplateColumn Header="状态" Width="86">
+                    <!-- 列 9：状态徽章展示（居中） -->
+                    <DataGridTemplateColumn Header="状态" Width="96" HeaderStyle="{StaticResource DataGridColumnHeader.Center}">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Border HorizontalAlignment="Left" VerticalAlignment="Center"
+                                <Border HorizontalAlignment="Center" VerticalAlignment="Center"
                                         CornerRadius="{StaticResource Radius.Small}"
                                         Padding="6,2"
                                         Background="{Binding StatusBackground}">
@@ -224,11 +229,11 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
 
-                    <!-- 列 10：行内操作列（默认左对齐） -->
-                    <DataGridTemplateColumn Header="操作" Width="100">
+                    <!-- 列 10：行内操作列（居中） -->
+                    <DataGridTemplateColumn Header="操作" Width="110" HeaderStyle="{StaticResource DataGridColumnHeader.Center}">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                     <Button Content="详情"
                                             Style="{StaticResource Button.Text.Small}"
                                             Margin="0,0,4,0"
