@@ -800,6 +800,79 @@ pack://application:,,,/YourAssembly;component/Theme/Theme.xaml
 
 ---
 
+## 20. AI 典型 UI 坏味道：入口混乱到处是、文案冗余复读、功能交叉重叠与过度密集
+
+**症状**
+
+1. **满屏都是“导出”与“保存”**：页头有“导出”，表格上方工具栏有“导出 (CSV)”，底栏有“导出日志”，甚至单行右键还有“导出”。用户完全不知道各个导出有何区别、改动后到底点哪个保存才入库。
+2. **文字车轱辘话反复复读**：标题叫“物料管理”，副标题叫“物料管理与工艺”，下面还配两行“演示复选框联动、您可以管理物料...”。标签叫“材质种类”，下拉框默认选“选择材质种类”。
+3. **功能交叉重叠**：筛选栏里塞了“添加行”按钮，工具栏里既有针对选中行的“批量删除”，又混着针对全局的“保存到数据库”和“折叠/展开”视图控制。
+4. **过度密集缺乏呼吸感**：一行横向塞进 8 个输入控件，没有分组，没有间距，视觉疲劳。
+
+**根因**
+
+AI 模型的通病是“增量贪心堆叠”：收到“增加导出功能”时就顺手放一个导出按钮，收到“支持编辑”就塞一个保存按钮，收到“增加说明”就生成一段客套废话。缺乏对界面整体权责边界和信息架构的审视。
+
+**修复**
+
+严格遵循四大功能分区（Four-Zone）与单一动作入口（Single Action Entry）：
+
+1. **入口收敛到单一真理位置**：
+   - 全局动作（保存全单、导出整表）：**只在页头右侧出现一次**。
+   - 局部批量动作（批量审核、批量删除）：**放在表格工具栏左侧**，无选中项时灰显，配 `已选中 N 项` 状态。
+   - 单行操作（编辑、单行删除）：放在表格最后一列。
+2. **剔除所有 AI 教学废话**：
+   - 彻底删除标题下方的“演示...”、“您可以在这里...”等客套文字，只保留业务标题和上下文对象标签（如 `装配体: ASM-0482`）。
+3. **严格分离筛选与操作**：
+   - 筛选栏只放条件输入和“重置筛选”，绝不放业务修改动作。
+   - 工具栏左侧放数据操作，右侧放视图切换。
+
+```xml
+<!-- Correct: 结构清爽、职责分明的表格头部与工具栏 -->
+<!-- Zone 1: 页头主标题与唯一全局操作 -->
+<Grid Grid.Row="0">
+    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+        <TextBlock Text="BOM 物料与制造工艺清单" Style="{StaticResource Text.Title}" FontWeight="SemiBold" />
+        <Border Margin="12,0,0,0" Background="{StaticResource Brush.SurfaceAlt}" Padding="8,2" CornerRadius="{StaticResource Radius.Small}">
+            <TextBlock Text="装配体: ASM-0482_减速箱总成" Style="{StaticResource Text.Caption}" />
+        </Border>
+    </StackPanel>
+    <StackPanel Grid.Column="1" Orientation="Horizontal">
+        <Button Content="导出清单 (CSV)" Style="{StaticResource Button.Secondary}" Margin="0,0,8,0" />
+        <Button Content="保存变更" Style="{StaticResource Button.Primary}" />
+    </StackPanel>
+</Grid>
+
+<!-- Zone 2: 纯净筛选栏（至多 3 组常用筛选） -->
+<Grid Grid.Row="1">
+    <TextBlock Text="编码/品名" Style="{StaticResource Text.Label}" />
+    <TextBox x:Name="TxtSearch" ... />
+    <TextBlock Text="材质" Style="{StaticResource Text.Label}" />
+    <ComboBox x:Name="CmbMaterial" ... />
+    <Button Content="重置筛选" Style="{StaticResource Button.Secondary}" />
+</Grid>
+
+<!-- Zone 3: 表格工具栏（左侧批量，右侧视图） -->
+<Grid Grid.Row="2">
+    <StackPanel Orientation="Horizontal">
+        <Button Content="添加物料" Style="{StaticResource Button.Secondary}" Margin="0,0,8,0" />
+        <Button Content="批量审核" IsEnabled="False" Style="{StaticResource Button.Secondary}" Margin="0,0,8,0" />
+        <Button Content="批量删除" IsEnabled="False" Style="{StaticResource Button.Danger}" Margin="0,0,16,0" />
+        <TextBlock Text="未选择项" Style="{StaticResource Text.Caption}" />
+    </StackPanel>
+    <StackPanel Grid.Column="1" Orientation="Horizontal">
+        <Button Content="展开全部明细" Style="{StaticResource Button.Secondary}" />
+    </StackPanel>
+</Grid>
+```
+
+**验证**
+
+- 运行 `python tools/LayoutCheck.py --root .`，确保无 `Duplicate action entry points` 或 `Redundant AI demo chatter` 警告。
+- 检查界面上每个按钮的职责范围（全局 vs 批量 vs 单行），确认不存在同名动作互相掐架的情况。
+
+---
+
 ## 21. 标签被固定列宽裁掉一半
 
 **症状**

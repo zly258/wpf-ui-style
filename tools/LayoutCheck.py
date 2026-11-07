@@ -416,6 +416,59 @@ def check_tabcontrol_height(path: Path, text: str) -> None:
         )
 
 
+def check_duplicate_action_buttons(path: Path, text: str) -> None:
+    """Detects multiple action buttons sharing the same generic action label
+    (e.g. multiple '导出' or '保存' buttons scattered across different sections in the same window).
+    """
+    button_matches = re.finditer(r'<Button\b([^>]*?)(?:/>|>(.*?)</Button>)', text, re.DOTALL)
+    action_counts = {}
+    for m in button_matches:
+        attrs = m.group(1)
+        body = m.group(2) or ""
+        content = None
+        c_match = re.search(r'Content\s*=\s*"([^"]+)"', attrs)
+        if c_match:
+            content = c_match.group(1).strip()
+        elif "<TextBlock" in body:
+            tb_match = re.search(r'Text\s*=\s*"([^"]+)"', body)
+            if tb_match:
+                content = tb_match.group(1).strip()
+        if not content:
+            continue
+        for keyword in ("导出", "保存"):
+            if keyword in content:
+                action_counts.setdefault(keyword, []).append((m.start(), content))
+
+    for keyword, occurrences in action_counts.items():
+        if len(occurrences) > 1:
+            first_pos, _ = occurrences[0]
+            labels = [c for _, c in occurrences]
+            report(
+                "WARN",
+                path,
+                line_number(text, first_pos),
+                f"Duplicate '{keyword}' action entry points found ({len(occurrences)} times: {', '.join(labels)}); "
+                "consolidate into a single authoritative entry point (e.g. Header or Toolbar) to prevent entry point clutter.",
+            )
+
+
+def check_redundant_demo_chatter(path: Path, text: str) -> None:
+    """Scans for AI demo chatter and tutorial text (e.g. '演示...', '这里是...', '支持双击...')
+    which clutters industrial CAD interfaces with redundant explanations.
+    """
+    for match in re.finditer(r'<TextBlock\b[^>]*?Text\s*=\s*"([^"]+)"', text):
+        val = match.group(1).strip()
+        for pattern in ("演示复选框", "演示数据", "这里是", "您可以在这里", "此页面用于演示"):
+            if pattern in val:
+                report(
+                    "WARN",
+                    path,
+                    line_number(text, match.start()),
+                    f"Redundant AI demo chatter detected: '{val[:30]}...'; "
+                    "production CAD UI must be concise and avoid tutorial filler text.",
+                )
+
+
 def check_file(path: Path, theme_dirs: set[str], theme_files: set[str]) -> None:
     text = path.read_text(encoding="utf-8", errors="replace")
     comments = comment_ranges(text)
@@ -516,6 +569,8 @@ def check_file(path: Path, theme_dirs: set[str], theme_files: set[str]) -> None:
         check_star_row_without_scroll(path, text)
         check_tabcontrol_height(path, text)
         check_excessive_min_height(path, text)
+        check_duplicate_action_buttons(path, text)
+        check_redundant_demo_chatter(path, text)
 
     # 8. Nested ScrollViewer (skip theme/style templates: ComboBox popups legitimately nest)
     if is_theme_file(path, theme_dirs, theme_files):

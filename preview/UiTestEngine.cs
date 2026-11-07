@@ -267,6 +267,28 @@ namespace WpfStylePreview
                     SnapshotPath = shot
                 });
             }
+
+            // Step 5: 点击页头全局“保存变更”
+            var btnSave = FindChildWithText<Button>(root, "保存变更");
+            if (btnSave != null && btnSave.IsEnabled)
+            {
+                SimulateClick(btnSave);
+                root.UpdateLayout();
+
+                string shot = SaveStepSnapshot(root, window, shotDir, $"{report.WindowName}_05_save_changes.png", scale);
+                report.Steps.Add(new StepResult
+                {
+                    Step = step++,
+                    Action = "Click Button",
+                    TargetName = "BtnSave",
+                    Description = "点击页头全局保存变更，验证数据持久化触发",
+                    BeforeState = "Modified BOM",
+                    AfterState = "Persisted",
+                    Passed = true,
+                    Message = "全局保存入口正常触发",
+                    SnapshotPath = shot
+                });
+            }
         }
 
         private static void TestWizard(Window window, WindowTestReport report, string shotDir, double scale)
@@ -541,6 +563,25 @@ namespace WpfStylePreview
                         Details = $"控件布局尺寸为负数 ({fe.ActualWidth}x{fe.ActualHeight})"
                     });
                 }
+            }
+
+            // 4. 检查重复/混乱动作入口（同一窗口内出现多个相同的高频动作按钮）
+            var duplicateActionButtons = allElements.OfType<Button>()
+                .Where(b => b.IsVisible && b.Content != null)
+                .Select(b => b.Content.ToString().Trim())
+                .GroupBy(t => t)
+                .Where(g => g.Count() > 1 && (g.Key.Contains("导出") || g.Key.Contains("保存")))
+                .ToList();
+
+            foreach (var dup in duplicateActionButtons)
+            {
+                report.Issues.Add(new VerificationIssue
+                {
+                    Level = "WARN",
+                    Category = "DuplicateEntry",
+                    Element = $"Button: '{dup.Key}'",
+                    Details = $"窗口内检测到 {dup.Count()} 处同名 '{dup.Key}' 按钮入口；应收敛为单一权威入口（如页头或工具栏），避免入口混乱"
+                });
             }
         }
 

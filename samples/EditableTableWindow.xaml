@@ -32,7 +32,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <!-- 1. 页头 -->
+            <!-- 1. 页头：主标题与全局操作入口 -->
             <Border Grid.Row="0"
                     BorderBrush="{StaticResource Brush.Border}"
                     BorderThickness="0,0,0,1"
@@ -44,27 +44,23 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <StackPanel>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="物料工艺清单与参数管理" Style="{StaticResource Text.Title}" FontWeight="SemiBold" />
-                            <TextBlock Text="复杂可编辑表格"
-                                       Style="{StaticResource Text.Caption}"
-                                       Margin="12,0,0,0"
-                                       VerticalAlignment="Center" />
-                        </StackPanel>
-                        <TextBlock Text="支持双击单元格就地编辑、下拉框切换、单选/复选框联动以及嵌套详情展开。"
-                                   Style="{StaticResource Text.Caption}"
-                                   Margin="0,4,0,0" />
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="物料工艺清单与参数管理" Style="{StaticResource Text.Title}" FontWeight="SemiBold" />
+                        <Border Margin="12,0,0,0" Background="{StaticResource Brush.SurfaceAlt}"
+                                Padding="8,2" CornerRadius="{StaticResource Radius.Small}">
+                            <TextBlock Text="装配体: ASM-0482_减速箱总成" Style="{StaticResource Text.Caption}" />
+                        </Border>
                     </StackPanel>
 
-                    <TextBlock Grid.Column="1"
-                               Text="按 Tab 键流式切换下一个单元格"
-                               Style="{StaticResource Text.Caption}"
-                               VerticalAlignment="Bottom" />
+                    <!-- 全局操作单一入口：导出与保存变更统一在页头右侧 -->
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Button Content="导出 (CSV)" Style="{StaticResource Button.Secondary}" Margin="0,0,8,0" />
+                        <Button Content="保存变更" Style="{StaticResource Button.Primary}" />
+                    </StackPanel>
                 </Grid>
             </Border>
 
-            <!-- 2. 多维筛选栏 -->
+            <!-- 2. 多维筛选栏：纯粹收窄检索范围，不混杂数据操作 -->
             <Border Grid.Row="1"
                     Background="{StaticResource Brush.Surface}"
                     BorderBrush="{StaticResource Brush.Border}"
@@ -89,7 +85,7 @@
                     <TextBlock Grid.Column="0" Text="编码/品名" Style="{StaticResource Text.Label}" VerticalAlignment="Center" />
                     <TextBox x:Name="TxtSearch" Grid.Column="1" VerticalAlignment="Center" ToolTip="输入图号或零件名称模糊筛选" />
 
-                    <TextBlock Grid.Column="3" Text="材质种类" Style="{StaticResource Text.Label}" VerticalAlignment="Center" />
+                    <TextBlock Grid.Column="3" Text="材质" Style="{StaticResource Text.Label}" VerticalAlignment="Center" />
                     <ComboBox x:Name="CmbMaterialFilter" Grid.Column="4" VerticalAlignment="Center" SelectedIndex="0">
                         <ComboBoxItem Content="全部材质" />
                         <ComboBoxItem Content="Q235 碳素钢" />
@@ -98,7 +94,7 @@
                         <ComboBoxItem Content="6061-T6 铝合金" />
                     </ComboBox>
 
-                    <TextBlock Grid.Column="6" Text="审核状态" Style="{StaticResource Text.Label}" VerticalAlignment="Center" />
+                    <TextBlock Grid.Column="6" Text="状态" Style="{StaticResource Text.Label}" VerticalAlignment="Center" />
                     <ComboBox x:Name="CmbStatusFilter" Grid.Column="7" VerticalAlignment="Center" SelectedIndex="0">
                         <ComboBoxItem Content="全部状态" />
                         <ComboBoxItem Content="已审核" />
@@ -111,7 +107,7 @@
                 </Grid>
             </Border>
 
-            <!-- 3. 工具栏与批量操作 -->
+            <!-- 3. 表格工具栏：左侧为局部/批量操作（选中有物料时点亮），右侧为视图控制 -->
             <Grid Grid.Row="2" Margin="0,0,0,8">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -125,10 +121,9 @@
                     <TextBlock Text="已选中 2 项物料" Style="{StaticResource Text.Caption}" VerticalAlignment="Center" />
                 </StackPanel>
 
+                <!-- 右侧表格视图控制（展开/折叠明细） -->
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                    <Button Content="展开全部明细" Style="{StaticResource Button.Secondary}" Margin="0,0,8,0" />
-                    <Button Content="导出 (CSV)" Style="{StaticResource Button.Secondary}" Margin="0,0,8,0" />
-                    <Button Content="保存变更" Style="{StaticResource Button.Primary}" />
+                    <Button Content="展开全部明细" Style="{StaticResource Button.Secondary}" />
                 </StackPanel>
             </Grid>
 
