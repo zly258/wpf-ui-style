@@ -23,7 +23,7 @@ namespace WpfStylePreview
     /// </summary>
     public partial class CaseEditableTableWindow : Window
     {
-        private readonly List<string> _availableMaterials = new List<string>
+        public List<string> AvailableMaterials { get; } = new List<string>
         {
             "Q235 碳素钢",
             "45# 优质钢",
@@ -72,12 +72,12 @@ namespace WpfStylePreview
 
         private void SetupColumnComboBox()
         {
-            // 为 DataGridComboBoxColumn 配置可选材质列表
+            // 为可选材质列表赋值
             foreach (var col in GridMaterials.Columns)
             {
                 if (col is DataGridComboBoxColumn comboCol)
                 {
-                    comboCol.ItemsSource = _availableMaterials;
+                    comboCol.ItemsSource = AvailableMaterials;
                 }
             }
         }
