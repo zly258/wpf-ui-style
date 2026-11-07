@@ -224,8 +224,8 @@
         <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
-        <!-- 左内边距必须与 DataGridColumnHeader 的 10px 一致，
-             否则单元格内容与表头文字左右错位。 -->
+        <!-- 左内边距必须与 DataGridColumnHeader 的 8px 严格一致，
+             保证单元格文字与表头文字完全垂直对齐。 -->
         <Setter Property="Padding" Value="8,0" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -241,12 +241,33 @@
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Foreground" Value="{StaticResource Brush.Text.Disabled}" />
             </Trigger>
+            <!-- 编辑状态下：内边距归零，编辑器宽高 100% 占满单元格 -->
             <Trigger Property="IsEditing" Value="True">
                 <Setter Property="Padding" Value="0" />
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Setter Property="VerticalContentAlignment" Value="Stretch" />
                 <Setter Property="Background" Value="{StaticResource Brush.Surface}" />
             </Trigger>
         </Style.Triggers>
     </Style>
+
+    <ControlTemplate x:Key="DataGridColumnHeader.Template" TargetType="{x:Type DataGridColumnHeader}">
+        <Grid SnapsToDevicePixels="True">
+            <Border Background="{TemplateBinding Background}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    Padding="{TemplateBinding Padding}">
+                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                  RecognizesAccessKey="True"
+                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+            </Border>
+            <Thumb x:Name="PART_LeftHeaderGripper" HorizontalAlignment="Left"
+                   Width="2" Margin="0" Cursor="SizeWE" Background="Transparent" />
+            <Thumb x:Name="PART_RightHeaderGripper" HorizontalAlignment="Right"
+                   Width="2" Margin="0" Cursor="SizeWE" Background="Transparent" />
+        </Grid>
+    </ControlTemplate>
 
     <Style TargetType="{x:Type DataGridColumnHeader}">
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
@@ -256,11 +277,14 @@
         <Setter Property="Background" Value="{StaticResource Brush.SurfaceAlt}" />
         <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />
         <Setter Property="BorderThickness" Value="0,0,1,1" />
-        <Setter Property="Padding" Value="8,4" />
+        <!-- 紧凑表头内边距：左内边距与单元格一致（8px），垂直紧凑 2px -->
+        <Setter Property="Padding" Value="8,2" />
+        <!-- 默认靠左对齐，与单元格数据垂线对齐 -->
         <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="Template" Value="{StaticResource DataGridColumnHeader.Template}" />
     </Style>
 
-    <!-- 表头居中/靠右样式 -->
+    <!-- 表头特殊居中/靠右样式（仅在需要全选勾选框居中或数值靠右时选配） -->
     <Style x:Key="DataGridColumnHeader.Center" TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
         <Setter Property="HorizontalContentAlignment" Value="Center" />
     </Style>
@@ -303,7 +327,7 @@
         <Setter Property="Padding" Value="0" />
     </Style>
 
-    <!-- 表格编辑态：单行输入框（适配行高，去除外溢最小高度） -->
+    <!-- 表格编辑态：单行输入框（适配行高，宽度与高度 100% 占满可用区域） -->
     <Style x:Key="DataGrid.Editing.TextBox" TargetType="{x:Type TextBox}">
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
@@ -311,9 +335,12 @@
         <Setter Property="Background" Value="{StaticResource Brush.Surface}" />
         <Setter Property="BorderBrush" Value="{StaticResource Brush.Focus}" />
         <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
         <Setter Property="Height" Value="Auto" />
         <Setter Property="MinHeight" Value="0" />
-        <Setter Property="Padding" Value="6,1" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Padding" Value="7,1" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="CaretBrush" Value="{StaticResource Brush.Text.Primary}" />
@@ -324,20 +351,51 @@
     <!-- 表格编辑态：单行输入框靠右（数值编辑） -->
     <Style x:Key="DataGrid.Editing.TextBoxRight" TargetType="{x:Type TextBox}" BasedOn="{StaticResource DataGrid.Editing.TextBox}">
         <Setter Property="HorizontalContentAlignment" Value="Right" />
-        <Setter Property="Padding" Value="2,1,6,1" />
+        <Setter Property="Padding" Value="2,1,7,1" />
     </Style>
 
-    <!-- 表格编辑态：下拉框（无多余边距，完美契合单元格） -->
-    <Style x:Key="DataGrid.Editing.ComboBox" TargetType="{x:Type ComboBox}">
+    <!-- 表格单元格专用下拉框（单次点击直接展开，高度与宽度 100% 占满行可用空间） -->
+    <Style x:Key="DataGrid.Cell.ComboBox" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="Height" Value="Auto" />
+        <Setter Property="MinHeight" Value="0" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Background" Value="Transparent" />
+        <!-- 左 Padding 8px，与表头文字左边缘严密对齐 -->
+        <Setter Property="Padding" Value="8,0,24,0" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource Brush.Control.Hover}" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />
+                <Setter Property="Padding" Value="7,0,24,0" />
+            </Trigger>
+            <Trigger Property="IsDropDownOpen" Value="True">
+                <Setter Property="Background" Value="{StaticResource Brush.Surface}" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="BorderBrush" Value="{StaticResource Brush.Focus}" />
+                <Setter Property="Padding" Value="7,0,24,0" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- 表格编辑态：下拉框（适配原生 DataGridComboBoxColumn，高度占满单元格） -->
+    <Style x:Key="DataGrid.Editing.ComboBox" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource {x:Type ComboBox}}">
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
         <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
         <Setter Property="Background" Value="{StaticResource Brush.Surface}" />
         <Setter Property="BorderBrush" Value="{StaticResource Brush.Focus}" />
         <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
         <Setter Property="Height" Value="Auto" />
         <Setter Property="MinHeight" Value="0" />
-        <Setter Property="Padding" Value="4,0" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Padding" Value="5,0,20,0" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
     </Style>
