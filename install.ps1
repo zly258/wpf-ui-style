@@ -647,14 +647,15 @@ Non-negotiable rules:
 2. Never use `Opacity` for disabled; use `Brush.Control.Disabled` + `Brush.Text.Disabled`.
 3. White text only on Accent / Accent.Hover / Accent.Pressed / Danger / Danger.Hover / Danger.Pressed / Tooltip dark backgrounds.
 4. Selected + hover must use `MultiTrigger`; selected list rows use `Brush.Selection` + `Brush.Text.Primary`.
-5. Multiline TextBox: no forced `MinHeight`. Forms use `Height="Auto"` + `VerticalAlignment="Top"`;
-   logs/comparison panels use `VerticalAlignment="Stretch"` in a dedicated `Grid` `*` row with `MaxHeight`.
-   Only logs/lists/tables/ScrollViewer may occupy a `*` row. Never use `Height="*"` on a control.
+5. Multiline TextBox and Grid: no forced MinHeight (no MinHeight >= 180). Forms use `Height="Auto"` +
+   `VerticalAlignment="Top"`; tables/logs/comparison panels use `VerticalAlignment="Stretch"` in a dedicated
+   `Grid` `*` row. Only logs/lists/tables/ScrollViewer may occupy a `*` row. Never use `Height="*"` on a control.
 6. Before finishing, run `{{SKILL_PATH}}/tools/ContrastCheck.ps1` and
    `{{SKILL_PATH}}/tools/LayoutCheck.ps1 -Root <project>`.
 7. No truncation, no occlusion: label columns use `Width="Auto"` + `MinWidth`, input columns
    use `Width="*"` + `MinWidth` (never a hardcoded `Width` on a TextBox); every ellipsis needs a
-   `ToolTip`; windows use `SizeToContent="Height"` + `MinHeight` with a single `ScrollViewer`;
+   `ToolTip`; form dialogs use `SizeToContent="Height"` + `MinHeight` with a single `ScrollViewer`,
+   while DataGrid/workbench viewports use explicit initial size (e.g. 1180x680) with low `MinHeight` (360-420);
    the bottom action bar owns its own row (long status text on its own row above it);
    no negative `Margin`, no `Canvas` absolute layout.
 8. No multi-tab navigation in a window: use one window per task, or `GroupBox`/`Expander`

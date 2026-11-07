@@ -76,6 +76,19 @@ namespace WpfStylePreview
             else if (comboPopup?.Child is Panel panel) itemCount = panel.Children.Count;
             System.Console.WriteLine("COMBOPOPUP child=" + (comboPopup?.Child?.GetType().Name ?? "<null>") + " items=" + itemCount);
 
+            // 可编辑 ComboBox 必须正确装配 PART_EditableTextBox 并且与 Text 属性双向联动
+            ComboEditable.UpdateLayout();
+            var editableTb = ComboEditable.Template.FindName("PART_EditableTextBox", ComboEditable) as TextBox;
+            System.Console.WriteLine("COMBOEDITABLE tb=" + (editableTb != null ? editableTb.GetType().Name : "<null>") + " text=" + editableTb?.Text);
+            if (editableTb != null)
+            {
+                editableTb.Text = "输入新内容测试";
+                System.Console.WriteLine("COMBOEDITABLE sync back combo.Text=" + ComboEditable.Text);
+            }
+
+            var readOnlyTb = ComboEditableReadOnly.Template.FindName("PART_EditableTextBox", ComboEditableReadOnly) as TextBox;
+            System.Console.WriteLine("COMBOEDITABLE_READONLY isReadOnly=" + readOnlyTb?.IsReadOnly);
+
             // 单元格编辑器高度 vs 行高
             foreach (var row in Grid.ItemContainerGenerator.ContainerFromIndex(1) is null
                         ? new DataGridRow[0]

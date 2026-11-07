@@ -11,9 +11,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="案例 · 数据表格"
-        Width="1080"
-        SizeToContent="Height"
-        MinWidth="880" MinHeight="520"
+        Width="1080" Height="620"
+        MinWidth="780" MinHeight="360"
         WindowStartupLocation="CenterScreen">
 
     <Border Background="{StaticResource Brush.WindowBackground}">
@@ -61,7 +60,6 @@
             <!-- 表格：占 * 行，数据多时自身滚动 -->
             <DataGrid x:Name="GridDrawings"
                       Grid.Row="2"
-                      MinHeight="240"
                       AutoGenerateColumns="False"
                       IsReadOnly="True"
                       HeadersVisibility="Column"

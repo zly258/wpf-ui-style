@@ -210,6 +210,53 @@ namespace WpfStyles.Tests
         }
 
         [Fact]
+        public void ComboBox_Template_ContainsPartEditableTextBoxAndTriggers()
+        {
+            XElement style = FindKeyedStyle(ControlsPath, "ComboBox.Base");
+            Assert.NotNull(style);
+
+            // 1. 模板必须包含名为 PART_EditableTextBox 的 TextBox，保证 IsEditable="True" 时文本可输入
+            XElement editableTextBox = style.Descendants()
+                .FirstOrDefault(e => e.Name.LocalName == "TextBox"
+                    && (string)e.Attribute(X + "Name") == "PART_EditableTextBox");
+            Assert.NotNull(editableTextBox);
+            Assert.Equal("{StaticResource ComboBox.EditableTextBox}", (string)editableTextBox.Attribute("Style"));
+
+            // 2. 模板必须包含 PART_Popup
+            XElement popup = style.Descendants()
+                .FirstOrDefault(e => e.Name.LocalName == "Popup"
+                    && (string)e.Attribute(X + "Name") == "PART_Popup");
+            Assert.NotNull(popup);
+
+            // 3. 必须包含 IsEditable="True" 触发器：显示输入框、隐藏静态内容、禁用外部 Tab 停靠
+            XElement isEditableTrigger = style.Descendants()
+                .FirstOrDefault(e => e.Name.LocalName == "Trigger"
+                    && (string)e.Attribute("Property") == "IsEditable"
+                    && (string)e.Attribute("Value") == "True");
+            Assert.NotNull(isEditableTrigger);
+
+            var setters = isEditableTrigger.Elements().Where(e => e.Name.LocalName == "Setter").ToList();
+            Assert.Contains(setters, s => (string)s.Attribute("TargetName") == "PART_EditableTextBox"
+                && (string)s.Attribute("Property") == "Visibility"
+                && (string)s.Attribute("Value") == "Visible");
+            Assert.Contains(setters, s => (string)s.Attribute("TargetName") == "ContentSite"
+                && (string)s.Attribute("Property") == "Visibility"
+                && (string)s.Attribute("Value") == "Collapsed");
+            Assert.Contains(setters, s => (string)s.Attribute("Property") == "IsTabStop"
+                && (string)s.Attribute("Value") == "False");
+
+            // 4. ComboBox.EditableTextBox 专用样式必须存在，背景透明且包含 PART_ContentHost
+            XElement editableStyle = FindKeyedStyle(ControlsPath, "ComboBox.EditableTextBox");
+            Assert.NotNull(editableStyle);
+            Assert.Equal("True", (string)editableStyle.Elements().FirstOrDefault(e => (string)e.Attribute("Property") == "OverridesDefaultStyle")?.Attribute("Value"));
+            Assert.Equal("Transparent", (string)editableStyle.Elements().FirstOrDefault(e => (string)e.Attribute("Property") == "Background")?.Attribute("Value"));
+
+            XElement contentHost = editableStyle.Descendants()
+                .FirstOrDefault(e => (string)e.Attribute(X + "Name") == "PART_ContentHost");
+            Assert.NotNull(contentHost);
+        }
+
+        [Fact]
         public void NoDisabledTriggerUsesOpacity()
         {
             foreach (string path in new[] { ControlsPath, DataControlsPath })
@@ -385,6 +432,20 @@ namespace WpfStyles.Tests
             // 行高必须不小于输入框高度，否则编辑态的编辑器会被行裁掉
             Assert.True(doubles["Layout.ControlHeight"] >= doubles["Layout.ControlHeight"]);
             Assert.True(doubles["Layout.ControlHeight"] > 0);
+        }
+
+        [Fact]
+        public void Controls_DoNotImposeExcessiveMinHeight()
+        {
+            // DataGridRow、TextBox、PasswordBox 不得锁死高 MinHeight，确保弹性网格和紧凑布局能自适应收缩
+            string dataGridRowMinH = ImplicitStyleSetterValue(DataControlsPath, "DataGridRow", "MinHeight");
+            Assert.Equal("0", dataGridRowMinH);
+
+            string textBoxMinH = KeyedStyleSetterValue(ControlsPath, "TextBox.Base", "MinHeight");
+            Assert.Equal("0", textBoxMinH);
+
+            string pwdBoxMinH = KeyedStyleSetterValue(ControlsPath, "PasswordBox.Base", "MinHeight");
+            Assert.Equal("0", pwdBoxMinH);
         }
 
         [Fact]

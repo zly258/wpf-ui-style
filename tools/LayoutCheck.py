@@ -270,7 +270,13 @@ def check_fixed_width_textbox(path: Path, text: str) -> None:
 
 
 def check_window_height(path: Path, text: str) -> None:
-    """A fixed window height hides the bottom action bar as soon as content grows."""
+    """A fixed window height on form/dialog windows hides the bottom action bar as soon as content grows.
+
+    For viewport/workbench/table windows (containing DataGrid, ListView, TreeView,
+    ScrollViewer or GridSplitter that scroll in a '*' row), fixed viewport height with
+    a reasonable MinHeight is expected and recommended; SizeToContent="Height" must NOT
+    be forced on them.
+    """
     for match in ELEMENT_RE.finditer(text):
         closing, name, attrs, self_closing = match.groups()
         if closing or name != "Window" or self_closing:
@@ -280,13 +286,41 @@ def check_window_height(path: Path, text: str) -> None:
             continue
         if re.search(r'SizeToContent\s*=\s*"Height"', attrs):
             continue
+        # Viewport/workspace windows handle scrolling within '*' rows
+        if any(ctrl in text for ctrl in ("DataGrid", "ListView", "TreeView", "ScrollViewer", "GridSplitter")):
+            continue
         report(
             "WARN",
             path,
             line_number(text, match.start()),
-            f'Window has a fixed Height="{height.group(1)}"; use SizeToContent="Height" + MinHeight '
+            f'Dialog Window has a fixed Height="{height.group(1)}"; use SizeToContent="Height" + MinHeight '
             "so the action bar is never pushed out of view",
         )
+
+
+def check_excessive_min_height(path: Path, text: str) -> None:
+    """Rigid MinHeight (>=180) on DataGrid, Grid, or RowDefinition in flexible containers
+    prevents them from shrinking on low-resolution / high-DPI screens, clipping action bars
+    or pagination controls.
+    """
+    for match in ELEMENT_RE.finditer(text):
+        closing, name, attrs, self_closing = match.groups()
+        if closing or not attrs:
+            continue
+        min_h_match = re.search(r'\bMinHeight\s*=\s*"(\d+(?:\.\d+)?)"', attrs)
+        if not min_h_match:
+            continue
+        min_h = float(min_h_match.group(1))
+
+        if name in ("DataGrid", "Grid", "ListView", "ListBox", "RowDefinition") and min_h >= 180:
+            report(
+                "WARN",
+                path,
+                line_number(text, match.start()),
+                f'<{name}> has a rigid MinHeight="{min_h_match.group(1)}"; in compact viewports or low-resolution '
+                "screens (1366x768 / 150% DPI) this locks flexible rows and can push bottom action bars "
+                "or pagination out of view. Let the container flex and rely on the internal scrollbar instead.",
+            )
 
 
 def _star_row_indexes(block: str) -> list[int]:
@@ -481,6 +515,7 @@ def check_file(path: Path, theme_dirs: set[str], theme_files: set[str]) -> None:
         check_window_height(path, text)
         check_star_row_without_scroll(path, text)
         check_tabcontrol_height(path, text)
+        check_excessive_min_height(path, text)
 
     # 8. Nested ScrollViewer (skip theme/style templates: ComboBox popups legitimately nest)
     if is_theme_file(path, theme_dirs, theme_files):

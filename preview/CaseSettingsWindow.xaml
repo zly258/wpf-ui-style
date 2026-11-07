@@ -13,7 +13,7 @@
         Title="案例 · 密集设置表单"
         Width="1000"
         SizeToContent="Height"
-        MinWidth="820" MinHeight="560"
+        MinWidth="760" MinHeight="380"
         WindowStartupLocation="CenterScreen">
 
     <Border Background="{StaticResource Brush.WindowBackground}">

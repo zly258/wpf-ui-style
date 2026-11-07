@@ -15,7 +15,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="工程工作台 · 零件与特征检查器"
         Width="1260" Height="820"
-        MinWidth="1020" MinHeight="620"
+        MinWidth="860" MinHeight="420"
         WindowStartupLocation="CenterScreen">
 
     <Border Background="{StaticResource Brush.WindowBackground}">
@@ -142,9 +142,9 @@
                 <!-- 中间视口与参数表 -->
                 <Grid Grid.Column="2">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="2*" MinHeight="180" />
+                        <RowDefinition Height="2*" />
                         <RowDefinition Height="8" />
-                        <RowDefinition Height="1*" MinHeight="140" />
+                        <RowDefinition Height="1*" />
                     </Grid.RowDefinitions>
 
                     <GroupBox Grid.Row="0" Header="3D 模型交互视口">

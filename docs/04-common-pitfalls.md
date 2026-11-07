@@ -225,7 +225,9 @@ ListBox/ListView 选中项是浅蓝背景，但文字是白色，读不清。
 
 ---
 
-## 6. ComboBox 弹出层还是系统默认样式
+## 6. ComboBox 弹出层还是系统默认样式 / IsEditable 无法输入
+
+### 6.1 弹出层样式割裂
 
 **症状**
 
@@ -256,6 +258,57 @@ ListBox/ListView 选中项是浅蓝背景，但文字是白色，读不清。
 
 - 点开下拉框，检查弹层背景、边框、项悬停、项选中。
 - 在 125%/150% DPI 下检查弹层宽度是否与 ComboBox 对齐。
+
+### 6.2 ComboBox 设置 `IsEditable="True"` 时无法输入与聚焦
+
+**症状**
+
+给 `ComboBox` 设置了 `IsEditable="True"`，但点击控件仍然只能展开下拉列表，鼠标无法激活光标，键盘无法输入文本，`Text` 双向绑定也无法同步用户输入。
+
+**根因**
+
+自定义 `ComboBox` 模板只提供了 `ContentPresenter x:Name="ContentSite"`，缺少 WPF 官方控件契约强制要求的命名部件 `TextBox x:Name="PART_EditableTextBox"`。
+
+WPF 的 `ComboBox` 在内部实现中，仅当找到名为 `PART_EditableTextBox` 的文本框时才会挂载 `TextChanged`、键盘快捷键与焦点传递；若模板缺失此部件，WPF 将直接静默失败，无法支持任何编辑操作。
+
+**修复**
+
+在 `ComboBox.Base` 的控件模板中同时声明展示与编辑两个部件，并使用 `ComboBox.EditableTextBox` 专用去框样式：
+
+```xml
+<!-- 静态展示态文本宿主 -->
+<ContentPresenter x:Name="ContentSite"
+                  Margin="{TemplateBinding Padding}"
+                  IsHitTestVisible="False"
+                  Content="{TemplateBinding SelectionBoxItem}"
+                  ... />
+
+<!-- 可编辑态文本框宿主（WPF 契约要求 PART_EditableTextBox） -->
+<TextBox x:Name="PART_EditableTextBox"
+         Style="{StaticResource ComboBox.EditableTextBox}"
+         Margin="{TemplateBinding Padding}"
+         HorizontalAlignment="Stretch"
+         VerticalAlignment="Stretch"
+         Foreground="{TemplateBinding Foreground}"
+         IsReadOnly="{TemplateBinding IsReadOnly}"
+         Visibility="Collapsed" />
+```
+
+在模板触发器中按 `IsEditable` 切换：
+
+```xml
+<Trigger Property="IsEditable" Value="True">
+    <Setter Property="IsTabStop" Value="False" />
+    <Setter TargetName="PART_EditableTextBox" Property="Visibility" Value="Visible" />
+    <Setter TargetName="ContentSite" Property="Visibility" Value="Collapsed" />
+</Trigger>
+```
+
+**验证**
+
+- 设置 `IsEditable="True"`，点击文本区域时光标正确呈 I 型，可自由键入与选择文本。
+- 点击右侧下拉箭头时正常展开/收起下拉项列表。
+- 设置 `IsReadOnly="True"` 时背景呈只读底色，允许选中文本但禁止键盘键入。
 
 ---
 
@@ -683,6 +736,44 @@ pack://application:,,,/YourAssembly;component/Theme/Theme.xaml
 - 运行 `pwsh ./tools/LayoutCheck.ps1 -Root <项目目录>`。
 - 缩放窗口，确认表单高度不随窗口无限增长。
 - 150% DPI 下检查日志区没有把按钮挤出窗口。
+
+---
+
+## 18.5 给 DataGrid、Grid 或弹性 RowDefinition 设置过大 MinHeight 导致布局截断
+
+**症状**
+
+在普通 1080p（125%/150% DPI 缩放）或 1366x768 屏幕上，表格页面底部的分页栏、统计汇总栏或保存/取消操作按钮被截断、挤出屏幕看不见；缩放窗口时，表格不触发内部滚动条，而是整体溢出。
+
+**根因**
+
+1. 在 `DataGrid`、`Grid` 或 `RowDefinition Height="*"` 上硬编码了过大的 `MinHeight`（例如 `MinHeight="280"` 或 `MinHeight="240"`）。
+2. 在 WPF 网格布局中，`MinHeight` 具有强制最高优先级。当可用视口高度不足时，`*` 行被 `MinHeight` 锁死无法收缩，强制将位于下方的 `Auto` 行（分页条、操作栏）挤出窗口可视边界。
+3. 试图通过给数据表格窗口加 `SizeToContent="Height"` 来解决，反而导致 DataGrid 失去虚拟化、以无限高度测量所有行，窗口瞬间被撑爆并延伸到屏幕下方。
+
+**修复**
+
+1. **去除 `*` 行内控件的硬编码 MinHeight**：
+   让 `DataGrid`、`Grid` 占 `Height="*"` 行，设置 `MinHeight="0"` 或极小保底值（如 <=100）。当窗口变小时，`DataGrid` 自然缩小并唤起自带的垂直滚动条，绝不挤压底部操作栏。
+2. **区分窗口类型**：
+   - 视图型表格窗口使用确定初始宽高 `Width="1180" Height="680"` 与低保底 `MinHeight="360"`，禁止使用 `SizeToContent="Height"`。
+   - 底部的操作栏/分页器单独占 `RowDefinition Height="Auto"` 行。
+
+```xml
+<Grid.RowDefinitions>
+    <RowDefinition Height="Auto" />  <!-- 顶部筛选 -->
+    <RowDefinition Height="*" />     <!-- 表格：弹性自适应，内部自滚动，不锁死 MinHeight -->
+    <RowDefinition Height="Auto" />  <!-- 底部分页：永远可见 -->
+</Grid.RowDefinitions>
+
+<DataGrid Grid.Row="1" ... />
+<Border Grid.Row="2" ... />
+```
+
+**验证**
+
+- 运行 `pwsh ./tools/LayoutCheck.ps1 -Root <项目目录>`，确认无 `rigid MinHeight` 警告。
+- 将窗口垂直高度缩小到 480px，检查底部的分页器和操作按钮是否仍然清晰可见、完整不被裁切。
 
 ---
 

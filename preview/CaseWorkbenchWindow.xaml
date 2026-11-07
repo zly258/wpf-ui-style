@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="案例 · 工程工作台布局（Workbench）"
         Width="1260" Height="820"
-        MinWidth="1020" MinHeight="620"
+        MinWidth="860" MinHeight="420"
         WindowStartupLocation="CenterScreen">
 
     <Border Background="{StaticResource Brush.WindowBackground}">
@@ -156,10 +156,10 @@
                 <Grid Grid.Column="2">
                     <Grid.RowDefinitions>
                         <!-- 视口模拟区 -->
-                        <RowDefinition Height="2*" MinHeight="180" />
+                        <RowDefinition Height="2*" />
                         <RowDefinition Height="8" />
                         <!-- 下半部分：当前选定构件的子参数表 -->
-                        <RowDefinition Height="1*" MinHeight="140" />
+                        <RowDefinition Height="1*" />
                     </Grid.RowDefinitions>
 
                     <!-- 视口画板模拟 -->

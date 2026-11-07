@@ -179,7 +179,8 @@
     <Style TargetType="{x:Type DataGridRow}">
         <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
         <Setter Property="Background" Value="{StaticResource Brush.Surface}" />
-        <Setter Property="MinHeight" Value="{StaticResource Layout.ControlHeight}" />
+        <!-- 默认不锁死 MinHeight，由 DataGrid.RowHeight 决定行高，方便紧凑表格缩减行高 -->
+        <Setter Property="MinHeight" Value="0" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource Brush.Control.Hover}" />

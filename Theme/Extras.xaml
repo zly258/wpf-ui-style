@@ -287,7 +287,7 @@
         <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Padding" Value="{StaticResource Layout.InputPadding.Multiline}" />
-        <Setter Property="MinHeight" Value="{StaticResource Layout.ControlHeight}" />
+        <Setter Property="MinHeight" Value="0" />
         <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="Template">
