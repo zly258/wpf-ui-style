@@ -6,8 +6,10 @@
 |---|---|---|
 | `ContrastCheck.py` | Python 3（仅标准库） | WCAG 对比度检查，逻辑唯一实现 |
 | `LayoutCheck.py` | Python 3（仅标准库） | XAML 布局与令牌使用扫描，逻辑唯一实现 |
+| `UiTest.py` | Python 3（仅标准库） | UI 渲染、交互点击测试与视觉规范自检工具 |
 | `ContrastCheck.ps1` | PowerShell | **薄包装**：探测 `py -3` → `python3` → `python` 并转调 `.py` |
 | `LayoutCheck.ps1` | PowerShell | **薄包装**：同上 |
+| `UiTest.ps1` | PowerShell | **薄包装**：同上，无 Python 时自动回退至 `dotnet run` |
 | `_fetch_material_icons.py` | Python 3 | 从 Google Fonts 抓取 Material Symbols Outlined 并转换到 24 视口 |
 | `_splice_icons.py` | Python 3 | 将转换后的几何写入 `Theme/Icons.xaml` |
 | `../install.ps1` | PowerShell | 唯一保留的安装脚本：复制 skill、写客户端目录，零依赖 |
@@ -32,6 +34,25 @@ pwsh ./tools/LayoutCheck.ps1 -Root "D:\your\project" -Strict
 # 直接运行（CI / Linux / macOS）
 python tools/ContrastCheck.py
 python tools/LayoutCheck.py --root . --strict
+python tools/UiTest.py --window editable-table --test-clicks
+```
+
+### UI 渲染、交互点击测试与自检 (`UiTest.py` / `UiTest.ps1`)
+
+用于对 WPF 界面进行**真实离屏渲染、模拟交互点击与状态机断言**：
+
+```powershell
+# 1. 运行核心复杂界面的交互点击测试（模拟全选、批量审核、新增行等），验证状态迁移与断言
+pwsh ./tools/UiTest.ps1 -Window editable-table -TestClicks
+
+# 2. 交互测试并分步保存每次点击后的状态快照图片（Before/After 对比）
+pwsh ./tools/UiTest.ps1 -Window wizard -TestClicks -ShotDir shots/wizard
+
+# 3. 动态加载渲染外部任意 XAML 窗口/用户控件为高清图片
+pwsh ./tools/UiTest.ps1 -Xaml "D:\Projects\YourApp\MainWindow.xaml" -Shot "shots\preview.png"
+
+# 4. 自动化执行 UI 规范与点击热区静态检查（支持输出 JSON 供 CI/Agent 读取）
+pwsh ./tools/UiTest.ps1 -Window all -TestClicks -Json
 ```
 
 参数同时兼容 PowerShell 风格（`-Root`、`-Strict`、`-TokensPath`）和 Unix 风格（`--root`、`--strict`、`--tokens`）。

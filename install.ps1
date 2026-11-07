@@ -650,8 +650,9 @@ Non-negotiable rules:
 5. Multiline TextBox and Grid: no forced MinHeight (no MinHeight >= 180). Forms use `Height="Auto"` +
    `VerticalAlignment="Top"`; tables/logs/comparison panels use `VerticalAlignment="Stretch"` in a dedicated
    `Grid` `*` row. Only logs/lists/tables/ScrollViewer may occupy a `*` row. Never use `Height="*"` on a control.
-6. Before finishing, run `{{SKILL_PATH}}/tools/ContrastCheck.ps1` and
-   `{{SKILL_PATH}}/tools/LayoutCheck.ps1 -Root <project>`.
+6. Before finishing, run `{{SKILL_PATH}}/tools/ContrastCheck.ps1`,
+   `{{SKILL_PATH}}/tools/LayoutCheck.ps1 -Root <project>`, and
+   `{{SKILL_PATH}}/tools/UiTest.ps1 -Window editable-table -TestClicks`.
 7. No truncation, no occlusion: label columns use `Width="Auto"` + `MinWidth`, input columns
    use `Width="*"` + `MinWidth` (never a hardcoded `Width` on a TextBox); every ellipsis needs a
    `ToolTip`; form dialogs use `SizeToContent="Height"` + `MinHeight` with a single `ScrollViewer`,
@@ -988,5 +989,6 @@ Write-Host '  2. Ask: "按 wpf-ui-style 规范检查这个 WPF 窗口".'
 Write-Host '  3. Run the bundled checks:'
 Write-Host ("     pwsh `"" + (Join-Path $primarySkillPath 'tools/ContrastCheck.ps1') + "`"")
 Write-Host ("     pwsh `"" + (Join-Path $primarySkillPath 'tools/LayoutCheck.ps1') + "`" -Root `"<project>`"")
+Write-Host ("     pwsh `"" + (Join-Path $primarySkillPath 'tools/UiTest.ps1') + "`" -Window editable-table -TestClicks")
 Write-Host ''
 Write-Host 'Manual verification: see INSTALL.md in the skill folder.' -ForegroundColor DarkGray
