@@ -50,7 +50,8 @@ namespace WpfStylePreview
             if (all)
             {
                 foreach (var name in new[] { "showcase", "controls", "layouts", "safeform", "anti",
-                                             "case-settings", "case-table", "case-compare" })
+                                             "case-settings", "case-table", "case-compare",
+                                             "case-editable-table", "case-workbench", "case-wizard", "case-dashboard" })
                 {
                     string dir = Path.GetDirectoryName(Path.GetFullPath(shot ?? "shots/out.png"));
                     string file = Path.Combine(dir ?? ".", $"{name}.png");
@@ -99,6 +100,14 @@ namespace WpfStylePreview
                 case "case-settings": return new CaseSettingsWindow();
                 case "case-table": return new CaseTableWindow();
                 case "case-compare": return new CaseCompareWindow();
+                case "case-editable-table":
+                case "editable-table": return new CaseEditableTableWindow();
+                case "case-workbench":
+                case "workbench": return new CaseWorkbenchWindow();
+                case "case-wizard":
+                case "wizard": return new CaseWizardWindow();
+                case "case-dashboard":
+                case "dashboard": return new CaseDashboardWindow();
                 default: return new ShowcaseWindow();
             }
         }

@@ -1,0 +1,315 @@
+<!--
+    WPF UI Skills 示例：复杂可编辑数据表格（Editable & Complex DataGrid）
+
+    直接可复制到任何业务工程使用的规范模板。
+    包含：
+    1. 顶部检索与筛选栏（关键字、下拉筛选、重置）；
+    2. 批量操作工具栏（全选状态、批量通过、批量删除、添加行、导出）；
+    3. 表头三态复选框联动；
+    4. DataGridTextColumn 可编辑文本单元格（编码、名称）；
+    5. DataGridComboBoxColumn 下拉单元格（材质牌号选择）；
+    6. 数值单元格右对齐（数量、单价）；
+    7. DataGridTemplateColumn 带复选框单元格（关键部件勾选标记）；
+    8. 状态徽章与行内操作列；
+    9. RowDetailsTemplate 展开行技术参数；
+    10. 底部分页条与合计统计。
+-->
+<Window x:Class="YourApp.EditableTableWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="物料与制造工艺明细表"
+        Width="1180"
+        SizeToContent="Height"
+        MinWidth="980" MinHeight="580"
+        WindowStartupLocation="CenterScreen">
+
+    <Border Background="{StaticResource Brush.WindowBackground}">
+        <Grid Margin="{StaticResource Layout.WindowPadding}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- 1. 页头 -->
+            <Border Grid.Row="0"
+                    BorderBrush="{StaticResource Brush.Border}"
+                    BorderThickness="0,0,0,1"
+                    Padding="0,0,0,10"
+                    Margin="0,0,0,10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="物料工艺清单与参数管理" Style="{StaticResource Text.Title}" FontWeight="SemiBold" />
+                            <TextBlock Text="复杂可编辑表格"
+                                       Style="{StaticResource Text.Caption}"
+                                       Margin="12,0,0,0"
+                                       VerticalAlignment="Center" />
+                        </StackPanel>
+                        <TextBlock Text="支持双击单元格就地编辑、下拉框切换、单选/复选框联动以及嵌套详情展开。"
+                                   Style="{StaticResource Text.Caption}"
+                                   Margin="0,4,0,0" />
+                    </StackPanel>
+
+                    <TextBlock Grid.Column="1"
+                               Text="按 Tab 键流式切换下一个单元格"
+                               Style="{StaticResource Text.Caption}"
+                               VerticalAlignment="Bottom" />
+                </Grid>
+            </Border>
+
+            <!-- 2. 多维筛选栏 -->
+            <Border Grid.Row="1"
+                    Background="{StaticResource Brush.Surface}"
+                    BorderBrush="{StaticResource Brush.Border}"
+                    BorderThickness="1"
+                    CornerRadius="{StaticResource Radius.Small}"
+                    Padding="10,8"
+                    Margin="0,0,0,10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" MinWidth="{StaticResource Layout.FormLabelMinWidth}" />
+                        <ColumnDefinition Width="*" MinWidth="140" />
+                        <ColumnDefinition Width="{StaticResource Layout.ColumnGap}" />
+                        <ColumnDefinition Width="Auto" MinWidth="{StaticResource Layout.FormLabelMinWidth}" />
+                        <ColumnDefinition Width="*" MinWidth="120" />
+                        <ColumnDefinition Width="{StaticResource Layout.ColumnGap}" />
+                        <ColumnDefinition Width="Auto" MinWidth="{StaticResource Layout.FormLabelMinWidth}" />
+                        <ColumnDefinition Width="*" MinWidth="120" />
+                        <ColumnDefinition Width="{StaticResource Layout.ColumnGap}" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="编码/品名" Style="{StaticResource Text.Label}" VerticalAlignment="Center" />
+                    <TextBox x:Name="TxtSearch" Grid.Column="1" VerticalAlignment="Center" ToolTip="输入图号或零件名称模糊筛选" />
+
+                    <TextBlock Grid.Column="3" Text="材质种类" Style="{StaticResource Text.Label}" VerticalAlignment="Center" />
+                    <ComboBox x:Name="CmbMaterialFilter" Grid.Column="4" VerticalAlignment="Center" SelectedIndex="0">
+                        <ComboBoxItem Content="全部材质" />
+                        <ComboBoxItem Content="Q235 碳素钢" />
+                        <ComboBoxItem Content="45# 优质钢" />
+                        <ComboBoxItem Content="304 不锈钢" />
+                        <ComboBoxItem Content="6061-T6 铝合金" />
+                    </ComboBox>
+
+                    <TextBlock Grid.Column="6" Text="审核状态" Style="{StaticResource Text.Label}" VerticalAlignment="Center" />
+                    <ComboBox x:Name="CmbStatusFilter" Grid.Column="7" VerticalAlignment="Center" SelectedIndex="0">
+                        <ComboBoxItem Content="全部状态" />
+                        <ComboBoxItem Content="已审核" />
+                        <ComboBoxItem Content="审核中" />
+                        <ComboBoxItem Content="待处理" />
+                        <ComboBoxItem Content="已驳回" />
+                    </ComboBox>
+
+                    <Button Grid.Column="9" Content="重置筛选" Style="{StaticResource Button.Secondary}" VerticalAlignment="Center" />
+                </Grid>
+            </Border>
+
+            <!-- 3. 工具栏与批量操作 -->
+            <Grid Grid.Row="2" Margin="0,0,0,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Content="添加物料" Style="{StaticResource Button.Secondary}" Margin="0,0,8,0" />
+                    <Button Content="批量审核" Style="{StaticResource Button.Secondary}" Margin="0,0,8,0" />
+                    <Button Content="批量删除" Style="{StaticResource Button.Danger}" Margin="0,0,16,0" />
+                    <TextBlock Text="已选中 2 项物料" Style="{StaticResource Text.Caption}" VerticalAlignment="Center" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Content="展开全部明细" Style="{StaticResource Button.Secondary}" Margin="0,0,8,0" />
+                    <Button Content="导出 (CSV)" Style="{StaticResource Button.Secondary}" Margin="0,0,8,0" />
+                    <Button Content="保存变更" Style="{StaticResource Button.Primary}" />
+                </StackPanel>
+            </Grid>
+
+            <!-- 4. 复杂可编辑表格 -->
+            <DataGrid x:Name="GridMaterials"
+                      Grid.Row="3"
+                      MinHeight="280"
+                      MaxHeight="520"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      CanUserResizeRows="False"
+                      HeadersVisibility="Column"
+                      GridLinesVisibility="Horizontal"
+                      SelectionUnit="FullRow"
+                      RowDetailsVisibilityMode="Collapsed">
+
+                <DataGrid.Columns>
+                    <!-- 全选复选框列 -->
+                    <DataGridTemplateColumn Width="46" HeaderStyle="{StaticResource DataGridColumnHeader.Center}">
+                        <DataGridTemplateColumn.Header>
+                            <CheckBox IsThreeState="True" ToolTip="全选 / 反选 / 取消" />
+                        </DataGridTemplateColumn.Header>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                          Style="{StaticResource DataGrid.Element.CheckBox}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <!-- 序号列 -->
+                    <DataGridTextColumn Header="序号"
+                                        Binding="{Binding Index}"
+                                        Width="52"
+                                        IsReadOnly="True"
+                                        HeaderStyle="{StaticResource DataGridColumnHeader.Center}"
+                                        ElementStyle="{StaticResource DataGrid.Element.TextCenter}" />
+
+                    <!-- 可编辑文本列：物料编码 -->
+                    <DataGridTextColumn Header="物料编码"
+                                        Binding="{Binding MaterialCode, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                                        Width="110"
+                                        EditingElementStyle="{StaticResource DataGrid.Editing.TextBox}" />
+
+                    <!-- 可编辑文本列：物料名称 -->
+                    <DataGridTextColumn Header="物料名称"
+                                        Binding="{Binding MaterialName, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                                        Width="*"
+                                        MinWidth="140"
+                                        EditingElementStyle="{StaticResource DataGrid.Editing.TextBox}" />
+
+                    <!-- 下拉单元格列：材质种类（DataGridComboBoxColumn） -->
+                    <DataGridComboBoxColumn Header="材质牌号"
+                                            Width="140"
+                                            SelectedValueBinding="{Binding MaterialType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                            EditingElementStyle="{StaticResource DataGrid.Editing.ComboBox}" />
+
+                    <!-- 数值编辑列：数量（靠右） -->
+                    <DataGridTextColumn Header="数量 (件)"
+                                        Binding="{Binding Quantity, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
+                                        Width="84"
+                                        HeaderStyle="{StaticResource DataGridColumnHeader.Right}"
+                                        ElementStyle="{StaticResource DataGrid.Element.TextRight}"
+                                        EditingElementStyle="{StaticResource DataGrid.Editing.TextBoxRight}" />
+
+                    <!-- 数值编辑列：单价（靠右） -->
+                    <DataGridTextColumn Header="单价 (元)"
+                                        Binding="{Binding UnitPrice, Mode=TwoWay, StringFormat={}{0:F2}, UpdateSourceTrigger=LostFocus}"
+                                        Width="90"
+                                        HeaderStyle="{StaticResource DataGridColumnHeader.Right}"
+                                        ElementStyle="{StaticResource DataGrid.Element.TextRight}"
+                                        EditingElementStyle="{StaticResource DataGrid.Editing.TextBoxRight}" />
+
+                    <!-- 带复选框单元格列：关键件标记 -->
+                    <DataGridTemplateColumn Header="关键部件" Width="80" HeaderStyle="{StaticResource DataGridColumnHeader.Center}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding IsCritical, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                          Style="{StaticResource DataGrid.Element.CheckBox}"
+                                          ToolTip="标记为关键受力件或关键控制部件" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <!-- 状态徽章列 -->
+                    <DataGridTemplateColumn Header="状态" Width="100" HeaderStyle="{StaticResource DataGridColumnHeader.Center}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border HorizontalAlignment="Center" VerticalAlignment="Center"
+                                        CornerRadius="{StaticResource Radius.Small}"
+                                        Padding="6,2"
+                                        Background="{Binding StatusBackground}">
+                                    <TextBlock Text="{Binding Status}"
+                                               FontSize="{StaticResource FontSize.Caption}"
+                                               Foreground="{Binding StatusForeground}"
+                                               FontWeight="SemiBold" />
+                                </Border>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <!-- 行操作列 -->
+                    <DataGridTemplateColumn Header="操作" Width="120" HeaderStyle="{StaticResource DataGridColumnHeader.Center}">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Button Content="详情" Style="{StaticResource Button.Text.Small}" Margin="0,0,4,0" />
+                                    <Button Content="删除" Style="{StaticResource Button.Text.Small}" Foreground="{StaticResource Brush.Danger}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+
+                <!-- 展开明细模板 -->
+                <DataGrid.RowDetailsTemplate>
+                    <DataTemplate>
+                        <Border Style="{StaticResource DataGrid.RowDetails.Border}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" MinWidth="70" />
+                                    <ColumnDefinition Width="*" MinWidth="160" />
+                                    <ColumnDefinition Width="{StaticResource Layout.ColumnGap}" />
+                                    <ColumnDefinition Width="Auto" MinWidth="70" />
+                                    <ColumnDefinition Width="*" MinWidth="160" />
+                                    <ColumnDefinition Width="{StaticResource Layout.ColumnGap}" />
+                                    <ColumnDefinition Width="Auto" MinWidth="70" />
+                                    <ColumnDefinition Width="*" MinWidth="180" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Column="0" Text="加工工艺：" Style="{StaticResource Text.Label}" VerticalAlignment="Center" />
+                                <TextBlock Grid.Column="1" Text="{Binding ProcessNote}" Style="{StaticResource Text.Caption}" VerticalAlignment="Center" />
+
+                                <TextBlock Grid.Column="3" Text="公差配合：" Style="{StaticResource Text.Label}" VerticalAlignment="Center" />
+                                <TextBlock Grid.Column="4" Text="{Binding Tolerance}" Style="{StaticResource Text.Caption}" VerticalAlignment="Center" />
+
+                                <TextBlock Grid.Column="6" Text="更新时间：" Style="{StaticResource Text.Label}" VerticalAlignment="Center" />
+                                <TextBlock Grid.Column="7" Text="{Binding LastUpdated}" Style="{StaticResource Text.Caption}" VerticalAlignment="Center" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </DataGrid.RowDetailsTemplate>
+            </DataGrid>
+
+            <!-- 5. 底部分页与统计汇总 -->
+            <Border Grid.Row="4"
+                    BorderBrush="{StaticResource Brush.Border}"
+                    BorderThickness="0,1,0,0"
+                    Padding="0,10,0,0"
+                    Margin="0,10,0,0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="汇总统计：" Style="{StaticResource Text.Label}" VerticalAlignment="Center" />
+                        <TextBlock Text="共 8 种物料 · 总件数 264 件 · 预估金额 ￥32,640.00"
+                                   Style="{StaticResource Text.Caption}"
+                                   VerticalAlignment="Center"
+                                   Margin="4,0,0,0" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="每页" Style="{StaticResource Text.Caption}" VerticalAlignment="Center" Margin="0,0,4,0" />
+                        <ComboBox Width="68" Height="26" SelectedIndex="0" Margin="0,0,12,0" VerticalAlignment="Center">
+                            <ComboBoxItem Content="10 条" />
+                            <ComboBoxItem Content="20 条" />
+                            <ComboBoxItem Content="50 条" />
+                        </ComboBox>
+
+                        <Button Style="{StaticResource Button.Text.Small}" Content="上一页" IsEnabled="False" Margin="0,0,4,0" />
+                        <TextBlock Text="1 / 3" Style="{StaticResource Text.Caption}" VerticalAlignment="Center" Margin="0,0,8,0" />
+                        <Button Style="{StaticResource Button.Text.Small}" Content="下一页" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+        </Grid>
+    </Border>
+</Window>
