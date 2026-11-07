@@ -73,9 +73,16 @@
 ## 5. ComboBox
 
 ```xml
+<!-- 基础下拉框 -->
 <ComboBox SelectedIndex="0">
     <ComboBoxItem Content="替换原文" />
     <ComboBoxItem Content="追加译文" />
+</ComboBox>
+
+<!-- 可编辑下拉框（支持键盘自由输入或选择现有项） -->
+<ComboBox IsEditable="True" Text="可键入内容">
+    <ComboBoxItem Content="推荐选项一" />
+    <ComboBoxItem Content="推荐选项二" />
 </ComboBox>
 ```
 

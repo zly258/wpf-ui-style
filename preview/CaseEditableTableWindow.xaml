@@ -2,9 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="案例 · 复杂可编辑数据表格"
-        Width="1180"
-        SizeToContent="Height"
-        MinWidth="980" MinHeight="580"
+        Width="1180" Height="680"
+        MinWidth="860" MinHeight="360"
         WindowStartupLocation="CenterScreen">
 
     <Border Background="{StaticResource Brush.WindowBackground}">
@@ -131,11 +130,9 @@
                 </StackPanel>
             </Grid>
 
-            <!-- 4. 复杂可编辑表格核心 -->
+            <!-- 4. 复杂可编辑表格核心（占 * 行，高度跟随视口自适应，内部自带垂直滚动条） -->
             <DataGrid x:Name="GridMaterials"
                       Grid.Row="3"
-                      MinHeight="280"
-                      MaxHeight="520"
                       AutoGenerateColumns="False"
                       CanUserAddRows="False"
                       CanUserDeleteRows="False"

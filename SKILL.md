@@ -114,9 +114,9 @@ description: Apply and audit the WPF UI Skills style system (tokens, control sta
 ### R8. 单一主按钮原则
 每个对话框或主区域**最多允许一个** `Button.Primary`（主强调操作，回车默认）；其余操作均为 `Button.Secondary`、`Button.Text` 或 `Button.Danger`。
 
-### R9. 多行文本框弹性自适应，严禁强制 MinHeight
+### R9. 多行文本框与网格容器弹性自适应，严禁强制过大 MinHeight
 - 表单中的多行输入框（`TextBox.Multiline`）放在 `Grid` 的 `Height="Auto"` 行中，设 `VerticalAlignment="Top"`，由内容自然伸展；严禁在样式中写死全局 `MinHeight="100"` 导致界面被强行撑高。
-- 对照视图、日志视图放在 `Grid` 的 `Height="*"` 行，设 `VerticalAlignment="Stretch"` 配合内部滚动。
+- 对照视图、日志视图、数据表格放在 `Grid` 的 `Height="*"` 行，设 `VerticalAlignment="Stretch"` 配合内部自带滚动条；**严禁在 `DataGrid`、`Grid` 或 `*` 弹性 `RowDefinition` 上硬编码过大的 `MinHeight`（>=180px）**，避免在低分辨率（1366x768 / 150% DPI）下弹性行无法收缩，将底部分页栏或操作按钮挤出可视区。
 - 严禁在控件上写 `Height="*"`（`*` 只能用于 RowDefinition / ColumnDefinition）。
 
 ### R10. 没有明确要求不用图标 (No Gratuitous Icons)
@@ -130,7 +130,9 @@ description: Apply and audit the WPF UI Skills style system (tokens, control sta
 1. **标签列**：使用 `Width="Auto"` + `MinWidth="{StaticResource Layout.FormLabelMinWidth}"`。严禁写死固定像素列宽导致长标签被裁切。
 2. **输入列**：使用 `Width="*"` + `MinWidth="{StaticResource Layout.InputMinWidth}"`。严禁在输入框上写死固定 `Width`。
 3. **截断必须配 ToolTip**：凡使用 `TextTrimming="CharacterEllipsis"` 或 `WordEllipsis` 的文本，必须同时绑定 `ToolTip`。
-4. **窗口自适应与根滚动**：窗口使用 `SizeToContent="Height"` + `MinHeight`；内容区包裹在单一垂直 `ScrollViewer`（`VerticalScrollBarVisibility="Auto"`）内，禁止嵌套多层滚动。
+4. **窗口类型与自适应**：
+   - **纯表单/弹窗**：窗口使用 `SizeToContent="Height"` + 低阈值 `MinHeight="320"`；内容区包裹在单一垂直 `ScrollViewer`（`VerticalScrollBarVisibility="Auto"`）内，禁止嵌套多层滚动。
+   - **数据表格/工作台等视图型窗口**：严禁使用 `SizeToContent="Height"`（避免破坏 DataGrid 虚拟化并将窗口撑爆）；指定建议初始宽高（如 1180×680）配合低保底 `MinHeight="360"`~`420"`，由 `*` 弹性行内的控件内置滚动条自适应。
 5. **状态文案与按钮分行**：底部按钮栏固定在独立的底行；路径、处理状态等可能很长的状态文本必须单独占按钮栏上方的一行，严禁与按钮抢同行。
 6. **严禁遮挡写法**：严禁负 `Margin`（如 `Margin="-4,0,0,0"`），严禁使用 `Canvas` 绝对坐标排列表单。
 

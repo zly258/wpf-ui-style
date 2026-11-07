@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="WPF UI Skills · 控件全览"
         Width="1120" Height="940"
-        MinWidth="860" MinHeight="620"
+        MinWidth="860" MinHeight="420"
         WindowStartupLocation="CenterScreen">
 
     <Border Background="{StaticResource Brush.WindowBackground}">
@@ -181,6 +181,7 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
 
                             <TextBlock Text="下拉框" Style="{StaticResource Text.Label}" />
@@ -196,14 +197,26 @@
                                 <ComboBoxItem Content="不可选" />
                             </ComboBox>
 
-                            <TextBlock Grid.Row="1" Text="日期" Style="{StaticResource Text.Label}" />
-                            <DatePicker Grid.Row="1" Grid.Column="1" Margin="0,4" />
+                            <TextBlock Grid.Row="1" Text="可编辑下拉" Style="{StaticResource Text.Label}" />
+                            <ComboBox Grid.Row="1" Grid.Column="1" Margin="0,4" IsEditable="True" Text="可直接输入或选择">
+                                <ComboBoxItem Content="选项一（Custom 1）" />
+                                <ComboBoxItem Content="选项二（Custom 2）" />
+                                <ComboBoxItem Content="选项三（Custom 3）" />
+                            </ComboBox>
 
-                            <TextBlock Grid.Row="1" Grid.Column="3" Text="日期禁用" Style="{StaticResource Text.Label}" />
-                            <DatePicker Grid.Row="1" Grid.Column="4" Margin="0,4" IsEnabled="False" />
+                            <TextBlock Grid.Row="1" Grid.Column="3" Text="可编辑只读" Style="{StaticResource Text.Label}" />
+                            <ComboBox Grid.Row="1" Grid.Column="4" Margin="0,4" IsEditable="True" IsReadOnly="True" Text="只读文本（不可键入）">
+                                <ComboBoxItem Content="选项一" />
+                            </ComboBox>
 
-                            <TextBlock Grid.Row="2" Text="滑杆" Style="{StaticResource Text.Label}" />
-                            <Grid Grid.Row="2" Grid.Column="1" Margin="0,4">
+                            <TextBlock Grid.Row="2" Text="日期" Style="{StaticResource Text.Label}" />
+                            <DatePicker Grid.Row="2" Grid.Column="1" Margin="0,4" />
+
+                            <TextBlock Grid.Row="2" Grid.Column="3" Text="日期禁用" Style="{StaticResource Text.Label}" />
+                            <DatePicker Grid.Row="2" Grid.Column="4" Margin="0,4" IsEnabled="False" />
+
+                            <TextBlock Grid.Row="3" Text="滑杆" Style="{StaticResource Text.Label}" />
+                            <Grid Grid.Row="3" Grid.Column="1" Margin="0,4">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
@@ -213,19 +226,19 @@
                                            VerticalAlignment="Center" Margin="10,0,0,0" />
                             </Grid>
 
-                            <TextBlock Grid.Row="2" Grid.Column="3" Text="滑杆禁用" Style="{StaticResource Text.Label}" />
-                            <Slider Grid.Row="2" Grid.Column="4" Margin="0,4" Value="30" IsEnabled="False" />
+                            <TextBlock Grid.Row="3" Grid.Column="3" Text="滑杆禁用" Style="{StaticResource Text.Label}" />
+                            <Slider Grid.Row="3" Grid.Column="4" Margin="0,4" Value="30" IsEnabled="False" />
 
-                            <TextBlock Grid.Row="3" Text="进度" Style="{StaticResource Text.Label}" />
-                            <StackPanel Grid.Row="3" Grid.Column="1" Margin="0,4">
+                            <TextBlock Grid.Row="4" Text="进度" Style="{StaticResource Text.Label}" />
+                            <StackPanel Grid.Row="4" Grid.Column="1" Margin="0,4">
                                 <ProgressBar Height="8" Value="62" Margin="0,0,0,6" />
                                 <ProgressBar Height="8" Value="100" Margin="0,0,0,6" />
                                 <ProgressBar Height="8" IsIndeterminate="True" />
                             </StackPanel>
 
-                            <TextBlock Grid.Row="3" Grid.Column="3" Text="单选" Style="{StaticResource Text.Label}"
+                            <TextBlock Grid.Row="4" Grid.Column="3" Text="单选" Style="{StaticResource Text.Label}"
                                        VerticalAlignment="Top" />
-                            <StackPanel Grid.Row="3" Grid.Column="4" Margin="0,4">
+                            <StackPanel Grid.Row="4" Grid.Column="4" Margin="0,4">
                                 <RadioButton Content="覆盖同名文件" IsChecked="True" />
                                 <RadioButton Content="自动重命名" />
                                 <RadioButton Content="跳过已存在" IsEnabled="False" />

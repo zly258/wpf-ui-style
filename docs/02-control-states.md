@@ -163,6 +163,13 @@ WPF 会按声明顺序应用 `Trigger`，后声明的覆盖前面的。不要靠
 | Hover | `Brush.Surface` | `Brush.Text.Primary` | `Brush.Border.Strong` |
 | Focused / Open | `Brush.Surface` | `Brush.Text.Primary` | `Brush.Focus` |
 | Disabled | `Brush.Control.Disabled` | `Brush.Text.Disabled` | `Brush.Border` |
+| Editable (`IsEditable="True"`) | `Brush.Surface` | `Brush.Text.Primary` | `Brush.Border`（聚焦/展开时 `Brush.Focus`） |
+| Editable ReadOnly (`IsReadOnly="True"`) | `Brush.SurfaceAlt` | `Brush.Text.Secondary` | `Brush.Border` |
+
+可编辑态说明：
+
+- `IsEditable="True"` 时内置文本框 `PART_EditableTextBox` 可见，光标在文字区域呈 `IBeam`，右侧箭头区域点击仍可直接展开/收回下拉列表。
+- 文本框与外层 `ComboBox.Text` 属性完全双向绑定。
 
 弹出层：
 

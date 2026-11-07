@@ -551,23 +551,39 @@ pwsh ./tools/LayoutCheck.ps1 -Root "D:\your\project"
 根因几乎只有一个：**让固定尺寸去裁可变内容**。本节的规则都以
 "内容决定尺寸" 为原则。
 
-### 14.1 窗口尺寸与滚动
+### 14.1 窗口与网格（Grid）尺寸约束分类
 
-| 症状 | 原因 | 正确做法 |
-|---|---|---|
-| 内容底部被裁掉 | 窗口写死 `Height` | `SizeToContent="Height"` + `MinHeight` |
-| 150% DPI 下装不下 | 固定高度 + 无滚动 | 内容区包 `ScrollViewer`（`VerticalScrollBarVisibility="Auto"`） |
-| 窄窗口下右侧被切 | 列宽写死 | 列宽用 `Auto`/`*` + `MinWidth`，窗口给 `MinWidth` |
+WPF 界面必须严格区分两类窗口形态，**严禁对所有界面一刀切套用 `SizeToContent="Height"` 或在 Grid/DataGrid 上写死大 `MinHeight`**：
+
+| 窗口类型 | 典型场景 | 高度与滚动策略 | 最小高度（MinHeight）约束 |
+|---|---|---|---|
+| **表单型弹窗 (Dialog/Form)** | 密集设置、参数录入、简单确认对话框 | `SizeToContent="Height"` + 内容区包裹一层 `ScrollViewer`（`VerticalScrollBarVisibility="Auto"`） | 窗口设置 `MinHeight="320"` 保底，内容较少时不塌陷。 |
+| **视图型窗口 (Viewport/DataGrid/Workbench)** | BOM 数据表格、工程工作台、双栏对照、监控看板 | **禁止 `SizeToContent="Height"`**；指定初始宽高（如 `Width="1180" Height="680"`），主体控件占 `Height="*"` 行并利用其内部滚动条 | **严禁在 `DataGrid`、`Grid` 或 `RowDefinition` 上硬编码大 `MinHeight`**（如 >=180px）；窗口给低保底 `MinHeight="360"`~`420"`。 |
+
+#### 为什么严禁在 Grid / DataGrid 上设置过大的 MinHeight？
+1. **低分辨率与高 DPI 挤压灾难**：在工业工控屏（1366×768）或笔记本 150% 缩放（1080p 下有效高度仅 640px 减去任务栏）下，若 `DataGrid` 设了 `MinHeight="280"`，加上页头与边距，`*` 行被死死撑大无法收缩，直接将底部的**分页器、汇总统计栏或确定/保存按钮挤出窗口底部可视区**，用户无法完成操作。
+2. **阻碍内部滚动条生效**：`DataGrid` 本身具有优秀的虚拟化滚动能力。只要不设置僵死的 `MinHeight`，当窗口高度缩小时，`DataGrid` 会平滑收缩并唤起自身垂直滚动条，保证外部整体布局完整可见。
+
+#### 示例：视图型数据表格窗口规范
 
 ```xml
-<Window SizeToContent="Height"
-        MinWidth="{StaticResource Layout.WindowMinWidth}"
-        MinHeight="320" Width="680">
-```
+<Window Title="物料明细表"
+        Width="1180" Height="680"
+        MinWidth="860" MinHeight="360"
+        WindowStartupLocation="CenterScreen">
+    <Grid Margin="{StaticResource Layout.WindowPadding}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />  <!-- 1. 页头与搜索栏 -->
+            <RowDefinition Height="Auto" />  <!-- 2. 工具栏 -->
+            <RowDefinition Height="*" />     <!-- 3. 数据表格：占 * 行，不设大 MinHeight，内部自滚动 -->
+            <RowDefinition Height="Auto" />  <!-- 4. 底部分页与统计：始终常驻可视区 -->
+        </Grid.RowDefinitions>
 
-- 高度永远不要写死；宽度可给一个建议值 + `MinWidth`。
-- 整窗只允许**一层**垂直滚动（`LayoutCheck` 会报嵌套滚动）。
-- 内容区滚动，操作栏不滚动（固定在窗口底部）。
+        <DataGrid Grid.Row="2" AutoGenerateColumns="False" ... />
+        <Border Grid.Row="3" ... /> <!-- 分页器永不被遮挡 -->
+    </Grid>
+</Window>
+```
 
 ### 14.2 表单行骨架
 
