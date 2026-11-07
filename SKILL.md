@@ -165,8 +165,11 @@ dotnet test tests/WpfStyleContractTests.csproj
 # 4. 预览工程编译验证
 dotnet build preview/WpfStylePreview.csproj
 
-# 5. 渲染验证（必要时生成截图核验）
-dotnet run --project preview -- -shot .tmp-shots/verify.png -window case-settings
+# 5. UI 自动化交互点击、状态机断言与分步快照（测试真实按钮/复选/下拉联动）
+python tools/UiTest.py --all --test-clicks
+
+# 6. 动态渲染指定 XAML 界面并执行规范自检
+python tools/UiTest.py --xaml preview/SafeFormWindow.xaml --shot .tmp-shots/verify.png
 ```
 
 ---

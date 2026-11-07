@@ -26,6 +26,11 @@ namespace WpfStylePreview
             bool all = false;
             bool menu = false;
             int autoclose = 0;
+            bool testClicks = false;
+            bool verify = false;
+            string shotDir = null;
+            string xamlFile = null;
+            bool json = false;
 
             for (int i = 0; i < args.Length; i++)
             {
@@ -37,7 +42,34 @@ namespace WpfStylePreview
                     case "-all": all = true; break;
                     case "-menu": menu = true; break;
                     case "-autoclose": autoclose = int.Parse(args[++i]); break;
+                    case "-test-clicks":
+                    case "-c": testClicks = true; break;
+                    case "-verify":
+                    case "-v": verify = true; break;
+                    case "-shot-dir": shotDir = args[++i]; break;
+                    case "-xaml": xamlFile = args[++i]; break;
+                    case "-json": json = true; break;
                 }
+            }
+
+            // 动态 XAML 渲染模式
+            if (!string.IsNullOrEmpty(xamlFile))
+            {
+                string targetShot = shot ?? "shots/xaml_rendered.png";
+                var xamlReport = UiTestEngine.RenderDynamicXamlFile(xamlFile, targetShot, scale);
+                UiTestEngine.OutputReport(xamlReport, json);
+                Console.Out.Flush();
+                Environment.Exit(xamlReport.Success ? 0 : 1);
+            }
+
+            // 交互点击与综合校验模式
+            if (testClicks || verify)
+            {
+                var win = CreateWindow(which);
+                var report = UiTestEngine.RunWindowInteractionTest(which, win, shotDir, scale);
+                UiTestEngine.OutputReport(report, json);
+                Console.Out.Flush();
+                Environment.Exit(report.Success ? 0 : 1);
             }
 
             if (menu)

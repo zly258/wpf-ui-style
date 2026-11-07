@@ -77,6 +77,32 @@ python tools/LayoutCheck.py --root . --strict
 
 默认只把“错误”作为失败；警告需要人工判断。CI 中可以使用 `-Strict`（或 `--strict`）让警告也失败。
 
+---
+
+## 1.2 UI 自动化渲染、点击交互测试与视觉自检 (UiTest)
+
+为 AI Agent 与自动化流水线提供**真实控件点击、状态机断言、分步快照与外部 XAML 动态渲染**能力：
+
+```powershell
+# 1. 运行核心复杂界面的交互点击测试（模拟全选/批量审批/步骤机前进后退/输入回写）
+pwsh ./tools/UiTest.ps1 -Window editable-table -TestClicks
+
+# 2. 执行交互点击并保存每一步的对比状态快照（Before/After 对比图片）
+pwsh ./tools/UiTest.ps1 -Window wizard -TestClicks -ShotDir shots/wizard
+
+# 3. 动态加载渲染外部任意 XAML 界面（无需编译整个业务工程）并执行布局静态自检
+pwsh ./tools/UiTest.ps1 -Xaml "D:/Demo/YourApp\MainWindow.xaml" -Shot "shots\preview.png"
+
+# 4. 批量运行所有核心窗口的交互与点击测试，输出结构化 JSON 报表供 CI/Agent 自动化消费
+pwsh ./tools/UiTest.ps1 -All -TestClicks -Json
+```
+
+支持特性：
+- **模拟真实点击与联动**：自动触发 `ButtonBase.ClickEvent`、`Command`、`ToggleButton`、`ComboBox` 下拉项选择；
+- **状态机断言**：断言点击后文字更新（如 `已选中 8 项`）、按钮启用禁用状态（`IsEnabled`）、行数变化、向导步骤推进；
+- **无障碍与热区自检**：自动扫描整个可视树，检查可交互按钮尺寸（>=20px）、检查省略文本 `ToolTip` 配套；
+- **动态解析渲染**：支持向 `-Xaml` 传入任意未编译的 XAML 窗口或用户控件，自动注入设计系统资源并导出高清截图。
+
 
 ---
 
