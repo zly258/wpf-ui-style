@@ -75,6 +75,25 @@
                           HorizontalScrollBarVisibility="Disabled">
                 <StackPanel>
 
+                    <!-- 0. 案例与经典布局导航中心 -->
+                    <GroupBox Header="案例与经典布局示例导航 (点击直达对应窗口)">
+                        <StackPanel>
+                            <TextBlock Text="点击以下按钮可直接打开独立的完整业务案例与不同骨架布局窗口："
+                                       Style="{StaticResource Text.Caption}" Margin="0,0,0,8" />
+                            <WrapPanel>
+                                <Button Content="★ 复杂可编辑表格案例" Style="{StaticResource Button.Primary.Small}" Margin="0,0,8,8" Click="BtnOpenEditableTable_Click" />
+                                <Button Content="工程工作台布局 (三栏)" Style="{StaticResource Button.Secondary.Small}" Margin="0,0,8,8" Click="BtnOpenWorkbench_Click" />
+                                <Button Content="分步向导对话框 (Wizard)" Style="{StaticResource Button.Secondary.Small}" Margin="0,0,8,8" Click="BtnOpenWizard_Click" />
+                                <Button Content="生产任务监控看板 (Dashboard)" Style="{StaticResource Button.Secondary.Small}" Margin="0,0,8,8" Click="BtnOpenDashboard_Click" />
+                                <Button Content="紧凑只读表格案例" Style="{StaticResource Button.Secondary.Small}" Margin="0,0,8,8" Click="BtnOpenTable_Click" />
+                                <Button Content="双栏对照案例" Style="{StaticResource Button.Secondary.Small}" Margin="0,0,8,8" Click="BtnOpenCompare_Click" />
+                                <Button Content="设置配置表单案例" Style="{StaticResource Button.Secondary.Small}" Margin="0,0,8,8" Click="BtnOpenSettings_Click" />
+                                <Button Content="六种窗口骨架模板" Style="{StaticResource Button.Secondary.Small}" Margin="0,0,8,8" Click="BtnOpenLayouts_Click" />
+                                <Button Content="全量控件画廊" Style="{StaticResource Button.Secondary.Small}" Margin="0,0,8,8" Click="BtnOpenControls_Click" />
+                            </WrapPanel>
+                        </StackPanel>
+                    </GroupBox>
+
                     <!-- 1. 按钮层级与状态 -->
                     <GroupBox Header="1. 按钮层级与状态">
                         <StackPanel>

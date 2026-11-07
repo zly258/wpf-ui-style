@@ -19,6 +19,51 @@ namespace WpfStylePreview
             InitializeComponent();
             GridDrawings.ItemsSource = Drawings;
         }
+
+        private void BtnOpenEditableTable_Click(object sender, RoutedEventArgs e)
+        {
+            new CaseEditableTableWindow().Show();
+        }
+
+        private void BtnOpenWorkbench_Click(object sender, RoutedEventArgs e)
+        {
+            new CaseWorkbenchWindow().Show();
+        }
+
+        private void BtnOpenWizard_Click(object sender, RoutedEventArgs e)
+        {
+            new CaseWizardWindow().Show();
+        }
+
+        private void BtnOpenDashboard_Click(object sender, RoutedEventArgs e)
+        {
+            new CaseDashboardWindow().Show();
+        }
+
+        private void BtnOpenTable_Click(object sender, RoutedEventArgs e)
+        {
+            new CaseTableWindow().Show();
+        }
+
+        private void BtnOpenCompare_Click(object sender, RoutedEventArgs e)
+        {
+            new CaseCompareWindow().Show();
+        }
+
+        private void BtnOpenSettings_Click(object sender, RoutedEventArgs e)
+        {
+            new CaseSettingsWindow().Show();
+        }
+
+        private void BtnOpenLayouts_Click(object sender, RoutedEventArgs e)
+        {
+            new LayoutsWindow().Show();
+        }
+
+        private void BtnOpenControls_Click(object sender, RoutedEventArgs e)
+        {
+            new ControlsGalleryWindow().Show();
+        }
     }
 
     public class DrawingRow

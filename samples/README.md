@@ -1,14 +1,51 @@
-# 示例
+# 示例与布局模板索引
 
-工程提供三个核心示例窗口：
+工程提供六个核心业务与布局模板，全部遵循紧凑排版、无截断、状态契约原则，开箱即用：
 
-1. `SampleWindow.xaml`：完整的业务设置/批量窗口示例。
-2. `SafeFormWindow.xaml`：**安全表单骨架**（防截断 / 防遮挡，规则 R14）。
-3. `IconGalleryWindow.xaml`：**图标系统全场景测试与矩阵展示窗口**。
+1. `EditableTableWindow.xaml`：**复杂可编辑数据表格模板**（全选联动、可编辑单元格、下拉单元格、复选框单元格、状态徽章、展开详情行、分页与汇总统计）。
+2. `WorkbenchWindow.xaml`：**工程工作台三栏布局模板**（装配特征树 + 3D/2D 视口卡片 + 属性检查器 Property Grid + 底部状态条）。
+3. `WizardWindow.xaml`：**分步向导对话框模板**（顶部步骤条指示器 + 动态步进单层容器 + 流程控制栏）。
+4. `SampleWindow.xaml`：完整的业务设置与批量处理窗口示例。
+5. `SafeFormWindow.xaml`：**安全表单骨架**（防截断 / 防遮挡，规则 R11/R14）。
+6. `IconGalleryWindow.xaml`：**图标系统全场景测试与矩阵展示窗口**。
 
 ---
 
-## 1. IconGalleryWindow.xaml (图标系统测试矩阵)
+## 1. EditableTableWindow.xaml (复杂可编辑数据表格)
+
+演示工业与企业软件中极高频的复杂表格体系：
+- **表头三态联动**：表头 `CheckBox` 具备全选 / 反选 / 部分选中三态，与所有行复选框双向绑定联动。
+- **可编辑文本单元格**：`DataGridTextColumn` 双击就地编辑，聚焦蓝框高亮，Tab 键平滑切换，文字垂直居中不溢出。
+- **下拉单元格 (ComboBox Column)**：`DataGridComboBoxColumn` 材质/状态下拉切换，无多余边距，完美适配单元格高度。
+- **带复选框单元格**：`DataGridTemplateColumn` 居中 CheckBox，支持一键点击勾选标记（关键部件、质检状态等）。
+- **数值与金额列**：文字靠右对齐（`DataGrid.Element.TextRight` 与 `DataGrid.Editing.TextBoxRight`）。
+- **状态徽章列**：结合主题语义色彩（`Brush.Success.Subtle`、`Brush.Accent.Subtle` 等）展示审核状态。
+- **展开详情行 (RowDetails)**：嵌套展示加工工艺、公差配合与更新时间，展开内容内部适配。
+- **工具条与分页**：顶部复合过滤与批量操作（批量审核、批量删除），底部分页与金额数量统计汇总。
+
+---
+
+## 2. WorkbenchWindow.xaml (工程工作台三栏布局)
+
+演示 CAD/CAM/CAE 插件及专业桌面软件经典的三栏架构：
+- **左栏**：装配构件与特征导航树（带搜索过滤框）。
+- **中栏**：交互视口画板卡片 + 下半部分特征几何参数表，支持可拖动 `GridSplitter`。
+- **右栏**：分组折叠式属性检查器（Property Grid），采用 `Expander` + 两列表单紧凑排版。
+- **底部**：系统运行状态与视口坐标信息条。
+
+---
+
+## 3. WizardWindow.xaml (分步向导对话框)
+
+演示配置向导、图纸导入导出向导的标准化骨架：
+- **顶部步骤条**：带编号徽章与流程连接线的高亮步骤指示器（Step 1/2/3）。
+- **单层自适应容器**：规避多 TabControl 造成的高度跳变事故，内容在单一面板中平滑切换。
+- **标准化步进操作**：底部独立的“上一步”、“下一步 / 开始批处理”、“取消”按钮组。
+- **状态说明保护**：引导说明与操作按钮分行/分列排布，长文案绝不挤压按钮。
+
+---
+
+## 4. IconGalleryWindow.xaml (图标系统测试矩阵)
 
 演示与测试图标系统的全场景约束：
 - **尺寸阶梯**：Micro (12px) / Small (14px) / Regular (16px) / Medium (20px) / Large (24px) / Hero (32px)。

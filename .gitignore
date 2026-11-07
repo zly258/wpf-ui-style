@@ -21,6 +21,8 @@ __pycache__/
 
 # Preview screenshot output
 preview/out/
+dist/
+.tmp-shots/
 
 # ZCode session artifacts (plans) — not part of the skill
 .zcode/
