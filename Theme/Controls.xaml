@@ -924,12 +924,15 @@
     <!-- ============================================================
          6. TabControl / TabItem
          ============================================================
-         选中的标签页必须是「一块实心面」，而不是只有一条横线：
-           - Accent 实心填充 + 白字（OnAccent，对比度 5.39:1）；
-           - 1px Accent 描边 + 上方圆角，与标签栏基线断开；
-           - 底部 3px Accent.Pressed 加深条，强化归属；
-           - 未选中标签悬停时给浅底 + 描边，点击目标清晰。
-         这样在白色卡片、浅灰窗口、GroupBox 里都能一眼分辨当前页。
+         原生方角标签（贴近 Win32 经典页签），不使用圆角、不使用底部强调条：
+           - 每个标签都是一个 1px 实线描边的方框，未选中也有可见边界，
+             一眼能看出「这是一个可点击的页签」；
+           - 未选中：SurfaceAlt 底 + Border.Control 描边（含下边，与基线同色）；
+           - 选中：Surface 底 + Border.Control 描边 + 去掉下边框，
+             落到基线上并盖住它，与右侧内容区连成一体；
+           - 悬停给 Control.Hover 底 + Accent 描边；
+           - 内容区是一整个 1px 方框（Border.Control + Surface），
+             与选中的标签共用同一条上边线。
          注意：R12 仍然禁止用 TabControl 做整窗多任务导航，
          本样式适用于分组设置、属性分类、画廊演示等局部切换。
          ============================================================ -->
@@ -938,7 +941,7 @@
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Padding" Value="0,8,0,0" />
+        <Setter Property="Padding" Value="{DynamicResource Layout.GroupPadding}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="Template">
             <Setter.Value>
@@ -949,9 +952,9 @@
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <Grid Grid.Row="0">
-                            <!-- 标签栏基线：贯穿整行，是未选中标签的视觉锚点 -->
+                            <!-- 标签栏基线：未选中标签的下边框、以及内容区的上边线都落在这一行上 -->
                             <Border VerticalAlignment="Bottom"
-                                    BorderBrush="{StaticResource Brush.Border}"
+                                    BorderBrush="{StaticResource Brush.Border.Control}"
                                     BorderThickness="0,0,0,1"
                                     SnapsToDevicePixels="True" />
                             <TabPanel x:Name="HeaderPanel"
@@ -959,11 +962,17 @@
                                       IsItemsHost="True"
                                       KeyboardNavigation.TabIndex="1" />
                         </Grid>
-                        <ContentPresenter x:Name="PART_SelectedContentHost"
-                                          Grid.Row="1"
-                                          Margin="{TemplateBinding Padding}"
-                                          ContentSource="SelectedContent"
-                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        <!-- 内容区：与选中标签共用上边线，形成完整的方框 -->
+                        <Border Grid.Row="1"
+                                Background="{StaticResource Brush.Surface}"
+                                BorderBrush="{StaticResource Brush.Border.Control}"
+                                BorderThickness="1,0,1,1"
+                                SnapsToDevicePixels="True">
+                            <ContentPresenter x:Name="PART_SelectedContentHost"
+                                              Margin="{TemplateBinding Padding}"
+                                              ContentSource="SelectedContent"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                        </Border>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
@@ -972,54 +981,45 @@
 
     <Style TargetType="{x:Type TabItem}">
         <Setter Property="Padding" Value="{DynamicResource Layout.TabPadding}" />
-        <Setter Property="Margin" Value="{DynamicResource Layout.TabMargin}" />
         <Setter Property="MinHeight" Value="{DynamicResource Layout.ControlHeight.Small}" />
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
         <Setter Property="FontWeight" Value="Normal" />
         <Setter Property="Foreground" Value="{StaticResource Brush.Text.Secondary}" />
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="Background" Value="{StaticResource Brush.SurfaceAlt}" />
+        <Setter Property="BorderBrush" Value="{StaticResource Brush.Border.Control}" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TabItem}">
-                    <Grid Margin="{TemplateBinding Margin}" SnapsToDevicePixels="True">
-                        <Border x:Name="Bd"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="1,1,1,0"
-                                CornerRadius="4,4,0,0"
-                                Padding="{TemplateBinding Padding}"
-                                SnapsToDevicePixels="True">
-                            <ContentPresenter ContentSource="Header"
-                                              HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              TextElement.Foreground="{TemplateBinding Foreground}"
-                                              TextElement.FontWeight="{TemplateBinding FontWeight}"
-                                              RecognizesAccessKey="True" />
-                        </Border>
-                        <!-- 3px 指示条：选中时压在标签栏基线上，形成明确归属 -->
-                        <Border x:Name="Underline"
-                                Height="3"
-                                VerticalAlignment="Bottom"
-                                Background="Transparent"
-                                SnapsToDevicePixels="True" />
-                    </Grid>
+                    <!-- 方角页签：没有圆角、没有底部强调条。
+                         未选中标签下边框用 Border.Control，与基线同色，标签栏是一条连续的线；
+                         选中标签去掉下边框并铺满到底，盖住基线，与内容区连成一体。 -->
+                    <Border x:Name="Bd"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="1,1,1,1"
+                            Padding="{TemplateBinding Padding}"
+                            SnapsToDevicePixels="True">
+                        <ContentPresenter ContentSource="Header"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          TextElement.Foreground="{TemplateBinding Foreground}"
+                                          TextElement.FontWeight="{TemplateBinding FontWeight}"
+                                          RecognizesAccessKey="True" />
+                    </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Control.Hover}" />
-                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Border}" />
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Accent}" />
                             <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
                         </Trigger>
-                        <!-- 选中态 = Accent 实心面 + 白字：在白色/浅灰背景上都能一眼分辨，
-                             不再依赖一条 1~3px 的横线。 -->
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Accent}" />
-                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Accent}" />
-                            <Setter TargetName="Underline" Property="Background" Value="{StaticResource Brush.Accent.Pressed}" />
-                            <Setter Property="Foreground" Value="{StaticResource Brush.OnAccent}" />
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Surface}" />
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Border.Control}" />
+                            <Setter TargetName="Bd" Property="BorderThickness" Value="1,1,1,0" />
+                            <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
                             <Setter Property="FontWeight" Value="SemiBold" />
                         </Trigger>
                         <MultiTrigger>
@@ -1027,16 +1027,15 @@
                                 <Condition Property="IsSelected" Value="True" />
                                 <Condition Property="IsMouseOver" Value="True" />
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Accent.Hover}" />
-                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Accent.Hover}" />
-                            <Setter TargetName="Underline" Property="Background" Value="{StaticResource Brush.Accent.Pressed}" />
-                            <Setter Property="Foreground" Value="{StaticResource Brush.OnAccent}" />
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Surface}" />
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Accent}" />
+                            <Setter TargetName="Bd" Property="BorderThickness" Value="1,1,1,0" />
+                            <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
                         </MultiTrigger>
                         <Trigger Property="IsKeyboardFocused" Value="True">
                             <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Focus}" />
-                            <Setter TargetName="Underline" Property="Background" Value="{StaticResource Brush.Focus}" />
                         </Trigger>
-                        <!-- 禁用优先：选中但禁用时回到灰底灰字，不留白字压在灰底。 -->
+                        <!-- 禁用优先：选中但禁用时回到灰底灰字 -->
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="IsSelected" Value="True" />
@@ -1044,14 +1043,13 @@
                             </MultiTrigger.Conditions>
                             <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Control.Disabled}" />
                             <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Border}" />
-                            <Setter TargetName="Underline" Property="Background" Value="{StaticResource Brush.Border}" />
+                            <Setter TargetName="Bd" Property="BorderThickness" Value="1,1,1,0" />
                             <Setter Property="Foreground" Value="{StaticResource Brush.Text.Disabled}" />
                             <Setter Property="Cursor" Value="Arrow" />
                         </MultiTrigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="Bd" Property="Background" Value="Transparent" />
-                            <Setter TargetName="Bd" Property="BorderBrush" Value="Transparent" />
-                            <Setter TargetName="Underline" Property="Background" Value="Transparent" />
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Control.Disabled}" />
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Border}" />
                             <Setter Property="Foreground" Value="{StaticResource Brush.Text.Disabled}" />
                             <Setter Property="Cursor" Value="Arrow" />
                         </Trigger>

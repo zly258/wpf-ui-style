@@ -50,7 +50,6 @@
 | `Layout.FormRowMargin` | 0,2,0,2 | **0,3,0,3** | 0,5,0,5 |
 | `Layout.SectionMargin` | 0,0,0,6 | **0,0,0,10** | 0,0,0,14 |
 | `Layout.TabPadding` | 10,4 | **12,6** | 16,8 |
-| `Layout.TabMargin` | 0,0,2,0 | **0,0,4,0** | 0,0,6,0 |
 | `Layout.TooltipPadding` | 6,3 | **8,4** | 10,5 |
 | `Layout.BadgePadding` | 6,1 | **8,2** | 10,3 |
 | `Layout.ExpanderHeaderPadding` | 8,4 | **10,6** | 12,8 |

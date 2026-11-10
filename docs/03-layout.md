@@ -802,7 +802,7 @@ AI 生成 WPF 界面时极易犯以下**四大结构性坏味道**：
 
 ### 16.3 标签页必须有明确选中态
 
-默认 `TabItem` 选中态 = `Brush.Accent` 实心底 + `Brush.OnAccent` 白字 + 1px Accent 描边 + 3px `Brush.Accent.Pressed` 底条 + SemiBold。
+默认 `TabItem` 是**原生方角页签**：1px `Brush.Border.Control` 边框、无圆角、无底部强调条；选中页签去掉下边框并与内容区连成一体。
 它不是装饰，而是「当前位置」的唯一视觉锚点。只画一条 1px 横线（或只改文字颜色）在低对比显示器上无法辨认。
 
 ### 16.4 按钮边界与高度

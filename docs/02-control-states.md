@@ -200,19 +200,19 @@ WPF 会按声明顺序应用 `Trigger`，后声明的覆盖前面的。不要靠
 
 ### 5.3 TabControl / TabItem
 
-| 状态 | Background | Foreground | BorderBrush | 底条 |
+| 状态 | Background | Foreground | BorderBrush | 边框 |
 |---|---|---|---|---|
-| Normal | `Transparent` | `Brush.Text.Secondary` | `Transparent` | 无 |
-| Hover | `Brush.Control.Hover` | `Brush.Text.Primary` | `Brush.Border` | 无 |
-| Selected | `Brush.Accent` | `Brush.OnAccent`（SemiBold） | `Brush.Accent` | 3px `Brush.Accent.Pressed` |
-| Selected+Hover | `Brush.Accent.Hover` | `Brush.OnAccent` | `Brush.Accent.Hover` | 3px `Brush.Accent.Pressed` |
-| Selected+Disabled | `Brush.Control.Disabled` | `Brush.Text.Disabled` | `Brush.Border` | 3px `Brush.Border` |
-| Focused | 不变 | 不变 | `Brush.Focus` | `Brush.Focus` |
-| Disabled | `Transparent` | `Brush.Text.Disabled` | `Transparent` | 无 |
+| Normal（未选中） | `Brush.SurfaceAlt` | `Brush.Text.Secondary` | `Brush.Border.Control` | 四边 1px |
+| Hover | `Brush.Control.Hover` | `Brush.Text.Primary` | `Brush.Accent` | 四边 1px |
+| Selected | `Brush.Surface` | `Brush.Text.Primary`（SemiBold） | `Brush.Border.Control` | 左/上/右 1px，**无下边框** |
+| Selected+Hover | `Brush.Surface` | `Brush.Text.Primary` | `Brush.Accent` | 左/上/右 1px |
+| Selected+Disabled | `Brush.Control.Disabled` | `Brush.Text.Disabled` | `Brush.Border` | 左/上/右 1px |
+| Focused | 不变 | 不变 | `Brush.Focus` | 保持原厚度 |
+| Disabled | `Brush.Control.Disabled` | `Brush.Text.Disabled` | `Brush.Border` | 四边 1px |
 
-- 选中标签页是「一块实心面」：Accent 底 + 白字 + 上方圆角 4 + 1px Accent 描边 + 3px Accent.Pressed 底条。**不要退回成单条细横线**。
-- 选中态必须与未选中态在**填充色**上就能区分，不能只靠底部横线。浅蓝底（Accent.Subtle）在白色卡片上同样不够明显，默认用 Accent 实心。
-- 选中标签页内**只用白字**；白字压在 Accent/Hover/Pressed 上均 ≥ 5.3:1。
+- 采用**原生方角页签**：每个页签都是 1px 实线方框，**不用圆角、不用底部强调条**。未选中也要有可见边框，让用户一眼看出「这是可点击的页签」。
+- **选中页签与内容区连成一体**：选中时去掉下边框、铺 `Brush.Surface` 盖住标签栏基线；内容区本身是 `1px Border.Control + Surface` 的方框。禁止再用「下划线指示器」表达选中。
+- 悬停用 `Control.Hover` 底 + `Accent` 描边；禁用统一 `Control.Disabled + Text.Disabled + Border`。
 - 标签栏下方有一条贯穿的 1px `Brush.Border` 基线；选中标签的底条压在这条基线上。
 - 标签页仅用于局部切换（分组设置、属性分类、画廊演示）；整窗多任务导航仍按 R12 拆分窗口。
 

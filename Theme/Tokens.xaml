@@ -268,7 +268,6 @@
     <Thickness x:Key="Layout.ListViewItemPadding">3,2</Thickness>
     <Thickness x:Key="Layout.MenuItemPadding">8,5</Thickness>
     <Thickness x:Key="Layout.TabPadding">12,6</Thickness>
-    <Thickness x:Key="Layout.TabMargin">0,0,4,0</Thickness>
     <Thickness x:Key="Layout.TooltipPadding">8,4</Thickness>
     <Thickness x:Key="Layout.BadgePadding">8,2</Thickness>
     <Thickness x:Key="Layout.ExpanderHeaderPadding">10,6</Thickness>

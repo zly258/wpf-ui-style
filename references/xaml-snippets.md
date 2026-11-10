@@ -635,7 +635,7 @@ static void ApplyDensity(string profile) // Compact / Medium / Relaxed
 
 要点：
 
-- 选中态 = `Brush.Accent` 实心底 + `Brush.OnAccent` 白字 + 1px Accent 描边 + 3px `Brush.Accent.Pressed` 底条 + SemiBold；
+- 原生方角页签：每个页签 1px `Brush.Border.Control` 边框、无圆角；选中页签去掉下边框并与内容区连成一体；
 - 未选中悬停 = `Brush.Control.Hover` 底 + `Brush.Border` 描边；
 - 标签页只做局部切换；整窗多任务仍按 R12 拆窗口。
 

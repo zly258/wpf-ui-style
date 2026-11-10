@@ -60,7 +60,6 @@
 
     <!-- 标签页 -->
     <Thickness x:Key="Layout.TabPadding">10,4</Thickness>
-    <Thickness x:Key="Layout.TabMargin">0,0,2,0</Thickness>
 
     <!-- 其它 -->
     <Thickness x:Key="Layout.TooltipPadding">6,3</Thickness>

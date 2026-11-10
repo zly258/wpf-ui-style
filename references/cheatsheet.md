@@ -52,7 +52,8 @@
 | 列表 Selected | `Brush.Selection` | `Brush.Text.Primary` | 透明 |
 | 列表 Selected+Hover | `Brush.Selection.Hover` | `Brush.Text.Primary` | 透明 |
 | ComboBoxItem Selected | `Brush.Accent.Subtle` | `Brush.Text.Primary` | 透明 |
-| 标签页 Selected | `Brush.Accent` | `Brush.OnAccent` | `Brush.Accent` + 3px Accent.Pressed 底条 |
+| 标签页 Normal | `Brush.SurfaceAlt` | `Brush.Text.Secondary` | `Brush.Border.Control` 四边 |
+| 标签页 Selected | `Brush.Surface` | `Brush.Text.Primary` | `Brush.Border.Control`（无下边框，与内容区连通） |
 | ToolTip | `Brush.Tooltip.Background` | `Brush.Tooltip.Foreground` | 同背景 |
 
 ## 多行文本高度与自适应
@@ -81,7 +82,7 @@
 <!-- 输入区横向占满：列用 *，输入框不写 Width -->
 <TextBox Grid.Column="1" Text="{Binding Name}" />
 
-<!-- 标签页：使用默认 TabItem 选中态（Accent 实心底 + 白字 + 3px 加深条） -->
+<!-- 标签页：原生方角页签，选中页签与内容区连成一体，无圆角/无底部强调条 -->
 <TabControl>
     <TabItem Header="基本信息">...</TabItem>
     <TabItem Header="高级选项">...</TabItem>

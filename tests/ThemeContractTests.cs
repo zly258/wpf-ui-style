@@ -722,9 +722,10 @@ namespace WpfStyles.Tests
         }
 
         [Fact]
-        public void TabItem_SelectedStateHasSurfaceBorderAndAccentBar()
+        public void TabItem_UsesNativeBoxedTabs()
         {
-            XElement tabItem = Load(ControlsPath).Root.Elements()
+            XDocument controls = Load(ControlsPath);
+            XElement tabItem = controls.Root.Elements()
                 .FirstOrDefault(e => e.Name.LocalName == "Style"
                     && (string)e.Attribute("TargetType") == "{x:Type TabItem}"
                     && e.Attribute(X + "Key") == null);
@@ -732,14 +733,18 @@ namespace WpfStyles.Tests
 
             Assert.Equal("{DynamicResource Layout.TabPadding}",
                 SetterValue(tabItem, "Padding", "TabItem"));
-            Assert.Equal("{DynamicResource Layout.TabMargin}",
-                SetterValue(tabItem, "Margin", "TabItem"));
 
-            XElement underline = tabItem.Descendants()
+            // 方角原生页签：没有圆角、没有底部强调条
+            Assert.Null(tabItem.Descendants()
+                .FirstOrDefault(e => (string)e.Attribute(X + "Name") == "Underline"));
+
+            XElement bd = tabItem.Descendants()
                 .FirstOrDefault(e => e.Name.LocalName == "Border"
-                    && (string)e.Attribute(X + "Name") == "Underline");
-            Assert.NotNull(underline);
-            Assert.Equal("3", (string)underline.Attribute("Height"));
+                    && (string)e.Attribute(X + "Name") == "Bd");
+            Assert.NotNull(bd);
+            Assert.Null(bd.Attribute("CornerRadius"));
+            // 未选中也有完整 1px 边框，页签边界可见
+            Assert.Equal("1,1,1,1", (string)bd.Attribute("BorderThickness"));
 
             XElement selected = tabItem.Descendants()
                 .FirstOrDefault(e => e.Name.LocalName == "Trigger"
@@ -751,17 +756,23 @@ namespace WpfStyles.Tests
                 .Where(e => e.Name.LocalName == "Setter")
                 .ToList();
 
-            Assert.Contains(setters, s => (string)s.Attribute("TargetName") == "Bd"
-                && (string)s.Attribute("Property") == "Background"
-                && (string)s.Attribute("Value") == "{StaticResource Brush.Accent}");
-            Assert.Contains(setters, s => (string)s.Attribute("TargetName") == "Bd"
-                && (string)s.Attribute("Property") == "BorderBrush"
-                && (string)s.Attribute("Value") == "{StaticResource Brush.Accent}");
-            Assert.Contains(setters, s => (string)s.Attribute("TargetName") == "Underline"
-                && (string)s.Attribute("Property") == "Background"
-                && (string)s.Attribute("Value") == "{StaticResource Brush.Accent.Pressed}");
-            Assert.Contains(setters, s => (string)s.Attribute("Property") == "Foreground"
-                && (string)s.Attribute("Value") == "{StaticResource Brush.OnAccent}");
+            Assert.Contains(setters, x => (string)x.Attribute("TargetName") == "Bd"
+                && (string)x.Attribute("Property") == "Background"
+                && (string)x.Attribute("Value") == "{StaticResource Brush.Surface}");
+            // 选中页签去掉下边框，与内容区连成一体
+            Assert.Contains(setters, x => (string)x.Attribute("TargetName") == "Bd"
+                && (string)x.Attribute("Property") == "BorderThickness"
+                && (string)x.Attribute("Value") == "1,1,1,0");
+            Assert.Contains(setters, x => (string)x.Attribute("Property") == "FontWeight"
+                && (string)x.Attribute("Value") == "SemiBold");
+
+            // 内容区是完整方框（左边/右边/下边），上边线由标签栏基线提供
+            XElement content = controls.Descendants()
+                .Where(e => e.Name.LocalName == "Border"
+                    && (string)e.Attribute("BorderThickness") == "1,0,1,1")
+                .FirstOrDefault();
+            Assert.NotNull(content);
+            Assert.Equal("{StaticResource Brush.Surface}", (string)content.Attribute("Background"));
         }
 
         [Fact]

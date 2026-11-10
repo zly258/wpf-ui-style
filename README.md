@@ -185,7 +185,7 @@ public static void Apply(Window window)
 - `Button`、`TextBox`、`ComboBox`、`CheckBox`、`RadioButton`、`ListBox`、`DataGrid` 等都有隐式样式，**不需要逐个指定**。
 - 只有变体需要显式指定：`Button.Primary`、`Button.Danger`、`Button.Text`、`TextBox.Multiline`、`TextBox.Code`、`Button.Primary.Small`、`Button.Secondary.Large` 等。
 - `TextBox` / `PasswordBox` / `ComboBox` 的内容区默认横向占满，点击右侧空白也能继续输入。
-- `TabItem` 选中态是「Accent 实心面 + 白字 + 3px 加深条 + SemiBold」，白色卡片上也一眼可辨。
+- `TabItem` 是原生方角页签：每个页签都有 1px `Brush.Border.Control` 边框（未选中可见、可点击），选中页签去掉下边框与内容区连成一体；无圆角、无底部强调条。
 
 ### 2.3 选择密度（紧凑 / 中等 / 宽松）
 
@@ -284,7 +284,8 @@ Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary
 | 输入框 聚焦 | `Brush.Surface` | `Brush.Text.Primary` | `Brush.Focus` |
 | 标签页 未选中 | `Transparent` | `Brush.Text.Secondary` | 透明 |
 | 标签页 悬停 | `Brush.Control.Hover` | `Brush.Text.Primary` | `Brush.Border` |
-| 标签页 选中 | `Brush.Accent` | `Brush.OnAccent` | `Brush.Accent` + 3px `Brush.Accent.Pressed` 底条 |
+| 标签页 未选中 | `Brush.SurfaceAlt` | `Brush.Text.Secondary` | `Brush.Border.Control`（四边） |
+| 标签页 选中 | `Brush.Surface` | `Brush.Text.Primary`（SemiBold） | `Brush.Border.Control`（去掉下边框） |
 | 列表项 悬停 | `Brush.Control.Hover` | `Brush.Text.Primary` | 透明 |
 | 列表项 选中 | `Brush.Selection` | `Brush.Text.Primary` | 透明 |
 | 列表项 选中+悬停 | `Brush.Selection.Hover` | `Brush.Text.Primary` | 透明 |

@@ -193,7 +193,7 @@
 | `Layout.InputPadding` | `6,0` | 单行输入框左右内边距（上下为 0，高度由 Height 控制） |
 | `Layout.InputPadding.Multiline` | `6,6` | 多行输入框 |
 | `Layout.ListItemPadding` | `8,5` | 列表项 |
-| `Layout.TabPadding` / `Layout.TabMargin` | `12,6` / `0,0,4,0` | 标签页内边距与间距 |
+| `Layout.TabPadding` | `12,6` | 标签页内边距（页签相邻，无间距） |
 | `Layout.TooltipPadding` | `8,4` | ToolTip 内边距 |
 
 > 按钮高度由 `Height="{DynamicResource Layout.ControlHeight}"` 控制，上下 Padding 固定为 0，

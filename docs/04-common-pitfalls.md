@@ -1321,13 +1321,13 @@ DatePicker 的弹层里放的是 **DatePicker 自己创建的 Calendar 实例**�
 
 **根因**
 
-模板只给 `Underline` 设了背景色，标签页本身没有底色和描边。
+模板只画了一条下划线指示器，标签页本身没有可见的边框/底色，看起来不像可点击的页签。
 
 **修复**
 
-- 使用主题的默认 `TabItem`：选中态 = `Brush.Accent` 实心底 + 白字 + 1px `Brush.Accent` 描边
-  + 3px `Brush.Accent.Pressed` 底条 + 白字 SemiBold。
-- 不要自己删掉 `Bd` 的 `Background`/`BorderBrush`，也不要只保留 `Underline`。
+- 使用主题的默认 `TabItem`：原生方角页签，每个页签都有 1px `Brush.Border.Control` 边框、
+  未选中 `SurfaceAlt` 底；选中页签铺 `Brush.Surface` 并去掉下边框，与内容区连成一体。
+- 不要重新引入圆角或底部强调条；不要只保留一条下划线。
 - 仍然遵守 R12：窗口内不要用 tab 承载并排任务。
 
 ---

@@ -173,7 +173,7 @@ description: Apply and audit the WPF UI Skills style system (tokens, three-level
 
 ### R16. 输入区占满、标签页可识别 (Fill & Visible Tabs)
 - **输入区横向占满**：`TextBox` / `PasswordBox` / `ComboBox` 的文本宿主必须横向 `Stretch`。严禁在业务 XAML 里把 `HorizontalContentAlignment` 改成 `Left`，否则右侧会是无法点击的空白，长值也更容易被截。
-- **标签页选中态必须有面**：默认 `TabItem` 选中态 = **`Brush.Accent` 实心面 + `Brush.OnAccent` 白字** + 1px Accent 描边 + 3px `Brush.Accent.Pressed` 底条 + SemiBold。严禁只画一条 1px 横线当选中态（浅色卡片上会完全看不出），也禁止用浅蓝底当选中态（在白卡片上同样不明显）。
+- **标签页必须是「可见的方框」**：默认 `TabItem` 用原生方角样式——未选中也有 1px `Brush.Border.Control` 边框 + `SurfaceAlt` 底；选中页签铺 `Brush.Surface`、去掉下边框，与内容区连成一体。**禁止圆角、禁止底部强调条/下划线指示器**；浅色卡片上只画一条线无法看出这是可切换的页签。
 - **标签页仍是局部切换**：R12 的「窗口内禁止多 Tab 导航」继续生效；本样式用于分组设置、属性分类、画廊演示等局部区域。
 - **按钮边界可见**：默认按钮是「白底 + `Brush.Border.Control` 描边」。严禁把按钮描边改成 `Brush.Border` 或更浅的颜色，也不要用 `Opacity` 弱化。
 
@@ -225,7 +225,7 @@ python tools/UiTest.py --xaml preview/Views/SafeFormView.xaml --shot .tmp-shots/
 - [ ] 默认排版为中等密度（Body 12px, ControlHeight 30px, 表格行 28px, 表单行距 3px, 根边距 12px），未混用其它档位。
 - [ ] 控件尺寸/内边距引用 `Layout.*`，没有写死 `Height="32"` / `Padding="8,0"`；主题内部密度 token 使用 `DynamicResource`。
 - [ ] 单行/多行输入与下拉框内容区横向占满，右侧空白可点击聚焦。
-- [ ] 标签页选中态是 Accent 实心面 + 白字 + 3px 加深条，不是单条细线。
+- [ ] 标签页是方角页签：每个页签边框可见，选中页签与内容区连通，无圆角/无底部强调条。
 - [ ] 表单标签与控件共享左基线：宽面板单 Grid 两列，窄面板 `FormStack` 单列。
 - [ ] 输入框/下拉框内部文字左对齐（数值列允许右对齐），没有居中。
 - [ ] 复选框对勾是填充路径且居中；三态可区分（`IsChecked=null` 显示横杠，不是空框）。
