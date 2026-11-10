@@ -641,6 +641,49 @@ static void ApplyDensity(string profile) // Compact / Medium / Relaxed
 
 ---
 
+## 20.5 批量操作条（ToolStrip + 选中数徽章）
+
+```xml
+<Border Style="{StaticResource ToolStrip}" Margin="0,0,0,8">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+            <Button Content="添加物料" Margin="0,0,8,0" Click="Add_Click" />
+            <Button Content="批量审核通过" Margin="0,0,8,0"
+                    IsEnabled="False" Click="Approve_Click" />
+            <Button Content="批量删除" Style="{StaticResource Button.Danger}"
+                    Margin="0,0,10,0" IsEnabled="False" Click="Delete_Click" />
+
+            <Border x:Name="SelectionBadge"
+                    Background="{StaticResource Brush.SurfaceAlt}"
+                    CornerRadius="{StaticResource Radius.Pill}"
+                    Padding="{DynamicResource Layout.BadgePadding}"
+                    VerticalAlignment="Center">
+                <TextBlock x:Name="SelectedSummary" Text="未选择项"
+                           FontSize="{StaticResource FontSize.Caption}"
+                           Foreground="{StaticResource Brush.Text.Secondary}" />
+            </Border>
+        </StackPanel>
+
+        <Button Grid.Column="1" Content="展开全部明细" Click="Toggle_Click" />
+    </Grid>
+</Border>
+```
+
+```csharp
+// 勾选数量变化时：点亮按钮 + 徽章换色
+bool any = selectedCount > 0;
+BtnBatchApprove.IsEnabled = any;
+BtnBatchDelete.IsEnabled = any;
+SelectedSummary.Text = any ? $"已选中 {selectedCount} 项" : "未选择项";
+SelectionBadge.Background = (Brush)FindResource(any ? "Brush.Accent.Subtle" : "Brush.SurfaceAlt");
+SelectedSummary.Foreground = (Brush)FindResource(any ? "Brush.Accent" : "Brush.Text.Secondary");
+```
+
 ## 21. 窄面板单列表单（标签与控件左对齐）
 
 ```xml

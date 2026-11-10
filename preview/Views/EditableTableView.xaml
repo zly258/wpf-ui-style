@@ -98,26 +98,39 @@
                 </Grid>
             </Border>
 
-            <!-- 3. 表格工具栏：左侧为局部/批量操作（选中有物料时点亮），右侧为视图控制 -->
-            <Grid Grid.Row="2" Margin="0,0,0,8">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
+            <!-- 3. 表格工具栏：用统一 ToolStrip 容器包住按钮组，
+                    左边缘与下方表格、上方筛选卡对齐；批量操作跟随勾选状态点亮。 -->
+            <Border Grid.Row="2" Style="{StaticResource ToolStrip}" Margin="0,0,0,8">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
 
-                <!-- 左侧批量操作按钮组 -->
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <Button Content="添加物料" Style="{StaticResource Button.Secondary}" Margin="0,0,8,0" Click="BtnAddRow_Click" />
-                    <Button x:Name="BtnBatchApprove" Content="批量审核通过" Style="{StaticResource Button.Secondary}" Margin="0,0,8,0" IsEnabled="False" Click="BtnBatchApprove_Click" />
-                    <Button x:Name="BtnBatchDelete" Content="批量删除" Style="{StaticResource Button.Danger}" Margin="0,0,16,0" IsEnabled="False" Click="BtnBatchDelete_Click" />
-                    <TextBlock x:Name="TxtSelectedSummary" Text="未选择项" Style="{StaticResource Text.Caption}" VerticalAlignment="Center" />
-                </StackPanel>
+                    <!-- 左侧批量操作按钮组 -->
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Button Content="添加物料" Style="{StaticResource Button.Secondary}" Margin="0,0,8,0" Click="BtnAddRow_Click" />
+                        <Button x:Name="BtnBatchApprove" Content="批量审核通过" Style="{StaticResource Button.Secondary}" Margin="0,0,8,0" IsEnabled="False" Click="BtnBatchApprove_Click" />
+                        <Button x:Name="BtnBatchDelete" Content="批量删除" Style="{StaticResource Button.Danger}" Margin="0,0,10,0" IsEnabled="False" Click="BtnBatchDelete_Click" />
 
-                <!-- 右侧表格视图控制（展开/折叠明细） -->
-                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                    <Button Content="展开全部明细" Style="{StaticResource Button.Secondary}" Click="BtnToggleAllDetails_Click" />
-                </StackPanel>
-            </Grid>
+                        <!-- 选中数徽章：未选中时中性灰，选中后点亮为 Accent -->
+                        <Border x:Name="SelectionBadge"
+                                Background="{StaticResource Brush.SurfaceAlt}"
+                                CornerRadius="{StaticResource Radius.Pill}"
+                                Padding="{DynamicResource Layout.BadgePadding}"
+                                VerticalAlignment="Center">
+                            <TextBlock x:Name="TxtSelectedSummary" Text="未选择项"
+                                       FontSize="{StaticResource FontSize.Caption}"
+                                       Foreground="{StaticResource Brush.Text.Secondary}" />
+                        </Border>
+                    </StackPanel>
+
+                    <!-- 右侧表格视图控制（展开/折叠明细） -->
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Button Content="展开全部明细" Style="{StaticResource Button.Secondary}" Click="BtnToggleAllDetails_Click" />
+                    </StackPanel>
+                </Grid>
+            </Border>
 
             <!-- 4. 复杂可编辑表格核心（占 * 行，高度跟随视口自适应，内部自带垂直滚动条） -->
             <DataGrid x:Name="GridMaterials"
@@ -137,6 +150,7 @@
                         <DataGridTemplateColumn.Header>
                             <CheckBox x:Name="ChkSelectAll"
                                       IsThreeState="True"
+                                      Focusable="False"
                                       ToolTip="全选 / 反选 / 取消"
                                       Click="ChkSelectAll_Click" />
                         </DataGridTemplateColumn.Header>

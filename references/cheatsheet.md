@@ -91,6 +91,40 @@
 - 不要给 `TextBox` / `PasswordBox` / `ComboBox` 设 `HorizontalContentAlignment="Left"`。
 - 标签页选中态不能只剩一条 1px 横线；仍禁止用 tab 承载整窗多任务导航。
 
+## 批量操作条（Zone 3 工具条）
+
+```xml
+<Border Style="{StaticResource ToolStrip}" Margin="0,0,0,8">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+            <Button Content="添加物料" Margin="0,0,8,0" />
+            <Button Content="批量审核通过" Margin="0,0,8,0" IsEnabled="False" />
+            <Button Content="批量删除" Style="{StaticResource Button.Danger}"
+                    Margin="0,0,10,0" IsEnabled="False" />
+            <Border Background="{StaticResource Brush.SurfaceAlt}"
+                    CornerRadius="{StaticResource Radius.Pill}"
+                    Padding="{DynamicResource Layout.BadgePadding}"
+                    VerticalAlignment="Center">
+                <TextBlock Text="未选择项" FontSize="{StaticResource FontSize.Caption}"
+                           Foreground="{StaticResource Brush.Text.Secondary}" />
+            </Border>
+        </StackPanel>
+
+        <Button Grid.Column="1" Content="展开全部明细" />
+    </Grid>
+</Border>
+```
+
+- 工具条用 `ToolStrip` 包住，左边缘与表格/筛选卡对齐；
+- 批量动作未勾选时必须 `IsEnabled="False"`；
+- 选中数用胶囊徽章，选中后切 `Accent.Subtle + Accent`；
+- 禁用态的危险按钮必须是灰底灰字，不能保留红色。
+
 ## 表单对齐（宽面板 / 窄面板）
 
 | 场景 | 骨架 | 规则 |

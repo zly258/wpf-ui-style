@@ -117,6 +117,9 @@ WPF 会按声明顺序应用 `Trigger`，后声明的覆盖前面的。不要靠
 | Focused | 不变 | 不变 | `Brush.Danger.Pressed` |
 | Disabled | `Brush.Control.Disabled` | `Brush.Text.Disabled` | `Brush.Border` |
 
+> **禁用态必须中性化**：危险按钮一旦 `IsEnabled="False"`，背景/文字/描边全部转灰，
+> 不得保留任何红色，否则零选中时的“批量删除”看起来仍然可以点击。
+>
 > 危险按钮的悬停是**浅红底 + 深红字**，不是红底白字。
 > 只有实心红底才允许白字；本规范的危险按钮默认是描边风格。
 

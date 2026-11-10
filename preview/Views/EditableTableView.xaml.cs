@@ -159,10 +159,25 @@ namespace WpfStylePreview.Views
         private void UpdateSelectionSummary()
         {
             int selectedCount = DisplayItems.Count(i => i.IsSelected);
+
             if (TxtSelectedSummary != null)
             {
                 TxtSelectedSummary.Text = selectedCount > 0 ? $"已选中 {selectedCount} 项物料" : "未选择项";
             }
+
+            // 徽章随手选状态点亮：未选中 = 中性灰，选中 = Accent 浅底
+            if (SelectionBadge != null)
+            {
+                SelectionBadge.Background = (Brush)Application.Current.FindResource(
+                    selectedCount > 0 ? "Brush.Accent.Subtle" : "Brush.SurfaceAlt");
+
+                if (TxtSelectedSummary != null)
+                {
+                    TxtSelectedSummary.Foreground = (Brush)Application.Current.FindResource(
+                        selectedCount > 0 ? "Brush.Accent" : "Brush.Text.Secondary");
+                }
+            }
+
             if (BtnBatchApprove != null) BtnBatchApprove.IsEnabled = selectedCount > 0;
             if (BtnBatchDelete != null) BtnBatchDelete.IsEnabled = selectedCount > 0;
         }

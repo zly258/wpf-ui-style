@@ -11,7 +11,7 @@
 | `Controls.xaml` | Window、TextBlock/AccessText、Button、TextBox、PasswordBox、ComboBox、CheckBox、RadioButton、GroupBox、Expander、Tab、ToolTip、ProgressBar、StatusBar、ScrollBar、GridSplitter、ContextMenu |
 | `DataControls.xaml` | ListBox、ListView、DataGrid、TreeView、ScrollViewer.Base |
 | `Icons.xaml` | 24x24 矢量几何图形 (`Icon.Geo.*`)、基础与尺寸样式 (`Icon.*`)、图标按钮 (`Button.Icon*`) |
-| `Extras.xaml` | Slider、DatePicker、RichTextBox、ToggleButton、ToggleSwitch、Menu/MenuItem、ToolBar、Card、Badge |
+| `Extras.xaml` | Slider、DatePicker、RichTextBox、ToggleButton、ToggleSwitch、Menu/MenuItem、ToolBar、Card、Badge、`ToolStrip`（批量操作条容器） |
 | `Theme.xaml` | 默认入口（中等），合并 Tokens + Density.Medium + 其它控件字典 |
 | `Theme.Compact.xaml` | 整包入口：紧凑密度 |
 | `Theme.Relaxed.xaml` | 整包入口：宽松密度 |

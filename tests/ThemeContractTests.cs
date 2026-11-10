@@ -817,6 +817,36 @@ namespace WpfStyles.Tests
         }
 
         [Fact]
+        public void DangerButton_DisabledStateIsNeutral()
+        {
+            // 危险按钮禁用时必须中性化：不允许保留红底/红字/红边框，
+            // 否则“批量删除”在没有任何选中项时看起来仍然可用。
+            XElement danger = FindKeyedStyle(ControlsPath, "Button.Danger");
+            XElement disabled = FindTrigger(danger, "IsEnabled", "False");
+            Assert.NotNull(disabled);
+
+            Assert.Equal("{StaticResource Brush.Control.Disabled}",
+                SetterValue(disabled, "Background", "Button.Danger disabled"));
+            Assert.Equal("{StaticResource Brush.Text.Disabled}",
+                SetterValue(disabled, "Foreground", "Button.Danger disabled"));
+            Assert.Equal("{StaticResource Brush.Border}",
+                SetterValue(disabled, "BorderBrush", "Button.Danger disabled"));
+        }
+
+        [Fact]
+        public void ToolStrip_StyleExistsForBulkActionBars()
+        {
+            XElement strip = FindKeyedStyle(ExtrasPath, "ToolStrip");
+            Assert.Equal("{x:Type Border}", (string)strip.Attribute("TargetType"));
+            Assert.Equal("{StaticResource Brush.Surface}",
+                SetterValue(strip, "Background", "ToolStrip"));
+            Assert.Equal("{StaticResource Brush.Border}",
+                SetterValue(strip, "BorderBrush", "ToolStrip"));
+            Assert.Equal("{DynamicResource Layout.ToolBarPadding}",
+                SetterValue(strip, "Padding", "ToolStrip"));
+        }
+
+        [Fact]
         public void ContrastPairs_MeetMinimum()
         {
             Dictionary<string, string> colors = LoadColors();

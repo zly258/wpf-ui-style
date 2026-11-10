@@ -27,6 +27,18 @@
         <Setter Property="SnapsToDevicePixels" Value="True" />
     </Style>
 
+    <!-- 工具条容器：表格/列表上方的批量操作条。
+         统一用一层浅色卡片包住按钮组，避免按钮直接浮在窗口背景上，
+         也保证左边缘与下方表格、上方筛选卡对齐。 -->
+    <Style x:Key="ToolStrip" TargetType="{x:Type Border}">
+        <Setter Property="Background" Value="{StaticResource Brush.Surface}" />
+        <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="{StaticResource Radius.Small}" />
+        <Setter Property="Padding" Value="{DynamicResource Layout.ToolBarPadding}" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+    </Style>
+
     <Style x:Key="Badge.Base" TargetType="{x:Type Border}">
         <Setter Property="CornerRadius" Value="{StaticResource Radius.Pill}" />
         <Setter Property="Padding" Value="{DynamicResource Layout.BadgePadding}" />
