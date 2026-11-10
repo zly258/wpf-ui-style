@@ -1,0 +1,167 @@
+<!--
+    反模式对照窗口（故意保留问题写法，勿照抄）：
+      1. 标签列固定 104px  -> 长标签被裁掉一半；
+      2. 窗口固定 Height="470" -> 内容多时底部状态行被挤出画面（这里"已载入…"整行看不见）；
+      3. 状态文案与按钮同一行 -> 长路径会把按钮挤变形；
+      4. 没有 ScrollViewer -> 高 DPI 下内容直接被裁掉。
+
+    对照窗口：SafeFormWindow.xaml（规则 R14）。
+    这份文件用于演示 LayoutCheck 会报什么：标签列固定宽度、窗口固定高度都会触发告警。
+-->
+<Window x:Class="WpfStylePreview.AntiPatternWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="反模式对照（固定标签列宽 / 固定窗口高度 / 状态与按钮同行）"
+        Width="780" Height="470"
+        MinWidth="700" MinHeight="420"
+        WindowStartupLocation="CenterScreen"
+        ShowInTaskbar="False">
+
+    <!--
+      反模式对照：演示硬编码宽高与缺乏弹性布局的问题。
+      旧版是三列混排的绝对定位窗体，这里按"左列 9 / 右列 9"重排，
+      字段顺序与旧版逐个对照过（标签位置从左版设计师文件里读出来的），
+      每个输入框缺乏弹性容器约束。
+      另加"重置表单"按钮——旧版是独立命令 RefreshDocumentInfo，放这里省一次输入。
+    -->
+    <Grid Margin="{StaticResource Layout.WindowPadding}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Style="{StaticResource Text.Caption}"
+                   Foreground="{StaticResource Brush.Text.Secondary}"
+                   Text="文档属性与元数据设置；起始编号用于连续编号。"
+                   Margin="0,0,0,10" TextWrapping="Wrap" />
+
+        <!-- 窗口较矮（或 150% DPI 缩到最小尺寸）时，两列 18 个字段会超出行高；
+             这里用一层滚动兜底，保证永远不裁切、不折叠。 -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Disabled"
+                      Padding="0,0,2,0">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Margin="0,0,12,0">
+                <Grid Style="{StaticResource FormRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="104" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="文档编号" Style="{StaticResource Text.Label}" />
+                    <TextBox Grid.Column="1" Tag="CONTRACT_NO" Style="{StaticResource TextBox.Base}" />
+                </Grid>
+                <Grid Style="{StaticResource FormRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="104" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="文档版本" Style="{StaticResource Text.Label}" />
+                    <TextBox Grid.Column="1" Tag="CERTIFICATE_NUM" Style="{StaticResource TextBox.Base}" />
+                </Grid>
+                <Grid Style="{StaticResource FormRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="104" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="所属项目" Style="{StaticResource Text.Label}" />
+                    <TextBox Grid.Column="1" Tag="PROJECT_NO" Style="{StaticResource TextBox.Base}" />
+                </Grid>
+                <Grid Style="{StaticResource FormRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="104" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="编制" Style="{StaticResource Text.Label}" />
+                    <TextBox Grid.Column="1" Tag="DEPT_CHECKER" Style="{StaticResource TextBox.Base}" />
+                </Grid>
+                <Grid Style="{StaticResource FormRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="104" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="审核" Style="{StaticResource Text.Label}" />
+                    <TextBox Grid.Column="1" Tag="DWG_CHECKER" Style="{StaticResource TextBox.Base}" />
+                </Grid>
+                <Grid Style="{StaticResource FormRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="104" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="设计" Style="{StaticResource Text.Label}" />
+                    <TextBox Grid.Column="1" Tag="DWG_DESIGNER" Style="{StaticResource TextBox.Base}" />
+                </Grid>
+                <Grid Style="{StaticResource FormRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="104" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="制图" Style="{StaticResource Text.Label}" />
+                    <TextBox Grid.Column="1" Tag="DWG_DRAW" Style="{StaticResource TextBox.Base}" />
+                </Grid>
+                <Grid Style="{StaticResource FormRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="104" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="日期" Style="{StaticResource Text.Label}" />
+                    <TextBox Grid.Column="1" Tag="PRINT_DATE" Style="{StaticResource TextBox.Base}" />
+                </Grid>
+                <Grid Style="{StaticResource FormRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="104" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="文档前缀" Style="{StaticResource Text.Label}" />
+                    <TextBox Grid.Column="1" Tag="DRAWING_NO" Style="{StaticResource TextBox.Base}" />
+                </Grid>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1">
+                <Grid Style="{StaticResource FormRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="104" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="附件1" Style="{StaticResource Text.Label}" />
+                    <TextBox Grid.Column="1" Tag="DESCRIPTION_1" Style="{StaticResource TextBox.Base}" />
+                </Grid>
+                <Grid Style="{StaticResource FormRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="104" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="附件2" Style="{StaticResource Text.Label}" />
+                    <TextBox Grid.Column="1" Tag="DESCRIPTION_2" Style="{StaticResource TextBox.Base}" />
+                </Grid>
+                <Grid Style="{StaticResource FormRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="104" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="附件3" Style="{StaticResource Text.Label}" />
+                    <TextBox Grid.Column="1" Tag="DESCRIPTION_3" Style="{StaticResource TextBox.Base}" />
+                </Grid>
+                <Grid Style="{StaticResource FormRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="104" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="附件4" Style="{StaticResource Text.Label}" />
+                    <TextBox Grid.Column="1" Tag="DESCRIPTION_4" Style="{StaticResource TextBox.Base}" />
+                </Grid>
+                <Grid Style="{StaticResource FormRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="104" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="附件5" Style="{StaticResource Text.Label}" />
+                    <TextBox Grid.Column="1" Tag="DESCRIPTION_5" Style="{StaticResource TextBox.Base}" />
+                </Grid>
+                <Grid Style="{StaticResource FormRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="104" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="附件6" Style="{StaticResource Text.Label}" />
+                    <TextBox Grid.Column="1" Tag="DESCRIPTION_6" Style="{StaticResource TextBox.Base}" />
+                </Grid>
+                <Grid Style="{StaticResource FormRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="104" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="起始编号" Style="{StaticResource Text.Label}" />
+                    <TextBox Grid.Column="1" Tag="DRAWING_NO_Start" Style="{StaticResource TextBox.Base}"
+                             ToolTip="整数；用于连续编号，由编号逻辑使用" />
+                </Grid>
+                <Grid Style="{StaticResource FormRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="104" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="质量等级" Style="{StaticResource Text.Label}" />
+                    <TextBox Grid.Column="1" Tag="DWG_VALIDATION" Style="{StaticResource TextBox.Base}" />
+                </Grid>
+                <Grid Style="{StaticResource FormRow}">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="104" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="保密等级" Style="{StaticResource Text.Label}" />
+                    <TextBox Grid.Column="1" Tag="DWG_AUDIT" Style="{StaticResource TextBox.Base}" />
+                </Grid>
+            </StackPanel>
+        </Grid>
+        </ScrollViewer>
+
+        <Grid Grid.Row="2" Margin="0,12,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock x:Name="StatusText" Grid.Column="0" Style="{StaticResource Text.Caption}"
+                       Foreground="{StaticResource Brush.Text.Secondary}"
+                       VerticalAlignment="Center" TextWrapping="Wrap" />
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <Button Content="重置表单" Margin="0,0,8,0"
+                        ToolTip="恢复为默认文档属性" />
+                <Button Content="保存" Style="{StaticResource Button.Primary}" Margin="0,0,8,0" ToolTip="保存配置到模板文件" />
+                <Button Content="关闭" ToolTip="关闭窗口" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

@@ -1,0 +1,16 @@
+# Normalize text files in the repository.
+* text=auto eol=lf
+
+# Windows scripts stay CRLF so they run from cmd.exe / PowerShell without
+# surprises.
+*.ps1 text eol=crlf
+*.psm1 text eol=crlf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binary assets.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
