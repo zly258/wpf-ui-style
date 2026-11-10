@@ -63,18 +63,20 @@ pwsh ./install.ps1 -Cleanup -DryRun
 | `-DryRun` | 关闭 | 只打印动作，不写文件 |
 | `-Cleanup` | 关闭 | 删除“客户端未安装”的残留技能/规则文件；单独使用时只清理、不安装 |
 | `-NoCleanup` | 关闭 | `-Clients auto` 下跳过自动清理 |
+| `-MaxAgeDays` | `90` | 配置目录里最近一次真实写入距今超过该天数即视为残留 |
 | `-Detect` | — | 列出本机检测到的客户端后退出 |
 | `-List` | — | 列出所有支持的客户端和路径后退出 |
 
 `auto` 检测的是“客户端软件是否真的存在”，而不是配置目录是否存在：
 
 - 可执行文件在 `PATH` 上（如 `zcode`、`claude`、`qwen`），或
-- 客户端安装在常见程序目录（如 `%LOCALAPPDATA%\Programs\ZCode`），或
-- 配置目录（如 `~/.zcode`、`~/.cursor`）里有本安装器之外的真实数据。
+- 客户端安装在常见程序目录且目录里仍有 exe（如 `%LOCALAPPDATA%\Programs\ZCode`），或
+- Windows 卸载注册表 / MSIX 包里有该客户端的安装记录，或
+- 配置目录（如 `~/.zcode`、`~/.claude`）在 `-MaxAgeDays` 天内被客户端写入过。
 
-早期版本用 `-Clients all` 安装时，会为每个受支持的客户端创建配置目录。这些目录里
-如果只有本技能写入的 `skills/wpf-ui-style`、`wpf-ui-style.md`、`AGENTS.md` 标记块，
-不再算作“已安装”，`-Detect` 会把它们列为 `Stale`：
+卸载软件通常只留下配置目录；里面只剩旧数据的目录不算“已安装”。早期版本用
+`-Clients all` 安装时创建的目录（里面只有本技能写入的 `skills/wpf-ui-style`、
+`wpf-ui-style.md`、`AGENTS.md` 标记块）同样不算。`-Detect` 会把这些列为 `Stale`：
 
 ```powershell
 # 查看检测结果与残留安装
@@ -110,7 +112,7 @@ pwsh ./install.ps1 -Cleanup
 | Roo Code | `~/.roo/rules` | `.roo/rules` | 规则文件 |
 | Kilo Code | `~/.kilocode/rules` | `.kilocode/rules` | 规则文件 |
 | Continue | `~/.continue/rules` | `.continue/rules` | 规则文件 |
-| OpenAI Codex | `~/.codex/AGENTS.md` | `AGENTS.md` | 标记块 |
+| OpenAI Codex | `~/.codex/skills`、`~/.codex/AGENTS.md` | `AGENTS.md` | 另写 `AGENTS.md` 标记块 |
 | Gemini CLI | `~/.gemini/config/skills` | `.gemini/skills` | — |
 | Qwen Code | `~/.qwen/skills` | `.qwen/skills` | — |
 | Grok CLI | `~/.grok/skills`、`~/.grok/rules` | `.grok/skills`、`.grok/rules` | — |

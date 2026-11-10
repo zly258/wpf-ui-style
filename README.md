@@ -45,9 +45,10 @@ pwsh ./install.ps1 -Scope Project -Root "D:/Demo/YourApp" -Clients all
 pwsh ./install.ps1 -Cleanup
 ```
 
-`-Clients auto` 只安装到“软件确实存在”的客户端：检测可执行文件、程序安装目录和
-配置目录里的真实数据；如果配置目录里只有早期 `-Clients all` 留下的本技能文件，
-会被视为残留，并在安装时自动清理。
+`-Clients auto` 只安装到“软件确实存在”的客户端：检测 PATH 上的可执行文件、仍含
+exe 的程序安装目录、Windows 卸载注册表/MSIX 安装记录，以及配置目录近 90 天内
+（`-MaxAgeDays` 可调）的真实写入。卸载后残留的旧配置目录、或早期 `-Clients all`
+留下的本技能文件，会被视为残留并在安装时自动清理。
 
 手动安装（任选其一）：
 

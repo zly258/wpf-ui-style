@@ -51,9 +51,16 @@
     Skip the automatic cleanup pass under -Clients auto.
 
 .PARAMETER Detect
-    List detected clients and exit. A config directory counts as detected only
-    if it holds real client data; directories that contain nothing but files
-    this installer wrote are reported as stale installs instead.
+    List detected clients and exit. A client counts as installed when its
+    software is present (executable, install directory, uninstall entry, MSIX
+    package) or when its config profile was written to recently. Directories
+    that contain nothing but files this installer wrote are reported as stale
+    installs instead.
+
+.PARAMETER MaxAgeDays
+    How recent a config profile must be to count as evidence that the client is
+    still installed. A profile untouched for longer than this is a leftover of
+    an uninstalled client. Default: 90.
 
 .PARAMETER List
     List all supported clients and their install paths, then exit.
@@ -91,6 +98,9 @@ param(
     [switch]$Cleanup,
 
     [switch]$NoCleanup,
+
+    [ValidateRange(1, 3650)]
+    [int]$MaxAgeDays = 90,
 
     [switch]$Detect,
 
@@ -239,6 +249,7 @@ $Registry = [ordered]@{
         Label = 'OpenAI Codex'
         Detect = @("$Home/.codex")
         Global = @(
+            @{ Kind = 'Skill'; Path = "$Home/.codex/skills" },
             @{ Kind = 'Agent'; Path = "$Home/.codex/AGENTS.md" }
         )
         Project = @(
@@ -434,31 +445,43 @@ $Registry = [ordered]@{
     }
 }
 
-# Positive evidence that the client software itself is installed: an executable
-# on PATH or the app's install directory. These are checked in addition to the
-# config directory, so a client whose config folder was created by an earlier
-# `-Clients all` run is not mistaken for an installed client.
+# Positive evidence that the client software itself is installed:
+#   * a command on PATH
+#   * an app install directory that still contains the executable
+#   * an uninstall-registry entry (Windows)
+#   * an installed MSIX/AppX package (Windows)
+# A config directory on its own is never enough: `-Clients all` creates one for
+# every supported client, and uninstalling an app usually leaves its profile
+# folder behind. Config data only counts when it is recent (see -MaxAgeDays).
+# ---------------------------------------------------------------------------
 $LocalPrograms = if ($env:LOCALAPPDATA) { Join-Path $env:LOCALAPPDATA 'Programs' } else { $null }
 $Probes = @{
-    'zcode'      = @{ Commands = @('zcode'); AppDirs = @("$LocalPrograms\ZCode") }
-    'claude'     = @{ Commands = @('claude'); AppDirs = @("$Home\.claude\local") }
-    'copilot'    = @{ Commands = @('copilot') }
-    'cursor'     = @{ Commands = @('cursor'); AppDirs = @("$LocalPrograms\cursor") }
-    'windsurf'   = @{ Commands = @('windsurf'); AppDirs = @("$LocalPrograms\Windsurf") }
-    'codex'      = @{ Commands = @('codex'); AppDirs = @("$env:APPDATA\Codex") }
-    'gemini'     = @{ Commands = @('gemini') }
-    'qwen'       = @{ Commands = @('qwen') }
-    'grok'       = @{ Commands = @('grok'); AppDirs = @("$Home\.grok\bin") }
-    'kiro'       = @{ Commands = @('kiro') }
-    'trae'       = @{ Commands = @('trae') }
-    'workbuddy'  = @{ AppDirs = @("$LocalPrograms\WorkBuddy") }
-    'codebuddy'  = @{ AppDirs = @("$LocalPrograms\CodeBuddy") }
-    'codebuddycn'= @{ AppDirs = @("$LocalPrograms\CodeBuddy CN") }
-    'dsh'        = @{ AppDirs = @("$LocalPrograms\DeepSeek Harness") }
-    'antigravity'= @{ AppDirs = @("$LocalPrograms\antigravity") }
-    'zed'        = @{ Commands = @('zed') }
-    'aider'      = @{ Commands = @('aider') }
-    'openhands'  = @{ Commands = @('openhands') }
+    'zcode'      = @{ Commands = @('zcode'); AppDirs = @("$LocalPrograms\ZCode"); Uninstall = @('^ZCode') }
+    'claude'     = @{ Commands = @('claude'); AppDirs = @("$Home\.claude\local"); Uninstall = @('Claude Code') }
+    'copilot'    = @{ Commands = @('copilot'); Uninstall = @('Microsoft Visual Studio Code') }
+    'cursor'     = @{ Commands = @('cursor'); AppDirs = @("$LocalPrograms\cursor"); Uninstall = @('^Cursor') }
+    'windsurf'   = @{ Commands = @('windsurf'); AppDirs = @("$LocalPrograms\Windsurf"); Uninstall = @('Windsurf') }
+    'cline'      = @{ Uninstall = @('Cline') }
+    'roo'        = @{ Uninstall = @('Roo Code') }
+    'kilo'       = @{ Uninstall = @('Kilo Code') }
+    'continue'   = @{ Uninstall = @('^Continue') }
+    'codex'      = @{ Commands = @('codex'); AppDirs = @("$env:LOCALAPPDATA\OpenAI\Codex", "$env:APPDATA\Codex"); Uninstall = @('Codex'); Appx = @('OpenAI.Codex') }
+    'gemini'     = @{ Commands = @('gemini'); Uninstall = @('Gemini CLI') }
+    'qwen'       = @{ Commands = @('qwen'); Uninstall = @('Qwen') }
+    'grok'       = @{ Commands = @('grok'); AppDirs = @("$Home\.grok\bin"); Uninstall = @('Grok Bot') }
+    'kiro'       = @{ Commands = @('kiro'); AppDirs = @("$LocalPrograms\Kiro"); Uninstall = @('Kiro') }
+    'trae'       = @{ Commands = @('trae'); AppDirs = @("$LocalPrograms\Trae"); Uninstall = @('TRAE') }
+    'trae-cn'    = @{ Commands = @('trae-cn'); AppDirs = @("$LocalPrograms\TRAE CN", "$LocalPrograms\Trae CN"); Uninstall = @('TRAE') }
+    'workbuddy'  = @{ AppDirs = @("$LocalPrograms\WorkBuddy", "$LocalPrograms\WorkBuddyAI"); Uninstall = @('WorkBuddy'); Appx = @('WorkBuddy') }
+    'codebuddy'  = @{ AppDirs = @("$LocalPrograms\CodeBuddy"); Uninstall = @('^CodeBuddy') }
+    'codebuddycn'= @{ AppDirs = @("$LocalPrograms\CodeBuddy CN"); Uninstall = @('CodeBuddy CN') }
+    'dsh'        = @{ AppDirs = @("$LocalPrograms\DeepSeek Harness"); Uninstall = @('DeepSeek Harness') }
+    'antigravity'= @{ AppDirs = @("$LocalPrograms\antigravity"); Uninstall = @('Antigravity') }
+    'marscode'   = @{ AppDirs = @("$LocalPrograms\MarsCode"); Uninstall = @('MarsCode') }
+    'zed'        = @{ Commands = @('zed'); AppDirs = @("$LocalPrograms\Zed"); Uninstall = @('^Zed') }
+    'aider'      = @{ Commands = @('aider'); Uninstall = @('Aider') }
+    'openhands'  = @{ Commands = @('openhands'); Uninstall = @('OpenHands') }
+    'jetbrains'  = @{ Uninstall = @('JetBrains') }
 }
 
 # ---------------------------------------------------------------------------
@@ -781,7 +804,7 @@ Key rules:
 # `-Clients all` creates one for every supported client. A directory counts as
 # a real client only when it holds something this installer did not write.
 # ---------------------------------------------------------------------------
-$script:SharedRuleNames = @('AGENTS.md', 'CONVENTIONS.md', 'copilot-instructions.md')
+$script:SharedRuleNames = @('AGENTS.md', 'CONVENTIONS.md', 'copilot-instructions.md', 'global_rules.md')
 
 function Test-InstallerArtifact {
     param([string]$Path)
@@ -828,6 +851,134 @@ function Test-ForeignContent {
     return $false
 }
 
+# True for any file this installer wrote, including a marked block inside a
+# file the user also owns. Used to decide whether a file counts as client
+# activity: our own write must never make a client look "recently used".
+function Test-WrittenByInstaller {
+    param([string]$Path)
+
+    if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) { return $false }
+
+    $leaf = Split-Path -Leaf $Path
+    $base = $leaf -replace '\.bak-\d{8}-\d{6}$', ''
+
+    if ($base -eq ($SkillName + '.md') -or
+        $base -eq ($SkillName + '.mdc') -or
+        $base -eq ($SkillName + '.instructions.md')) {
+        return $true
+    }
+    if ($script:SharedRuleNames -contains $base) {
+        $text = Get-Content -LiteralPath $Path -Raw -ErrorAction SilentlyContinue
+        return ($null -ne $text -and $text -match '<!-- BEGIN wpf-ui-style -->')
+    }
+    return $false
+}
+
+# Newest file in the tree that this installer did not write, or $null when the
+# tree holds nothing but our own artifacts. Used to tell a live client profile
+# from a leftover one. The scan stops as soon as it finds a file that is
+# already newer than the cutoff, so live clients stay cheap to check.
+function Get-NewestForeignFile {
+    param([string]$Path, [datetime]$Cutoff)
+
+    $newest = $null
+    $queue = New-Object System.Collections.Queue
+    $queue.Enqueue(@($Path, 0))
+
+    while ($queue.Count -gt 0) {
+        $entry = $queue.Dequeue()
+        $dir = $entry[0]
+        $depth = [int]$entry[1]
+        if ($depth -gt 6) { continue }
+
+        foreach ($child in @(Get-ChildItem -LiteralPath $dir -Force -ErrorAction SilentlyContinue)) {
+            if ($child.PSIsContainer) {
+                if (Test-InstallerArtifact $child.FullName) { continue }
+                $queue.Enqueue(@($child.FullName, $depth + 1))
+                continue
+            }
+            if (Test-InstallerArtifact $child.FullName) { continue }
+            if (Test-WrittenByInstaller $child.FullName) { continue }
+            if ($null -eq $newest -or $child.LastWriteTime -gt $newest.LastWriteTime) { $newest = $child }
+            # Already newer than the cutoff: nothing older can change the
+            # verdict, so stop walking this branch.
+            if ($newest.LastWriteTime -ge $Cutoff) { return $newest }
+        }
+    }
+    return $newest
+}
+
+# ---------------------------------------------------------------------------
+# Windows installation evidence.
+# An app directory that still holds its executable, an uninstall-registry
+# entry, or an MSIX package all prove the client software is present. A
+# directory that only holds leftovers proves nothing.
+# ---------------------------------------------------------------------------
+$script:UninstallIndex = $null
+$script:AppxIndex = $null
+
+function Get-UninstallIndex {
+    if ($null -ne $script:UninstallIndex) { return $script:UninstallIndex }
+
+    $entries = @()
+    $roots = @(
+        'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall',
+        'HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall',
+        'HKLM:\Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall'
+    )
+    foreach ($root in $roots) {
+        if (-not (Test-Path -LiteralPath $root)) { continue }
+        foreach ($key in @(Get-ChildItem -LiteralPath $root -ErrorAction SilentlyContinue)) {
+            $props = Get-ItemProperty -LiteralPath $key.PSPath -ErrorAction SilentlyContinue
+            if ($props -and $props.DisplayName) {
+                $entries += [pscustomobject]@{
+                    Name = $props.DisplayName
+                    Location = $props.InstallLocation
+                }
+            }
+        }
+    }
+    $script:UninstallIndex = $entries
+    return $entries
+}
+
+function Get-AppxIndex {
+    if ($null -ne $script:AppxIndex) { return $script:AppxIndex }
+
+    $names = @()
+    if ($env:OS -eq 'Windows_NT') {
+        try {
+            $raw = & powershell.exe -NoProfile -Command `
+                "Get-AppxPackage | ForEach-Object { `$_.Name }" 2>$null
+            foreach ($line in @($raw)) {
+                $name = "$line".Trim()
+                if ($name) { $names += $name }
+            }
+        }
+        catch {
+            $names = @()
+        }
+    }
+    $script:AppxIndex = $names
+    return $names
+}
+
+# An app directory only proves the client is installed when it still holds an
+# executable. A folder kept after an uninstall only holds leftovers.
+function Test-AppDirHasExecutable {
+    param([string]$Path)
+
+    if (-not (Test-Path -LiteralPath $Path -PathType Container)) { return $false }
+    foreach ($exe in @(Get-ChildItem -LiteralPath $Path -Filter *.exe -File -Force -ErrorAction SilentlyContinue)) {
+        return $true
+    }
+    # Electron / VS Code forks keep the binary in a nested folder.
+    foreach ($child in @(Get-ChildItem -LiteralPath $Path -Directory -Force -ErrorAction SilentlyContinue)) {
+        if (Test-AppDirHasExecutable $child.FullName) { return $true }
+    }
+    return $false
+}
+
 function Get-ClientEvidence {
     param([string]$Name)
 
@@ -841,13 +992,36 @@ function Get-ClientEvidence {
             if ($cmd -and (Get-Command $cmd -ErrorAction SilentlyContinue)) { $evidence += "command $cmd" }
         }
         foreach ($dir in @($probe.AppDirs)) {
-            if ($dir -and (Test-Path -LiteralPath (Resolve-TargetPath $dir $Root))) { $evidence += "app $dir" }
+            if (-not $dir) { continue }
+            $resolved = Resolve-TargetPath $dir $Root
+            if (Test-AppDirHasExecutable $resolved) { $evidence += "app $resolved" }
+        }
+        foreach ($pattern in @($probe.Uninstall)) {
+            if (-not $pattern) { continue }
+            foreach ($item in @(Get-UninstallIndex)) {
+                if ($item.Name -match $pattern) { $evidence += "installed $($item.Name)"; break }
+            }
+        }
+        foreach ($pattern in @($probe.Appx)) {
+            if (-not $pattern) { continue }
+            foreach ($appxName in @(Get-AppxIndex)) {
+                if ($appxName -like "*$pattern*") { $evidence += "appx $appxName"; break }
+            }
         }
     }
+
+    # A config profile proves the client ran, but only while it is still being
+    # written to. An old profile is a leftover of an uninstalled client.
+    $cutoff = (Get-Date).AddDays(-$MaxAgeDays)
     foreach ($path in @($entry.Detect)) {
         $resolved = Resolve-TargetPath $path $Root
-        if (-not (Test-Path -LiteralPath $resolved)) { continue }
-        if (Test-ForeignContent $resolved) { $evidence += "data $resolved" }
+        if (-not (Test-Path -LiteralPath $resolved -PathType Container)) { continue }
+        $newest = Get-NewestForeignFile $resolved $cutoff
+        if ($null -eq $newest) { continue }
+        $ageDays = ((Get-Date) - $newest.LastWriteTime).TotalDays
+        if ($ageDays -le $MaxAgeDays) {
+            $evidence += "data $resolved (written $([int]$ageDays)d ago)"
+        }
     }
     return $evidence
 }
@@ -946,7 +1120,12 @@ function Remove-ClientArtifacts {
             }
             else {
                 if (-not $Preview) {
+                    # Keep the original mtime: this is a cleanup of our own
+                    # block, not client activity, and a refreshed timestamp
+                    # would make an uninstalled client look recently used.
+                    $keep = (Get-Item -LiteralPath $target).LastWriteTime
                     [IO.File]::WriteAllText($target, $stripped + "`r`n", (New-Object Text.UTF8Encoding($false)))
+                    (Get-Item -LiteralPath $target).LastWriteTime = $keep
                 }
                 $removed += "$target (block removed)"
             }
