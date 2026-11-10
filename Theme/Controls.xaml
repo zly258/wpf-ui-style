@@ -653,16 +653,27 @@
                                 BorderBrush="{StaticResource Brush.Border.Control}"
                                 BorderThickness="1"
                                 VerticalAlignment="Center">
-                            <Path x:Name="Check"
-                                  Data="M 2.5 7 L 5.5 10 L 11 3.5"
-                                  Stroke="{StaticResource Brush.OnAccent}"
-                                  StrokeThickness="1.6"
-                                  StrokeStartLineCap="Round"
-                                  StrokeEndLineCap="Round"
-                                  StrokeLineJoin="Round"
-                                  HorizontalAlignment="Center"
-                                  VerticalAlignment="Center"
-                                  Visibility="Collapsed" />
+                            <Grid>
+                                <!-- 对勾用“填充多边形”而不是细描边：
+                                     16px 靶心下描边会发虚、显细；填充路径边缘更实、更锐利。
+                                     几何在 16×16 视口内左右上下都居中（2.6~13.4 / 3.8~12.2），
+                                     视觉重量与蓝色填充块匹配。 -->
+                                <Path x:Name="Check"
+                                      Data="M 2.6 8.3 L 6.5 12.2 L 13.4 5.3 L 11.9 3.8 L 6.5 9.2 L 4.1 6.8 Z"
+                                      Fill="{StaticResource Brush.OnAccent}"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      Visibility="Collapsed" />
+                                <!-- 不确定态（IsChecked = null）：全选框部分选中时显示横杠，
+                                     而不是退化成“空框”，避免与“一个都没选”混淆。 -->
+                                <Rectangle x:Name="Dash"
+                                           Width="8" Height="2"
+                                           RadiusX="1" RadiusY="1"
+                                           Fill="{StaticResource Brush.OnAccent}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Visibility="Collapsed" />
+                            </Grid>
                         </Border>
                         <ContentPresenter Margin="8,0,0,0"
                                           VerticalAlignment="Center"
@@ -680,11 +691,35 @@
                             <Setter TargetName="Box" Property="BorderBrush" Value="{StaticResource Brush.Accent}" />
                             <Setter TargetName="Check" Property="Visibility" Value="Visible" />
                         </Trigger>
+                        <!-- 未确定态：勾选块 + 横杠 -->
+                        <Trigger Property="IsChecked" Value="{x:Null}">
+                            <Setter TargetName="Box" Property="Background" Value="{StaticResource Brush.Accent}" />
+                            <Setter TargetName="Box" Property="BorderBrush" Value="{StaticResource Brush.Accent}" />
+                            <Setter TargetName="Dash" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                        <!-- 已勾选 + 悬停：加深填充，给出明确反馈（白勾仍然清晰） -->
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsChecked" Value="True" />
+                                <Condition Property="IsMouseOver" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Box" Property="Background" Value="{StaticResource Brush.Accent.Hover}" />
+                            <Setter TargetName="Box" Property="BorderBrush" Value="{StaticResource Brush.Accent.Hover}" />
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsChecked" Value="{x:Null}" />
+                                <Condition Property="IsMouseOver" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Box" Property="Background" Value="{StaticResource Brush.Accent.Hover}" />
+                            <Setter TargetName="Box" Property="BorderBrush" Value="{StaticResource Brush.Accent.Hover}" />
+                        </MultiTrigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Foreground" Value="{StaticResource Brush.Text.Disabled}" />
                             <Setter TargetName="Box" Property="Background" Value="{StaticResource Brush.Control.Disabled}" />
                             <Setter TargetName="Box" Property="BorderBrush" Value="{StaticResource Brush.Border}" />
-                            <Setter TargetName="Check" Property="Stroke" Value="{StaticResource Brush.Text.Disabled}" />
+                            <Setter TargetName="Check" Property="Fill" Value="{StaticResource Brush.Text.Disabled}" />
+                            <Setter TargetName="Dash" Property="Fill" Value="{StaticResource Brush.Text.Disabled}" />
                             <Setter Property="Cursor" Value="Arrow" />
                         </Trigger>
                     </ControlTemplate.Triggers>

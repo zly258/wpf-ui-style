@@ -227,13 +227,19 @@ WPF 会按声明顺序应用 `Trigger`，后声明的覆盖前面的。不要靠
 | Focused | `Brush.Text.Primary` | `Brush.Surface` | `Brush.Focus` |
 | Checked | `Brush.Text.Primary` | `Brush.Accent` | `Brush.Accent` |
 | Checked+Hover | `Brush.Text.Primary` | `Brush.Accent.Hover` | `Brush.Accent.Hover` |
+| Indeterminate (`IsChecked = null`) | `Brush.Text.Primary` | `Brush.Accent` | `Brush.Accent` |
+| Indeterminate+Hover | `Brush.Text.Primary` | `Brush.Accent.Hover` | `Brush.Accent.Hover` |
 | Disabled | `Brush.Text.Disabled` | `Brush.Control.Disabled` | `Brush.Border` |
 
 - 勾选符号/圆点：`Brush.OnAccent`（白）。
 - 禁用时勾选符号改为 `Brush.Text.Disabled`，不要保留白色。
 - 文本通过 `ContentPresenter TextElement.Foreground="{TemplateBinding Foreground}"` 传递。
 - 不要用 `Opacity` 表示禁用。
-- **方框/圆环尺寸固定为 `Layout.CheckBox.Size` / `Layout.RadioButton.Size`（16×16），不得缩小**；勾选符号使用圆头端点、描边 1.6px，方框与文字间距 8px。
+- **方框/圆环尺寸固定为 `Layout.CheckBox.Size` / `Layout.RadioButton.Size`（16×16），不得缩小**；方框与文字间距 8px。
+- **对勾用填充路径，不用细描边**：16px 靶心下 1.6px 描边会发虚、显细；填充多边形边缘更实、更锐利。
+- **对勾必须在 16×16 视口内居中**：几何左右/上下中心都应落在 8±0.6，且跨距 ≥6px（太小会看不清，太大顶到边框）。
+- **三态必须区分**：`IsChecked = null`（全选框部分选中）要显示「勾选块 + 横杠」，不能退化成空框——否则与“一个都没选”无法区分。
+- 禁用勾/横杠：`Fill` 切到 `Brush.Text.Disabled`，不留白色 glyph。
 
 
 ---

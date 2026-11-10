@@ -91,6 +91,13 @@
 - 不要给 `TextBox` / `PasswordBox` / `ComboBox` 设 `HorizontalContentAlignment="Left"`。
 - 标签页选中态不能只剩一条 1px 横线；仍禁止用 tab 承载整窗多任务导航。
 
+## 复选框
+
+- 对勾用**填充路径**（不是 1.6px 细描边），在 16×16 视口内居中（2.6~13.4 / 3.8~12.2）；
+- 三态必须区分：`IsChecked="True"` 白勾、`{x:Null}` 白横杠、`False` 空框；
+- 禁用态勾/横杠切 `Brush.Text.Disabled`，不留白色 glyph；
+- 全选框用 `IsThreeState="True"` + `Focusable="False"`（避免启动时抢焦点框）。
+
 ## 批量操作条（Zone 3 工具条）
 
 ```xml

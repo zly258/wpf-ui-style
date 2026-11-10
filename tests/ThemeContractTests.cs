@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -844,6 +845,76 @@ namespace WpfStyles.Tests
                 SetterValue(strip, "BorderBrush", "ToolStrip"));
             Assert.Equal("{DynamicResource Layout.ToolBarPadding}",
                 SetterValue(strip, "Padding", "ToolStrip"));
+        }
+
+        [Fact]
+        public void CheckBox_CheckIsAFilledCenteredGlyph()
+        {
+            XDocument controls = Load(ControlsPath);
+            XElement check = controls.Descendants()
+                .FirstOrDefault(e => e.Name.LocalName == "Path"
+                    && (string)e.Attribute(X + "Name") == "Check");
+            Assert.NotNull(check);
+
+            // 对勾必须是填充路径：细描边在 16px 下会发虚、显细
+            Assert.Null(check.Attribute("Stroke"));
+            Assert.NotNull(check.Attribute("Fill"));
+
+            // 几何在 16×16 视口内左右上下居中，且足够大（>=6px 跨距）
+            MatchCollection numbers = Regex.Matches((string)check.Attribute("Data"), @"-?\d+(?:\.\d+)?");
+            var xs = new List<double>();
+            var ys = new List<double>();
+            for (int i = 0; i + 1 < numbers.Count; i += 2)
+            {
+                xs.Add(double.Parse(numbers[i].Value, CultureInfo.InvariantCulture));
+                ys.Add(double.Parse(numbers[i + 1].Value, CultureInfo.InvariantCulture));
+            }
+
+            Assert.True(xs.Count >= 3, "check geometry is too simple");
+            Assert.True(Math.Abs((xs.Min() + xs.Max()) / 2 - 8.0) <= 0.6, "check is not horizontally centered");
+            Assert.True(Math.Abs((ys.Min() + ys.Max()) / 2 - 8.0) <= 0.6, "check is not vertically centered");
+            Assert.True(xs.Max() - xs.Min() >= 6.0, "check is too small horizontally");
+            Assert.True(ys.Max() - ys.Min() >= 5.0, "check is too small vertically");
+        }
+
+        [Fact]
+        public void CheckBox_SupportsIndeterminateAndDisabledStates()
+        {
+            XDocument controls = Load(ControlsPath);
+            XElement style = controls.Root.Elements()
+                .FirstOrDefault(e => e.Name.LocalName == "Style"
+                    && (string)e.Attribute("TargetType") == "{x:Type CheckBox}"
+                    && e.Attribute(X + "Key") == null);
+            Assert.NotNull(style);
+
+            XElement dash = style.Descendants()
+                .FirstOrDefault(e => e.Name.LocalName == "Rectangle"
+                    && (string)e.Attribute(X + "Name") == "Dash");
+            Assert.NotNull(dash);
+
+            // 未确定态（全选框部分选中）不能退化成空框
+            XElement indeterminate = style.Descendants()
+                .FirstOrDefault(e => e.Name.LocalName == "Trigger"
+                    && (string)e.Attribute("Property") == "IsChecked"
+                    && (string)e.Attribute("Value") == "{x:Null}");
+            Assert.NotNull(indeterminate);
+            Assert.Contains(indeterminate.Elements(),
+                e => (string)e.Attribute("TargetName") == "Dash"
+                    && (string)e.Attribute("Property") == "Visibility"
+                    && (string)e.Attribute("Value") == "Visible");
+
+            // 禁用态：勾与横杠都转灰，不留白 glyph
+            XElement disabled = style.Descendants()
+                .FirstOrDefault(e => e.Name.LocalName == "Trigger"
+                    && (string)e.Attribute("Property") == "IsEnabled"
+                    && (string)e.Attribute("Value") == "False");
+            Assert.NotNull(disabled);
+            Assert.Contains(disabled.Elements(),
+                e => (string)e.Attribute("TargetName") == "Check"
+                    && (string)e.Attribute("Property") == "Fill");
+            Assert.Contains(disabled.Elements(),
+                e => (string)e.Attribute("TargetName") == "Dash"
+                    && (string)e.Attribute("Property") == "Fill");
         }
 
         [Fact]
