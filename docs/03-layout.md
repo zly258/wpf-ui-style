@@ -812,3 +812,79 @@ AI 生成 WPF 界面时极易犯以下**四大结构性坏味道**：
 - 按钮高度由 `Layout.ControlHeight` 决定，**上下 Padding 固定为 0**，不要用 padding 把按钮垫高；
 - 同一行按钮高度必须一致：`Button.Primary.Small` / `Button.Secondary.Small` 用 `ControlHeight.Small`，
   默认按钮 / 输入框 / 下拉框用 `ControlHeight`，不要混档。
+
+---
+
+## 17. 表单对齐与窄面板
+
+### 17.1 两种合法骨架
+
+**宽面板（≥ 520 DIP）：两列，一个 Grid**
+
+```xml
+<Grid>
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto" MinWidth="{StaticResource Layout.FormLabelMinWidth}" />
+        <ColumnDefinition Width="*" MinWidth="{StaticResource Layout.InputMinWidth}" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <TextBlock Text="服务地址" Style="{StaticResource Text.Label}" />
+    <TextBox Grid.Column="1" Text="{Binding Url}" />
+
+    <TextBlock Grid.Row="1" Text="模型名称" Style="{StaticResource Text.Label}" />
+    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Model}" />
+</Grid>
+```
+
+- 一个表单只定义一个 Grid；行只声明 `Grid.Row`，**不要每行再套一个 Grid**，否则标签列宽各行不同，视觉上就是“没对齐”。
+- 标签列 `Auto` + `MinWidth` 由最长标签撑开；短标签后面的留白是列对齐的正常结果。
+
+**窄面板 / 停靠窗（< 520 DIP）：单列，标签在上**
+
+```xml
+<StackPanel Style="{StaticResource FormStack}">
+    <TextBlock Text="服务地址" Style="{StaticResource Text.FieldLabel}" />
+    <TextBox Text="{Binding Url}" />
+</StackPanel>
+```
+
+- 标签与输入框同一条左基线；
+- 不依赖左右列宽，不会被输入列的 `MinWidth` 挤出可视区；
+- 宿主宽度可能变化时（属性面板、侧栏、停靠窗）优先使用单列。
+
+### 17.2 控件内容对齐
+
+| 控件 | 内容对齐 | 说明 |
+|---|---|---|
+| `TextBox` / `PasswordBox` | 左对齐 | 文本宿主 `Stretch`，文字从 8px 内边距开始 |
+| `ComboBox` | 左对齐 | `HorizontalContentAlignment="Left"` |
+| 数字/金额单元格 | 允许右对齐 | 用 `TextAlignment="Right"`，表头注明单位 |
+| 普通表单字段 | 禁止居中 | `HorizontalContentAlignment="Center"` / `TextAlignment="Center"` 会让标签与控件看起来错位 |
+
+`LayoutCheck` 会对 `TextBox` / `PasswordBox` / `ComboBox` / `RichTextBox` 的 `Center` 对齐报 WARN。
+
+### 17.3 GroupBox 基线
+
+主题模板把 `Header` 与内容放在同一张卡片、同一 `Padding` 容器中：
+
+```text
+┌ 服务连接 ───────────────────────────┐
+│ 服务地址  [____________________]    │
+│ 模型名称  [____________________]    │
+└─────────────────────────────────────┘
+```
+
+标题、标签、控件共享同一条左基线。业务 XAML 不要再给标题或内容加负 `Margin` 去“对齐”。
+
+### 17.4 自查
+
+- [ ] 宽表单只有一个 Grid，所有行共享列定义。
+- [ ] 标签列 `Auto` + `MinWidth`，输入列 `*` + `MinWidth`，没有写死输入框 `Width`。
+- [ ] 窄面板使用 `FormStack` + `Text.FieldLabel`，标签与控件都从左边开始。
+- [ ] 输入框/下拉框文字左对齐，没有 `Center`。
+- [ ] GroupBox 标题与内容左基线一致，没有负 `Margin`。
+- [ ] 在 150% DPI 和宿主最小宽度下，输入框没有被挤出可视区。

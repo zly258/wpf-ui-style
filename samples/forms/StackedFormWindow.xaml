@@ -1,0 +1,59 @@
+<!--
+    窄面板/停靠窗的单列表单骨架。
+
+    适用：宿主宽度可能小于 520 DIP 的停靠窗、属性面板、侧边设置栏。
+    关键：
+      1. 标签在上、控件在下，两者都从左边开始；
+      2. 不需要左右两列，因此不会被输入列的 MinWidth 挤出可视区；
+      3. 只保留一层垂直 ScrollViewer，窗口用 SizeToContent="Height"。
+
+-->
+<Window x:Class="YourApp.StackedFormWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="服务连接设置"
+        SizeToContent="Height"
+        Width="380"
+        MinWidth="320"
+        MinHeight="360"
+        WindowStartupLocation="CenterScreen">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Margin="{StaticResource Layout.WindowPadding}">
+
+            <TextBlock Text="服务连接" Style="{StaticResource Text.Title}" FontWeight="SemiBold" />
+            <TextBlock Text="窄面板使用单列：标签与输入框都从左边开始。"
+                       Style="{StaticResource Text.Caption}" Margin="0,3,0,10" />
+
+            <StackPanel Style="{StaticResource FormStack}">
+                <TextBlock Text="服务地址" Style="{StaticResource Text.FieldLabel}" />
+                <TextBox Text="http://127.0.0.1:8080/v1" />
+            </StackPanel>
+
+            <StackPanel Style="{StaticResource FormStack}">
+                <TextBlock Text="模型名称" Style="{StaticResource Text.FieldLabel}" />
+                <TextBox Text="demo-translation-model" />
+            </StackPanel>
+
+            <StackPanel Style="{StaticResource FormStack}">
+                <TextBlock Text="超时（秒）" Style="{StaticResource Text.FieldLabel}" />
+                <TextBox Text="300" />
+            </StackPanel>
+
+            <StackPanel Style="{StaticResource FormStack}">
+                <TextBlock Text="目标语言" Style="{StaticResource Text.FieldLabel}" />
+                <ComboBox SelectedIndex="0">
+                    <ComboBoxItem Content="英语 (en)" />
+                    <ComboBoxItem Content="德语 (de)" />
+                    <ComboBoxItem Content="日语 (ja)" />
+                </ComboBox>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                <Button Content="取消" IsCancel="True" Margin="0,0,8,0" />
+                <Button Content="保存" Style="{StaticResource Button.Primary}" IsDefault="True" />
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</Window>

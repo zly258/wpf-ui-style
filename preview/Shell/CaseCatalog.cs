@@ -46,6 +46,13 @@ namespace WpfStylePreview.Shell
             },
             new CaseDescriptor
             {
+                Key = "form-layout", Category = "基础",
+                Title = "表单对齐", Subtitle = "宽面板两列、窄面板单列，标签与控件共享左基线",
+                Width = 1160, Height = 720,
+                Create = () => new FormLayoutView()
+            },
+            new CaseDescriptor
+            {
                 Key = "safeform", Category = "基础",
                 Title = "安全表单", Subtitle = "标签不裁、值不藏、按钮不被内容顶出",
                 Width = 820, Height = 560,

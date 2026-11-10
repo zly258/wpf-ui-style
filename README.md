@@ -111,13 +111,14 @@ wpf-styles/
 ├─ samples/                          ← 按用途分类的可复制 XAML
 │  ├─ forms/
 │  │  ├─ SafeFormWindow.xaml         ← 安全表单骨架
-│  │  └─ TabsSettingsWindow.xaml     ← 标签页 + 输入占满
+│  │  ├─ TabsSettingsWindow.xaml     ← 标签页 + 输入占满
+│  │  └─ StackedFormWindow.xaml      ← 窄面板单列表单
 │  ├─ tables/EditableTableWindow.xaml
 │  ├─ layouts/WorkbenchWindow.xaml
 │  ├─ dialogs/WizardWindow.xaml
 │  ├─ icons/IconGalleryWindow.xaml
 │  └─ README.md
-├─ preview/                          ← 可运行案例中心（侧边导航 + 9 个案例页 + 密度切换 + 截图）
+├─ preview/                          ← 可运行案例中心（侧边导航 + 10 个案例页 + 密度切换 + 截图）
 ├─ tools/
 │  ├─ ContrastCheck.py               ← 对比度自动检查（Python 3 标准库）
 │  ├─ LayoutCheck.py                 ← 布局/防截断/TabControl 规则自动检查

@@ -1367,3 +1367,54 @@ DatePicker 的弹层里放的是 **DatePicker 自己创建的 Calendar 实例**�
 - 选定一档密度后，所有控件引用同一组 `Layout.*`，不要在业务 XAML 写死高度。
 - 工具条/表格行内统一用 `Layout.ControlHeight.Small`，主表单统一用 `Layout.ControlHeight`。
 - `LayoutCheck` 会检查 `Padding`/`Height` 硬编码；`dotnet test` 会检查三档键集与递增关系。
+
+---
+
+## 22. 标签与输入框/下拉框不对齐
+
+**症状**
+
+表单里标签靠左，输入框和下拉框却离得很远；窄停靠窗里甚至只看到标签，输入控件被挤到右侧或裁掉。
+
+**根因**
+
+1. 每一行用独立的 `Grid` / `StackPanel`，标签列宽各行不同；
+2. 标签列和输入列没有共享一个 Grid，或者标签上加了局部 `Margin` / `HorizontalAlignment`；
+3. 宿主宽度小于两列的最小宽度（标签 `MinWidth` + 输入 `MinWidth`），输入列被挤出可视区；
+4. 控件被局部设置了 `HorizontalContentAlignment="Center"` 或 `TextAlignment="Center"`。
+
+**修复**
+
+宽面板（≥ 520 DIP）：
+
+```xml
+<Grid>
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto" MinWidth="{StaticResource Layout.FormLabelMinWidth}" />
+        <ColumnDefinition Width="*" MinWidth="{StaticResource Layout.InputMinWidth}" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+    <TextBlock Text="服务地址" Style="{StaticResource Text.Label}" />
+    <TextBox Grid.Column="1" />
+    <TextBlock Grid.Row="1" Text="模型名称" Style="{StaticResource Text.Label}" />
+    <TextBox Grid.Row="1" Grid.Column="1" />
+</Grid>
+```
+
+窄面板（< 520 DIP）改为单列：
+
+```xml
+<StackPanel Style="{StaticResource FormStack}">
+    <TextBlock Text="服务地址" Style="{StaticResource Text.FieldLabel}" />
+    <TextBox />
+</StackPanel>
+```
+
+**验证**
+
+- `LayoutCheck --strict`：0 错误；居中输入内容会报 WARN；
+- 在 150% DPI 与宿主最小宽度下，输入框仍完整可见；
+- 目视确认标签与控件共享同一条左基线。

@@ -101,7 +101,7 @@ namespace WpfStylePreview
             if (all)
             {
                 foreach (var name in new[] { "overview", "controls", "safeform", "settings",
-                                             "editable-table", "compare", "workbench",
+                                             "form-layout", "editable-table", "compare", "workbench",
                                              "wizard", "dashboard" })
                 {
                     string dir = Path.GetDirectoryName(Path.GetFullPath(shot ?? "shots/out.png"));
@@ -164,6 +164,8 @@ namespace WpfStylePreview
                     return Host("dashboard");
                 case "case-compare":
                     return Host("compare");
+                case "form-layout":
+                    return Host("form-layout");
                 case "case-settings":
                     return Host("settings");
                 case "layouts":

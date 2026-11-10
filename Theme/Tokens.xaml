@@ -352,6 +352,14 @@
         <Setter Property="LineHeight" Value="{StaticResource LineHeight.Caption}" />
     </Style>
 
+    <!-- 窄面板/单列表单的字段标签：标签在上，控件在下，两者左对齐。 -->
+    <Style x:Key="Text.FieldLabel" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource Text.Label}">
+        <Setter Property="FontSize" Value="{StaticResource FontSize.Caption}" />
+        <Setter Property="Foreground" Value="{StaticResource Brush.Text.Secondary}" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="Margin" Value="0,0,0,3" />
+    </Style>
+
     <Style x:Key="Text.RoleLabel" TargetType="{x:Type TextBlock}">
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Caption}" />

@@ -363,6 +363,13 @@
         <Setter Property="VerticalAlignment" Value="Top" />
     </Style>
 
+    <!-- 窄面板/单列表单骨架：标签在上、控件在下，全部左对齐。
+         适用于停靠窗、属性面板、宽度可能小于 520 DIP 的宿主。 -->
+    <Style x:Key="FormStack" TargetType="{x:Type StackPanel}">
+        <Setter Property="Margin" Value="{DynamicResource Layout.FormRowMargin}" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+    </Style>
+
     <Style x:Key="PasswordBox.Base" TargetType="{x:Type PasswordBox}">
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
@@ -757,28 +764,26 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type GroupBox}">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <ContentPresenter Grid.Row="0"
-                                          Margin="0,0,0,6"
-                                          Content="{TemplateBinding Header}"
-                                          ContentTemplate="{TemplateBinding HeaderTemplate}"
-                                          RecognizesAccessKey="False"
-                                          TextElement.FontSize="{StaticResource FontSize.Section}"
-                                          TextElement.FontWeight="Normal"
-                                          TextElement.Foreground="{StaticResource Brush.Text.Primary}" />
-                        <Border Grid.Row="1"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="{StaticResource Radius.Card}"
-                                SnapsToDevicePixels="True">
-                            <ContentPresenter Margin="{TemplateBinding Padding}" />
-                        </Border>
-                    </Grid>
+                    <!-- 标题与内容放在同一张卡片、同一内边距里：
+                         标题、标签、输入控件共享同一条左基线，避免
+                         “标题贴边、内容缩进 10px”被误读为没有左对齐。 -->
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{StaticResource Radius.Card}"
+                            SnapsToDevicePixels="True">
+                        <DockPanel Margin="{TemplateBinding Padding}">
+                            <ContentPresenter DockPanel.Dock="Top"
+                                              Margin="0,0,0,6"
+                                              Content="{TemplateBinding Header}"
+                                              ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                              RecognizesAccessKey="False"
+                                              TextElement.FontSize="{StaticResource FontSize.Section}"
+                                              TextElement.FontWeight="Normal"
+                                              TextElement.Foreground="{StaticResource Brush.Text.Primary}" />
+                            <ContentPresenter />
+                        </DockPanel>
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

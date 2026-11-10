@@ -299,6 +299,23 @@ namespace WpfStylePreview
             }
         }
 
+        private static int IndexOfNavItem(ListBox nav, string title)
+        {
+            if (nav == null) return -1;
+
+            for (int i = 0; i < nav.Items.Count; i++)
+            {
+                object item = nav.Items[i];
+                var property = item?.GetType().GetProperty("Title");
+                if (property != null && string.Equals((string)property.GetValue(item), title, StringComparison.Ordinal))
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
         private static void TestShell(Window window, WindowTestReport report, string shotDir, double scale)
         {
             var root = (FrameworkElement)window.Content;
@@ -309,11 +326,12 @@ namespace WpfStylePreview
 
             int step = 1;
 
-            // Step 1: 导航到“工程工作台”（索引 6）
-            if (nav != null && host != null && nav.Items.Count > 6)
+            // Step 1: 导航到“工程工作台”（按标题查找，避免案例顺序变化导致索引失效）
+            int workbenchIndex = IndexOfNavItem(nav, "工程工作台");
+            if (nav != null && host != null && workbenchIndex >= 0)
             {
                 string before = title?.Text ?? "<null>";
-                nav.SelectedIndex = 6;
+                nav.SelectedIndex = workbenchIndex;
                 root.UpdateLayout();
                 string after = title?.Text ?? "<null>";
                 bool pass = host.Content != null &&
@@ -334,10 +352,11 @@ namespace WpfStylePreview
                 });
             }
 
-            // Step 2: 切换到“可编辑数据表格”（索引 4）
-            if (nav != null && host != null && nav.Items.Count > 4)
+            // Step 2: 切换到“可编辑数据表格”
+            int tableIndex = IndexOfNavItem(nav, "可编辑数据表格");
+            if (nav != null && host != null && tableIndex >= 0)
             {
-                nav.SelectedIndex = 4;
+                nav.SelectedIndex = tableIndex;
                 root.UpdateLayout();
                 bool pass = host.Content != null &&
                             host.Content.GetType().Name.Contains("EditableTableView") &&

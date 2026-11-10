@@ -16,7 +16,7 @@
 - `references/cheatsheet.md`：一页速查。
 - `references/xaml-snippets.md`：可复制片段（合并主题、密度、表单、表格、Tab、安全骨架）。
 - `samples/forms|tables|layouts|dialogs|icons/`：按用途分类的可复制窗口骨架。
-- `preview/`：可运行案例中心（侧边导航 + 9 个案例页，支持 `-page` / `-density` 与离屏截图）。
+- `preview/`：可运行案例中心（侧边导航 + 10 个案例页，支持 `-page` / `-density` 与离屏截图）。
 
 常用验证：
 

@@ -14,6 +14,7 @@ preview/
 ├─ Views/
 │  ├─ OverviewView.xaml      ← 首页：规范摘要 + 全部案例卡片
 │  ├─ ControlsGalleryView    ← 基础控件全览
+│  ├─ FormLayoutView         ← 表单对齐（宽面板两列 / 窄面板单列）
 │  ├─ SafeFormView           ← 安全表单骨架
 │  ├─ SettingsView           ← 密集设置表单
 │  ├─ EditableTableView      ← 可编辑数据表格
@@ -37,6 +38,7 @@ preview/
 |---|---|---|
 | `OverviewView` | `home` / `overview` | 首页：规范定位、三条核心约束、全部案例入口 |
 | `ControlsGalleryView` | `controls` | 按钮/输入/下拉/复选/标签页/密度等基础控件矩阵 |
+| `FormLayoutView` | `form-layout` | 表单对齐：宽面板两列、窄面板单列，标签与控件左对齐 |
 | `SafeFormView` | `safeform` | 标签不裁、值不藏、状态与按钮栏分行 |
 | `SettingsView` | `settings` | 三列并排的密集设置表单 |
 | `EditableTableView` | `editable-table` | 全选联动、单元格编辑、批量操作、分页 |

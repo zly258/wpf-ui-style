@@ -423,6 +423,32 @@ def check_tabcontrol_height(path: Path, text: str) -> None:
         )
 
 
+def check_centered_input_content(path: Path, text: str) -> None:
+    """Form inputs must read left-aligned; centering text in a field is almost always a mistake.
+
+    Numeric columns may intentionally use TextAlignment="Right"; center alignment is
+    reported because it makes labels, inputs and dropdowns look misaligned.
+    """
+    for match in ELEMENT_RE.finditer(text):
+        closing, name, attrs, self_closing = match.groups()
+        if closing or name not in ("TextBox", "PasswordBox", "ComboBox", "RichTextBox"):
+            continue
+        if not attrs:
+            continue
+
+        centered = (
+            re.search(r'HorizontalContentAlignment\s*=\s*"Center"', attrs)
+            or re.search(r'TextAlignment\s*=\s*"Center"', attrs)
+        )
+        if centered:
+            report(
+                "WARN",
+                path,
+                line_number(text, match.start()),
+                f'<{name}> sets centered content; form inputs and dropdowns should stay left-aligned',
+            )
+
+
 def check_duplicate_action_buttons(path: Path, text: str) -> None:
     """Detects multiple action buttons sharing the same generic action label
     (e.g. multiple '导出' or '保存' buttons scattered across different sections in the same window).
@@ -667,6 +693,7 @@ def check_file(path: Path, theme_dirs: set[str], theme_files: set[str]) -> None:
         check_tabcontrol_height(path, text)
         check_excessive_min_height(path, text)
         check_duplicate_action_buttons(path, text)
+        check_centered_input_content(path, text)
         check_redundant_demo_chatter(path, text)
 
     # 8. Nested ScrollViewer (skip theme/style templates: ComboBox popups legitimately nest)

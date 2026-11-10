@@ -638,3 +638,37 @@ static void ApplyDensity(string profile) // Compact / Medium / Relaxed
 - 选中态 = `Brush.Surface` 底 + 1px `Brush.Border` 描边 + 2px `Brush.Accent` 底条 + Accent 半粗文字；
 - 未选中悬停 = `Brush.Control.Hover` 底 + `Brush.Border` 描边；
 - 标签页只做局部切换；整窗多任务仍按 R12 拆窗口。
+
+---
+
+## 21. 窄面板单列表单（标签与控件左对齐）
+
+```xml
+<ScrollViewer VerticalScrollBarVisibility="Auto"
+              HorizontalScrollBarVisibility="Disabled">
+    <StackPanel Margin="{StaticResource Layout.WindowPadding}">
+        <TextBlock Text="服务连接" Style="{StaticResource Text.Title}" FontWeight="SemiBold" />
+
+        <StackPanel Style="{StaticResource FormStack}">
+            <TextBlock Text="服务地址" Style="{StaticResource Text.FieldLabel}" />
+            <TextBox Text="{Binding Url}" />
+        </StackPanel>
+
+        <StackPanel Style="{StaticResource FormStack}">
+            <TextBlock Text="模型名称" Style="{StaticResource Text.FieldLabel}" />
+            <TextBox Text="{Binding Model}" />
+        </StackPanel>
+
+        <StackPanel Style="{StaticResource FormStack}">
+            <TextBlock Text="超时（秒）" Style="{StaticResource Text.FieldLabel}" />
+            <TextBox Text="{Binding Timeout}" />
+        </StackPanel>
+    </StackPanel>
+</ScrollViewer>
+```
+
+要点：
+
+- 标签与输入框都从左边开始，不依赖左右列宽；
+- 适用宿主宽度可能小于 520 DIP 的停靠窗、属性面板、侧栏；
+- 宽面板仍用单 Grid 两列，见 `docs/03-layout.md` §17。

@@ -87,6 +87,7 @@ LayoutCheck 识别主题文件的方式：默认 `theme` 目录及 `Theme/Window
 | 日志/代码 TextBox 缺 `MaxHeight` | 可能导致高度无界增长 |
 | `TextWrapping="Wrap"` 配 `VerticalAlignment="Stretch"` | 建议用 `Top` |
 | 嵌套 `ScrollViewer` | 一处窗口只保留一层垂直滚动 |
+| 表单控件内容居中 | `TextBox`/`PasswordBox`/`ComboBox`/`RichTextBox` 使用 `Center` 对齐，标签与控件会显得错位 |
 
 固定窗口高度默认报 WARN；向导等“步骤切换必须保持外框稳定”的窗口，可在文件注释中写
 `layout-check: allow-fixed-window-height` 显式豁免（不要用于普通表单/设置窗口）。

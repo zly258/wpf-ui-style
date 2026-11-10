@@ -8,7 +8,8 @@
 samples/
 ├─ forms/
 │  ├─ SafeFormWindow.xaml        ← 安全表单：长标签/长值/状态行/底部栏
-│  └─ TabsSettingsWindow.xaml    ← 标签页设置：可见选中态 + 输入占满 + 防跳变
+│  ├─ TabsSettingsWindow.xaml    ← 标签页设置：可见选中态 + 输入占满 + 防跳变
+│  └─ StackedFormWindow.xaml     ← 窄面板单列表单：标签在上、控件在下
 ├─ tables/
 │  └─ EditableTableWindow.xaml   ← 可编辑表格：全选联动/单元格编辑/分页
 ├─ layouts/
@@ -37,6 +38,13 @@ samples/
 - 窗口 `SizeToContent="Height"` + `MinHeight`，内容区一层 `ScrollViewer`；
 - 状态文案独占一行，按钮栏独占一行；
 - 无负 `Margin`、无 `Canvas` 绝对定位、无省略号缺 `ToolTip`。
+
+### forms/StackedFormWindow.xaml
+
+- 窄面板（< 520 DIP）单列布局：标签在上、控件在下；
+- `FormStack` + `Text.FieldLabel`，标签与输入框共享左基线；
+- 不使用左右两列，避免输入列被 `MinWidth` 挤出可视区；
+- 适合停靠窗、属性面板、侧边设置栏。
 
 ### forms/TabsSettingsWindow.xaml
 

@@ -91,6 +91,24 @@
 - 不要给 `TextBox` / `PasswordBox` / `ComboBox` 设 `HorizontalContentAlignment="Left"`。
 - 标签页选中态不能只剩一条 1px 横线；仍禁止用 tab 承载整窗多任务导航。
 
+## 表单对齐（宽面板 / 窄面板）
+
+| 场景 | 骨架 | 规则 |
+|---|---|---|
+| 宽面板 ≥ 520 DIP | 一个 Grid：标签 `Auto+MinWidth` / 输入 `*+MinWidth` | 所有行共享列定义，禁止每行一个 Grid |
+| 窄面板 < 520 DIP | `FormStack` + `Text.FieldLabel` | 标签在上、控件在下，共享左基线 |
+| 控件内容 | `TextBox` / `ComboBox` 左对齐 | 禁止 `Center`；数值列可 `TextAlignment="Right"` |
+| GroupBox | 标题与内容同一内边距 | 不要用负 `Margin` 手工对位 |
+
+```xml
+<!-- 窄面板单列 -->
+<StackPanel Style="{StaticResource FormStack}">
+    <TextBlock Text="服务地址" Style="{StaticResource Text.FieldLabel}" />
+    <TextBox Text="{Binding Url}" />
+</StackPanel>
+```
+
+
 ## 防截断 / 防遮挡（显示不全与重叠）
 
 1. 标签列 `Width="Auto"` + `MinWidth="{StaticResource Layout.FormLabelMinWidth}"`（80）——

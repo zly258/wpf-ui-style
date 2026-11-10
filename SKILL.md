@@ -31,7 +31,7 @@ description: Apply and audit the WPF UI Skills style system (tokens, three-level
 - `tools/LayoutCheck.py`：布局/截断/多行文本/多Tab跳变静态规则检查（Python 3 标准库）。
 - `tools/ContrastCheck.py`：WCAG 颜色对比度自动化计算与检查。
 - `tests/ThemeContractTests.cs`：xUnit 契约测试（`dotnet test tests/WpfStyleContractTests.csproj`）。
-- `preview/`：WPF 案例中心（左侧分类导航 + 右侧 UserControl 案例页），支持 `-page` 选页、`-density` 换密度与 `-shot` 离屏截图。
+- `preview/`：WPF 案例中心（左侧分类导航 + 右侧 10 个 UserControl 案例页），支持 `-page` 选页、`-density` 换密度与 `-shot` 离屏截图。
 
 ---
 
@@ -173,6 +173,20 @@ description: Apply and audit the WPF UI Skills style system (tokens, three-level
 - **标签页仍是局部切换**：R12 的「窗口内禁止多 Tab 导航」继续生效；本样式用于分组设置、属性分类、画廊演示等局部区域。
 - **按钮边界可见**：默认按钮是「白底 + `Brush.Border.Control` 描边」。严禁把按钮描边改成 `Brush.Border` 或更浅的颜色，也不要用 `Opacity` 弱化。
 
+### R17. 表单对齐与窄面板 (Form Alignment & Narrow Panels)
+1. **宽面板（≥ 520 DIP）用两列**：标签列 `Width="Auto"` + `MinWidth="{StaticResource Layout.FormLabelMinWidth}"`，输入列 `Width="*"` + `MinWidth="{StaticResource Layout.InputMinWidth}"`；同一个表单**只定义一个 Grid**，所有行共享列定义。禁止每行一个 Grid、各自算标签宽度。
+2. **窄面板（< 520 DIP）用单列**：标签在上、控件在下，统一使用 `FormStack` + `Text.FieldLabel`：
+   ```xml
+   <StackPanel Style="{StaticResource FormStack}">
+       <TextBlock Text="服务地址" Style="{StaticResource Text.FieldLabel}" />
+       <TextBox Text="{Binding Url}" />
+   </StackPanel>
+   ```
+   宿主可能是停靠窗、属性面板或可缩放侧栏时，优先用单列，避免输入列被 `MinWidth` 挤出可视区。
+3. **控件内容左对齐**：`TextBox` / `PasswordBox` / `ComboBox` 内部文字默认左对齐；禁止设置 `HorizontalContentAlignment="Center"` 或 `TextAlignment="Center"`（数值列需要右对齐时用 `TextAlignment="Right"` 并在表头说明）。
+4. **GroupBox 标题与内容同基线**：主题模板把标题和内容放在同一内边距容器里，标题、标签、控件共享左基线；业务 XAML 不要再用负 `Margin` 手工对位。
+5. **不要用空白占位**：禁止用 `Margin` / 固定 `Width` / 空 `TextBlock` 把标签或控件"推到"期望位置；对齐应由 Grid 列或 `FormStack` 决定。
+
 ---
 
 ## 自动化验证流水线 (Verification Pipeline)
@@ -208,6 +222,8 @@ python tools/UiTest.py --xaml preview/Views/SafeFormView.xaml --shot .tmp-shots/
 - [ ] 控件尺寸/内边距引用 `Layout.*`，没有写死 `Height="32"` / `Padding="8,0"`；主题内部密度 token 使用 `DynamicResource`。
 - [ ] 单行/多行输入与下拉框内容区横向占满，右侧空白可点击聚焦。
 - [ ] 标签页选中态有 Surface 底 + 描边 + 2px Accent 指示条，不是单条细线。
+- [ ] 表单标签与控件共享左基线：宽面板单 Grid 两列，窄面板 `FormStack` 单列。
+- [ ] 输入框/下拉框内部文字左对齐（数值列允许右对齐），没有居中。
 - [ ] 默认按钮使用 `Brush.Border.Control` 描边（≥3:1），悬停切到 Accent 描边。
 - [ ] 未要求使用图标的按钮均为纯文本按钮，无多余装饰性矢量 Path。
 - [ ] 纯图标按钮均包含有效 `ToolTip`。

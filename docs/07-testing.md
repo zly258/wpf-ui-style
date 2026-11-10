@@ -59,6 +59,7 @@ python tools/LayoutCheck.py --root . --strict
 - 业务窗口是否嵌套 `ScrollViewer`。
 - 多行 `TextBox` 不再强制要求 `MinHeight`（全局硬限制会导致小窗口被撑爆）。
 - `TabControl` 是否缺少固定高度（会导致切换 tab 时窗口高度跳变）。
+- 表单输入/下拉框是否被局部设为居中（`HorizontalContentAlignment` / `TextAlignment="Center"`）。
 - 密度令牌接线：`Theme/` 内密度键不得使用 `StaticResource`，三份 `Density.*.xaml` 键集必须一致，
   `DynamicResource` 不得引用未定义键，`Tokens.xaml` 必须保留兜底值。
 

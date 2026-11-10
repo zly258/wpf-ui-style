@@ -754,6 +754,43 @@ namespace WpfStyles.Tests
         }
 
         [Fact]
+        public void GroupBox_HeaderAndBodyShareTheSameLeftInset()
+        {
+            XElement groupBox = Load(ControlsPath).Root.Elements()
+                .FirstOrDefault(e => e.Name.LocalName == "Style"
+                    && (string)e.Attribute("TargetType") == "{x:Type GroupBox}"
+                    && e.Attribute(X + "Key") == null);
+            Assert.NotNull(groupBox);
+
+            XElement dock = groupBox.Descendants()
+                .FirstOrDefault(e => e.Name.LocalName == "DockPanel");
+            Assert.NotNull(dock);
+            Assert.Equal("{TemplateBinding Padding}", (string)dock.Attribute("Margin"));
+
+            var presenters = dock.Elements()
+                .Where(e => e.Name.LocalName == "ContentPresenter")
+                .ToList();
+            Assert.Equal(2, presenters.Count);
+            Assert.Equal("Top", (string)presenters[0].Attribute("DockPanel.Dock"));
+        }
+
+        [Fact]
+        public void FormAlignmentHelpers_ExistAndKeepContentLeft()
+        {
+            XElement combo = FindKeyedStyle(ControlsPath, "ComboBox.Base");
+            Assert.Equal("Left", SetterValue(combo, "HorizontalContentAlignment", "ComboBox.Base"));
+
+            XElement label = FindKeyedStyle(TokensPath, "Text.FieldLabel");
+            Assert.Equal("Left", SetterValue(label, "HorizontalAlignment", "Text.FieldLabel"));
+            Assert.Equal("{StaticResource Text.Label}", (string)label.Attribute("BasedOn"));
+
+            XElement stack = FindKeyedStyle(ControlsPath, "FormStack");
+            Assert.Equal("{x:Type StackPanel}", (string)stack.Attribute("TargetType"));
+            Assert.Equal("{DynamicResource Layout.FormRowMargin}",
+                SetterValue(stack, "Margin", "FormStack"));
+        }
+
+        [Fact]
         public void ContrastPairs_MeetMinimum()
         {
             Dictionary<string, string> colors = LoadColors();

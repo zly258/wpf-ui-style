@@ -139,6 +139,12 @@ public SettingsWindow()
 <TextBox Text="{Binding Name}" />
 <TextBox Text="{Binding Log}" Style="{StaticResource TextBox.Multiline}" />
 <TextBox Text="{Binding Json}" Style="{StaticResource TextBox.Code}" />
+
+<!-- 窄面板单列：标签在上，控件在下 -->
+<StackPanel Style="{StaticResource FormStack}">
+    <TextBlock Text="服务地址" Style="{StaticResource Text.FieldLabel}" />
+    <TextBox Text="{Binding Url}" />
+</StackPanel>
 ```
 
 隐式样式（不需要指定）：
