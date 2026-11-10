@@ -48,7 +48,7 @@
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
         <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Padding" Value="{StaticResource Layout.ListItemPadding}" />
+        <Setter Property="Padding" Value="{DynamicResource Layout.ListItemPadding}" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
@@ -112,7 +112,7 @@
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
         <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Padding" Value="3,2" />
+        <Setter Property="Padding" Value="{DynamicResource Layout.ListViewItemPadding}" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -165,11 +165,11 @@
         <Setter Property="AlternatingRowBackground" Value="{StaticResource Brush.SurfaceSunken}" />
         <Setter Property="HorizontalGridLinesBrush" Value="{StaticResource Brush.Border}" />
         <Setter Property="VerticalGridLinesBrush" Value="{StaticResource Brush.Border}" />
-        <!-- 行高必须 >= 单元格编辑器高度（输入框 36px）：
-             编辑态的编辑器是 TextBox，行高小于它时编辑器会被行裁掉，
-             文字上下不居中、底边框也看不见。 -->
-        <Setter Property="RowHeight" Value="{StaticResource Layout.ControlHeight}" />
-        <Setter Property="ColumnHeaderHeight" Value="{StaticResource Layout.HeaderHeight}" />
+        <!-- 行高使用密度 token（紧凑 24 / 中等 28 / 宽松 32）。
+             编辑态 TextBox 为 Height=Auto、VerticalAlignment=Stretch，
+             会跟随行高伸展；单元格下载框的 MinHeight 也取同一 token。 -->
+        <Setter Property="RowHeight" Value="{DynamicResource Layout.RowHeight}" />
+        <Setter Property="ColumnHeaderHeight" Value="{DynamicResource Layout.HeaderHeight}" />
         <Setter Property="HeadersVisibility" Value="Column" />
         <Setter Property="GridLinesVisibility" Value="Horizontal" />
         <Setter Property="CanUserResizeRows" Value="False" />
@@ -382,7 +382,7 @@
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Stretch" />
         <Setter Property="Height" Value="Auto" />
-        <Setter Property="MinHeight" Value="{StaticResource Layout.RowHeight}" />
+        <Setter Property="MinHeight" Value="{DynamicResource Layout.RowHeight}" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Background" Value="Transparent" />
@@ -455,7 +455,7 @@
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
         <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Padding" Value="3,2" />
+        <Setter Property="Padding" Value="{DynamicResource Layout.ListViewItemPadding}" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource Brush.Control.Hover}" />

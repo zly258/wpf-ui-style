@@ -276,7 +276,14 @@ def check_window_height(path: Path, text: str) -> None:
     ScrollViewer or GridSplitter that scroll in a '*' row), fixed viewport height with
     a reasonable MinHeight is expected and recommended; SizeToContent="Height" must NOT
     be forced on them.
+
+    Intentional exceptions (e.g. a wizard whose step panels must not change the outer
+    frame) can opt out with a comment containing:
+        layout-check: allow-fixed-window-height
     """
+    if "layout-check: allow-fixed-window-height" in text:
+        return
+
     for match in ELEMENT_RE.finditer(text):
         closing, name, attrs, self_closing = match.groups()
         if closing or name != "Window" or self_closing:
@@ -469,6 +476,92 @@ def check_redundant_demo_chatter(path: Path, text: str) -> None:
                 )
 
 
+# --- density token wiring (Theme/Density.*.xaml) -------------------------
+# Controls must read density-sensitive Layout.* tokens through DynamicResource so
+# that swapping the density dictionary at runtime actually re-sizes them.
+DENSITY_PROFILE_KEYS: dict[str, set[str]] = {}
+DENSITY_PROFILE_NAMES = ("Density.Compact.xaml", "Density.Medium.xaml", "Density.Relaxed.xaml")
+DYNAMIC_LAYOUT_RE = re.compile(r"\{DynamicResource\s+(Layout\.[A-Za-z0-9.]+)\}")
+STATIC_LAYOUT_RE = re.compile(r"\{StaticResource\s+(Layout\.[A-Za-z0-9.]+)\}")
+
+
+def xaml_keys(path: Path) -> set[str]:
+    """Return every x:Key declared at the dictionary root."""
+    import xml.etree.ElementTree as ET
+
+    try:
+        root = ET.parse(path).getroot()
+    except (ET.ParseError, OSError):
+        return set()
+
+    keys: set[str] = set()
+    for node in root:
+        for attr, value in node.attrib.items():
+            if attr.endswith("}Key") or attr == "Key":
+                keys.add(value)
+                break
+    return keys
+
+
+def check_density_theme(path: Path, text: str) -> None:
+    """Density profile dictionaries must be complete and internally consistent."""
+    name = path.name
+    if name.lower().startswith("density."):
+        DENSITY_PROFILE_KEYS[name] = xaml_keys(path)
+        return
+
+    medium = path.parent / "Density.Medium.xaml"
+    if not medium.exists():
+        return
+    density_keys = DENSITY_PROFILE_KEYS.get(medium.name) or xaml_keys(medium)
+    if not density_keys:
+        return
+
+    for match in STATIC_LAYOUT_RE.finditer(text):
+        key = match.group(1)
+        if key in density_keys:
+            report(
+                "ERROR",
+                path,
+                line_number(text, match.start()),
+                f"{key} is density-sensitive; use DynamicResource so Compact/Relaxed can override it",
+            )
+
+    for match in DYNAMIC_LAYOUT_RE.finditer(text):
+        key = match.group(1)
+        if key not in density_keys:
+            report(
+                "ERROR",
+                path,
+                line_number(text, match.start()),
+                f"{key} is not defined by Density.Medium.xaml",
+            )
+
+
+def check_density_profiles(root: Path) -> None:
+    """Every profile must define the same key set, and Tokens must keep fallbacks."""
+    found = {name: keys for name, keys in DENSITY_PROFILE_KEYS.items() if keys}
+    if not found:
+        return
+
+    baseline_name = DENSITY_PROFILE_NAMES[1]
+    baseline = found.get(baseline_name) or next(iter(found.values()))
+
+    for name, keys in found.items():
+        missing = baseline - keys
+        extra = keys - baseline
+        for key in sorted(missing):
+            report("ERROR", root / "Theme" / name, 1, f"density profile is missing {key}")
+        for key in sorted(extra):
+            report("ERROR", root / "Theme" / name, 1, f"density profile defines extra key {key}")
+
+    tokens = root / "Theme" / "Tokens.xaml"
+    if tokens.exists():
+        token_keys = xaml_keys(tokens)
+        for key in sorted(baseline - token_keys):
+            report("ERROR", tokens, 1, f"Tokens.xaml keeps no fallback for density key {key}")
+
+
 def check_file(path: Path, theme_dirs: set[str], theme_files: set[str]) -> None:
     text = path.read_text(encoding="utf-8", errors="replace")
     comments = comment_ranges(text)
@@ -558,6 +651,10 @@ def check_file(path: Path, theme_dirs: set[str], theme_files: set[str]) -> None:
     # 6. Negative margin: causes overlapping controls (applies everywhere).
     check_negative_margin(path, text)
 
+    # 6b. Density token wiring inside Theme/.
+    if path.parent.name.lower() in theme_dirs:
+        check_density_theme(path, text)
+
     if not is_theme_file(path, theme_dirs, theme_files):
         # 7. Truncation / occlusion rules for business XAML (R14).
         check_canvas_layout(path, text)
@@ -629,6 +726,8 @@ def main() -> int:
 
     for path in files:
         check_file(path, theme_dirs, theme_files)
+
+    check_density_profiles(root)
 
     print()
     print(f"Errors: {errors}   Warnings: {warnings}")

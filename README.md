@@ -1,8 +1,8 @@
 # WPF UI Skills
 
-面向桌面工具与工程插件的高质量 WPF 视觉规范、紧凑布局体系与自动化校验工具。
+面向桌面工具与工程插件的高质量 WPF 视觉规范、**三档密度（紧凑 / 中等 / 宽松）**布局体系与自动化校验工具。
 
-目标是把**设计令牌、紧凑布局（Compact by Default）、状态契约（前景/背景/悬停/选中/禁用）与防截断骨架**固定为可执行的标准规范，避免出现：
+目标是把**设计令牌、可切换密度、状态契约（前景/背景/悬停/选中/禁用）与防截断骨架**固定为可执行的标准规范，避免出现：
 
 - 字体过大、内边距过厚、一屏展示信息量过少；
 - 主按钮蓝底深灰字；
@@ -11,7 +11,10 @@
 - 列表选中项白字压在浅蓝底上；
 - 窗口多 tab 切换导致窗口高度跳变；
 - ComboBox 弹出层还是系统默认白底黑字，和主界面割裂；
-- 同一个项目里 28/32 两种控件高度混用。
+- 同一个项目里 28/32 两种控件高度混用；
+- 输入框文字只占左半边，右侧点击不能继续输入；
+- 标签页选中后只有一条细横线，看不出当前在哪一页；
+- 白底按钮的描边太浅，在浅色窗口里几乎看不见按钮边界。
 
 ---
 
@@ -80,29 +83,41 @@ wpf-styles/
 ├─ install.ps1                       ← 一键安装到主流客户端
 ├─ SKILL.md                          ← 给 AI/编码代理使用的执行规范
 ├─ Theme/
-│  ├─ Tokens.xaml                    ← 唯一色值、字体、尺寸、圆角、文本样式
+│  ├─ Tokens.xaml                    ← 唯一色值、字体、尺寸兜底值、圆角、文本样式
+│  ├─ Density.Compact.xaml           ← 紧凑密度（26px 控件 / 24px 行高）
+│  ├─ Density.Medium.xaml            ← 中等密度（默认，30px 控件 / 28px 行高）
+│  ├─ Density.Relaxed.xaml           ← 宽松密度（34px 控件 / 32px 行高）
 │  ├─ Controls.xaml                  ← 按钮、输入框、下拉框、复选、分组、Tab、ToolTip…
 │  ├─ DataControls.xaml              ← ListBox、ListView、DataGrid、TreeView
 │  ├─ Icons.xaml                     ← 24x24 图标几何、尺寸阶梯、图标按钮
 │  ├─ Extras.xaml                    ← Slider、DatePicker、Menu、ToolBar、Card、Badge…
-│  ├─ Theme.xaml                     ← 唯一推荐入口
+│  ├─ Theme.xaml                     ← 默认入口（中等密度）
+│  ├─ Theme.Compact.xaml             ← 整包入口（紧凑密度）
+│  ├─ Theme.Relaxed.xaml             ← 整包入口（宽松密度）
 │  └─ README.md                      ← 主题文件使用说明
 ├─ docs/
+│  ├─ README.md                      ← 文档索引
 │  ├─ 01-design-tokens.md            ← 设计令牌
 │  ├─ 02-control-states.md           ← 控件状态矩阵（核心）
-│  ├─ 03-layout.md                   ← 布局规范（含防截断与紧凑布局）
+│  ├─ 03-layout.md                   ← 布局规范（含防截断与密度）
 │  ├─ 04-common-pitfalls.md          ← 常见错误与修复
 │  ├─ 05-accessibility-contrast.md   ← 对比度与可访问性
+│  ├─ 06-density.md                  ← 三档密度说明与切换方式
 │  ├─ 07-testing.md                  ← 自动化与人工验证
 │  └─ 09-icon-system.md              ← 矢量图标系统与契约
 ├─ references/
 │  ├─ cheatsheet.md                  ← 一页速查
 │  └─ xaml-snippets.md               ← 可复制 XAML 片段
-├─ samples/
-│  ├─ SampleWindow.xaml              ← 推荐布局示例
-│  ├─ SafeFormWindow.xaml            ← 安全表单骨架示例
+├─ samples/                          ← 按用途分类的可复制 XAML
+│  ├─ forms/
+│  │  ├─ SafeFormWindow.xaml         ← 安全表单骨架
+│  │  └─ TabsSettingsWindow.xaml     ← 标签页 + 输入占满
+│  ├─ tables/EditableTableWindow.xaml
+│  ├─ layouts/WorkbenchWindow.xaml
+│  ├─ dialogs/WizardWindow.xaml
+│  ├─ icons/IconGalleryWindow.xaml
 │  └─ README.md
-├─ preview/                          ← 可运行的 WPF 预览工程（dotnet run，支持 8 种场景与截图）
+├─ preview/                          ← 可运行案例中心（侧边导航 + 9 个案例页 + 密度切换 + 截图）
 ├─ tools/
 │  ├─ ContrastCheck.py               ← 对比度自动检查（Python 3 标准库）
 │  ├─ LayoutCheck.py                 ← 布局/防截断/TabControl 规则自动检查
@@ -167,7 +182,49 @@ public static void Apply(Window window)
 ```
 
 - `Button`、`TextBox`、`ComboBox`、`CheckBox`、`RadioButton`、`ListBox`、`DataGrid` 等都有隐式样式，**不需要逐个指定**。
-- 只有变体需要显式指定：`Button.Primary`、`Button.Danger`、`Button.Text`、`TextBox.Multiline`、`TextBox.Code`、`Button.Primary.Small` 等。
+- 只有变体需要显式指定：`Button.Primary`、`Button.Danger`、`Button.Text`、`TextBox.Multiline`、`TextBox.Code`、`Button.Primary.Small`、`Button.Secondary.Large` 等。
+- `TextBox` / `PasswordBox` / `ComboBox` 的内容区默认横向占满，点击右侧空白也能继续输入。
+- `TabItem` 选中态是「实心 Surface 面 + 1px 描边 + 2px Accent 指示条 + Accent 半粗文字」，不再只有一条细线。
+
+### 2.3 选择密度（紧凑 / 中等 / 宽松）
+
+默认是 **中等**；换密度只需更换入口文件名：
+
+```xml
+<!-- 紧凑：工程插件工具条、属性面板、大表格 -->
+<ResourceDictionary Source="pack://application:,,,/YourAssembly;component/Theme/Theme.Compact.xaml" />
+
+<!-- 中等（默认） -->
+<ResourceDictionary Source="pack://application:,,,/YourAssembly;component/Theme/Theme.xaml" />
+
+<!-- 宽松：触屏 / 演示 / 培训 -->
+<ResourceDictionary Source="pack://application:,,,/YourAssembly;component/Theme/Theme.Relaxed.xaml" />
+```
+
+运行时热切换（控件全部使用 `{DynamicResource Layout.*}`，可即时生效）：
+
+```csharp
+Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary
+{
+    Source = new Uri(
+        "pack://application:,,,/YourAssembly;component/Theme/Density.Compact.xaml",
+        UriKind.Absolute)
+});
+```
+
+| 令牌 | 紧凑 | 中等（默认） | 宽松 |
+|---|---:|---:|---:|
+| `Layout.ControlHeight`（按钮/输入/下拉） | 26 | **30** | 34 |
+| `Layout.ControlHeight.Small`（工具条） | 24 | **26** | 30 |
+| `Layout.RowHeight`（表格行） | 24 | **28** | 32 |
+| `Layout.HeaderHeight`（表头） | 26 | **30** | 34 |
+| `Layout.TabPadding` | 10,4 | **12,6** | 16,8 |
+| `Layout.ButtonPadding` | 10,0 | **12,0** | 16,0 |
+| `Layout.WindowPadding` | 8 | **12** | 16 |
+| `Layout.FormRowMargin` | 0,2 | **0,3** | 0,5 |
+
+字号与颜色**不随密度变化**；只在 `Density.*.xaml` 中改尺寸、内边距和行高。
+完整说明见 [docs/06-density.md](docs/06-density.md)。
 
 ---
 
@@ -203,7 +260,12 @@ public static void Apply(Window window)
    标签列 `Auto` + `MinWidth`（长标签换行，不裁）；输入列 `*` + `MinWidth`（不写死 `Width`）；
    省略号必须配 `ToolTip`；窗口用 `SizeToContent="Height"` + 一层 `ScrollViewer`；
    底部按钮栏独占一行，状态文案另起一行；禁止负 `Margin` 与 `Canvas` 绝对定位。
-   详见 `SKILL.md` 的 R14、`docs/03-layout.md` §14 与 `samples/SafeFormWindow.xaml`。
+   详见 `SKILL.md` 的 R14、`docs/03-layout.md` §14 与 `samples/forms/SafeFormWindow.xaml`。
+
+8. **密度只改变尺寸，不改变颜色与字号。**
+   控件内部通过 `{DynamicResource Layout.*}` 读取高度、内边距与行高；
+   业务 XAML 不要写死 `Height="32"` 或 `Padding="8,0"`。
+   紧凑 / 中等 / 宽松三档由 `Theme/Density.*.xaml` 提供，默认中等。
 
 ---
 
@@ -211,13 +273,17 @@ public static void Apply(Window window)
 
 | 控件/状态 | 背景 | 前景 | 边框 |
 |---|---|---|---|
-| 次要按钮 正常 | `Brush.Surface` | `Brush.Text.Primary` | `Brush.Border` |
-| 次要按钮 悬停 | `Brush.Control.Hover` | `Brush.Text.Primary` | `Brush.Border.Strong` |
+| 次要按钮 正常 | `Brush.Surface` | `Brush.Text.Primary` | `Brush.Border.Control` |
+| 次要按钮 悬停 | `Brush.Control.Hover` | `Brush.Text.Primary` | `Brush.Accent` |
+| 次要按钮 按下 | `Brush.Control.Pressed` | `Brush.Text.Primary` | `Brush.Accent.Pressed` |
 | 主按钮 正常 | `Brush.Accent` | `Brush.OnAccent` | `Brush.Accent` |
 | 主按钮 悬停 | `Brush.Accent.Hover` | `Brush.OnAccent` | `Brush.Accent.Hover` |
 | 主按钮 禁用 | `Brush.Control.Disabled` | `Brush.Text.Disabled` | `Brush.Border` |
-| 输入框 正常 | `Brush.Surface` | `Brush.Text.Primary` | `Brush.Border` |
+| 输入框 正常 | `Brush.Surface` | `Brush.Text.Primary` | `Brush.Border.Control` |
 | 输入框 聚焦 | `Brush.Surface` | `Brush.Text.Primary` | `Brush.Focus` |
+| 标签页 未选中 | `Transparent` | `Brush.Text.Secondary` | 透明 |
+| 标签页 悬停 | `Brush.Control.Hover` | `Brush.Text.Primary` | `Brush.Border` |
+| 标签页 选中 | `Brush.Surface` | `Brush.Accent` | `Brush.Border` + 2px `Brush.Accent` 底条 |
 | 列表项 悬停 | `Brush.Control.Hover` | `Brush.Text.Primary` | 透明 |
 | 列表项 选中 | `Brush.Selection` | `Brush.Text.Primary` | 透明 |
 | 列表项 选中+悬停 | `Brush.Selection.Hover` | `Brush.Text.Primary` | 透明 |
@@ -232,7 +298,8 @@ public static void Apply(Window window)
 
 - 正文文字：≥ **4.5:1**（WCAG AA）。
 - 大号文字（≥ 18.66px 粗体或 ≥ 24px）：≥ **3:1**。
-- 焦点边框、图标、输入框边框等非文字元素：≥ **3:1**。
+- 焦点边框、图标、输入框/按钮边框等非文字元素：≥ **3:1**。
+  按钮与输入框描边使用 `Brush.Border.Control`（对白底 3.52:1、对窗口底 3.10:1）。
 - 禁用文字：WCAG 不强制，但本规范要求 ≥ **3:1**，建议 ≥ 4.5:1。
 - 白字压品牌色：本规范所有 Accent/Danger 组合均 ≥ 5.3:1。
 
@@ -312,9 +379,11 @@ Skill 会按以下顺序工作：
 
 ## 9. 相关文档
 
+- [文档索引](docs/README.md)
 - [设计令牌](docs/01-design-tokens.md)
 - [控件状态矩阵](docs/02-control-states.md)
 - [布局规范](docs/03-layout.md)
+- [三档密度](docs/06-density.md)
 - [常见错误](docs/04-common-pitfalls.md)
 - [对比度与可访问性](docs/05-accessibility-contrast.md)
 - [测试与验证](docs/07-testing.md)

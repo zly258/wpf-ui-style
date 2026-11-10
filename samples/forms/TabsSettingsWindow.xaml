@@ -1,0 +1,118 @@
+<!--
+    示例：标签页 + 输入区占满 + 三档密度。
+
+    演示要点：
+      1. TabControl 只做局部设置分组，不用来承载整窗多任务；
+      2. 窗口 SizeToContent="Height" 时，TabControl 显式给固定 Height，
+         避免切换标签页时窗口高度跳变；
+      3. 输入列 * + MinWidth，输入框自身不写 Width（内容宿主横向占满）；
+      4. 所有尺寸来自 Layout.*，切换 Theme.Compact / Theme / Theme.Relaxed 即可换密度；
+      5. 不要在这里写任何 #RRGGBB 颜色。
+
+    使用前：合并 Theme/Theme.xaml，并把 x:Class 改成你的命名空间和类名。
+-->
+<Window x:Class="YourApp.TabsSettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="工程设置"
+        SizeToContent="Height"
+        Width="720"
+        MinWidth="{StaticResource Layout.WindowMinWidth}"
+        MinHeight="420"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="{StaticResource Layout.WindowPadding}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="0,0,0,10">
+            <TextBlock Text="工程设置" Style="{StaticResource Text.Title}" />
+            <TextBlock Text="按类别维护工程参数；切换标签页不会改变窗口高度。"
+                       Style="{StaticResource Text.Caption}" Margin="0,3,0,0" />
+        </StackPanel>
+
+        <!-- 固定高度：SizeToContent 窗口内的 TabControl 必须限制高度 -->
+        <TabControl Grid.Row="1" Height="260">
+            <TabItem Header="基本信息">
+                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel Margin="0,6,0,0">
+                        <Grid Style="{StaticResource FormRow}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" MinWidth="{StaticResource Layout.FormLabelMinWidth}" />
+                                <ColumnDefinition Width="*" MinWidth="{StaticResource Layout.InputMinWidth}" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="工程名称" Style="{StaticResource Text.Label}" />
+                            <TextBox Grid.Column="1" Style="{StaticResource TextBox.Form}"
+                                     Text="总装工程" />
+                        </Grid>
+
+                        <Grid Style="{StaticResource FormRow}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" MinWidth="{StaticResource Layout.FormLabelMinWidth}" />
+                                <ColumnDefinition Width="*" MinWidth="{StaticResource Layout.InputMinWidth}" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="文档前缀" Style="{StaticResource Text.Label}" />
+                            <TextBox Grid.Column="1" Style="{StaticResource TextBox.Form}"
+                                     Text="DOC-" ToolTip="用于连续编号的文档前缀" />
+                        </Grid>
+
+                        <Grid Style="{StaticResource FormRow}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" MinWidth="{StaticResource Layout.FormLabelMinWidth}" />
+                                <ColumnDefinition Width="*" MinWidth="{StaticResource Layout.InputMinWidth}" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="项目根目录" Style="{StaticResource Text.Label}" />
+                            <TextBox Grid.Column="1" Style="{StaticResource TextBox.Form}"
+                                     Text="D:/Demo/Documents/Design"
+                                     ToolTip="完整路径较长时使用 ToolTip 查看" />
+                        </Grid>
+
+                        <Grid Style="{StaticResource FormRow}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" MinWidth="{StaticResource Layout.FormLabelMinWidth}" />
+                                <ColumnDefinition Width="*" MinWidth="{StaticResource Layout.InputMinWidth}" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="单位制" Style="{StaticResource Text.Label}" />
+                            <ComboBox Grid.Column="1" SelectedIndex="0">
+                                <ComboBoxItem Content="毫米 (mm)" />
+                                <ComboBoxItem Content="英寸 (in)" />
+                            </ComboBox>
+                        </Grid>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="生成选项">
+                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel Margin="0,6,0,0">
+                        <CheckBox Content="保存时自动生成工程图" IsChecked="True" />
+                        <CheckBox Content="同步更新物料清单" IsChecked="True" />
+                        <CheckBox Content="启用严格校验（失败时阻断保存）" />
+                        <CheckBox Content="记录详细调试日志" IsEnabled="False" />
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="高级（只读）" IsEnabled="False">
+                <TextBlock Text="该分组仅在管理员模式下可用。"
+                           Style="{StaticResource Text.Caption}"
+                           Margin="0,6,0,0" />
+            </TabItem>
+        </TabControl>
+
+        <Grid Grid.Row="2" Margin="0,10,0,0">
+            <TextBlock Text="当前密度：中等（切换主题入口即可改为紧凑或宽松）"
+                       Style="{StaticResource Text.Caption}"
+                       VerticalAlignment="Center" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="取消" IsCancel="True" Margin="0,0,8,0" />
+                <Button Content="保存" Style="{StaticResource Button.Primary}" IsDefault="True" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

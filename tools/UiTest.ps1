@@ -10,7 +10,7 @@
 .EXAMPLE
     pwsh ./tools/UiTest.ps1 -Window editable-table -TestClicks
     pwsh ./tools/UiTest.ps1 -Window wizard -TestClicks -ShotDir shots/wizard
-    pwsh ./tools/UiTest.ps1 -Xaml "preview/SafeFormWindow.xaml" -Shot "shots/safeform.png"
+    pwsh ./tools/UiTest.ps1 -Xaml "preview/Views/SafeFormView.xaml" -Shot "shots/safeform.png"
     pwsh ./tools/UiTest.ps1 -All -TestClicks
     pwsh ./tools/UiTest.ps1 -List
 #>

@@ -1128,12 +1128,12 @@ Expander 的内容直接放在 `ContentPresenter` 里，没有滚动容器：
 
 **根因**
 
-单元格编辑器是 TextBox（高度 32px），而行高小于它时：
+单元格编辑器是 TextBox（高度 = `Layout.ControlHeight`，中等 30px），而行高小于它时：
 行高小于编辑器高度时，编辑器被行裁掉。
 
 **修复**
 
-- `DataGrid.RowHeight` 必须 ≥ 编辑器高度，主题已设为 `Layout.ControlHeight`（32）。
+- `DataGrid.RowHeight` 必须 ≥ 编辑器实际高度，主题已设为 `Layout.RowHeight`（中等 28，紧凑 24，宽松 32）。
 - `DataGridRow.MinHeight` 同步。
 
 **验证**
@@ -1279,3 +1279,91 @@ DatePicker 的弹层里放的是 **DatePicker 自己创建的 Calendar 实例**�
 
 - `LayoutCheck` 会报 ERROR（`SizeToContent` 窗口内 `TabControl` 无固定高度）。
 - 手工点一遍每个 tab，确认窗口高度不变、底部按钮栏不移动。
+
+---
+
+## 18. 输入框只显示左半边，右侧点不进去
+
+**症状**
+
+`TextBox` 看起来占满整行，但文字只靠左，点击右侧空白没有反应，
+光标不会跳到行尾；长值看起来像被截断。
+
+**根因**
+
+模板里的 `PART_ContentHost` 跟随了 `HorizontalContentAlignment="Left"`，
+`ScrollViewer` 按内容宽度收缩，右侧空白不属于文本宿主。
+
+**修复**
+
+- 主题已把 `TextBox.Base` 的 `HorizontalContentAlignment` 设为 `Stretch`，
+  模板里的 `ScrollViewer` 固定 `HorizontalAlignment="Stretch"`。业务 XAML 不要再改回 `Left`。
+- 输入列用 `Width="*"`，输入框不写 `Width`；需要上限时用 `MaxWidth`。
+
+```xml
+<Grid>
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto" MinWidth="{StaticResource Layout.FormLabelMinWidth}" />
+        <ColumnDefinition Width="*" MinWidth="{StaticResource Layout.InputMinWidth}" />
+    </Grid.ColumnDefinitions>
+    <TextBlock Text="工程名称" Style="{StaticResource Text.Label}" />
+    <TextBox Grid.Column="1" Text="{Binding Name}" />
+</Grid>
+```
+
+---
+
+## 19. 标签页选中后只有一条细横线
+
+**症状**
+
+点 tab 后只有一条 1px 蓝色横线，分不清当前页；多个 tab 时尤其明显。
+
+**根因**
+
+模板只给 `Underline` 设了背景色，标签页本身没有底色和描边。
+
+**修复**
+
+- 使用主题的默认 `TabItem`：选中态 = `Brush.Surface` 底 + 1px `Brush.Border` 描边
+  + 2px `Brush.Accent` 底条 + Accent 半粗文字。
+- 不要自己删掉 `Bd` 的 `Background`/`BorderBrush`，也不要只保留 `Underline`。
+- 仍然遵守 R12：窗口内不要用 tab 承载并排任务。
+
+---
+
+## 20. 白底按钮的边框太浅，看不见边界
+
+**症状**
+
+白色按钮放在浅灰窗口上，按钮形状几乎消失，只有文字浮着。
+
+**根因**
+
+按钮边框使用了 `Brush.Border`（`#D0D5DB`，对白底约 1.4:1），
+或直接用了 `BorderThickness="0"`。
+
+**修复**
+
+- 默认按钮使用 `Brush.Border.Control`（对 Surface 3.52:1，对窗口底 3.10:1）。
+- 悬停时描边切到 `Brush.Accent`，按下切到 `Brush.Accent.Pressed`。
+- 不要用 `Opacity` 弱化按钮；禁用态用 `Control.Disabled + Text.Disabled`。
+
+---
+
+## 21. 同一窗口混用 26 / 30 / 34 三档尺寸
+
+**症状**
+
+同一行里有的按钮 34px、有的输入框 26px，基线不齐，看起来像贴错。
+
+**根因**
+
+从不同来源复制 XAML，局部写死了 `Height="32"`、`Padding="10,6"`，
+或部分控件用了 `.Small` 变体、部分用默认样式。
+
+**修复**
+
+- 选定一档密度后，所有控件引用同一组 `Layout.*`，不要在业务 XAML 写死高度。
+- 工具条/表格行内统一用 `Layout.ControlHeight.Small`，主表单统一用 `Layout.ControlHeight`。
+- `LayoutCheck` 会检查 `Padding`/`Height` 硬编码；`dotnet test` 会检查三档键集与递增关系。

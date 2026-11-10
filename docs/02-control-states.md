@@ -88,9 +88,9 @@ WPF 会按声明顺序应用 `Trigger`，后声明的覆盖前面的。不要靠
 
 | 状态 | Background | Foreground | BorderBrush |
 |---|---|---|---|
-| Normal | `Brush.Surface` | `Brush.Text.Primary` | `Brush.Border` |
-| Hover | `Brush.Control.Hover` | `Brush.Text.Primary` | `Brush.Border.Strong` |
-| Pressed | `Brush.Control.Pressed` | `Brush.Text.Primary` | `Brush.Accent` |
+| Normal | `Brush.Surface` | `Brush.Text.Primary` | `Brush.Border.Control` |
+| Hover | `Brush.Control.Hover` | `Brush.Text.Primary` | `Brush.Accent` |
+| Pressed | `Brush.Control.Pressed` | `Brush.Text.Primary` | `Brush.Accent.Pressed` |
 | Focused | 不变 | 不变 | `Brush.Focus` |
 | Disabled | `Brush.Control.Disabled` | `Brush.Text.Disabled` | `Brush.Border` |
 
@@ -136,8 +136,8 @@ WPF 会按声明顺序应用 `Trigger`，后声明的覆盖前面的。不要靠
 
 | 状态 | Background | Foreground | BorderBrush |
 |---|---|---|---|
-| Normal | `Brush.Surface` | `Brush.Text.Primary` | `Brush.Border` |
-| Hover | `Brush.Surface` | `Brush.Text.Primary` | `Brush.Border.Strong` |
+| Normal | `Brush.Surface` | `Brush.Text.Primary` | `Brush.Border.Control` |
+| Hover | `Brush.Surface` | `Brush.Text.Primary` | `Brush.Accent` |
 | Focused | `Brush.Surface` | `Brush.Text.Primary` | `Brush.Focus` |
 | ReadOnly | `Brush.SurfaceAlt` | `Brush.Text.Secondary` | `Brush.Border` |
 | Disabled | `Brush.Control.Disabled` | `Brush.Text.Disabled` | `Brush.Border` |
@@ -145,6 +145,8 @@ WPF 会按声明顺序应用 `Trigger`，后声明的覆盖前面的。不要靠
 
 **注意：**
 
+- **输入区横向占满**：模板里的 `PART_ContentHost` 使用 `HorizontalAlignment="Stretch"`，
+  且 `HorizontalContentAlignment="Stretch"`。点击右侧空白也能进入编辑，长值不会被压到左侧。
 - 错误态只改边框和下方提示文字，不要把输入框背景改成浅红；浅红底 + 深色文字虽然可读，
   但会与“危险按钮悬停”混淆。
 - 错误提示文字使用 `Text.Danger`，放在输入框下方，不要只靠颜色。
@@ -159,11 +161,11 @@ WPF 会按声明顺序应用 `Trigger`，后声明的覆盖前面的。不要靠
 
 | 状态 | Background | Foreground | BorderBrush |
 |---|---|---|---|
-| Normal | `Brush.Surface` | `Brush.Text.Primary` | `Brush.Border` |
-| Hover | `Brush.Surface` | `Brush.Text.Primary` | `Brush.Border.Strong` |
+| Normal | `Brush.Surface` | `Brush.Text.Primary` | `Brush.Border.Control` |
+| Hover | `Brush.Surface` | `Brush.Text.Primary` | `Brush.Accent` |
 | Focused / Open | `Brush.Surface` | `Brush.Text.Primary` | `Brush.Focus` |
 | Disabled | `Brush.Control.Disabled` | `Brush.Text.Disabled` | `Brush.Border` |
-| Editable (`IsEditable="True"`) | `Brush.Surface` | `Brush.Text.Primary` | `Brush.Border`（聚焦/展开时 `Brush.Focus`） |
+| Editable (`IsEditable="True"`) | `Brush.Surface` | `Brush.Text.Primary` | `Brush.Border.Control`（聚焦/展开时 `Brush.Focus`） |
 | Editable ReadOnly (`IsReadOnly="True"`) | `Brush.SurfaceAlt` | `Brush.Text.Secondary` | `Brush.Border` |
 
 可编辑态说明：
@@ -193,12 +195,29 @@ WPF 会按声明顺序应用 `Trigger`，后声明的覆盖前面的。不要靠
 
 ---
 
+### 5.3 TabControl / TabItem
+
+| 状态 | Background | Foreground | BorderBrush | 底条 |
+|---|---|---|---|---|
+| Normal | `Transparent` | `Brush.Text.Secondary` | `Transparent` | 无 |
+| Hover | `Brush.Control.Hover` | `Brush.Text.Primary` | `Brush.Border` | 无 |
+| Selected | `Brush.Surface` | `Brush.Accent`（SemiBold） | `Brush.Border` | 2px `Brush.Accent` |
+| Selected+Hover | `Brush.Surface` | `Brush.Accent.Hover` | `Brush.Border.Strong` | 2px `Brush.Accent.Hover` |
+| Focused | 不变 | 不变 | `Brush.Focus` | `Brush.Focus` |
+| Disabled | `Transparent` | `Brush.Text.Disabled` | `Transparent` | 无 |
+
+- 选中标签页是「一块面」：Surface 底 + 上方圆角 4 + 1px 描边 + 2px Accent 底条。**不要退回成单条细横线**。
+- 标签栏下方有一条贯穿的 1px `Brush.Border` 基线；选中标签的底条压在这条基线上。
+- 标签页仅用于局部切换（分组设置、属性分类、画廊演示）；整窗多任务导航仍按 R12 拆分窗口。
+
+---
+
 ## 6. CheckBox / RadioButton
 
 | 状态 | 文本 Foreground | 方框/圆环 Background | 方框/圆环 BorderBrush |
 |---|---|---|---|
-| Normal | `Brush.Text.Primary` | `Brush.Surface` | `Brush.Border` |
-| Hover | `Brush.Text.Primary` | `Brush.Surface` | `Brush.Border.Strong` |
+| Normal | `Brush.Text.Primary` | `Brush.Surface` | `Brush.Border.Control` |
+| Hover | `Brush.Text.Primary` | `Brush.Surface` | `Brush.Accent` |
 | Focused | `Brush.Text.Primary` | `Brush.Surface` | `Brush.Focus` |
 | Checked | `Brush.Text.Primary` | `Brush.Accent` | `Brush.Accent` |
 | Checked+Hover | `Brush.Text.Primary` | `Brush.Accent.Hover` | `Brush.Accent.Hover` |

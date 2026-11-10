@@ -202,8 +202,8 @@
 
 ### 6.1 列表
 
-- 行高 26（`Layout.RowHeight`）。
-- 表头 28（`Layout.HeaderHeight`）。
+- 行高 28（`Layout.RowHeight`，中等密度）。
+- 表头 30（`Layout.HeaderHeight`，中等密度）。
 - 列宽：短序号 40–56，名称/路径 `*`，状态 80–100。
 - 长文本列使用 `TextTrimming="CharacterEllipsis"` 或 `ToolTip` 显示完整内容。
 - 不要在列表项里放多层嵌套控件；一行最多一个主文本 + 一个次要文本 + 一个状态标签。
@@ -228,9 +228,9 @@
   `DataGridCell.Template`，业务侧不要重写单元格模板。
 - 数字列若要右对齐，必须同时给表头 `HorizontalContentAlignment="Right"`，
   否则表头与数据左右不齐。
-- 行高必须 ≥ 单元格编辑器高度（`Layout.ControlHeight`=32）：编辑态的编辑器是 TextBox，
+- 行高必须 ≥ 单元格编辑器高度（`Layout.ControlHeight`，中等 30）：编辑态的编辑器是 TextBox，
   行高比它小，编辑器会被行裁掉，文字上下不居中、底边框也看不见。
-  主题已把 `DataGrid.RowHeight` 设为 `Layout.ControlHeight`。
+  主题已把 `DataGrid.RowHeight` 设为 `Layout.RowHeight`。
 - 可编辑列建议用 `DataGridTextColumn`，编辑器的隐式样式继承全局 `TextBox.Base`；
   不要在单元格里再套自定义 TextBox。
 
@@ -768,8 +768,47 @@ AI 生成 WPF 界面时极易犯以下**四大结构性坏味道**：
 ### 15.4 紧凑不等于拥挤 (Compact ≠ Cramped)
 
 1. **控件尺寸紧凑，但模块之间要有清晰留白**：
-   - 控件本身使用 26px/32px 的专业紧凑尺寸；
+   - 控件本身使用当前密度的 `Layout.ControlHeight`（紧凑 26 / 中等 30 / 宽松 34），同一窗口只用一档；
    - 筛选栏与工具栏之间保持 8px~10px 呼吸间距，严禁所有控件黏连在一起；
 2. **筛选列限制**：
    - 一行内的筛选组合（Label + Input）**不得超过 3~4 组**；
    - 超过 4 组筛选条件的，必须提供“高级筛选”折叠展开面板，严禁横向排成 8~10 列撑破窗口。
+
+---
+
+## 16. 密度与控件可识别性
+
+### 16.1 三档密度
+
+布局尺寸不再只有一个固定值，而是由 `Theme/Density.*.xaml` 提供三档：
+
+- **紧凑 Compact**：26px 控件、24px 表格行，适合工程插件工具条与属性面板；
+- **中等 Medium（默认）**：30px 控件、28px 表格行，适合绝大多数业务窗口；
+- **宽松 Relaxed**：34px 控件、32px 表格行，适合触屏、演示与低密度看板。
+
+业务 XAML 引用 `{StaticResource Layout.*}`；主题内部引用 `{DynamicResource Layout.*}` 以支持运行时换挡。
+**同一窗口只用一档**，不要把 26px 输入框和 34px 按钮排在同一行。完整键值见 [06-density.md](06-density.md)。
+
+### 16.2 输入框必须占满可用宽度
+
+`TextBox` / `PasswordBox` / `ComboBox` 的文本宿主默认 `HorizontalAlignment="Stretch"`。
+如果业务代码把 `HorizontalContentAlignment` 改成 `Left`：
+
+- 点击输入框右侧空白不会聚焦，用户会以为控件坏了；
+- 长路径、长编码的可视区域缩短，更容易被误判为截断；
+- 只读/错误提示的对齐也会歪。
+
+正确做法是让输入列 `Width="*"`，输入框自身不写 `Width`；需要上限时用 `MaxWidth`。
+
+### 16.3 标签页必须有明确选中态
+
+默认 `TabItem` 选中态 = `Brush.Surface` 底 + 1px `Brush.Border` 描边 + 2px `Brush.Accent` 底条 + Accent 半粗文字。
+它不是装饰，而是「当前位置」的唯一视觉锚点。只画一条 1px 横线（或只改文字颜色）在低对比显示器上无法辨认。
+
+### 16.4 按钮边界与高度
+
+- 默认按钮是白底 + `Brush.Border.Control` 描边（对白底 3.52:1）；
+- 悬停时描边切到 `Brush.Accent`，按下切到 `Brush.Accent.Pressed`；
+- 按钮高度由 `Layout.ControlHeight` 决定，**上下 Padding 固定为 0**，不要用 padding 把按钮垫高；
+- 同一行按钮高度必须一致：`Button.Primary.Small` / `Button.Secondary.Small` 用 `ControlHeight.Small`，
+  默认按钮 / 输入框 / 下拉框用 `ControlHeight`，不要混档。

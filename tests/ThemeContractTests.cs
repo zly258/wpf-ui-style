@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using Xunit;
 
@@ -304,7 +305,7 @@ namespace WpfStyles.Tests
         {
             XElement formRow = FindKeyedStyle(ControlsPath, "FormRow");
             Assert.Equal("{x:Type Grid}", (string)formRow.Attribute("TargetType"));
-            Assert.Equal("{StaticResource Layout.FormRowMargin}",
+            Assert.Equal("{DynamicResource Layout.FormRowMargin}",
                 SetterValue(formRow, "Margin", "FormRow"));
 
             XElement formTextBox = FindKeyedStyle(ControlsPath, "TextBox.Form");
@@ -421,17 +422,15 @@ namespace WpfStyles.Tests
         [Fact]
         public void DataGrid_RowHeightFitsTheCellEditor()
         {
-            XDocument tokens = Load(TokensPath);
-            var doubles = tokens.Root.Elements()
-                .Where(e => e.Name.LocalName == "Double")
-                .ToDictionary(e => (string)e.Attribute(X + "Key") ?? "", e => double.Parse(e.Value));
-
             string rowHeight = ImplicitStyleSetterValue(DataControlsPath, "DataGrid", "RowHeight");
-            Assert.Contains("Layout.ControlHeight", rowHeight);
+            Assert.Contains("Layout.RowHeight", rowHeight);
 
-            // 行高必须不小于输入框高度，否则编辑态的编辑器会被行裁掉
-            Assert.True(doubles["Layout.ControlHeight"] >= doubles["Layout.ControlHeight"]);
-            Assert.True(doubles["Layout.ControlHeight"] > 0);
+            // 行高必须容得下 18px 正文行高 + 编辑器内边距，三档都不小于 24px
+            foreach (string profile in DensityProfiles)
+            {
+                double value = double.Parse(DensityProfile(profile)["Layout.RowHeight"].Value);
+                Assert.True(value >= 24, "Layout.RowHeight is too small in " + profile);
+            }
         }
 
         [Fact]
@@ -537,6 +536,223 @@ namespace WpfStyles.Tests
                 "DatePicker.Template 的 Calendar 缺少 MinWidth，弹层可能塌成竖条");
         }
 
+        private static readonly string[] DensityProfiles = { "Compact", "Medium", "Relaxed" };
+
+        private static string ThemeFile(string name) => Path.Combine(StylesRoot, "Theme", name);
+
+        private static Dictionary<string, XElement> KeyedResources(string path)
+        {
+            return Load(path).Root.Elements()
+                .Where(e => !string.IsNullOrWhiteSpace((string)e.Attribute(X + "Key")))
+                .ToDictionary(e => (string)e.Attribute(X + "Key"), e => e);
+        }
+
+        private static Dictionary<string, XElement> DensityProfile(string name)
+        {
+            return KeyedResources(ThemeFile("Density." + name + ".xaml"));
+        }
+
+        [Fact]
+        public void DensityProfiles_DefineTheSameLayoutKeys()
+        {
+            Dictionary<string, XElement> tokens = KeyedResources(TokensPath);
+            Dictionary<string, XElement> compact = DensityProfile("Compact");
+            Dictionary<string, XElement> medium = DensityProfile("Medium");
+            Dictionary<string, XElement> relaxed = DensityProfile("Relaxed");
+
+            string[] compactKeys = compact.Keys.OrderBy(k => k, StringComparer.Ordinal).ToArray();
+            Assert.Equal(compactKeys, medium.Keys.OrderBy(k => k, StringComparer.Ordinal).ToArray());
+            Assert.Equal(compactKeys, relaxed.Keys.OrderBy(k => k, StringComparer.Ordinal).ToArray());
+
+            foreach (string key in compactKeys)
+            {
+                // Tokens 必须保留同名兜底值，单独合并 Controls 的项目才不会缺资源。
+                Assert.True(tokens.ContainsKey(key), "Tokens.xaml is missing density key " + key);
+                Assert.Equal(tokens[key].Name.LocalName, compact[key].Name.LocalName);
+            }
+
+            Assert.Equal("compact", compact["Density.Profile"].Value.Trim());
+            Assert.Equal("medium", medium["Density.Profile"].Value.Trim());
+            Assert.Equal("relaxed", relaxed["Density.Profile"].Value.Trim());
+        }
+
+        [Fact]
+        public void ThemeEntries_MergeTheMatchingDensityProfile()
+        {
+            foreach (var pair in new[]
+            {
+                new KeyValuePair<string, string>("Theme.xaml", "Density.Medium.xaml"),
+                new KeyValuePair<string, string>("Theme.Compact.xaml", "Density.Compact.xaml"),
+                new KeyValuePair<string, string>("Theme.Relaxed.xaml", "Density.Relaxed.xaml")
+            })
+            {
+                var sources = Load(ThemeFile(pair.Key)).Root
+                    .Descendants()
+                    .Where(e => e.Name.LocalName == "ResourceDictionary")
+                    .Select(e => (string)e.Attribute("Source"))
+                    .Where(s => !string.IsNullOrWhiteSpace(s))
+                    .ToList();
+
+                Assert.Contains(pair.Value, sources);
+                Assert.Contains("Tokens.xaml", sources);
+                Assert.Contains("Controls.xaml", sources);
+                // 密度必须最后合并，否则会被控件字典内嵌套的 Tokens 中等兜底盖住
+                Assert.Equal(pair.Value, sources.Last());
+            }
+        }
+
+        [Fact]
+        public void Controls_ReadDensityTokensThroughDynamicResource()
+        {
+            HashSet<string> densityKeys = new HashSet<string>(
+                DensityProfile("Medium").Keys, StringComparer.OrdinalIgnoreCase);
+
+            var dynamicRe = new Regex(@"\{DynamicResource\s+(Layout\.[A-Za-z0-9.]+)\}");
+            var staticRe = new Regex(@"\{StaticResource\s+(Layout\.[A-Za-z0-9.]+)\}");
+
+            foreach (string path in new[] { ControlsPath, DataControlsPath, ExtrasPath, IconsPath })
+            {
+                string text = File.ReadAllText(path, Encoding.UTF8);
+
+                foreach (Match match in staticRe.Matches(text))
+                {
+                    string key = match.Groups[1].Value;
+                    Assert.False(densityKeys.Contains(key),
+                        path + " must read density token " + key + " with DynamicResource");
+                }
+
+                foreach (Match match in dynamicRe.Matches(text))
+                {
+                    string key = match.Groups[1].Value;
+                    Assert.True(densityKeys.Contains(key),
+                        path + " references unknown density token " + key);
+                }
+            }
+        }
+
+        [Fact]
+        public void DensityProfiles_AreStrictlyOrderedCompactMediumRelaxed()
+        {
+            var compact = DensityProfile("Compact");
+            var medium = DensityProfile("Medium");
+            var relaxed = DensityProfile("Relaxed");
+
+            foreach (string key in new[]
+            {
+                "Layout.ControlHeight",
+                "Layout.ControlHeight.Small",
+                "Layout.ControlHeight.Large",
+                "Layout.RowHeight",
+                "Layout.HeaderHeight",
+                "Layout.ButtonMinWidth",
+                "Layout.ProgressBarHeight"
+            })
+            {
+                double c = double.Parse(compact[key].Value);
+                double m = double.Parse(medium[key].Value);
+                double r = double.Parse(relaxed[key].Value);
+                Assert.True(c < m && m < r, key + " must grow: " + c + " < " + m + " < " + r);
+            }
+
+            foreach (string key in new[]
+            {
+                "Layout.TabPadding",
+                "Layout.InputPadding",
+                "Layout.FormRowMargin",
+                "Layout.ListItemPadding"
+            })
+            {
+                double[] c = compact[key].Value.Split(',').Select(double.Parse).ToArray();
+                double[] m = medium[key].Value.Split(',').Select(double.Parse).ToArray();
+                double[] r = relaxed[key].Value.Split(',').Select(double.Parse).ToArray();
+                Assert.True(c[0] <= m[0] && m[0] <= r[0], key + " left/start inset must grow");
+            }
+
+            // 按钮上下内边距必须为 0：高度由 Height 控制，避免“按钮显得过高”。
+            foreach (var profile in new[] { compact, medium, relaxed })
+            {
+                double[] padding = profile["Layout.ButtonPadding"].Value.Split(',').Select(double.Parse).ToArray();
+                Assert.Equal(2, padding.Length);
+                Assert.Equal(0, padding[1]);
+            }
+        }
+
+        [Fact]
+        public void TextBox_ContentHostFillsAvailableWidth()
+        {
+            XElement baseStyle = FindKeyedStyle(ControlsPath, "TextBox.Base");
+            Assert.Equal("Stretch",
+                SetterValue(baseStyle, "HorizontalContentAlignment", "TextBox.Base"));
+
+            XDocument controls = Load(ControlsPath);
+            XElement host = controls.Descendants()
+                .FirstOrDefault(e => e.Name.LocalName == "ScrollViewer"
+                    && (string)e.Attribute(X + "Name") == "PART_ContentHost");
+            Assert.NotNull(host);
+            Assert.Equal("Stretch", (string)host.Attribute("HorizontalAlignment"));
+            Assert.DoesNotContain("HorizontalContentAlignment",
+                (string)host.Attribute("HorizontalAlignment") ?? "");
+        }
+
+        [Fact]
+        public void TabItem_SelectedStateHasSurfaceBorderAndAccentBar()
+        {
+            XElement tabItem = Load(ControlsPath).Root.Elements()
+                .FirstOrDefault(e => e.Name.LocalName == "Style"
+                    && (string)e.Attribute("TargetType") == "{x:Type TabItem}"
+                    && e.Attribute(X + "Key") == null);
+            Assert.NotNull(tabItem);
+
+            Assert.Equal("{DynamicResource Layout.TabPadding}",
+                SetterValue(tabItem, "Padding", "TabItem"));
+            Assert.Equal("{DynamicResource Layout.TabMargin}",
+                SetterValue(tabItem, "Margin", "TabItem"));
+
+            XElement underline = tabItem.Descendants()
+                .FirstOrDefault(e => e.Name.LocalName == "Border"
+                    && (string)e.Attribute(X + "Name") == "Underline");
+            Assert.NotNull(underline);
+            Assert.Equal("2", (string)underline.Attribute("Height"));
+
+            XElement selected = tabItem.Descendants()
+                .FirstOrDefault(e => e.Name.LocalName == "Trigger"
+                    && (string)e.Attribute("Property") == "IsSelected"
+                    && (string)e.Attribute("Value") == "True");
+            Assert.NotNull(selected);
+
+            var setters = selected.Elements()
+                .Where(e => e.Name.LocalName == "Setter")
+                .ToList();
+
+            Assert.Contains(setters, s => (string)s.Attribute("TargetName") == "Bd"
+                && (string)s.Attribute("Property") == "Background"
+                && (string)s.Attribute("Value") == "{StaticResource Brush.Surface}");
+            Assert.Contains(setters, s => (string)s.Attribute("TargetName") == "Bd"
+                && (string)s.Attribute("Property") == "BorderBrush"
+                && (string)s.Attribute("Value") == "{StaticResource Brush.Border}");
+            Assert.Contains(setters, s => (string)s.Attribute("TargetName") == "Underline"
+                && (string)s.Attribute("Property") == "Background"
+                && (string)s.Attribute("Value") == "{StaticResource Brush.Accent}");
+            Assert.Contains(setters, s => (string)s.Attribute("Property") == "Foreground"
+                && (string)s.Attribute("Value") == "{StaticResource Brush.Accent}");
+        }
+
+        [Fact]
+        public void SecondaryButton_HasVisibleBorderAndCompactHeight()
+        {
+            XElement baseStyle = FindKeyedStyle(ControlsPath, "Button.Base");
+            Assert.Equal("{StaticResource Brush.Border.Control}",
+                SetterValue(baseStyle, "BorderBrush", "Button.Base"));
+            Assert.Equal("{DynamicResource Layout.ControlHeight}",
+                SetterValue(baseStyle, "Height", "Button.Base"));
+
+            XElement secondary = FindKeyedStyle(ControlsPath, "Button.Secondary");
+            XElement hover = FindTrigger(secondary, "IsMouseOver", "True");
+            Assert.NotNull(hover);
+            Assert.Equal("{StaticResource Brush.Accent}",
+                SetterValue(hover, "BorderBrush", "Button.Secondary hover"));
+        }
+
         [Fact]
         public void ContrastPairs_MeetMinimum()
         {
@@ -572,7 +788,11 @@ namespace WpfStyles.Tests
                 Pair("Color.Warning", "Color.WarningSubtle", 4.5),
                 Pair("Color.TooltipForeground", "Color.TooltipBackground", 4.5),
                 Pair("Color.Focus", "Color.Surface", 3.0),
-                Pair("Color.Focus", "Color.WindowBackground", 3.0)
+                Pair("Color.Focus", "Color.WindowBackground", 3.0),
+                // 按钮/输入框描边属于非文字 UI 组件，必须与相邻表面有 3:1
+                Pair("Color.BorderControl", "Color.Surface", 3.0),
+                Pair("Color.BorderControl", "Color.WindowBackground", 3.0),
+                Pair("Color.BorderControl", "Color.ControlHover", 3.0)
             };
 
             foreach (var pair in pairs)

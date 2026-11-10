@@ -1,17 +1,41 @@
 # 可复制 XAML 片段
 
-## 1. 合并主题
+## 1. 合并主题与选择密度
 
 ```xml
 <Application.Resources>
     <ResourceDictionary>
         <ResourceDictionary.MergedDictionaries>
+            <!-- 中等（默认）：Theme.xaml -->
+            <!-- 紧凑：Theme.Compact.xaml -->
+            <!-- 宽松：Theme.Relaxed.xaml -->
             <ResourceDictionary
                 Source="pack://application:,,,/YourAssembly;component/Theme/Theme.xaml" />
         </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
 </Application.Resources>
 ```
+
+运行时热切换（控件全部使用 `{DynamicResource Layout.*}`）：
+
+```csharp
+static void ApplyDensity(string profile) // Compact / Medium / Relaxed
+{
+    var dict = new ResourceDictionary
+    {
+        Source = new Uri("pack://application:,,,/YourAssembly;component/Theme/Density." +
+                         profile + ".xaml", UriKind.Absolute)
+    };
+    var merged = Application.Current.Resources.MergedDictionaries;
+    for (int i = merged.Count - 1; i >= 0; i--)
+        if (merged[i].Source?.OriginalString.Contains("/Density.") == true)
+            merged.RemoveAt(i);
+    merged.Add(dict);
+}
+```
+
+> 业务 XAML 用 `{StaticResource Layout.*}`，主题内部用 `{DynamicResource Layout.*}`。
+> 三档键值与选型见 `docs/06-density.md`。
 
 ## 2. 按钮
 
@@ -561,3 +585,56 @@
     <TextBox Canvas.Left="20" Canvas.Top="12" />
 </Canvas>
 ```
+
+---
+
+## 19. 输入区占满整行（R16）
+
+```xml
+<!-- 列用 * + MinWidth；输入框不写 Width -->
+<Grid>
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto" MinWidth="{StaticResource Layout.FormLabelMinWidth}" />
+        <ColumnDefinition Width="*" MinWidth="{StaticResource Layout.InputMinWidth}" />
+    </Grid.ColumnDefinitions>
+    <TextBlock Text="工程名称" Style="{StaticResource Text.Label}" />
+    <TextBox Grid.Column="1" Text="{Binding Name}" />
+</Grid>
+```
+
+要点：
+
+- 主题模板已把 `PART_ContentHost` 设为 `HorizontalAlignment="Stretch"`；
+- 不要设置 `HorizontalContentAlignment="Left"`，否则右侧空白点不进去；
+- 需要最大宽度时用 `MaxWidth`，不要写死 `Width`。
+
+---
+
+## 20. 标签页（可见选中态）
+
+```xml
+<TabControl>
+    <TabItem Header="基本信息">
+        <Grid Margin="0,8,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" MinWidth="{StaticResource Layout.FormLabelMinWidth}" />
+                <ColumnDefinition Width="*" MinWidth="{StaticResource Layout.InputMinWidth}" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="工程名称" Style="{StaticResource Text.Label}" />
+            <TextBox Grid.Column="1" Text="{Binding Name}" />
+        </Grid>
+    </TabItem>
+    <TabItem Header="高级选项">
+        <StackPanel Margin="0,8,0,0">
+            <CheckBox Content="启用自动保存" IsChecked="True" />
+            <CheckBox Content="记录调试日志" />
+        </StackPanel>
+    </TabItem>
+</TabControl>
+```
+
+要点：
+
+- 选中态 = `Brush.Surface` 底 + 1px `Brush.Border` 描边 + 2px `Brush.Accent` 底条 + Accent 半粗文字；
+- 未选中悬停 = `Brush.Control.Hover` 底 + `Brush.Border` 描边；
+- 标签页只做局部切换；整窗多任务仍按 R12 拆窗口。

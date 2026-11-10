@@ -23,23 +23,37 @@
 
 - 业务 XAML 禁止出现 `FontFamily`，禁止写 `FontSize="13"` 字面量。
 - 复选框 / 单选框不得小于 **16×16**（`Layout.CheckBox.Size`）。
-- 字号变化后必须同步检查：控件高度（32/28）、行高（26）、表头（28）、Tab/Menu/ToolTip/DataGrid 内边距。
+- 字号不随密度变化；控件高度/行高由密度令牌控制：紧凑 26/24、中等 30/28、宽松 34/32。
+
+## 三档密度（默认中等）
+
+| 密度 | 入口 | 控件高 | 表格行 | Tab 内边距 | 按钮内边距 |
+|---|---|---:|---:|---|---|
+| 紧凑 | `Theme.Compact.xaml` | 26 | 24 | 10,4 | 10,0 |
+| 中等 | `Theme.xaml` | **30** | **28** | **12,6** | **12,0** |
+| 宽松 | `Theme.Relaxed.xaml` | 34 | 32 | 16,8 | 16,0 |
+
+- 业务 XAML 用 `{StaticResource Layout.*}`；主题内部用 `{DynamicResource Layout.*}`（支持运行时换挡）。
+- 同一窗口只用一档；颜色、字号、圆角、16px 勾选框不随密度变化。
+- 运行时切换：替换应用级 `Density.*.xaml` 合并字典（见 `docs/06-density.md`）。
 
 ## 状态速查
 
-| 状态 | 背景 | 前景 |
-|---|---|---|
-| 主按钮 Normal | `Brush.Accent` | `Brush.OnAccent` |
-| 主按钮 Hover | `Brush.Accent.Hover` | `Brush.OnAccent` |
-| 主按钮 Disabled | `Brush.Control.Disabled` | `Brush.Text.Disabled` |
-| 次按钮 Hover | `Brush.Control.Hover` | `Brush.Text.Primary` |
-| 危险按钮 Hover | `Brush.Danger.Subtle` | `Brush.Danger.Hover` |
-| 输入框 Focus | `Brush.Surface` | `Brush.Text.Primary` |
-| 列表 Hover | `Brush.Control.Hover` | `Brush.Text.Primary` |
-| 列表 Selected | `Brush.Selection` | `Brush.Text.Primary` |
-| 列表 Selected+Hover | `Brush.Selection.Hover` | `Brush.Text.Primary` |
-| ComboBoxItem Selected | `Brush.Accent.Subtle` | `Brush.Text.Primary` |
-| ToolTip | `Brush.Tooltip.Background` | `Brush.Tooltip.Foreground` |
+| 状态 | 背景 | 前景 | 边框 |
+|---|---|---|---|
+| 次按钮 Normal | `Brush.Surface` | `Brush.Text.Primary` | `Brush.Border.Control` |
+| 次按钮 Hover | `Brush.Control.Hover` | `Brush.Text.Primary` | `Brush.Accent` |
+| 主按钮 Normal | `Brush.Accent` | `Brush.OnAccent` | `Brush.Accent` |
+| 主按钮 Hover | `Brush.Accent.Hover` | `Brush.OnAccent` | `Brush.Accent.Hover` |
+| 主按钮 Disabled | `Brush.Control.Disabled` | `Brush.Text.Disabled` | `Brush.Border` |
+| 危险按钮 Hover | `Brush.Danger.Subtle` | `Brush.Danger.Hover` | `Brush.Danger.Hover` |
+| 输入框 Focus | `Brush.Surface` | `Brush.Text.Primary` | `Brush.Focus` |
+| 列表 Hover | `Brush.Control.Hover` | `Brush.Text.Primary` | 透明 |
+| 列表 Selected | `Brush.Selection` | `Brush.Text.Primary` | 透明 |
+| 列表 Selected+Hover | `Brush.Selection.Hover` | `Brush.Text.Primary` | 透明 |
+| ComboBoxItem Selected | `Brush.Accent.Subtle` | `Brush.Text.Primary` | 透明 |
+| 标签页 Selected | `Brush.Surface` | `Brush.Accent` | `Brush.Border` + 2px Accent 底条 |
+| ToolTip | `Brush.Tooltip.Background` | `Brush.Tooltip.Foreground` | 同背景 |
 
 ## 多行文本高度与自适应
 
@@ -60,6 +74,22 @@
 - 表单多行放在 `Auto` 行并设置 `VerticalAlignment="Top"`。
 - 不要写 `Height="*"`。
 
+
+## 输入占满与标签页（R16）
+
+```xml
+<!-- 输入区横向占满：列用 *，输入框不写 Width -->
+<TextBox Grid.Column="1" Text="{Binding Name}" />
+
+<!-- 标签页：使用默认 TabItem 选中态（Surface 底 + 描边 + 2px Accent 底条） -->
+<TabControl>
+    <TabItem Header="基本信息">...</TabItem>
+    <TabItem Header="高级选项">...</TabItem>
+</TabControl>
+```
+
+- 不要给 `TextBox` / `PasswordBox` / `ComboBox` 设 `HorizontalContentAlignment="Left"`。
+- 标签页选中态不能只剩一条 1px 横线；仍禁止用 tab 承载整窗多任务导航。
 
 ## 防截断 / 防遮挡（显示不全与重叠）
 
@@ -85,7 +115,7 @@
 
 | 交互态 | 必查项 |
 |---|---|
-| 表格单元格编辑 | 编辑器高度 ≤ 行高（`RowHeight` ≥ `Layout.ControlHeight`），文字上下居中 |
+| 表格单元格编辑 | 行高取 `Layout.RowHeight`；编辑器 `Height=Auto` 跟随行高，文字上下居中 |
 | 折叠面板展开长内容 | 内容区出现滚动条，窗口不被撑高，底部按钮栏不被顶出 |
 | 日期/下拉弹层打开 | 弹层有内容；按钮不压住输入内容（`DatePickerTextBox` 要 `Stretch`） |
 | 长列表滚动 | 竖向滚动条可见，滑块方向正确（`Track.Orientation` 绑定 `TemplateBinding Orientation`） |
@@ -158,6 +188,10 @@ pwsh ./tools/LayoutCheck.ps1 -Root "D:\your\project"
 10. 工具栏全员次要按钮：破坏性操作（如删除）混在常规操作中无危险警示色。
 11. 标签列写死像素宽度 → 长标签被裁成 "起始流…"。
 12. 窗口写死 `Height` + 无滚动 → 底部按钮被内容盖住（150% DPI 更明显）。
+13. 输入框内容宿主 `Left` 对齐 → 右侧点不进去，长值像被截断。
+14. 标签页选中只画一条细线 → 分不清当前页。
+15. 白底按钮用浅色描边 → 按钮边界消失；应使用 `Brush.Border.Control`。
+16. 同一窗口混用 26/30/34 三档高度 → 基线不齐。
 
 
 ---
@@ -182,6 +216,6 @@ pwsh ./tools/LayoutCheck.ps1 -Root "D:\your\project"
 - **严禁写死 Fill="#..."**。
 - 默认继承宿主 `(TextElement.Foreground)`，主按钮自动纯白，禁用自动变灰。
 - 纯图标按钮必带 `ToolTip`。
-- 图标按钮尺寸矩阵：`Button.Icon.Small` (24px) / `Button.Icon` (28px) / `Button.Icon.Large` (32px)。
+- 图标按钮尺寸矩阵（中等密度）：`Button.Icon.Small` (24px) / `Button.Icon` (28px) / `Button.Icon.Large` (32px)；紧凑/宽松按 `Layout.IconButton.*` 自动换挡。
 
 

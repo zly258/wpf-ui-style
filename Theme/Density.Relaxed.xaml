@@ -1,0 +1,67 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!--
+        ============================================================
+        Density 宽松 (Relaxed)
+        ============================================================
+        用于：触屏 / 演示 / 培训场景、低信息密度面板、需要更大点击靶心的窗口。
+        （本规范正文与按钮字号仍为 12px，不做放大；只放大控件与留白。）
+    -->
+
+    <sys:String x:Key="Density.Profile">relaxed</sys:String>
+
+    <!-- 控件高度 -->
+    <sys:Double x:Key="Layout.ControlHeight">34</sys:Double>
+    <sys:Double x:Key="Layout.ControlHeight.Small">30</sys:Double>
+    <sys:Double x:Key="Layout.ControlHeight.Large">40</sys:Double>
+
+    <!-- 数据行 / 表头 -->
+    <sys:Double x:Key="Layout.RowHeight">32</sys:Double>
+    <sys:Double x:Key="Layout.HeaderHeight">34</sys:Double>
+
+    <!-- 按钮 -->
+    <sys:Double x:Key="Layout.ButtonMinWidth">72</sys:Double>
+    <sys:Double x:Key="Layout.ButtonMinWidth.Small">56</sys:Double>
+    <Thickness x:Key="Layout.ButtonPadding">16,0</Thickness>
+    <Thickness x:Key="Layout.ButtonPadding.Small">10,0</Thickness>
+
+    <!-- 输入 -->
+    <Thickness x:Key="Layout.InputPadding">10,0</Thickness>
+    <Thickness x:Key="Layout.InputPadding.Multiline">10,8</Thickness>
+    <Thickness x:Key="Layout.ComboBoxPadding">10,0,26,0</Thickness>
+    <Thickness x:Key="Layout.ComboBoxItemPadding">10,5</Thickness>
+    <Thickness x:Key="Layout.DatePickerPadding">10,0,32,0</Thickness>
+
+    <!-- 列表 / 菜单 -->
+    <Thickness x:Key="Layout.ListItemPadding">10,6</Thickness>
+    <Thickness x:Key="Layout.ListViewItemPadding">5,3</Thickness>
+    <Thickness x:Key="Layout.MenuItemPadding">10,6</Thickness>
+
+    <!-- 容器 / 间距 -->
+    <Thickness x:Key="Layout.WindowPadding">16</Thickness>
+    <Thickness x:Key="Layout.GroupPadding">14</Thickness>
+    <Thickness x:Key="Layout.CardPadding">14</Thickness>
+    <Thickness x:Key="Layout.FormRowMargin">0,5,0,5</Thickness>
+    <Thickness x:Key="Layout.SectionMargin">0,0,0,14</Thickness>
+
+    <!-- 标签页 -->
+    <Thickness x:Key="Layout.TabPadding">16,8</Thickness>
+    <Thickness x:Key="Layout.TabMargin">0,0,6,0</Thickness>
+
+    <!-- 其它 -->
+    <Thickness x:Key="Layout.TooltipPadding">10,5</Thickness>
+    <Thickness x:Key="Layout.BadgePadding">10,3</Thickness>
+    <Thickness x:Key="Layout.ExpanderHeaderPadding">12,8</Thickness>
+    <Thickness x:Key="Layout.ExpanderContentPadding">12,8</Thickness>
+    <Thickness x:Key="Layout.ToolBarPadding">6,4</Thickness>
+    <sys:Double x:Key="Layout.ToolBarHeight">52</sys:Double>
+    <sys:Double x:Key="Layout.ProgressBarHeight">10</sys:Double>
+
+    <sys:Double x:Key="Layout.TagHeight">26</sys:Double>
+    <sys:Double x:Key="Layout.IconButton.Micro">28</sys:Double>
+    <sys:Double x:Key="Layout.IconButton.Small">32</sys:Double>
+    <sys:Double x:Key="Layout.IconButton.Large">36</sys:Double>
+
+</ResourceDictionary>

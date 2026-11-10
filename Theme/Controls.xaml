@@ -81,18 +81,22 @@
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
         <Setter Property="FontWeight" Value="Normal" />
-        <Setter Property="Height" Value="{StaticResource Layout.ControlHeight}" />
-        <Setter Property="MinWidth" Value="{StaticResource Layout.ButtonMinWidth}" />
-        <Setter Property="Padding" Value="{StaticResource Layout.ButtonPadding}" />
+        <Setter Property="Height" Value="{DynamicResource Layout.ControlHeight}" />
+        <Setter Property="MinWidth" Value="{DynamicResource Layout.ButtonMinWidth}" />
+        <Setter Property="Padding" Value="{DynamicResource Layout.ButtonPadding}" />
         <Setter Property="Background" Value="{StaticResource Brush.Surface}" />
-        <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />
+        <!-- 默认按钮是「白底 + 清晰描边」。描边必须比分隔线更深（≥3:1），
+             否则在浅色窗口里按钮边界几乎不可见。 -->
+        <Setter Property="BorderBrush" Value="{StaticResource Brush.Border.Control}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
         <Setter Property="Cursor" Value="Hand" />
+        <!-- 焦点由描边表达；不要再叠一层系统虚线框。 -->
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <!-- 同一行里混用 36 / 32 等尺寸时，按钮要共用一条垂直中轴，
+        <!-- 同一行里混用不同高度时，按钮要共用一条垂直中轴，
              否则默认的 Stretch（带 Height 时等同顶对齐）会让图标/文字上下错位。 -->
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Template" Value="{StaticResource Button.Template}" />
@@ -103,12 +107,12 @@
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource Brush.Control.Hover}" />
-                <Setter Property="BorderBrush" Value="{StaticResource Brush.Border.Strong}" />
+                <Setter Property="BorderBrush" Value="{StaticResource Brush.Accent}" />
                 <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
                 <Setter Property="Background" Value="{StaticResource Brush.Control.Pressed}" />
-                <Setter Property="BorderBrush" Value="{StaticResource Brush.Accent}" />
+                <Setter Property="BorderBrush" Value="{StaticResource Brush.Accent.Pressed}" />
                 <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
             </Trigger>
             <Trigger Property="IsKeyboardFocused" Value="True">
@@ -208,29 +212,41 @@
         </Style.Triggers>
     </Style>
 
-    <!-- 小号按钮 -->
+    <!-- 小号按钮：工具条、表格行内、弹层底部 -->
     <Style x:Key="Button.Primary.Small" TargetType="{x:Type Button}" BasedOn="{StaticResource Button.Primary}">
-        <Setter Property="Height" Value="{StaticResource Layout.ControlHeight.Small}" />
-        <Setter Property="MinWidth" Value="{StaticResource Layout.ButtonMinWidth.Small}" />
-        <Setter Property="Padding" Value="7,0" />
+        <Setter Property="Height" Value="{DynamicResource Layout.ControlHeight.Small}" />
+        <Setter Property="MinWidth" Value="{DynamicResource Layout.ButtonMinWidth.Small}" />
+        <Setter Property="Padding" Value="{DynamicResource Layout.ButtonPadding.Small}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Caption}" />
     </Style>
     <Style x:Key="Button.Secondary.Small" TargetType="{x:Type Button}" BasedOn="{StaticResource Button.Secondary}">
-        <Setter Property="Height" Value="{StaticResource Layout.ControlHeight.Small}" />
-        <Setter Property="MinWidth" Value="{StaticResource Layout.ButtonMinWidth.Small}" />
-        <Setter Property="Padding" Value="7,0" />
+        <Setter Property="Height" Value="{DynamicResource Layout.ControlHeight.Small}" />
+        <Setter Property="MinWidth" Value="{DynamicResource Layout.ButtonMinWidth.Small}" />
+        <Setter Property="Padding" Value="{DynamicResource Layout.ButtonPadding.Small}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Caption}" />
     </Style>
     <Style x:Key="Button.Text.Small" TargetType="{x:Type Button}" BasedOn="{StaticResource Button.Text}">
-        <Setter Property="Height" Value="{StaticResource Layout.ControlHeight.Small}" />
-        <Setter Property="Padding" Value="5,0" />
+        <Setter Property="Height" Value="{DynamicResource Layout.ControlHeight.Small}" />
+        <Setter Property="Padding" Value="{DynamicResource Layout.ButtonPadding.Small}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Caption}" />
     </Style>
     <Style x:Key="Button.Danger.Small" TargetType="{x:Type Button}" BasedOn="{StaticResource Button.Danger}">
-        <Setter Property="Height" Value="{StaticResource Layout.ControlHeight.Small}" />
-        <Setter Property="MinWidth" Value="{StaticResource Layout.ButtonMinWidth.Small}" />
-        <Setter Property="Padding" Value="7,0" />
+        <Setter Property="Height" Value="{DynamicResource Layout.ControlHeight.Small}" />
+        <Setter Property="MinWidth" Value="{DynamicResource Layout.ButtonMinWidth.Small}" />
+        <Setter Property="Padding" Value="{DynamicResource Layout.ButtonPadding.Small}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Caption}" />
+    </Style>
+
+    <!-- 大号按钮：主操作区 / 触屏密度 -->
+    <Style x:Key="Button.Primary.Large" TargetType="{x:Type Button}" BasedOn="{StaticResource Button.Primary}">
+        <Setter Property="Height" Value="{DynamicResource Layout.ControlHeight.Large}" />
+        <Setter Property="Padding" Value="{DynamicResource Layout.ButtonPadding}" />
+        <Setter Property="MinWidth" Value="{DynamicResource Layout.ButtonMinWidth}" />
+    </Style>
+    <Style x:Key="Button.Secondary.Large" TargetType="{x:Type Button}" BasedOn="{StaticResource Button.Secondary}">
+        <Setter Property="Height" Value="{DynamicResource Layout.ControlHeight.Large}" />
+        <Setter Property="Padding" Value="{DynamicResource Layout.ButtonPadding}" />
+        <Setter Property="MinWidth" Value="{DynamicResource Layout.ButtonMinWidth}" />
     </Style>
 
 
@@ -249,17 +265,26 @@
                 BorderThickness="{TemplateBinding BorderThickness}"
                 CornerRadius="{StaticResource Radius.Input}"
                 SnapsToDevicePixels="True">
+            <!-- 关键：ScrollViewer 必须双向 Stretch。
+                 只跟随 HorizontalContentAlignment="Left" 会让文本宿主按内容宽度
+                 收缩，点击输入框右侧空白处无法进入编辑；只跟随
+                 VerticalContentAlignment 则会让高度收缩，上下留白点不进去。
+                 文本本身的对齐由 ScrollViewer 的 Horizontal/VerticalContentAlignment
+                 继续传递给内部 TextBoxView。 -->
             <ScrollViewer x:Name="PART_ContentHost"
                           Focusable="False"
+                          Background="Transparent"
                           Margin="{TemplateBinding Padding}"
-                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch"
+                          HorizontalContentAlignment="Stretch"
+                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
                           HorizontalScrollBarVisibility="{Binding HorizontalScrollBarVisibility, RelativeSource={RelativeSource TemplatedParent}}"
                           VerticalScrollBarVisibility="{Binding VerticalScrollBarVisibility, RelativeSource={RelativeSource TemplatedParent}}" />
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Border.Strong}" />
+                <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Accent}" />
             </Trigger>
             <Trigger Property="IsKeyboardFocusWithin" Value="True">
                 <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Focus}" />
@@ -281,13 +306,14 @@
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
         <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
         <Setter Property="Background" Value="{StaticResource Brush.Surface}" />
-        <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />
+        <Setter Property="BorderBrush" Value="{StaticResource Brush.Border.Control}" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Height" Value="{StaticResource Layout.ControlHeight}" />
+        <Setter Property="Height" Value="{DynamicResource Layout.ControlHeight}" />
         <Setter Property="MinHeight" Value="0" />
-        <Setter Property="Padding" Value="{StaticResource Layout.InputPadding}" />
+        <Setter Property="Padding" Value="{DynamicResource Layout.InputPadding}" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <!-- 输入区默认占满整行：文字、光标、点击热区都覆盖到右边界。 -->
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="CaretBrush" Value="{StaticResource Brush.Text.Primary}" />
         <Setter Property="SelectionBrush" Value="{StaticResource Brush.Accent}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -297,7 +323,7 @@
     <Style x:Key="TextBox.Multiline" TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBox.Base}">
         <Setter Property="Height" Value="Auto" />
         <Setter Property="MinHeight" Value="0" />
-        <Setter Property="Padding" Value="{StaticResource Layout.InputPadding.Multiline}" />
+        <Setter Property="Padding" Value="{DynamicResource Layout.InputPadding.Multiline}" />
         <Setter Property="AcceptsReturn" Value="True" />
         <Setter Property="TextWrapping" Value="Wrap" />
         <Setter Property="VerticalContentAlignment" Value="Top" />
@@ -332,7 +358,7 @@
          一行 = 标签列(Auto + MinWidth) + 输入列(* + MinWidth)。
          列定义写在业务 XAML 里（本样式只负责行间距与对齐）。 -->
     <Style x:Key="FormRow" TargetType="{x:Type Grid}">
-        <Setter Property="Margin" Value="{StaticResource Layout.FormRowMargin}" />
+        <Setter Property="Margin" Value="{DynamicResource Layout.FormRowMargin}" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Top" />
     </Style>
@@ -342,12 +368,13 @@
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
         <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
         <Setter Property="Background" Value="{StaticResource Brush.Surface}" />
-        <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />
+        <Setter Property="BorderBrush" Value="{StaticResource Brush.Border.Control}" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Height" Value="{StaticResource Layout.ControlHeight}" />
+        <Setter Property="Height" Value="{DynamicResource Layout.ControlHeight}" />
         <Setter Property="MinHeight" Value="0" />
-        <Setter Property="Padding" Value="{StaticResource Layout.InputPadding}" />
+        <Setter Property="Padding" Value="{DynamicResource Layout.InputPadding}" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="CaretBrush" Value="{StaticResource Brush.Text.Primary}" />
         <Setter Property="SelectionBrush" Value="{StaticResource Brush.Accent}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -400,7 +427,7 @@
         <Setter Property="MinHeight" Value="0" />
         <Setter Property="Height" Value="Auto" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="AllowDrop" Value="True" />
         <Setter Property="Cursor" Value="IBeam" />
@@ -411,7 +438,10 @@
                     <ScrollViewer x:Name="PART_ContentHost"
                                   Focusable="False"
                                   Background="Transparent"
-                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                  HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Stretch"
+                                  HorizontalContentAlignment="Stretch"
+                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
                                   HorizontalScrollBarVisibility="Hidden"
                                   VerticalScrollBarVisibility="Hidden"
                                   SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
@@ -430,11 +460,11 @@
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
         <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
         <Setter Property="Background" Value="{StaticResource Brush.Surface}" />
-        <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />
+        <Setter Property="BorderBrush" Value="{StaticResource Brush.Border.Control}" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Height" Value="{StaticResource Layout.ControlHeight}" />
+        <Setter Property="Height" Value="{DynamicResource Layout.ControlHeight}" />
         <Setter Property="MinHeight" Value="0" />
-        <Setter Property="Padding" Value="5,0,20,0" />
+        <Setter Property="Padding" Value="{DynamicResource Layout.ComboBoxPadding}" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -506,7 +536,7 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="ToggleButton" Property="BorderBrush" Value="{StaticResource Brush.Border.Strong}" />
+                            <Setter TargetName="ToggleButton" Property="BorderBrush" Value="{StaticResource Brush.Accent}" />
                         </Trigger>
                         <Trigger Property="IsKeyboardFocusWithin" Value="True">
                             <Setter TargetName="ToggleButton" Property="BorderBrush" Value="{StaticResource Brush.Focus}" />
@@ -540,9 +570,9 @@
 
     <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource ComboBox.Base}" />
 
-    <!-- 紧凑型下拉框：适配工具栏、属性栏与紧凑表单（高度 28px） -->
+    <!-- 紧凑型下拉框：适配工具栏、属性栏与紧凑表单 -->
     <Style x:Key="ComboBox.Small" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource ComboBox.Base}">
-        <Setter Property="Height" Value="{StaticResource Layout.ControlHeight.Small}" />
+        <Setter Property="Height" Value="{DynamicResource Layout.ControlHeight.Small}" />
         <Setter Property="MinHeight" Value="0" />
     </Style>
 
@@ -551,7 +581,7 @@
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
         <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Padding" Value="7,4" />
+        <Setter Property="Padding" Value="{DynamicResource Layout.ComboBoxItemPadding}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="Template">
             <Setter.Value>
@@ -613,7 +643,7 @@
                                 Height="{StaticResource Layout.CheckBox.Size}"
                                 CornerRadius="{StaticResource Radius.Small}"
                                 Background="{StaticResource Brush.Surface}"
-                                BorderBrush="{StaticResource Brush.Border}"
+                                BorderBrush="{StaticResource Brush.Border.Control}"
                                 BorderThickness="1"
                                 VerticalAlignment="Center">
                             <Path x:Name="Check"
@@ -633,7 +663,7 @@
                     </StackPanel>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Box" Property="BorderBrush" Value="{StaticResource Brush.Border.Strong}" />
+                            <Setter TargetName="Box" Property="BorderBrush" Value="{StaticResource Brush.Accent}" />
                         </Trigger>
                         <Trigger Property="IsKeyboardFocused" Value="True">
                             <Setter TargetName="Box" Property="BorderBrush" Value="{StaticResource Brush.Focus}" />
@@ -675,7 +705,7 @@
                                 Height="{StaticResource Layout.RadioButton.Size}"
                                 CornerRadius="8"
                                 Background="{StaticResource Brush.Surface}"
-                                BorderBrush="{StaticResource Brush.Border}"
+                                BorderBrush="{StaticResource Brush.Border.Control}"
                                 BorderThickness="1"
                                 VerticalAlignment="Center">
                             <Ellipse x:Name="Dot"
@@ -689,7 +719,7 @@
                     </StackPanel>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Ring" Property="BorderBrush" Value="{StaticResource Brush.Border.Strong}" />
+                            <Setter TargetName="Ring" Property="BorderBrush" Value="{StaticResource Brush.Accent}" />
                         </Trigger>
                         <Trigger Property="IsKeyboardFocused" Value="True">
                             <Setter TargetName="Ring" Property="BorderBrush" Value="{StaticResource Brush.Focus}" />
@@ -721,8 +751,8 @@
         <Setter Property="Background" Value="{StaticResource Brush.Surface}" />
         <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Padding" Value="{StaticResource Layout.GroupPadding}" />
-        <Setter Property="Margin" Value="0,0,0,10" />
+        <Setter Property="Padding" Value="{DynamicResource Layout.GroupPadding}" />
+        <Setter Property="Margin" Value="{DynamicResource Layout.SectionMargin}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="Template">
             <Setter.Value>
@@ -761,7 +791,7 @@
         <Setter Property="Background" Value="{StaticResource Brush.Surface}" />
         <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Margin" Value="0,0,0,10" />
+        <Setter Property="Margin" Value="{DynamicResource Layout.SectionMargin}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Expander}">
@@ -781,7 +811,7 @@
                                     <ControlTemplate TargetType="{x:Type ToggleButton}">
                                         <Border x:Name="HeaderBorder"
                                                 Background="{TemplateBinding Background}"
-                                                Padding="10,6">
+                                                Padding="{DynamicResource Layout.ExpanderHeaderPadding}">
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="Auto" />
@@ -828,7 +858,7 @@
                             </ToggleButton>
                             <Border x:Name="ContentSite"
                                     Visibility="Collapsed"
-                                    Padding="8,6"
+                                    Padding="{DynamicResource Layout.ExpanderContentPadding}"
                                     BorderBrush="{StaticResource Brush.Border}"
                                     BorderThickness="0,1,0,0">
                                 <!-- 内容过长时由内容区自己滚动（最多 ExpanderMaxHeight），
@@ -853,13 +883,21 @@
 
     <!-- ============================================================
          6. TabControl / TabItem
+         ============================================================
+         选中的标签页必须是「一块面」，而不是只有一条横线：
+           - 浅色 Surface 底 + 1px 描边 + 上方圆角；
+           - 底部 2px Accent 指示条压在标签栏基线上；
+           - Accent 前景 + SemiBold；
+           - 未选中标签悬停时也有浅底和描边，点击目标清晰。
+         注意：R12 仍然禁止用 TabControl 做整窗多任务导航，
+         本样式适用于分组设置、属性分类、画廊演示等局部切换。
          ============================================================ -->
     <Style TargetType="{x:Type TabControl}">
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Padding" Value="0" />
+        <Setter Property="Padding" Value="0,8,0,0" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="Template">
             <Setter.Value>
@@ -870,6 +908,7 @@
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <Grid Grid.Row="0">
+                            <!-- 标签栏基线：贯穿整行，是未选中标签的视觉锚点 -->
                             <Border VerticalAlignment="Bottom"
                                     BorderBrush="{StaticResource Brush.Border}"
                                     BorderThickness="0,0,0,1"
@@ -891,28 +930,36 @@
     </Style>
 
     <Style TargetType="{x:Type TabItem}">
-        <Setter Property="Padding" Value="9,5" />
-        <Setter Property="Margin" Value="0,0,3,0" />
+        <Setter Property="Padding" Value="{DynamicResource Layout.TabPadding}" />
+        <Setter Property="Margin" Value="{DynamicResource Layout.TabMargin}" />
+        <Setter Property="MinHeight" Value="{DynamicResource Layout.ControlHeight.Small}" />
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
+        <Setter Property="FontWeight" Value="Normal" />
         <Setter Property="Foreground" Value="{StaticResource Brush.Text.Secondary}" />
         <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TabItem}">
-                    <Grid>
+                    <Grid Margin="{TemplateBinding Margin}" SnapsToDevicePixels="True">
                         <Border x:Name="Bd"
                                 Background="{TemplateBinding Background}"
-                                Margin="0,0,0,0"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="1,1,1,0"
+                                CornerRadius="4,4,0,0"
                                 Padding="{TemplateBinding Padding}"
                                 SnapsToDevicePixels="True">
                             <ContentPresenter ContentSource="Header"
                                               HorizontalAlignment="Center"
                                               VerticalAlignment="Center"
                                               TextElement.Foreground="{TemplateBinding Foreground}"
+                                              TextElement.FontWeight="{TemplateBinding FontWeight}"
                                               RecognizesAccessKey="True" />
                         </Border>
+                        <!-- 2px 指示条：选中时压在标签栏基线上，形成明确归属 -->
                         <Border x:Name="Underline"
                                 Height="2"
                                 VerticalAlignment="Bottom"
@@ -922,17 +969,36 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Control.Hover}" />
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Border}" />
                             <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Surface}" />
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Border}" />
                             <Setter TargetName="Underline" Property="Background" Value="{StaticResource Brush.Accent}" />
                             <Setter Property="Foreground" Value="{StaticResource Brush.Accent}" />
+                            <Setter Property="FontWeight" Value="SemiBold" />
                         </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsSelected" Value="True" />
+                                <Condition Property="IsMouseOver" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Surface}" />
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Border.Strong}" />
+                            <Setter TargetName="Underline" Property="Background" Value="{StaticResource Brush.Accent.Hover}" />
+                            <Setter Property="Foreground" Value="{StaticResource Brush.Accent.Hover}" />
+                        </MultiTrigger>
                         <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Focus}" />
                             <Setter TargetName="Underline" Property="Background" Value="{StaticResource Brush.Focus}" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Bd" Property="Background" Value="Transparent" />
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="Transparent" />
+                            <Setter TargetName="Underline" Property="Background" Value="Transparent" />
                             <Setter Property="Foreground" Value="{StaticResource Brush.Text.Disabled}" />
+                            <Setter Property="Cursor" Value="Arrow" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -950,7 +1016,7 @@
         <Setter Property="Background" Value="{StaticResource Brush.Tooltip.Background}" />
         <Setter Property="BorderBrush" Value="{StaticResource Brush.Tooltip.Background}" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Padding" Value="8,4" />
+        <Setter Property="Padding" Value="{DynamicResource Layout.TooltipPadding}" />
         <Setter Property="MaxWidth" Value="460" />
         <Setter Property="Template">
             <Setter.Value>
@@ -971,7 +1037,7 @@
          8. ProgressBar / StatusBar / Separator
          ============================================================ -->
     <Style TargetType="{x:Type ProgressBar}">
-        <Setter Property="Height" Value="8" />
+        <Setter Property="Height" Value="{DynamicResource Layout.ProgressBarHeight}" />
         <Setter Property="Foreground" Value="{StaticResource Brush.Accent}" />
         <Setter Property="Background" Value="{StaticResource Brush.SurfaceAlt}" />
         <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />
@@ -1170,7 +1236,7 @@
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
         <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Padding" Value="8,4" />
+        <Setter Property="Padding" Value="{DynamicResource Layout.MenuItemPadding}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="Template">
             <Setter.Value>

@@ -23,13 +23,13 @@
         <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="CornerRadius" Value="{StaticResource Radius.Card}" />
-        <Setter Property="Padding" Value="{StaticResource Layout.GroupPadding}" />
+        <Setter Property="Padding" Value="{DynamicResource Layout.CardPadding}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
     </Style>
 
     <Style x:Key="Badge.Base" TargetType="{x:Type Border}">
         <Setter Property="CornerRadius" Value="{StaticResource Radius.Pill}" />
-        <Setter Property="Padding" Value="8,2" />
+        <Setter Property="Padding" Value="{DynamicResource Layout.BadgePadding}" />
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -92,6 +92,7 @@
         <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Control.Hover}" />
+                <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Accent}" />
                 <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
@@ -115,13 +116,14 @@
     <Style x:Key="ToggleButton.Base" TargetType="{x:Type ToggleButton}">
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
-        <Setter Property="Height" Value="{StaticResource Layout.ControlHeight}" />
-        <Setter Property="MinWidth" Value="{StaticResource Layout.ButtonMinWidth}" />
-        <Setter Property="Padding" Value="{StaticResource Layout.ButtonPadding}" />
+        <Setter Property="Height" Value="{DynamicResource Layout.ControlHeight}" />
+        <Setter Property="MinWidth" Value="{DynamicResource Layout.ButtonMinWidth}" />
+        <Setter Property="Padding" Value="{DynamicResource Layout.ButtonPadding}" />
         <Setter Property="Background" Value="{StaticResource Brush.Surface}" />
-        <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />
+        <Setter Property="BorderBrush" Value="{StaticResource Brush.Border.Control}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Cursor" Value="Hand" />
@@ -234,7 +236,7 @@
     </Style>
 
     <Style x:Key="Slider.Base" TargetType="{x:Type Slider}">
-        <Setter Property="Height" Value="{StaticResource Layout.ControlHeight}" />
+        <Setter Property="Height" Value="{DynamicResource Layout.ControlHeight}" />
         <Setter Property="Minimum" Value="0" />
         <Setter Property="Maximum" Value="100" />
         <Setter Property="IsSnapToTickEnabled" Value="True" />
@@ -281,7 +283,7 @@
         <Setter Property="Background" Value="{StaticResource Brush.Surface}" />
         <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Padding" Value="{StaticResource Layout.InputPadding.Multiline}" />
+        <Setter Property="Padding" Value="{DynamicResource Layout.InputPadding.Multiline}" />
         <Setter Property="MinHeight" Value="0" />
         <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
@@ -334,9 +336,9 @@
     <Style x:Key="DatePickerTextBox.Base" TargetType="{x:Type DatePickerTextBox}"
            BasedOn="{StaticResource TextBox.Base}">
         <!-- 高度必须给足（= ControlHeight）：Auto 高度会把字形的上沿裁掉 -->
-        <Setter Property="Height" Value="{StaticResource Layout.ControlHeight}" />
-        <Setter Property="MinHeight" Value="{StaticResource Layout.ControlHeight}" />
-        <Setter Property="Padding" Value="5,0,26,0" />
+        <Setter Property="Height" Value="{DynamicResource Layout.ControlHeight}" />
+        <Setter Property="MinHeight" Value="{DynamicResource Layout.ControlHeight}" />
+        <Setter Property="Padding" Value="{DynamicResource Layout.DatePickerPadding}" />
         <!-- 必须 Stretch：DatePickerTextBox 默认按内容宽度收缩，
              文本视口会窄到把最后一个字裁掉（"2026/11/5" 显示成 "2026/11:"）。 -->
         <Setter Property="HorizontalAlignment" Value="Stretch" />
@@ -436,7 +438,7 @@
         <Setter Property="Background" Value="{StaticResource Brush.Surface}" />
         <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Height" Value="{StaticResource Layout.ControlHeight}" />
+        <Setter Property="Height" Value="{DynamicResource Layout.ControlHeight}" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Cursor" Value="Hand" />
@@ -474,8 +476,8 @@
         <Setter Property="Background" Value="{StaticResource Brush.Surface}" />
         <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Padding" Value="5,3" />
-        <Setter Property="Height" Value="44" />
+        <Setter Property="Padding" Value="{DynamicResource Layout.ToolBarPadding}" />
+        <Setter Property="Height" Value="{DynamicResource Layout.ToolBarHeight}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
     </Style>
 
@@ -487,11 +489,11 @@
     <!-- ToolBar 里的按钮默认会被系统主题改成扁平凸起块，这里强制回到标准按钮外观。 -->
     <Style x:Key="{x:Static ToolBar.ButtonStyleKey}" TargetType="{x:Type Button}"
            BasedOn="{StaticResource Button.Secondary}">
-        <Setter Property="Height" Value="{StaticResource Layout.ControlHeight.Small}" />
+        <Setter Property="Height" Value="{DynamicResource Layout.ControlHeight.Small}" />
     </Style>
     <Style x:Key="{x:Static ToolBar.ToggleButtonStyleKey}" TargetType="{x:Type ToggleButton}"
            BasedOn="{StaticResource ToggleButton.Base}">
-        <Setter Property="Height" Value="{StaticResource Layout.ControlHeight.Small}" />
+        <Setter Property="Height" Value="{DynamicResource Layout.ControlHeight.Small}" />
     </Style>
     <Style x:Key="{x:Static ToolBar.SeparatorStyleKey}" TargetType="{x:Type Separator}">
         <Setter Property="Background" Value="{StaticResource Brush.Border}" />
@@ -520,7 +522,7 @@
         <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Padding" Value="8,4" />
+        <Setter Property="Padding" Value="{DynamicResource Layout.MenuItemPadding}" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="Template">

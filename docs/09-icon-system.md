@@ -32,7 +32,7 @@
 | `Icon.Size.Micro` | 12×12 | 徽章标记、树节点展开折叠点、行内极小状态指示点 | 极小空间，不表达复杂几何 |
 | `Icon.Size.Small` | 14×14 | 行内标签、表格行紧凑操作、单行输入框辅助图标 | 配合 Caption 字体 |
 | `Icon.Size.Regular` | 16×16 | **默认尺寸**：标准按钮图标、菜单项、Tab 标头、树节点 | 配合 12px Body 字体 |
-| `Icon.Size.Medium` | 20×20 | 工具栏大图标、分组标题栏操作按钮、快捷操作条 | 搭配 28px / 32px 高度控件 |
+| `Icon.Size.Medium` | 20×20 | 工具栏大图标、分组标题栏操作按钮、快捷操作条 | 搭配 `Layout.ControlHeight` / `.Small`（中等 30 / 26） |
 | `Icon.Size.Large` | 24×24 | 大尺寸功能入口、通知卡片、重要警告提示框 | 对齐 24px 网格视口 |
 | `Icon.Size.Hero` | 32×32 | 引导对话框、空状态 (Empty State)、首页导航卡片 | 视觉焦点中心 |
 

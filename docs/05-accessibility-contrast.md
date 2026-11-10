@@ -69,9 +69,13 @@
 | `Text.Disabled` `#667085` | `Control.Disabled` `#F2F4F7` | 4.51:1 | ✅（超过 3:1 目标） |
 | `Focus` `#2F6F9F` | `Surface` `#FAFBFC` | 5.20:1 | ✅（非文字 3:1） |
 | `Border.Strong` `#AEB7C2` | `Surface` | 1.96:1 | ⚠️ 装饰性边框，不作为唯一状态信号 |
+| `Border.Control` `#7C8795` | `Surface` `#FAFBFC` | 3.52:1 | ✅ 按钮/输入框描边 |
+| `Border.Control` `#7C8795` | `WindowBackground` `#E9EDF2` | 3.10:1 | ✅ 按钮在窗口底色上的边界 |
+| `Border.Control` `#7C8795` | `Control.Hover` `#F0F3F6` | 3.28:1 | ✅ 悬停态边界 |
 
-> `Border`/`Border.Strong` 是装饰性边框，不满足 3:1 是允许的；
-> 但**焦点环、错误边框、选中指示**必须使用 `Focus`/`Danger`/`Accent`。
+> `Border`/`Border.Strong` 是装饰性边框（分隔线、卡片边），不满足 3:1 是允许的；
+> 但**按钮/输入框的可点击边界**必须使用 `Border.Control`，
+> **焦点环、错误边框、选中指示**必须使用 `Focus`/`Danger`/`Accent`。
 
 ---
 
@@ -85,7 +89,7 @@ WCAG 允许禁用控件低于 4.5:1，但本规范要求：
 - 禁用态使用：
   - Background `Brush.Control.Disabled`
   - Foreground `Brush.Text.Disabled`
-  - Border `Brush.Border`
+  - Border `Brush.Border.Control`（按钮/输入框等可交互控件）或 `Brush.Border`（分隔线/卡片）
 - 禁用态不响应悬停/按下视觉变化（`Cursor=Arrow`）。
 
 ---

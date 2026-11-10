@@ -15,7 +15,8 @@
 | `Color.SurfaceAlt` | `#F2F4F7` | 分组、表头、只读框、禁用底 | 比 Surface 深一档 |
 | `Color.SurfaceSunken` | `#F7F8FA` | 代码框、日志、交替行 | 轻微下沉 |
 | `Color.Border` | `#D0D5DB` | 普通边框、分隔线 | 装饰性，不强制 3:1 |
-| `Color.BorderStrong` | `#AEB7C2` | 悬停边框、弹层边框 | 比普通边框更明显 |
+| `Color.BorderStrong` | `#AEB7C2` | 选中/悬停表面、弹层边框 | 比普通边框更明显 |
+| `Color.BorderControl` | `#7C8795` | 按钮、输入框、下拉框的活动描边 | 对 Surface 3.52:1、对窗口底 3.10:1 |
 | `Color.Focus` | `#2F6F9F` | 键盘焦点边框 | 与 Surface 约 5.2:1 |
 
 ### 1.2 文字
@@ -92,7 +93,7 @@
 | 类别 | 命名 | 示例 |
 |---|---|---|
 | 表面 | `Brush.Surface*` | `Brush.Surface`, `Brush.SurfaceAlt` |
-| 边框 | `Brush.Border*` | `Brush.Border`, `Brush.Border.Strong` |
+| 边框 | `Brush.Border*` | `Brush.Border`, `Brush.Border.Strong`, `Brush.Border.Control` |
 | 文字 | `Brush.Text.*` | `Brush.Text.Primary`, `Brush.Text.Disabled` |
 | 品牌 | `Brush.Accent*` | `Brush.Accent`, `Brush.Accent.Hover` |
 | 危险 | `Brush.Danger*` | `Brush.Danger`, `Brush.Danger.Subtle` |
@@ -131,7 +132,7 @@
 - 不要用 `FontWeight="Bold"`；需要强调时用 `SemiBold`。
 - 不要混用 Consolas、Arial、宋体；代码/日志也使用 `Font.Ui`，避免字体跳变。
 - 字号提升后，控件高度、行高、内边距必须同步放大，避免文字被挤压或裁切。
-- **紧凑优先**：字号不靠放大制造层级。一屏要看到更多行与更多列——控件高 32px、行距 3px、窗口内边距 12px，用密度换信息量，而不是用大间距换"呼吸感"。
+- **密度与字号解耦**：字号固定为 Body 12 / Caption 11.5 / Title 13；紧凑/中等/宽松只改变控件高度与外边距，不改变字号。用密度换信息量，而不是用大字号制造层级。
 
 ---
 
@@ -139,21 +140,23 @@
 
 ### 4.1 控件高度
 
-| 令牌 | 值 | 用途 |
-|---|---|---|
-| `Layout.ControlHeight` | 32 | 按钮、输入框、下拉框、密码框 |
-| `Layout.ControlHeight.Small` | 28 | 小号按钮、工具条 |
-| `Layout.TagHeight` | 24 | 标签、徽章 |
-| `Layout.IconButton.Micro` | 24 | 紧凑图标按钮 |
-| `Layout.IconButton.Small` | 28 | 标准行内图标按钮 |
-| `Layout.IconButton.Large` | 32 | 大号工具条图标按钮 |
-| `Layout.RowHeight` | 26 | 列表/表格行 |
-| `Layout.HeaderHeight` | 28 | 表格表头 |
-| `Layout.CheckBox.Size` | 16 | 复选框方框 |
-| `Layout.RadioButton.Size` | 16 | 单选框圆环 |
+| 令牌 | 中等（默认） | 紧凑 / 宽松 | 用途 |
+|---|---:|---|---|
+| `Layout.ControlHeight` | 30 | 26 / 34 | 按钮、输入框、下拉框、密码框 |
+| `Layout.ControlHeight.Small` | 26 | 24 / 30 | 小号按钮、工具条 |
+| `Layout.ControlHeight.Large` | 36 | 32 / 40 | 主操作、触屏 |
+| `Layout.TagHeight` | 24 | 22 / 26 | 标签、徽章 |
+| `Layout.IconButton.Micro` | 24 | 22 / 28 | 紧凑图标按钮 |
+| `Layout.IconButton.Small` | 28 | 24 / 32 | 标准行内图标按钮 |
+| `Layout.IconButton.Large` | 32 | 28 / 36 | 大号工具条图标按钮 |
+| `Layout.RowHeight` | 28 | 24 / 32 | 列表/表格行 |
+| `Layout.HeaderHeight` | 30 | 26 / 34 | 表格表头 |
+| `Layout.CheckBox.Size` | 16 | 16 / 16 | 复选框方框（固定） |
+| `Layout.RadioButton.Size` | 16 | 16 / 16 | 单选框圆环（固定） |
 
-> 同一窗口内不要混用 28/32。需要紧凑时整组使用 Small。
-> 复选框/单选框不得小于 16×16，否则 125% DPI 下难以辨认与点击。
+> 同一窗口内只使用一档密度，不要混用 26 / 30 / 34。
+> 复选框/单选框不得小于 16×16，且不随密度缩小。
+> 完整三档对照见 [06-density.md](06-density.md)。
 
 
 ### 4.1.1 图标尺寸阶梯 (Icon Sizing)
@@ -171,27 +174,29 @@
 
 | 令牌 | 按钮宽高 (px) | 适用图标尺寸 | 用途 |
 |---|---|---|---|
-| `Layout.IconButton.Micro` | 24 | 14 (`Icon.Size.Small`) | 紧凑表格操作、搜索框清除按钮 |
-| `Layout.IconButton.Small` | 28 | 16 (`Icon.Size.Regular`) | 标准工具条按钮、面板小操作 |
-| `Layout.IconButton.Large` | 32 | 20 (`Icon.Size.Medium`) | 大号主工具条按钮 |
+| `Layout.IconButton.Micro` | 24（紧凑 22 / 宽松 28） | 14 (`Icon.Size.Small`) | 紧凑表格操作、搜索框清除按钮 |
+| `Layout.IconButton.Small` | 28（紧凑 24 / 宽松 32） | 16 (`Icon.Size.Regular`) | 标准工具条按钮、面板小操作 |
+| `Layout.IconButton.Large` | 32（紧凑 28 / 宽松 36） | 20 (`Icon.Size.Medium`) | 大号主工具条按钮 |
 
 
 ### 4.2 间距
 
-| 令牌 | 值 | 用途 |
-|---|---|---|
+| 令牌 | 中等（默认） | 用途 |
+|---|---:|---|
 | `Layout.WindowPadding` | 12 | 窗口内容边距 |
 | `Layout.GroupPadding` | 10 | GroupBox 内边距 |
 | `Layout.FormRowMargin` | `0,3,0,3` | 表单行上下间距 |
 | `Layout.ButtonMinWidth` / `Layout.ButtonMinWidth.Small` | `64` / `48` | 按钮最小宽度（由主题样式引用） |
-| `Layout.ButtonPadding` | `8,0` | 按钮左右内边距（防长文挤压） |
+| `Layout.ButtonPadding` | `12,0` | 按钮左右内边距（上下恒为 0，高度由 Height 控制） |
 | `Layout.LogMaxHeight` | `220` | 日志/代码 TextBox 可选高度上限（见 R9，不强制 MinHeight） |
-| `Layout.InputPadding` | `5,0` | 单行输入框（预留充分文字空间） |
-| `Layout.InputPadding.Multiline` | `6,5` | 多行输入框 |
+| `Layout.InputPadding` | `8,0` | 单行输入框（预留充分文字空间） |
+| `Layout.InputPadding.Multiline` | `8,6` | 多行输入框 |
 | `Layout.ListItemPadding` | `8,5` | 列表项 |
+| `Layout.TabPadding` / `Layout.TabMargin` | `12,6` / `0,0,4,0` | 标签页内边距与间距 |
+| `Layout.TooltipPadding` | `8,4` | ToolTip 内边距 |
 
-
-> 提示：按钮、输入框内部 Padding 严格控制在 8px 以内，严禁设置过大（如 14px 以上或过大上下 Padding），避免在高 DPI 或中英双语下文字截断、字符末尾丢失。
+> 按钮高度由 `Height="{DynamicResource Layout.ControlHeight}"` 控制，上下 Padding 固定为 0，
+> 不要用上下大内边距把按钮"垫高"。左右内边距按密度取 10 / 12 / 16px，避免中英双语文字被挤压。
 
 
 间距梯度：**2 / 3 / 5 / 8 / 10 / 12 / 16 / 20 / 24 / 32**。
@@ -237,4 +242,5 @@
 3. 新颜色必须给出在至少一个背景上的对比度。
 4. 不要新增“近似重复”的颜色（例如 `#2F6F9F` 与 `#2E6E9E`）。
 5. 新增后运行 `tools/ContrastCheck.ps1`。
-6. 在 `docs/01-design-tokens.md` 和 `docs/05-accessibility-contrast.md` 同步登记。
+6. 若新增的是尺寸/内边距/行高类令牌，必须在 `Density.Compact.xaml`、`Density.Medium.xaml`、`Density.Relaxed.xaml` 三份档案中同时登记，并在 `Tokens.xaml` 保留中等档兜底值；然后运行 `LayoutCheck.py`。
+7. 在 `docs/01-design-tokens.md` 和 `docs/05-accessibility-contrast.md` 同步登记。

@@ -133,6 +133,11 @@ namespace WpfStylePreview
                 case "probe":
                     TestProbe(window, report, shotDir, scale);
                     break;
+                case "overview":
+                case "home":
+                case "shell":
+                    TestShell(window, report, shotDir, scale);
+                    break;
                 default:
                     TestGenericWindow(window, report, shotDir, scale);
                     break;
@@ -291,6 +296,91 @@ namespace WpfStylePreview
                     Message = "全局保存入口正常触发",
                     SnapshotPath = shot
                 });
+            }
+        }
+
+        private static void TestShell(Window window, WindowTestReport report, string shotDir, double scale)
+        {
+            var root = (FrameworkElement)window.Content;
+            var nav = FindElementByName<ListBox>(root, "NavList");
+            var host = FindElementByName<ContentControl>(root, "PageHost");
+            var title = FindElementByName<TextBlock>(root, "PageTitle");
+            var density = FindElementByName<ComboBox>(root, "DensityCombo");
+
+            int step = 1;
+
+            // Step 1: 导航到“工程工作台”（索引 6）
+            if (nav != null && host != null && nav.Items.Count > 6)
+            {
+                string before = title?.Text ?? "<null>";
+                nav.SelectedIndex = 6;
+                root.UpdateLayout();
+                string after = title?.Text ?? "<null>";
+                bool pass = host.Content != null &&
+                            host.Content.GetType().Name.Contains("WorkbenchView") &&
+                            after == "工程工作台";
+
+                report.Steps.Add(new StepResult
+                {
+                    Step = step++,
+                    Action = "Select Navigation Item",
+                    TargetName = "NavList",
+                    Description = "点击左侧导航“工程工作台”，验证右侧内容区切换到对应案例页",
+                    BeforeState = before,
+                    AfterState = after + " / " + (host.Content?.GetType().Name ?? "<null>"),
+                    Passed = pass,
+                    Message = pass ? "导航与内容区联动正常" : "导航未切换到预期页面",
+                    SnapshotPath = SaveStepSnapshot(root, window, shotDir, $"{report.WindowName}_01_nav_workbench.png", scale)
+                });
+            }
+
+            // Step 2: 切换到“可编辑数据表格”（索引 4）
+            if (nav != null && host != null && nav.Items.Count > 4)
+            {
+                nav.SelectedIndex = 4;
+                root.UpdateLayout();
+                bool pass = host.Content != null &&
+                            host.Content.GetType().Name.Contains("EditableTableView") &&
+                            (title?.Text ?? "") == "可编辑数据表格";
+
+                report.Steps.Add(new StepResult
+                {
+                    Step = step++,
+                    Action = "Select Navigation Item",
+                    TargetName = "NavList",
+                    Description = "切换到“可编辑数据表格”案例页",
+                    BeforeState = "工程工作台",
+                    AfterState = (title?.Text ?? "<null>") + " / " + (host.Content?.GetType().Name ?? "<null>"),
+                    Passed = pass,
+                    Message = pass ? "导航与内容区联动正常" : "导航未切换到预期页面",
+                    SnapshotPath = SaveStepSnapshot(root, window, shotDir, $"{report.WindowName}_02_nav_table.png", scale)
+                });
+            }
+
+            // Step 3: 全局密度切换
+            if (density != null)
+            {
+                density.SelectedIndex = 0;
+                root.UpdateLayout();
+                string profile = Application.Current.TryFindResource("Density.Profile") as string;
+                bool pass = string.Equals(profile, "compact", StringComparison.OrdinalIgnoreCase);
+
+                report.Steps.Add(new StepResult
+                {
+                    Step = step++,
+                    Action = "Change Density",
+                    TargetName = "DensityCombo",
+                    Description = "主壳密度下拉切到紧凑档，验证全局 Density.Profile 生效",
+                    BeforeState = "medium",
+                    AfterState = profile ?? "<null>",
+                    Passed = pass,
+                    Message = pass ? "密度切换即时生效" : "密度未切换到 compact",
+                    SnapshotPath = SaveStepSnapshot(root, window, shotDir, $"{report.WindowName}_03_density_compact.png", scale)
+                });
+
+                // 复位到中等，避免影响后续截图
+                density.SelectedIndex = 1;
+                root.UpdateLayout();
             }
         }
 

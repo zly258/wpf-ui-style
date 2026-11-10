@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using WpfStylePreview.Shell;
 
 namespace WpfStylePreview
 {
@@ -21,7 +22,7 @@ namespace WpfStylePreview
             app.InitializeComponent();
 
             string shot = null;
-            string which = "showcase";
+            string which = "home";
             double scale = 1.0;
             bool all = false;
             bool menu = false;
@@ -30,6 +31,8 @@ namespace WpfStylePreview
             bool verify = false;
             string shotDir = null;
             string xamlFile = null;
+            string density = null;
+            string page = "overview";
             bool json = false;
 
             for (int i = 0; i < args.Length; i++)
@@ -39,6 +42,8 @@ namespace WpfStylePreview
                     case "-shot": shot = args[++i]; break;
                     case "-scale": scale = double.Parse(args[++i], CultureInfo.InvariantCulture); break;
                     case "-window": which = args[++i]; break;
+                    case "-density": density = args[++i]; break;
+                    case "-page": page = args[++i]; break;
                     case "-all": all = true; break;
                     case "-menu": menu = true; break;
                     case "-autoclose": autoclose = int.Parse(args[++i]); break;
@@ -56,6 +61,14 @@ namespace WpfStylePreview
             if (testClicks || verify || !string.IsNullOrEmpty(xamlFile) || all || shot != null || menu)
             {
                 AppDialog.Suppressed = true;
+            }
+
+            DefaultPage = page;
+
+            // 运行时密度（Compact / Medium / Relaxed），未指定时使用 Theme.xaml 的默认中等档
+            if (!string.IsNullOrWhiteSpace(density))
+            {
+                DensitySwitcher.Apply(density);
             }
 
             // 动态 XAML 渲染模式
@@ -87,9 +100,9 @@ namespace WpfStylePreview
 
             if (all)
             {
-                foreach (var name in new[] { "showcase", "controls", "layouts", "safeform", "anti",
-                                             "case-settings", "case-table", "case-compare",
-                                             "case-editable-table", "case-workbench", "case-wizard", "case-dashboard" })
+                foreach (var name in new[] { "overview", "controls", "safeform", "settings",
+                                             "editable-table", "compare", "workbench",
+                                             "wizard", "dashboard" })
                 {
                     string dir = Path.GetDirectoryName(Path.GetFullPath(shot ?? "shots/out.png"));
                     string file = Path.Combine(dir ?? ".", $"{name}.png");
@@ -128,26 +141,46 @@ namespace WpfStylePreview
 
         private static Window CreateWindow(string which)
         {
-            switch (which)
+            switch ((which ?? string.Empty).ToLowerInvariant())
             {
-                case "controls": return new ControlsGalleryWindow();
-                case "layouts": return new LayoutsWindow();
-                case "safeform": return new SafeFormWindow();
-                case "anti": return new AntiPatternWindow();
-                case "probe": return new ProbeWindow();
-                case "case-settings": return new CaseSettingsWindow();
-                case "case-table": return new CaseTableWindow();
-                case "case-compare": return new CaseCompareWindow();
+                case "home":
+                case "shell":
+                case "overview":
+                case "showcase":       // 旧入口保留为首页
+                    return new MainWindow(DefaultPage);
+                case "probe":
+                    return new ProbeWindow();
                 case "case-editable-table":
-                case "editable-table": return new CaseEditableTableWindow();
+                case "editable-table":
+                    return Host("editable-table");
                 case "case-workbench":
-                case "workbench": return new CaseWorkbenchWindow();
+                case "workbench":
+                    return Host("workbench");
                 case "case-wizard":
-                case "wizard": return new CaseWizardWindow();
+                case "wizard":
+                    return Host("wizard");
                 case "case-dashboard":
-                case "dashboard": return new CaseDashboardWindow();
-                default: return new ShowcaseWindow();
+                case "dashboard":
+                    return Host("dashboard");
+                case "case-compare":
+                    return Host("compare");
+                case "case-settings":
+                    return Host("settings");
+                case "layouts":
+                case "anti":
+                case "case-table":
+                    return Host("editable-table"); // 已合并：布局/反模式/简表由正式案例覆盖
+                default:
+                    return Host(which) ?? new MainWindow();
             }
+        }
+
+        internal static string DefaultPage { get; private set; } = "overview";
+
+        private static Window Host(string key)
+        {
+            CaseDescriptor descriptor = CaseCatalog.Find(key);
+            return descriptor == null ? null : new CaseHostWindow(descriptor);
         }
 
         private static void Render(string which, string path, double scale)
@@ -167,7 +200,7 @@ namespace WpfStylePreview
         // 展开控件全览窗口里的菜单，确认 MenuItem 的下拉弹层真的有内容。
         private static void RenderMenuOpen(string path, double scale)
         {
-            var window = new ControlsGalleryWindow();
+            var window = new CaseHostWindow(CaseCatalog.Find("controls"));
             typeof(Window).GetMethod("InitializeComponent",
                 BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                 ?.Invoke(window, null);

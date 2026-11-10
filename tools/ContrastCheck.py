@@ -73,6 +73,10 @@ PAIRS = [
     # 焦点（非文字 3:1）
     ("Color.Focus", "Color.Surface", 3.0, "Focus / Surface"),
     ("Color.Focus", "Color.WindowBackground", 3.0, "Focus / WindowBackground"),
+    # 按钮/输入框描边（非文字 UI 组件 3:1）
+    ("Color.BorderControl", "Color.Surface", 3.0, "Border.Control / Surface"),
+    ("Color.BorderControl", "Color.WindowBackground", 3.0, "Border.Control / WindowBackground"),
+    ("Color.BorderControl", "Color.ControlHover", 3.0, "Border.Control / Control.Hover"),
 ]
 
 

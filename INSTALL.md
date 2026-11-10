@@ -195,8 +195,8 @@ wpf-ui-style/
 ├─ Theme/                   ← 可直接合并的 WPF 主题
 ├─ docs/                    ← 详细规范
 ├─ references/              ← 速查与 XAML 片段
-├─ samples/                 ← 示例窗口
-├─ preview/                 ← 可运行的 WPF 预览工程
+├─ samples/                 ← 按用途分类的可复制 XAML
+├─ preview/                 ← 可运行案例中心（侧边导航 + 案例页）
 ├─ tools/                   ← 对比度/布局检查
 ├─ tests/                   ← 可直接运行的 xUnit 契约测试
 ├─ NOTICE.md                ← 第三方归属（Material Symbols）
@@ -273,11 +273,14 @@ dotnet test
 
 | 想改什么 | 改哪里 |
 |---|---|
-| 颜色、字体、尺寸、圆角 | `Theme/Tokens.xaml` |
+| 颜色、字体、尺寸兜底值、圆角 | `Theme/Tokens.xaml` |
+| 紧凑 / 中等 / 宽松三档尺寸 | `Theme/Density.Compact.xaml`、`Density.Medium.xaml`、`Density.Relaxed.xaml` |
+| 默认密度入口 | `Theme/Theme.xaml`（中等）、`Theme.Compact.xaml`、`Theme.Relaxed.xaml` |
 | 控件状态、模板 | `Theme/Controls.xaml`、`Theme/DataControls.xaml` |
 | 强制规则、检查清单 | `SKILL.md` |
 | 状态矩阵 | `docs/02-control-states.md` |
 | 布局/多行文本规则 | `docs/03-layout.md` |
+| 三档密度与切换 | `docs/06-density.md` |
 | 常见错误 | `docs/04-common-pitfalls.md` |
 | 速查与代码片段 | `references/cheatsheet.md`、`references/xaml-snippets.md` |
 | 对比度阈值 | `tools/ContrastCheck.py` 的 `PAIRS` |

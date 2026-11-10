@@ -59,6 +59,8 @@ python tools/LayoutCheck.py --root . --strict
 - 业务窗口是否嵌套 `ScrollViewer`。
 - 多行 `TextBox` 不再强制要求 `MinHeight`（全局硬限制会导致小窗口被撑爆）。
 - `TabControl` 是否缺少固定高度（会导致切换 tab 时窗口高度跳变）。
+- 密度令牌接线：`Theme/` 内密度键不得使用 `StaticResource`，三份 `Density.*.xaml` 键集必须一致，
+  `DynamicResource` 不得引用未定义键，`Tokens.xaml` 必须保留兜底值。
 
 截断 / 遮挡检查（R14）：
 
@@ -79,7 +81,29 @@ python tools/LayoutCheck.py --root . --strict
 
 ---
 
-## 1.2 UI 自动化渲染、点击交互测试与视觉自检 (UiTest)
+## 1.2 三档密度验收
+
+```bash
+# 密度档案键集一致 + DynamicResource 接线
+python tools/LayoutCheck.py --root . --theme-dir Theme
+
+# 契约测试：三档键集相同、严格递增、Tokens 兜底、TextBox 占满、TabItem 选中态
+dotnet test tests/WpfStyleContractTests.csproj
+```
+
+人工验收：
+
+1. 用 `Theme.Compact.xaml` / `Theme.xaml` / `Theme.Relaxed.xaml` 分别启动预览，确认控件高度、
+   表格行高、Tab/按钮/输入内边距随之变化；
+2. 确认字号、颜色、圆角、复选框 16px 靶心**没有**变化；
+3. 在同一窗口中确认所有控件来自同一档；
+4. 在输入框右侧空白处点击，确认能聚焦并继续输入；
+5. 点选标签页，确认选中态有 Surface 底 + 描边 + 2px Accent 底条；
+6. 在 `preview` 案例中心右上角切换「密度」，确认窗口即时换挡且无残影。
+
+---
+
+## 1.3 UI 自动化渲染、点击交互测试与视觉自检 (UiTest)
 
 为 AI Agent 与自动化流水线提供**真实控件点击、状态机断言、分步快照与外部 XAML 动态渲染**能力：
 
@@ -174,7 +198,7 @@ pwsh ./tools/UiTest.ps1 -All -TestClicks -Json
 
 ### 3.2.0 交互态自检（R15）
 
-`preview` 工程里的 `ProbeWindow` 会进入编辑态、展开长内容、打开日历弹层，
+`preview` 工程里的 `Diagnostics/ProbeWindow` 会进入编辑态、展开长内容、打开日历弹层，
 离屏渲染成 PNG，并在控制台打印自检结果：
 
 ```bash

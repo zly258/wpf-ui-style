@@ -13,7 +13,7 @@ WPF UI 自动化渲染、交互点击测试与视觉规范自检工具。
 使用示例：
   python tools/UiTest.py --window editable-table --test-clicks
   python tools/UiTest.py --window wizard --test-clicks --shot-dir shots/wizard
-  python tools/UiTest.py --xaml preview/SafeFormWindow.xaml --shot shots/safeform.png
+  python tools/UiTest.py --xaml preview/Views/SafeFormView.xaml --shot shots/safeform.png
   python tools/UiTest.py --all --test-clicks
   python tools/UiTest.py --list
 """
@@ -28,18 +28,16 @@ from pathlib import Path
 
 # 支持的内置案例与测试窗口列表
 BUILTIN_WINDOWS = [
-    ("case-editable-table", "复杂可编辑数据表格（复选框联动、单元格编辑、行增删、下拉筛选）"),
-    ("case-wizard", "分步向导对话框（上一步/下一步状态机联动、步骤条高亮）"),
-    ("case-workbench", "工程工作台布局（多窗格视口、选项卡切换、下拉坐标系选择）"),
-    ("case-dashboard", "任务与监控看板（KPI 卡片、状态表格、时间跨度筛选）"),
-    ("case-table", "标准数据表格（搜索、选择、分页）"),
-    ("case-compare", "双栏文本对照视图与日志框"),
-    ("case-settings", "密集参数表单（防截断与自动换行）"),
-    ("controls", "控件全览（Button、TextBox、ComboBox、Slider、DatePicker）"),
-    ("layouts", "多场景布局模板与自适应容器"),
-    ("safeform", "安全表单示例（防截断/防遮挡骨架）"),
-    ("probe", "交互状态专项校验（日历面板、可编辑下拉框文本回写、折叠展开）"),
-    ("showcase", "综合组件画廊展示"),
+    ("overview", "案例中心首页（侧边导航 + 规范摘要 + 全部案例入口）"),
+    ("controls", "基础控件全览（按钮、输入、下拉、复选、标签页、密度）"),
+    ("safeform", "安全表单（防截断/防遮挡骨架）"),
+    ("settings", "密集设置表单（三列并排、防截断）"),
+    ("editable-table", "可编辑数据表格（全选联动、单元格编辑、行增删）"),
+    ("compare", "双栏对照与日志（弹性主区 + 固定日志区）"),
+    ("workbench", "工程工作台（特征树/视口/属性检查器）"),
+    ("wizard", "分步向导（上一步/下一步状态机）"),
+    ("dashboard", "监控看板（KPI、任务队列、告警表格）"),
+    ("probe", "交互状态专项校验（日历面板、可编辑下拉框、折叠展开）"),
 ]
 
 
@@ -100,7 +98,7 @@ def run_test(args):
 
     if args.all and args.test_clicks:
         all_passed = True
-        test_targets = ["case-editable-table", "case-wizard", "case-workbench", "probe"]
+        test_targets = ["overview", "editable-table", "wizard", "workbench", "probe"]
         print(f"开始批量运行 {len(test_targets)} 个核心业务窗口交互测试...\n")
         for win in test_targets:
             sub_cmd = list(cmd)
@@ -121,7 +119,7 @@ def run_test(args):
         return res.returncode
 
     # 单窗口模式
-    target_window = args.window or "case-editable-table"
+    target_window = args.window or "overview"
     cmd.extend(["-window", target_window])
 
     if args.test_clicks:

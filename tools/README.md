@@ -76,6 +76,9 @@ LayoutCheck 识别主题文件的方式：默认 `theme` 目录及 `Theme/Window
 | 业务 XAML 硬编码色值 | `#RGB` / `#RRGGBB` / `#AARRGGBB` 只允许出现在 `Theme/` 里 |
 | 业务 XAML 本地 `FontFamily` | 字体栈由 Window 样式统一提供，禁止局部覆盖 |
 | `SizeToContent="Height"` 窗口里的 `TabControl` 没有固定 `Height` | 切到内容少的 tab 时窗口会缩矮（固定高度窗口里报 WARN） |
+| 密度键误用 `StaticResource` | `Theme/` 内的 `Layout.*` 密度键必须用 `DynamicResource`，否则换档不生效 |
+| 密度档案不完整 | `Density.Compact/Medium/Relaxed.xaml` 键集必须完全一致，且 `Tokens.xaml` 保留兜底值 |
+| `DynamicResource` 引用了未定义的密度键 | 防止拼写错误导致运行时尺寸回退到 0 |
 
 **警告（WARN，`--strict` 下才失败）**
 
@@ -84,6 +87,9 @@ LayoutCheck 识别主题文件的方式：默认 `theme` 目录及 `Theme/Window
 | 日志/代码 TextBox 缺 `MaxHeight` | 可能导致高度无界增长 |
 | `TextWrapping="Wrap"` 配 `VerticalAlignment="Stretch"` | 建议用 `Top` |
 | 嵌套 `ScrollViewer` | 一处窗口只保留一层垂直滚动 |
+
+固定窗口高度默认报 WARN；向导等“步骤切换必须保持外框稳定”的窗口，可在文件注释中写
+`layout-check: allow-fixed-window-height` 显式豁免（不要用于普通表单/设置窗口）。
 
 主题目录（`Theme/`）会被跳过色值与字体检查——它是色值的唯一来源，本就该直接写 `#RRGGBB`。
 

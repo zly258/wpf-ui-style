@@ -21,11 +21,16 @@
   <!-- 主题文件来自仓库根目录的 Theme/，用 Link 挂进程序集资源，避免复制副本。 -->
   <ItemGroup>
     <Page Include="..\Theme\Tokens.xaml" Link="Theme\Tokens.xaml" />
+    <Page Include="..\Theme\Density.Compact.xaml" Link="Theme\Density.Compact.xaml" />
+    <Page Include="..\Theme\Density.Medium.xaml" Link="Theme\Density.Medium.xaml" />
+    <Page Include="..\Theme\Density.Relaxed.xaml" Link="Theme\Density.Relaxed.xaml" />
     <Page Include="..\Theme\Controls.xaml" Link="Theme\Controls.xaml" />
     <Page Include="..\Theme\DataControls.xaml" Link="Theme\DataControls.xaml" />
     <Page Include="..\Theme\Icons.xaml" Link="Theme\Icons.xaml" />
     <Page Include="..\Theme\Extras.xaml" Link="Theme\Extras.xaml" />
     <Page Include="..\Theme\Theme.xaml" Link="Theme\Theme.xaml" />
+    <Page Include="..\Theme\Theme.Compact.xaml" Link="Theme\Theme.Compact.xaml" />
+    <Page Include="..\Theme\Theme.Relaxed.xaml" Link="Theme\Theme.Relaxed.xaml" />
   </ItemGroup>
 
 </Project>
