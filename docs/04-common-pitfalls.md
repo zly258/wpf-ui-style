@@ -1325,8 +1325,8 @@ DatePicker 的弹层里放的是 **DatePicker 自己创建的 Calendar 实例**�
 
 **修复**
 
-- 使用主题的默认 `TabItem`：选中态 = `Brush.Surface` 底 + 1px `Brush.Border` 描边
-  + 2px `Brush.Accent` 底条 + Accent 半粗文字。
+- 使用主题的默认 `TabItem`：选中态 = `Brush.Accent` 实心底 + 白字 + 1px `Brush.Accent` 描边
+  + 3px `Brush.Accent.Pressed` 底条 + 白字 SemiBold。
 - 不要自己删掉 `Bd` 的 `Background`/`BorderBrush`，也不要只保留 `Underline`。
 - 仍然遵守 R12：窗口内不要用 tab 承载并排任务。
 
@@ -1381,7 +1381,8 @@ DatePicker 的弹层里放的是 **DatePicker 自己创建的 Calendar 实例**�
 1. 每一行用独立的 `Grid` / `StackPanel`，标签列宽各行不同；
 2. 标签列和输入列没有共享一个 Grid，或者标签上加了局部 `Margin` / `HorizontalAlignment`；
 3. 宿主宽度小于两列的最小宽度（标签 `MinWidth` + 输入 `MinWidth`），输入列被挤出可视区；
-4. 控件被局部设置了 `HorizontalContentAlignment="Center"` 或 `TextAlignment="Center"`。
+4. 长标签只给 `ColumnDefinition` 设了 `MaxWidth`，文本仍按单行测量，直接溢出到输入框上；
+5. 控件被局部设置了 `HorizontalContentAlignment="Center"` 或 `TextAlignment="Center"`。
 
 **修复**
 
@@ -1412,6 +1413,17 @@ DatePicker 的弹层里放的是 **DatePicker 自己创建的 Calendar 实例**�
     <TextBox />
 </StackPanel>
 ```
+
+长标签要这样写：
+
+```xml
+<TextBlock Text="文档标题（用于换行演示）"
+           Style="{StaticResource Text.Label}"
+           TextWrapping="Wrap" TextTrimming="None"
+           MaxWidth="{StaticResource Layout.FormLabelMaxWidth}" />
+```
+
+> `MaxWidth` 放在 `TextBlock` 上，Auto 列才会按换行后的宽度测量；放在 `ColumnDefinition` 上无效。
 
 **验证**
 

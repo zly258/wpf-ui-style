@@ -201,12 +201,15 @@ WPF 会按声明顺序应用 `Trigger`，后声明的覆盖前面的。不要靠
 |---|---|---|---|---|
 | Normal | `Transparent` | `Brush.Text.Secondary` | `Transparent` | 无 |
 | Hover | `Brush.Control.Hover` | `Brush.Text.Primary` | `Brush.Border` | 无 |
-| Selected | `Brush.Surface` | `Brush.Accent`（SemiBold） | `Brush.Border` | 2px `Brush.Accent` |
-| Selected+Hover | `Brush.Surface` | `Brush.Accent.Hover` | `Brush.Border.Strong` | 2px `Brush.Accent.Hover` |
+| Selected | `Brush.Accent` | `Brush.OnAccent`（SemiBold） | `Brush.Accent` | 3px `Brush.Accent.Pressed` |
+| Selected+Hover | `Brush.Accent.Hover` | `Brush.OnAccent` | `Brush.Accent.Hover` | 3px `Brush.Accent.Pressed` |
+| Selected+Disabled | `Brush.Control.Disabled` | `Brush.Text.Disabled` | `Brush.Border` | 3px `Brush.Border` |
 | Focused | 不变 | 不变 | `Brush.Focus` | `Brush.Focus` |
 | Disabled | `Transparent` | `Brush.Text.Disabled` | `Transparent` | 无 |
 
-- 选中标签页是「一块面」：Surface 底 + 上方圆角 4 + 1px 描边 + 2px Accent 底条。**不要退回成单条细横线**。
+- 选中标签页是「一块实心面」：Accent 底 + 白字 + 上方圆角 4 + 1px Accent 描边 + 3px Accent.Pressed 底条。**不要退回成单条细横线**。
+- 选中态必须与未选中态在**填充色**上就能区分，不能只靠底部横线。浅蓝底（Accent.Subtle）在白色卡片上同样不够明显，默认用 Accent 实心。
+- 选中标签页内**只用白字**；白字压在 Accent/Hover/Pressed 上均 ≥ 5.3:1。
 - 标签栏下方有一条贯穿的 1px `Brush.Border` 基线；选中标签的底条压在这条基线上。
 - 标签页仅用于局部切换（分组设置、属性分类、画廊演示）；整窗多任务导航仍按 R12 拆分窗口。
 

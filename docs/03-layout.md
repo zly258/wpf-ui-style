@@ -802,7 +802,7 @@ AI 生成 WPF 界面时极易犯以下**四大结构性坏味道**：
 
 ### 16.3 标签页必须有明确选中态
 
-默认 `TabItem` 选中态 = `Brush.Surface` 底 + 1px `Brush.Border` 描边 + 2px `Brush.Accent` 底条 + Accent 半粗文字。
+默认 `TabItem` 选中态 = `Brush.Accent` 实心底 + `Brush.OnAccent` 白字 + 1px Accent 描边 + 3px `Brush.Accent.Pressed` 底条 + SemiBold。
 它不是装饰，而是「当前位置」的唯一视觉锚点。只画一条 1px 横线（或只改文字颜色）在低对比显示器上无法辨认。
 
 ### 16.4 按钮边界与高度
@@ -842,6 +842,8 @@ AI 生成 WPF 界面时极易犯以下**四大结构性坏味道**：
 
 - 一个表单只定义一个 Grid；行只声明 `Grid.Row`，**不要每行再套一个 Grid**，否则标签列宽各行不同，视觉上就是“没对齐”。
 - 标签列 `Auto` + `MinWidth` 由最长标签撑开；短标签后面的留白是列对齐的正常结果。
+- **长标签**：`MaxWidth` 必须加在 `TextBlock` 上（不是 `ColumnDefinition` 上）并配 `TextWrapping="Wrap"`。
+  加在列上只会夹住列宽、文本仍然单行溢出到输入框上。
 
 **窄面板 / 停靠窗（< 520 DIP）：单列，标签在上**
 

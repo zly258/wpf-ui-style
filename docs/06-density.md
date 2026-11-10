@@ -36,11 +36,11 @@
 | `Layout.ButtonMinWidth.Small` | 40 | **48** | 56 |
 | `Layout.ButtonPadding` | 10,0 | **12,0** | 16,0 |
 | `Layout.ButtonPadding.Small` | 6,0 | **8,0** | 10,0 |
-| `Layout.InputPadding` | 6,0 | **8,0** | 10,0 |
-| `Layout.InputPadding.Multiline` | 6,4 | **8,6** | 10,8 |
-| `Layout.ComboBoxPadding` | 6,0,22,0 | **8,0,24,0** | 10,0,26,0 |
+| `Layout.InputPadding` | 4,0 | **6,0** | 8,0 |
+| `Layout.InputPadding.Multiline` | 4,4 | **6,6** | 8,8 |
+| `Layout.ComboBoxPadding` | 4,0,20,0 | **6,0,22,0** | 8,0,24,0 |
 | `Layout.ComboBoxItemPadding` | 6,3 | **8,4** | 10,5 |
-| `Layout.DatePickerPadding` | 6,0,28,0 | **8,0,30,0** | 10,0,32,0 |
+| `Layout.DatePickerPadding` | 4,0,26,0 | **6,0,28,0** | 8,0,30,0 |
 | `Layout.ListItemPadding` | 6,4 | **8,5** | 10,6 |
 | `Layout.ListViewItemPadding` | 2,1 | **3,2** | 5,3 |
 | `Layout.MenuItemPadding` | 7,4 | **8,5** | 10,6 |
@@ -61,6 +61,7 @@
 | `Layout.IconButton.Micro` | 22 | **24** | 28 |
 | `Layout.IconButton.Small` | 24 | **28** | 32 |
 | `Layout.IconButton.Large` | 28 | **32** | 36 |
+| `Layout.FormLabelMaxWidth` | 116 | **132** | 148 |
 | `Layout.TagHeight` | 22 | **24** | 26 |
 
 `Density.Profile` 是字符串令牌（`compact` / `medium` / `relaxed`），便于调试和截图脚本识别当前档位。

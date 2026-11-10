@@ -393,7 +393,7 @@
                     </GroupBox>
 
                     <!-- 8. 标签页与密度 -->
-                    <GroupBox Header="8. 标签页（选中态为实心面 + 描边 + 2px 强调条）">
+                    <GroupBox Header="8. 标签页（选中态为 Accent 实心面 + 白字 + 3px 加深条）">
                         <TabControl Height="170">
                             <TabItem Header="基本信息">
                                 <Grid Margin="0,8,0,0">

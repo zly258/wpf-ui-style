@@ -368,12 +368,17 @@
                                       Margin="6,0,0,0"
                                       VerticalContentAlignment="Center" />
 
-                    <!-- 日历按钮：主题图标 + 主题悬停底 -->
+                    <!-- 日历按钮：主题图标 + 主题悬停底。
+                         尺寸必须跟随密度：写死 26 在紧凑档（控件高 26）会被上下裁掉，
+                         图标只剩一半。用 Stretch + 小外边距让它随宿主高度自适应。 -->
                     <ToggleButton x:Name="PART_Toggle"
                                   Grid.Column="1"
-                                  Width="26" Height="26"
+                                  Width="Auto" Height="Auto"
                                   MinWidth="0" MinHeight="0"
-                                  Margin="2,3,3,3"
+                                  Margin="2,2,2,2"
+                                  Padding="2"
+                                  HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Stretch"
                                   Focusable="False"
                                   Background="Transparent"
                                   BorderThickness="0"

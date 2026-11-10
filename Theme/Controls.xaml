@@ -889,11 +889,12 @@
     <!-- ============================================================
          6. TabControl / TabItem
          ============================================================
-         选中的标签页必须是「一块面」，而不是只有一条横线：
-           - 浅色 Surface 底 + 1px 描边 + 上方圆角；
-           - 底部 2px Accent 指示条压在标签栏基线上；
-           - Accent 前景 + SemiBold；
-           - 未选中标签悬停时也有浅底和描边，点击目标清晰。
+         选中的标签页必须是「一块实心面」，而不是只有一条横线：
+           - Accent 实心填充 + 白字（OnAccent，对比度 5.39:1）；
+           - 1px Accent 描边 + 上方圆角，与标签栏基线断开；
+           - 底部 3px Accent.Pressed 加深条，强化归属；
+           - 未选中标签悬停时给浅底 + 描边，点击目标清晰。
+         这样在白色卡片、浅灰窗口、GroupBox 里都能一眼分辨当前页。
          注意：R12 仍然禁止用 TabControl 做整窗多任务导航，
          本样式适用于分组设置、属性分类、画廊演示等局部切换。
          ============================================================ -->
@@ -964,9 +965,9 @@
                                               TextElement.FontWeight="{TemplateBinding FontWeight}"
                                               RecognizesAccessKey="True" />
                         </Border>
-                        <!-- 2px 指示条：选中时压在标签栏基线上，形成明确归属 -->
+                        <!-- 3px 指示条：选中时压在标签栏基线上，形成明确归属 -->
                         <Border x:Name="Underline"
-                                Height="2"
+                                Height="3"
                                 VerticalAlignment="Bottom"
                                 Background="Transparent"
                                 SnapsToDevicePixels="True" />
@@ -977,11 +978,13 @@
                             <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Border}" />
                             <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
                         </Trigger>
+                        <!-- 选中态 = Accent 实心面 + 白字：在白色/浅灰背景上都能一眼分辨，
+                             不再依赖一条 1~3px 的横线。 -->
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Surface}" />
-                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Border}" />
-                            <Setter TargetName="Underline" Property="Background" Value="{StaticResource Brush.Accent}" />
-                            <Setter Property="Foreground" Value="{StaticResource Brush.Accent}" />
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Accent}" />
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Accent}" />
+                            <Setter TargetName="Underline" Property="Background" Value="{StaticResource Brush.Accent.Pressed}" />
+                            <Setter Property="Foreground" Value="{StaticResource Brush.OnAccent}" />
                             <Setter Property="FontWeight" Value="SemiBold" />
                         </Trigger>
                         <MultiTrigger>
@@ -989,15 +992,27 @@
                                 <Condition Property="IsSelected" Value="True" />
                                 <Condition Property="IsMouseOver" Value="True" />
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Surface}" />
-                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Border.Strong}" />
-                            <Setter TargetName="Underline" Property="Background" Value="{StaticResource Brush.Accent.Hover}" />
-                            <Setter Property="Foreground" Value="{StaticResource Brush.Accent.Hover}" />
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Accent.Hover}" />
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Accent.Hover}" />
+                            <Setter TargetName="Underline" Property="Background" Value="{StaticResource Brush.Accent.Pressed}" />
+                            <Setter Property="Foreground" Value="{StaticResource Brush.OnAccent}" />
                         </MultiTrigger>
                         <Trigger Property="IsKeyboardFocused" Value="True">
                             <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Focus}" />
                             <Setter TargetName="Underline" Property="Background" Value="{StaticResource Brush.Focus}" />
                         </Trigger>
+                        <!-- 禁用优先：选中但禁用时回到灰底灰字，不留白字压在灰底。 -->
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsSelected" Value="True" />
+                                <Condition Property="IsEnabled" Value="False" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Control.Disabled}" />
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Border}" />
+                            <Setter TargetName="Underline" Property="Background" Value="{StaticResource Brush.Border}" />
+                            <Setter Property="Foreground" Value="{StaticResource Brush.Text.Disabled}" />
+                            <Setter Property="Cursor" Value="Arrow" />
+                        </MultiTrigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="Bd" Property="Background" Value="Transparent" />
                             <Setter TargetName="Bd" Property="BorderBrush" Value="Transparent" />

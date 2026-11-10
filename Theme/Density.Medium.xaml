@@ -35,11 +35,11 @@
     <Thickness x:Key="Layout.ButtonPadding.Small">8,0</Thickness>
 
     <!-- 输入 -->
-    <Thickness x:Key="Layout.InputPadding">8,0</Thickness>
-    <Thickness x:Key="Layout.InputPadding.Multiline">8,6</Thickness>
-    <Thickness x:Key="Layout.ComboBoxPadding">8,0,24,0</Thickness>
+    <Thickness x:Key="Layout.InputPadding">6,0</Thickness>
+    <Thickness x:Key="Layout.InputPadding.Multiline">6,6</Thickness>
+    <Thickness x:Key="Layout.ComboBoxPadding">6,0,22,0</Thickness>
     <Thickness x:Key="Layout.ComboBoxItemPadding">8,4</Thickness>
-    <Thickness x:Key="Layout.DatePickerPadding">8,0,30,0</Thickness>
+    <Thickness x:Key="Layout.DatePickerPadding">6,0,28,0</Thickness>
 
     <!-- 列表 / 菜单 -->
     <Thickness x:Key="Layout.ListItemPadding">8,5</Thickness>
@@ -47,6 +47,8 @@
     <Thickness x:Key="Layout.MenuItemPadding">8,5</Thickness>
 
     <!-- 容器 / 间距 -->
+    <sys:Double x:Key="Layout.FormLabelMaxWidth">132</sys:Double>
+
     <Thickness x:Key="Layout.WindowPadding">12</Thickness>
     <Thickness x:Key="Layout.GroupPadding">10</Thickness>
     <Thickness x:Key="Layout.CardPadding">10</Thickness>

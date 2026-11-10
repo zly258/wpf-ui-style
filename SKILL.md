@@ -60,7 +60,7 @@ description: Apply and audit the WPF UI Skills style system (tokens, three-level
 | `Layout.HeaderHeight` | 26 | **30** | 34 | 表格列头 |
 | `Layout.TabPadding` | 10,4 | **12,6** | 16,8 | 标签页内边距 |
 | `Layout.ButtonPadding` | 10,0 | **12,0** | 16,0 | 按钮左右内边距（上下恒为 0） |
-| `Layout.InputPadding` | 6,0 | **8,0** | 10,0 | 单行输入内边距 |
+| `Layout.InputPadding` | 4,0 | **6,0** | 8,0 | 单行输入左右内边距（不设上下） |
 | `Layout.WindowPadding` | 8 | **12** | 16 | 窗口根内边距 |
 | `Layout.GroupPadding` | 8 | **10** | 14 | GroupBox 内容内边距 |
 | `Layout.FormRowMargin` | 0,2 | **0,3** | 0,5 | 表单行上下间距 |
@@ -70,6 +70,7 @@ description: Apply and audit the WPF UI Skills style system (tokens, three-level
 | `Layout.ButtonMinWidth` | 56 | **64** | 72 | 标准按钮最小宽度 |
 | `Layout.ButtonMinWidth.Small` | 40 | **48** | 56 | 小号按钮最小宽度 |
 | `Layout.FormLabelMinWidth` | 80 | **80** | 80 | 标签列最小宽度（配合 `Auto`） |
+| `Layout.FormLabelMaxWidth` | 116 | **132** | 148 | 长标签换行上限（加在 TextBlock 上，不加在列上） |
 | `Layout.InputMinWidth` | 140 | **140** | 140 | 输入列最小宽度（配合 `*`） |
 | `Layout.WindowMinWidth` | 520 | **520** | 520 | 窗口最小宽度 |
 | `Layout.LogMaxHeight` | 220 | **220** | 220 | 日志框默认最大高度 |
@@ -169,7 +170,7 @@ description: Apply and audit the WPF UI Skills style system (tokens, three-level
 
 ### R16. 输入区占满、标签页可识别 (Fill & Visible Tabs)
 - **输入区横向占满**：`TextBox` / `PasswordBox` / `ComboBox` 的文本宿主必须横向 `Stretch`。严禁在业务 XAML 里把 `HorizontalContentAlignment` 改成 `Left`，否则右侧会是无法点击的空白，长值也更容易被截。
-- **标签页选中态必须有面**：默认 `TabItem` 选中态 = `Brush.Surface` 底 + 1px `Brush.Border` 描边 + 2px `Brush.Accent` 底条 + Accent 半粗文字。严禁只画一条 1px 横线当选中态。
+- **标签页选中态必须有面**：默认 `TabItem` 选中态 = **`Brush.Accent` 实心面 + `Brush.OnAccent` 白字** + 1px Accent 描边 + 3px `Brush.Accent.Pressed` 底条 + SemiBold。严禁只画一条 1px 横线当选中态（浅色卡片上会完全看不出），也禁止用浅蓝底当选中态（在白卡片上同样不明显）。
 - **标签页仍是局部切换**：R12 的「窗口内禁止多 Tab 导航」继续生效；本样式用于分组设置、属性分类、画廊演示等局部区域。
 - **按钮边界可见**：默认按钮是「白底 + `Brush.Border.Control` 描边」。严禁把按钮描边改成 `Brush.Border` 或更浅的颜色，也不要用 `Opacity` 弱化。
 
@@ -221,7 +222,7 @@ python tools/UiTest.py --xaml preview/Views/SafeFormView.xaml --shot .tmp-shots/
 - [ ] 默认排版为中等密度（Body 12px, ControlHeight 30px, 表格行 28px, 表单行距 3px, 根边距 12px），未混用其它档位。
 - [ ] 控件尺寸/内边距引用 `Layout.*`，没有写死 `Height="32"` / `Padding="8,0"`；主题内部密度 token 使用 `DynamicResource`。
 - [ ] 单行/多行输入与下拉框内容区横向占满，右侧空白可点击聚焦。
-- [ ] 标签页选中态有 Surface 底 + 描边 + 2px Accent 指示条，不是单条细线。
+- [ ] 标签页选中态是 Accent 实心面 + 白字 + 3px 加深条，不是单条细线。
 - [ ] 表单标签与控件共享左基线：宽面板单 Grid 两列，窄面板 `FormStack` 单列。
 - [ ] 输入框/下拉框内部文字左对齐（数值列允许右对齐），没有居中。
 - [ ] 默认按钮使用 `Brush.Border.Control` 描边（≥3:1），悬停切到 Accent 描边。

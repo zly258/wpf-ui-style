@@ -151,6 +151,7 @@
 | `Layout.IconButton.Large` | 32 | 28 / 36 | 大号工具条图标按钮 |
 | `Layout.RowHeight` | 28 | 24 / 32 | 列表/表格行 |
 | `Layout.HeaderHeight` | 30 | 26 / 34 | 表格表头 |
+| `Layout.FormLabelMaxWidth` | 132 | 116 / 148 | 长标签换行上限（设在 TextBlock 上） |
 | `Layout.CheckBox.Size` | 16 | 16 / 16 | 复选框方框（固定） |
 | `Layout.RadioButton.Size` | 16 | 16 / 16 | 单选框圆环（固定） |
 
@@ -189,8 +190,8 @@
 | `Layout.ButtonMinWidth` / `Layout.ButtonMinWidth.Small` | `64` / `48` | 按钮最小宽度（由主题样式引用） |
 | `Layout.ButtonPadding` | `12,0` | 按钮左右内边距（上下恒为 0，高度由 Height 控制） |
 | `Layout.LogMaxHeight` | `220` | 日志/代码 TextBox 可选高度上限（见 R9，不强制 MinHeight） |
-| `Layout.InputPadding` | `8,0` | 单行输入框（预留充分文字空间） |
-| `Layout.InputPadding.Multiline` | `8,6` | 多行输入框 |
+| `Layout.InputPadding` | `6,0` | 单行输入框左右内边距（上下为 0，高度由 Height 控制） |
+| `Layout.InputPadding.Multiline` | `6,6` | 多行输入框 |
 | `Layout.ListItemPadding` | `8,5` | 列表项 |
 | `Layout.TabPadding` / `Layout.TabMargin` | `12,6` / `0,0,4,0` | 标签页内边距与间距 |
 | `Layout.TooltipPadding` | `8,4` | ToolTip 内边距 |

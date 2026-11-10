@@ -4,7 +4,8 @@
     长标签、长值、长路径状态文案、两列表单、底部按钮栏。
 
     关键点：
-      1. 标签列 Auto + MinWidth：长标签把列撑宽，不会被裁掉一半。
+      1. 标签列 Auto + MinWidth；长标签在 TextBlock 上设 MaxWidth 并换行，
+         既不被裁掉，也不会把输入列挤出可视区。
       2. 输入列 * + MinWidth：窄窗口下仍有可用宽度；长值靠 ToolTip 查看。
       3. 独立运行时用 SizeToContent="Height" + MinHeight：内容变多时窗口跟着长。
       4. 内容区一层 ScrollViewer：150% DPI 下可滚动，不会被裁。
@@ -31,102 +32,96 @@
         <ScrollViewer Grid.Row="1"
                       VerticalScrollBarVisibility="Auto"
                       HorizontalScrollBarVisibility="Disabled">
+            <!-- 两列 = 两个独立的「标签 + 输入」子网格：
+                 不要做成 4 列的大 Grid —— 长标签一换行，整个网格就会超过窗口宽度，
+                 右列输入框被推出可视区。拆成两个 2 列子网格后，每半区都能独立收缩。 -->
+            <!-- 单组「标签 + 输入」两列：标签列 Auto + MinWidth + MaxWidth，
+                 输入列 * + MinWidth。长标签在 MaxWidth 内换行，永远不会把输入列挤出可视区。 -->
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" MinWidth="{StaticResource Layout.FormLabelMinWidth}" />
-                    <ColumnDefinition Width="*" MinWidth="{StaticResource Layout.InputMinWidth}" />
-                    <ColumnDefinition Width="{StaticResource Layout.ColumnGap}" />
-                    <ColumnDefinition Width="Auto" MinWidth="{StaticResource Layout.FormLabelMinWidth}" />
+                    <ColumnDefinition Width="Auto"
+                                      MinWidth="{StaticResource Layout.FormLabelMinWidth}"
+                                      MaxWidth="{StaticResource Layout.FormLabelMaxWidth}" />
                     <ColumnDefinition Width="*" MinWidth="{StaticResource Layout.InputMinWidth}" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
-                <!-- 左列 -->
-                <TextBlock Grid.Row="0" Text="文档编号" Style="{StaticResource Text.Label}" />
+                <TextBlock Grid.Row="0" Text="文档编号"
+                           Style="{StaticResource Text.Label}" />
                 <TextBox Grid.Row="0" Grid.Column="1" Style="{StaticResource TextBox.Form}"
                          Margin="0,0,0,8" />
 
-                <TextBlock Grid.Row="1" Text="文档版本" Style="{StaticResource Text.Label}" />
+                <TextBlock Grid.Row="1" Text="文档版本"
+                           Style="{StaticResource Text.Label}" />
                 <TextBox Grid.Row="1" Grid.Column="1" Style="{StaticResource TextBox.Form}"
                          Margin="0,0,0,8" />
 
-                <TextBlock Grid.Row="2" Text="所属项目" Style="{StaticResource Text.Label}" />
+                <TextBlock Grid.Row="2" Text="所属项目"
+                           Style="{StaticResource Text.Label}" />
                 <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource TextBox.Form}"
                          Margin="0,0,0,8" />
 
-                <TextBlock Grid.Row="3" Text="编制" Style="{StaticResource Text.Label}" />
+                <TextBlock Grid.Row="3" Text="编制"
+                           Style="{StaticResource Text.Label}" />
                 <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource TextBox.Form}"
                          Margin="0,0,0,8" />
 
-                <TextBlock Grid.Row="4" Text="审核" Style="{StaticResource Text.Label}" />
+                <TextBlock Grid.Row="4" Text="审核"
+                           Style="{StaticResource Text.Label}" />
                 <TextBox Grid.Row="4" Grid.Column="1" Style="{StaticResource TextBox.Form}"
                          Margin="0,0,0,8" />
 
-                <TextBlock Grid.Row="5" Text="设计" Style="{StaticResource Text.Label}" />
+                <TextBlock Grid.Row="5" Text="设计"
+                           Style="{StaticResource Text.Label}" />
                 <TextBox Grid.Row="5" Grid.Column="1" Style="{StaticResource TextBox.Form}"
                          Margin="0,0,0,8" />
 
-                <TextBlock Grid.Row="6" Text="制图" Style="{StaticResource Text.Label}" />
+                <TextBlock Grid.Row="6" Text="制图"
+                           Style="{StaticResource Text.Label}" />
                 <TextBox Grid.Row="6" Grid.Column="1" Style="{StaticResource TextBox.Form}"
                          Margin="0,0,0,8" />
 
-                <TextBlock Grid.Row="7" Text="日期" Style="{StaticResource Text.Label}" />
+                <TextBlock Grid.Row="7" Text="日期"
+                           Style="{StaticResource Text.Label}" />
                 <TextBox Grid.Row="7" Grid.Column="1" Style="{StaticResource TextBox.Form}"
                          Margin="0,0,0,8" />
 
-                <!-- 长标签：换行展示，而不是被裁成 "文档编号前…" -->
+                <!-- 长标签：MaxWidth 必须加在 TextBlock 上（不是列上），
+                     Auto 列才会按“换行后的宽度”测量；否则文本会溢出到输入框上。 -->
                 <TextBlock Grid.Row="8" Text="文档标题（用于换行演示）"
-                           Style="{StaticResource Text.Label}" TextWrapping="Wrap" />
+                           Style="{StaticResource Text.Label}"
+                           TextWrapping="Wrap" TextTrimming="None"
+                           MaxWidth="{StaticResource Layout.FormLabelMaxWidth}" />
                 <TextBox Grid.Row="8" Grid.Column="1" Style="{StaticResource TextBox.Form}"
                          Margin="0,0,0,8" />
 
-                <!-- 右列 -->
-                <TextBlock Grid.Row="0" Grid.Column="3" Text="附件1" Style="{StaticResource Text.Label}" />
-                <TextBox Grid.Row="0" Grid.Column="4" Style="{StaticResource TextBox.Form}"
-                         Margin="0,0,0,8" />
-
-                <TextBlock Grid.Row="1" Grid.Column="3" Text="附件2" Style="{StaticResource Text.Label}" />
-                <TextBox Grid.Row="1" Grid.Column="4" Style="{StaticResource TextBox.Form}"
-                         Margin="0,0,0,8" />
-
-                <TextBlock Grid.Row="2" Grid.Column="3" Text="附件3" Style="{StaticResource Text.Label}" />
-                <TextBox Grid.Row="2" Grid.Column="4" Style="{StaticResource TextBox.Form}"
-                         Margin="0,0,0,8" />
-
-                <TextBlock Grid.Row="3" Grid.Column="3" Text="附件4" Style="{StaticResource Text.Label}" />
-                <TextBox Grid.Row="3" Grid.Column="4" Style="{StaticResource TextBox.Form}"
-                         Margin="0,0,0,8" />
-
-                <TextBlock Grid.Row="4" Grid.Column="3" Text="附件5" Style="{StaticResource Text.Label}" />
-                <TextBox Grid.Row="4" Grid.Column="4" Style="{StaticResource TextBox.Form}"
-                         Margin="0,0,0,8" />
-
-                <TextBlock Grid.Row="5" Grid.Column="3" Text="附件6" Style="{StaticResource Text.Label}" />
-                <TextBox Grid.Row="5" Grid.Column="4" Style="{StaticResource TextBox.Form}"
-                         Margin="0,0,0,8" />
-
-                <TextBlock Grid.Row="6" Grid.Column="3" Text="起始编号" Style="{StaticResource Text.Label}" />
-                <TextBox Grid.Row="6" Grid.Column="4" Style="{StaticResource TextBox.Form}"
+                <TextBlock Grid.Row="9" Text="起始编号"
+                           Style="{StaticResource Text.Label}" />
+                <TextBox Grid.Row="9" Grid.Column="1" Style="{StaticResource TextBox.Form}"
                          Margin="0,0,0,8"
                          ToolTip="整数；用于连续编号" />
 
-                <TextBlock Grid.Row="7" Grid.Column="3" Text="质量等级" Style="{StaticResource Text.Label}" />
-                <TextBox Grid.Row="7" Grid.Column="4" Style="{StaticResource TextBox.Form}"
+                <TextBlock Grid.Row="10" Text="质量等级"
+                           Style="{StaticResource Text.Label}" />
+                <TextBox Grid.Row="10" Grid.Column="1" Style="{StaticResource TextBox.Form}"
                          Margin="0,0,0,8" />
 
-                <TextBlock Grid.Row="8" Grid.Column="3" Text="保密等级" Style="{StaticResource Text.Label}" />
-                <TextBox Grid.Row="8" Grid.Column="4" Style="{StaticResource TextBox.Form}"
+                <TextBlock Grid.Row="11" Text="保密等级"
+                           Style="{StaticResource Text.Label}" />
+                <TextBox Grid.Row="11" Grid.Column="1" Style="{StaticResource TextBox.Form}"
                          Margin="0,0,0,8" />
             </Grid>
         </ScrollViewer>

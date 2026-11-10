@@ -33,7 +33,7 @@ samples/
 
 对应规则 R11 / R14，专门演示最容易出问题的场景：
 
-- 标签列 `Auto` + `MinWidth`，长标签不会裁成一半；
+- 标签列 `Auto` + `MinWidth`；长标签在 `TextBlock` 上设 `MaxWidth` 并换行，既不被裁、也不会把输入列挤出可视区；
 - 输入列 `*` + `MinWidth`，输入框不写死 `Width`；长值配 `ToolTip`；
 - 窗口 `SizeToContent="Height"` + `MinHeight`，内容区一层 `ScrollViewer`；
 - 状态文案独占一行，按钮栏独占一行；
@@ -48,7 +48,7 @@ samples/
 
 ### forms/TabsSettingsWindow.xaml
 
-- `TabItem` 选中态 = Surface 底 + 1px 描边 + 2px Accent 底条 + Accent 半粗文字；
+- `TabItem` 选中态 = Accent 实心底 + 白字 + 3px 加深条 + SemiBold；
 - 输入区横向占满，点击右侧空白可继续输入；
 - `SizeToContent` 窗口里的 `TabControl` 显式 `Height`，切换标签页不改变窗口高度；
 - 禁用标签页灰字、不参与命中测试。
@@ -91,7 +91,7 @@ samples/
 - [ ] ComboBox：弹层浅色主题，选中项浅蓝底深字。
 - [ ] CheckBox：勾选蓝底白勾，禁用灰底灰字。
 - [ ] ListBox：选中浅蓝底深字，选中 + 悬停背景略深。
-- [ ] 标签页：选中态是实心面 + 描边 + 2px Accent 底条。
+- [ ] 标签页：选中态是 Accent 实心面 + 白字 + 3px 加深条。
 - [ ] Expander：展开/收起箭头旋转，头部悬停浅底。
 - [ ] 日志框：只读、可滚动、字体与其他文字一致。
 - [ ] ToolTip：深底白字。

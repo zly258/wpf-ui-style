@@ -503,6 +503,10 @@ namespace WpfStyles.Tests
                 .FirstOrDefault(e => e.Name.LocalName == "ToggleButton");
             Assert.NotNull(toggle);
             Assert.Equal("0", (string)toggle.Attribute("MinWidth"));
+
+            // 按钮尺寸必须跟随密度：写死 26 会在紧凑档（控件高 26）里被上下裁掉
+            Assert.Equal("Auto", (string)toggle.Attribute("Height"));
+            Assert.Equal("Stretch", (string)toggle.Attribute("VerticalAlignment"));
         }
 
         [Fact]
@@ -645,6 +649,7 @@ namespace WpfStyles.Tests
                 "Layout.RowHeight",
                 "Layout.HeaderHeight",
                 "Layout.ButtonMinWidth",
+                "Layout.FormLabelMaxWidth",
                 "Layout.ProgressBarHeight"
             })
             {
@@ -674,6 +679,27 @@ namespace WpfStyles.Tests
                 double[] padding = profile["Layout.ButtonPadding"].Value.Split(',').Select(double.Parse).ToArray();
                 Assert.Equal(2, padding.Length);
                 Assert.Equal(0, padding[1]);
+            }
+        }
+
+        [Fact]
+        public void InputPadding_StaysTightAndHasNoVerticalInset()
+        {
+            // 输入框左右内边距过大时，文本会离边框太远、可用宽度变少。
+            foreach (string profile in DensityProfiles)
+            {
+                var tokens = DensityProfile(profile);
+
+                double[] single = tokens["Layout.InputPadding"].Value.Split(',').Select(double.Parse).ToArray();
+                Assert.Equal(2, single.Length);
+                Assert.True(single[0] <= 8, "Layout.InputPadding horizontal is too large in " + profile);
+                Assert.Equal(0, single[1]);
+
+                double[] multiline = tokens["Layout.InputPadding.Multiline"].Value.Split(',').Select(double.Parse).ToArray();
+                Assert.True(multiline[0] <= 8, "multiline horizontal padding is too large in " + profile);
+
+                double[] combo = tokens["Layout.ComboBoxPadding"].Value.Split(',').Select(double.Parse).ToArray();
+                Assert.True(combo[0] <= 8, "ComboBox left padding is too large in " + profile);
             }
         }
 
@@ -712,7 +738,7 @@ namespace WpfStyles.Tests
                 .FirstOrDefault(e => e.Name.LocalName == "Border"
                     && (string)e.Attribute(X + "Name") == "Underline");
             Assert.NotNull(underline);
-            Assert.Equal("2", (string)underline.Attribute("Height"));
+            Assert.Equal("3", (string)underline.Attribute("Height"));
 
             XElement selected = tabItem.Descendants()
                 .FirstOrDefault(e => e.Name.LocalName == "Trigger"
@@ -726,15 +752,15 @@ namespace WpfStyles.Tests
 
             Assert.Contains(setters, s => (string)s.Attribute("TargetName") == "Bd"
                 && (string)s.Attribute("Property") == "Background"
-                && (string)s.Attribute("Value") == "{StaticResource Brush.Surface}");
+                && (string)s.Attribute("Value") == "{StaticResource Brush.Accent}");
             Assert.Contains(setters, s => (string)s.Attribute("TargetName") == "Bd"
                 && (string)s.Attribute("Property") == "BorderBrush"
-                && (string)s.Attribute("Value") == "{StaticResource Brush.Border}");
+                && (string)s.Attribute("Value") == "{StaticResource Brush.Accent}");
             Assert.Contains(setters, s => (string)s.Attribute("TargetName") == "Underline"
                 && (string)s.Attribute("Property") == "Background"
-                && (string)s.Attribute("Value") == "{StaticResource Brush.Accent}");
+                && (string)s.Attribute("Value") == "{StaticResource Brush.Accent.Pressed}");
             Assert.Contains(setters, s => (string)s.Attribute("Property") == "Foreground"
-                && (string)s.Attribute("Value") == "{StaticResource Brush.Accent}");
+                && (string)s.Attribute("Value") == "{StaticResource Brush.OnAccent}");
         }
 
         [Fact]

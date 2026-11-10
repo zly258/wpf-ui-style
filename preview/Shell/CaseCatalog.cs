@@ -55,7 +55,7 @@ namespace WpfStylePreview.Shell
             {
                 Key = "safeform", Category = "基础",
                 Title = "安全表单", Subtitle = "标签不裁、值不藏、按钮不被内容顶出",
-                Width = 820, Height = 560,
+                Width = 620, Height = 620,
                 Create = () => new SafeFormView()
             },
             new CaseDescriptor

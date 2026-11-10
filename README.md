@@ -185,7 +185,7 @@ public static void Apply(Window window)
 - `Button`、`TextBox`、`ComboBox`、`CheckBox`、`RadioButton`、`ListBox`、`DataGrid` 等都有隐式样式，**不需要逐个指定**。
 - 只有变体需要显式指定：`Button.Primary`、`Button.Danger`、`Button.Text`、`TextBox.Multiline`、`TextBox.Code`、`Button.Primary.Small`、`Button.Secondary.Large` 等。
 - `TextBox` / `PasswordBox` / `ComboBox` 的内容区默认横向占满，点击右侧空白也能继续输入。
-- `TabItem` 选中态是「实心 Surface 面 + 1px 描边 + 2px Accent 指示条 + Accent 半粗文字」，不再只有一条细线。
+- `TabItem` 选中态是「Accent 实心面 + 白字 + 3px 加深条 + SemiBold」，白色卡片上也一眼可辨。
 
 ### 2.3 选择密度（紧凑 / 中等 / 宽松）
 
@@ -284,7 +284,7 @@ Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary
 | 输入框 聚焦 | `Brush.Surface` | `Brush.Text.Primary` | `Brush.Focus` |
 | 标签页 未选中 | `Transparent` | `Brush.Text.Secondary` | 透明 |
 | 标签页 悬停 | `Brush.Control.Hover` | `Brush.Text.Primary` | `Brush.Border` |
-| 标签页 选中 | `Brush.Surface` | `Brush.Accent` | `Brush.Border` + 2px `Brush.Accent` 底条 |
+| 标签页 选中 | `Brush.Accent` | `Brush.OnAccent` | `Brush.Accent` + 3px `Brush.Accent.Pressed` 底条 |
 | 列表项 悬停 | `Brush.Control.Hover` | `Brush.Text.Primary` | 透明 |
 | 列表项 选中 | `Brush.Selection` | `Brush.Text.Primary` | 透明 |
 | 列表项 选中+悬停 | `Brush.Selection.Hover` | `Brush.Text.Primary` | 透明 |
