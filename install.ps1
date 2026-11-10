@@ -43,8 +43,17 @@
 .PARAMETER DryRun
     Print actions without writing anything.
 
+.PARAMETER Cleanup
+    Remove this skill's artifacts from clients that are not installed on this
+    machine. Implied by -Clients auto unless -NoCleanup is passed.
+
+.PARAMETER NoCleanup
+    Skip the automatic cleanup pass under -Clients auto.
+
 .PARAMETER Detect
-    List detected clients and exit.
+    List detected clients and exit. A config directory counts as detected only
+    if it holds real client data; directories that contain nothing but files
+    this installer wrote are reported as stale installs instead.
 
 .PARAMETER List
     List all supported clients and their install paths, then exit.
@@ -78,6 +87,10 @@ param(
 
 
     [switch]$DryRun,
+
+    [switch]$Cleanup,
+
+    [switch]$NoCleanup,
 
     [switch]$Detect,
 
@@ -421,6 +434,33 @@ $Registry = [ordered]@{
     }
 }
 
+# Positive evidence that the client software itself is installed: an executable
+# on PATH or the app's install directory. These are checked in addition to the
+# config directory, so a client whose config folder was created by an earlier
+# `-Clients all` run is not mistaken for an installed client.
+$LocalPrograms = if ($env:LOCALAPPDATA) { Join-Path $env:LOCALAPPDATA 'Programs' } else { $null }
+$Probes = @{
+    'zcode'      = @{ Commands = @('zcode'); AppDirs = @("$LocalPrograms\ZCode") }
+    'claude'     = @{ Commands = @('claude'); AppDirs = @("$Home\.claude\local") }
+    'copilot'    = @{ Commands = @('copilot') }
+    'cursor'     = @{ Commands = @('cursor'); AppDirs = @("$LocalPrograms\cursor") }
+    'windsurf'   = @{ Commands = @('windsurf'); AppDirs = @("$LocalPrograms\Windsurf") }
+    'codex'      = @{ Commands = @('codex'); AppDirs = @("$env:APPDATA\Codex") }
+    'gemini'     = @{ Commands = @('gemini') }
+    'qwen'       = @{ Commands = @('qwen') }
+    'grok'       = @{ Commands = @('grok'); AppDirs = @("$Home\.grok\bin") }
+    'kiro'       = @{ Commands = @('kiro') }
+    'trae'       = @{ Commands = @('trae') }
+    'workbuddy'  = @{ AppDirs = @("$LocalPrograms\WorkBuddy") }
+    'codebuddy'  = @{ AppDirs = @("$LocalPrograms\CodeBuddy") }
+    'codebuddycn'= @{ AppDirs = @("$LocalPrograms\CodeBuddy CN") }
+    'dsh'        = @{ AppDirs = @("$LocalPrograms\DeepSeek Harness") }
+    'antigravity'= @{ AppDirs = @("$LocalPrograms\antigravity") }
+    'zed'        = @{ Commands = @('zed') }
+    'aider'      = @{ Commands = @('aider') }
+    'openhands'  = @{ Commands = @('openhands') }
+}
+
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
@@ -735,15 +775,196 @@ Key rules:
     return $block.Replace('{{SKILL_PATH}}', $display) + "`r`n"
 }
 
-function Test-Detected {
-    param([string]$Name)
-    $entry = $Registry[$Name]
-    if ($null -eq $entry) { return $false }
-    foreach ($path in $entry.Detect) {
-        $resolved = Resolve-TargetPath $path $Root
-        if (Test-Path -LiteralPath $resolved) { return $true }
+# ---------------------------------------------------------------------------
+# Client detection.
+# A config directory on its own is not proof that the client is installed:
+# `-Clients all` creates one for every supported client. A directory counts as
+# a real client only when it holds something this installer did not write.
+# ---------------------------------------------------------------------------
+$script:SharedRuleNames = @('AGENTS.md', 'CONVENTIONS.md', 'copilot-instructions.md')
+
+function Test-InstallerArtifact {
+    param([string]$Path)
+
+    $leaf = Split-Path -Leaf $Path
+    $base = $leaf -replace '\.bak-\d{8}-\d{6}$', ''
+
+    if ($base -eq $SkillName) {
+        return (Test-Path -LiteralPath (Join-Path $Path 'SKILL.md') -PathType Leaf)
+    }
+
+    if ($base -eq ($SkillName + '.md') -or
+        $base -eq ($SkillName + '.mdc') -or
+        $base -eq ($SkillName + '.instructions.md')) {
+        return $true
+    }
+
+    if ($script:SharedRuleNames -contains $base) {
+        if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) { return $false }
+        $text = Get-Content -LiteralPath $Path -Raw -ErrorAction SilentlyContinue
+        if ($null -eq $text -or $text -notmatch '<!-- BEGIN wpf-ui-style -->') { return $false }
+        # A shared file is "ours" only when our marked block is all it contains;
+        # any extra content means the user owns that file too.
+        $rest = [regex]::Replace($text, '(?s)<!-- BEGIN wpf-ui-style -->.*?<!-- END wpf-ui-style -->', '').Trim()
+        return [string]::IsNullOrWhiteSpace($rest)
+    }
+
+    return $false
+}
+
+function Test-ForeignContent {
+    param([string]$Path)
+
+    foreach ($child in @(Get-ChildItem -LiteralPath $Path -Force -ErrorAction SilentlyContinue)) {
+        if (Test-InstallerArtifact $child.FullName) { continue }
+        if ($child.PSIsContainer) {
+            # `skills`, `rules`, `steering`... hold only our files when the
+            # whole tree was created by this installer.
+            if (Test-ForeignContent $child.FullName) { return $true }
+            continue
+        }
+        return $true
     }
     return $false
+}
+
+function Get-ClientEvidence {
+    param([string]$Name)
+
+    $entry = $Registry[$Name]
+    if ($null -eq $entry) { return @() }
+
+    $evidence = @()
+    $probe = $Probes[$Name]
+    if ($probe) {
+        foreach ($cmd in @($probe.Commands)) {
+            if ($cmd -and (Get-Command $cmd -ErrorAction SilentlyContinue)) { $evidence += "command $cmd" }
+        }
+        foreach ($dir in @($probe.AppDirs)) {
+            if ($dir -and (Test-Path -LiteralPath (Resolve-TargetPath $dir $Root))) { $evidence += "app $dir" }
+        }
+    }
+    foreach ($path in @($entry.Detect)) {
+        $resolved = Resolve-TargetPath $path $Root
+        if (-not (Test-Path -LiteralPath $resolved)) { continue }
+        if (Test-ForeignContent $resolved) { $evidence += "data $resolved" }
+    }
+    return $evidence
+}
+
+function Test-ClientInstalled {
+    param([string]$Name)
+    return (@(Get-ClientEvidence $Name).Count -gt 0)
+}
+
+# Backwards-compatible name used by the rest of the script.
+function Test-Detected {
+    param([string]$Name)
+    return (Test-ClientInstalled $Name)
+}
+
+function Get-InstalledArtifactPaths {
+    param([string]$Name, [string]$ScopeName)
+
+    $entry = $Registry[$Name]
+    if ($null -eq $entry) { return @() }
+    $base = if ($ScopeName -eq 'Global') { $Home } else { $Root }
+    $specs = if ($ScopeName -eq 'Global') { $entry.Global } else { $entry.Project }
+    $found = @()
+
+    foreach ($spec in $specs) {
+        $target = Resolve-TargetPath $spec.Path $base
+        if ($spec.Kind -eq 'Skill') {
+            $skillDir = Join-Path $target $SkillName
+            if (Test-Path -LiteralPath (Join-Path $skillDir 'SKILL.md')) { $found += $skillDir }
+        }
+        elseif ((Test-Path -LiteralPath $target -PathType Leaf) -and (Test-InstallerArtifact $target)) {
+            $found += $target
+        }
+    }
+    return $found
+}
+
+# Removes empty directories that existed only for this skill: e.g. ~/.roo/rules
+# left behind after the rule file is deleted. Stops at $StopAt and never touches
+# a directory that still has content.
+function Remove-EmptyParents {
+    param([string]$Path, [string]$StopAt, [bool]$Preview)
+
+    $stop = $StopAt.TrimEnd('\')
+    $current = $Path
+    while ($current -and (Test-Path -LiteralPath $current -PathType Container)) {
+        $trimmed = $current.TrimEnd('\')
+        if ($trimmed -eq $stop -or -not $trimmed.StartsWith($stop + '\', [StringComparison]::OrdinalIgnoreCase)) { break }
+        if (@(Get-ChildItem -LiteralPath $current -Force -ErrorAction SilentlyContinue).Count -gt 0) { break }
+        if (-not $Preview) {
+            try { Remove-Item -LiteralPath $current -Force -ErrorAction Stop } catch { break }
+        }
+        $script:CleanupPruned += $current
+        $current = Split-Path -Parent $current
+    }
+}
+
+# Deletes the skill folder / rule file / marked block this installer wrote for
+# one client. Anything that cannot be verified as ours is left untouched.
+function Remove-ClientArtifacts {
+    param([string]$Name, [string]$ScopeName, [bool]$Preview)
+
+    $entry = $Registry[$Name]
+    if ($null -eq $entry) { return @() }
+    $base = if ($ScopeName -eq 'Global') { $Home } else { $Root }
+    $specs = if ($ScopeName -eq 'Global') { $entry.Global } else { $entry.Project }
+    $removed = @()
+
+    foreach ($spec in $specs) {
+        $target = Resolve-TargetPath $spec.Path $base
+
+        if ($spec.Kind -eq 'Skill') {
+            $skillDir = Join-Path $target $SkillName
+            if (Test-Path -LiteralPath (Join-Path $skillDir 'SKILL.md')) {
+                if (-not $Preview) { Remove-Item -LiteralPath $skillDir -Recurse -Force }
+                $removed += $skillDir
+                Remove-EmptyParents $target $base $Preview
+            }
+            foreach ($bak in @(Get-ChildItem -LiteralPath $target -Force -ErrorAction SilentlyContinue |
+                    Where-Object { $_.Name -like ($SkillName + '.bak-*') })) {
+                if (-not $Preview) { Remove-Item -LiteralPath $bak.FullName -Recurse -Force -ErrorAction SilentlyContinue }
+                $removed += $bak.FullName
+            }
+            continue
+        }
+
+        if (-not (Test-Path -LiteralPath $target -PathType Leaf)) { continue }
+        $text = Get-Content -LiteralPath $target -Raw -ErrorAction SilentlyContinue
+        if ($null -eq $text -or $text -notmatch '<!-- BEGIN wpf-ui-style -->') { continue }
+
+        if ($spec.Kind -eq 'Agent' -or $spec.Kind -eq 'Memory') {
+            $stripped = [regex]::Replace($text, '(?s)\r?\n?<!-- BEGIN wpf-ui-style -->.*?<!-- END wpf-ui-style -->\r?\n?', "`r`n").Trim()
+            if ([string]::IsNullOrWhiteSpace($stripped)) {
+                if (-not $Preview) { Remove-Item -LiteralPath $target -Force }
+                $removed += $target
+            }
+            else {
+                if (-not $Preview) {
+                    [IO.File]::WriteAllText($target, $stripped + "`r`n", (New-Object Text.UTF8Encoding($false)))
+                }
+                $removed += "$target (block removed)"
+            }
+        }
+        else {
+            if (-not $Preview) { Remove-Item -LiteralPath $target -Force }
+            $removed += $target
+        }
+
+        $parent = Split-Path -Parent $target
+        foreach ($bak in @(Get-ChildItem -LiteralPath $parent -Force -ErrorAction SilentlyContinue |
+                Where-Object { $_.Name -like ((Split-Path -Leaf $target) + '.bak-*') })) {
+            if (-not $Preview) { Remove-Item -LiteralPath $bak.FullName -Recurse -Force -ErrorAction SilentlyContinue }
+            $removed += $bak.FullName
+        }
+        Remove-EmptyParents $parent $base $Preview
+    }
+    return $removed
 }
 
 # ---------------------------------------------------------------------------
@@ -787,24 +1008,52 @@ if ($Detect) {
     Write-Host ''
     $found = @()
     foreach ($name in $Registry.Keys) {
-        if (Test-Detected $name) {
-            $found += $name
-            Write-Host ("  [x] {0,-12} {1}" -f $name, $Registry[$name].Label) -ForegroundColor Green
-        }
+        if ($name -eq 'agents') { continue }
+        $evidence = @(Get-ClientEvidence $name)
+        if ($evidence.Count -eq 0) { continue }
+        $found += $name
+        Write-Host ("  [x] {0,-12} {1}" -f $name, $Registry[$name].Label) -ForegroundColor Green
+        Write-Host ("      " + ($evidence -join '; ')) -ForegroundColor DarkGray
     }
     if ($found.Count -eq 0) {
         Write-Host '  (none detected; use -Clients all or specify names)' -ForegroundColor Yellow
     }
+
+    # A client that is gone but still has our skill folder is not "installed";
+    # report it so the stale copy can be removed instead of silently reused.
+    $stale = @()
+    foreach ($name in $Registry.Keys) {
+        if ($name -eq 'agents' -or $found -contains $name) { continue }
+        $paths = @(Get-InstalledArtifactPaths $name 'Global') + @(Get-InstalledArtifactPaths $name 'Project')
+        if ($paths.Count -eq 0) { continue }
+        $stale += $name
+        Write-Host ("  [!] {0,-12} {1}  (skill present, client not found)" -f $name, $Registry[$name].Label) -ForegroundColor Yellow
+    }
+    if ($stale.Count -gt 0) {
+        Write-Host ''
+        Write-Host 'Stale installs are removed by "pwsh ./install.ps1 -Cleanup".' -ForegroundColor Yellow
+    }
+
     Write-Host ''
     Write-Host ('Detected: ' + ($found -join ', ')) -ForegroundColor DarkGray
+    if ($stale.Count -gt 0) {
+        Write-Host ('Stale   : ' + ($stale -join ', ')) -ForegroundColor DarkGray
+    }
     exit 0
 }
 
 # ---------------------------------------------------------------------------
 # Select clients
 # ---------------------------------------------------------------------------
+# `-Cleanup` without `-Clients` means "only clean up stale installs"; passing
+# a client selection (or relying on the `auto` default) installs as well.
+$cleanupOnly = $Cleanup -and -not $PSBoundParameters.ContainsKey('Clients')
+
 $selected = @()
-if ($Clients -eq 'all') {
+if ($cleanupOnly) {
+    $selected = @()
+}
+elseif ($Clients -eq 'all') {
     $selected = @($Registry.Keys)
 }
 elseif ($Clients -eq 'auto') {
@@ -828,7 +1077,7 @@ foreach ($name in $selected) {
 # `auto` detection often matches both a native client (ZCode/Claude/Copilot)
 # and the generic ~/.agents root. Installing both makes those clients list the
 # same skill twice, so prefer the native directory when one is available.
-if ($Clients -eq 'auto') {
+if ($Clients -eq 'auto' -and -not $cleanupOnly) {
     $selected = @($selected | Where-Object { $_ -ne 'agents' })
     if ($selected.Count -eq 0) { $selected = @('agents') }
 }
@@ -877,7 +1126,7 @@ if ($Clients -eq 'auto') {
 # Rule-only clients need a real skill folder to point at. If the selection has
 # no Skill action, add the generic Agent Skills root for each active scope.
 $hasSkillAction = @($actions | Where-Object { $_.Kind -eq 'Skill' }).Count -gt 0
-if (-not $hasSkillAction) {
+if (-not $hasSkillAction -and -not $cleanupOnly) {
     foreach ($scopeName in $scopes) {
         $fallbackPath = if ($scopeName -eq 'Global') { "$Home/.agents/skills" } else { '.agents/skills' }
         $actions += [pscustomobject]@{
@@ -965,6 +1214,7 @@ foreach ($action in $actions) {
 # ---------------------------------------------------------------------------
 # Summary
 # ---------------------------------------------------------------------------
+if (-not $cleanupOnly) {
 Write-Host ''
 Write-Host 'wpf-ui-style install' -ForegroundColor Cyan
 Write-Host ("Source : " + $Source) -ForegroundColor DarkGray
@@ -989,7 +1239,46 @@ if ($errors -gt 0) {
 if ($skipped -gt 0) {
     Write-Host 'Existing items were skipped. Re-run with -Force to overwrite.' -ForegroundColor Yellow
 }
+}
 
+# ---------------------------------------------------------------------------
+# Cleanup: remove this skill from clients that are not installed here.
+# `-Clients all` used to create a config directory for every supported client;
+# those leftover copies must not survive an `auto` install.
+# ---------------------------------------------------------------------------
+$doCleanup = $Cleanup -or ($Clients -eq 'auto' -and -not $NoCleanup)
+if ($doCleanup) {
+    $script:CleanupPruned = @()
+    $cleanupRows = @()
+    foreach ($name in $Registry.Keys) {
+        if ($selected -contains $name) { continue }
+        if ($name -ne 'agents' -and (Test-ClientInstalled $name)) { continue }
+        foreach ($scopeName in $scopes) {
+            foreach ($path in @(Remove-ClientArtifacts $name $scopeName ([bool]$DryRun))) {
+                $cleanupRows += [pscustomobject]@{ Client = $name; Scope = $scopeName; Removed = $path }
+            }
+        }
+    }
+
+    if ($cleanupRows.Count -gt 0) {
+        Write-Host ''
+        Write-Host $(if ($DryRun) { 'Cleanup (dry run: nothing deleted)' } else { 'Cleanup (clients not installed)' }) -ForegroundColor Cyan
+        Write-Host ''
+        $cleanupRows | Format-Table Client, Scope, Removed -AutoSize | Out-String | Write-Host
+        $pruned = @($script:CleanupPruned | Select-Object -Unique)
+        if ($pruned.Count -gt 0) {
+            Write-Host ("Empty directories {0}:" -f $(if ($DryRun) { 'that would be removed' } else { 'removed' })) -ForegroundColor DarkGray
+            foreach ($dir in $pruned) { Write-Host ("  " + $dir) -ForegroundColor DarkGray }
+        }
+        Write-Host ("Removed {0} leftover item(s) from clients that are not installed." -f $cleanupRows.Count) -ForegroundColor Cyan
+    }
+    else {
+        Write-Host ''
+        Write-Host 'Cleanup: no leftover installs in clients that are not present.' -ForegroundColor DarkGray
+    }
+}
+
+if (-not $cleanupOnly) {
 Write-Host ''
 Write-Host 'Next steps:' -ForegroundColor Green
 Write-Host '  1. Restart the client (or reload the window) so it rescans skills/rules.'
@@ -1000,3 +1289,4 @@ Write-Host ("     pwsh `"" + (Join-Path $primarySkillPath 'tools/LayoutCheck.ps1
 Write-Host ("     pwsh `"" + (Join-Path $primarySkillPath 'tools/UiTest.ps1') + "`" -Window editable-table -TestClicks")
 Write-Host ''
 Write-Host 'Manual verification: see INSTALL.md in the skill folder.' -ForegroundColor DarkGray
+}

@@ -38,6 +38,12 @@ pwsh ./install.ps1 -Scope Both -Clients all -DryRun
 
 # 覆盖已有安装（会先备份）
 pwsh ./install.ps1 -Scope Global -Clients all -Force
+
+# 清理“客户端已不存在”的残留安装（只删本技能写入的文件）
+pwsh ./install.ps1 -Cleanup
+
+# 预览清理结果，不实际删除
+pwsh ./install.ps1 -Cleanup -DryRun
 ```
 
 安装后重启客户端，或重新打开窗口，让客户端重新扫描 skill/规则。
@@ -55,11 +61,32 @@ pwsh ./install.ps1 -Scope Global -Clients all -Force
 | `-Source` | 脚本所在目录 | 技能源目录 |
 | `-Force` | 关闭 | 覆盖已有技能/规则文件；共享文件会先备份 |
 | `-DryRun` | 关闭 | 只打印动作，不写文件 |
+| `-Cleanup` | 关闭 | 删除“客户端未安装”的残留技能/规则文件；单独使用时只清理、不安装 |
+| `-NoCleanup` | 关闭 | `-Clients auto` 下跳过自动清理 |
 | `-Detect` | — | 列出本机检测到的客户端后退出 |
 | `-List` | — | 列出所有支持的客户端和路径后退出 |
 
-`auto` 的检测依据是各客户端的配置目录（如 `~/.zcode`、`~/.cursor`、`~/.workbuddy`）。
-如果一个都没检测到，会回退到通用 `agents`（`~/.agents/skills`）。
+`auto` 检测的是“客户端软件是否真的存在”，而不是配置目录是否存在：
+
+- 可执行文件在 `PATH` 上（如 `zcode`、`claude`、`qwen`），或
+- 客户端安装在常见程序目录（如 `%LOCALAPPDATA%\Programs\ZCode`），或
+- 配置目录（如 `~/.zcode`、`~/.cursor`）里有本安装器之外的真实数据。
+
+早期版本用 `-Clients all` 安装时，会为每个受支持的客户端创建配置目录。这些目录里
+如果只有本技能写入的 `skills/wpf-ui-style`、`wpf-ui-style.md`、`AGENTS.md` 标记块，
+不再算作“已安装”，`-Detect` 会把它们列为 `Stale`：
+
+```powershell
+# 查看检测结果与残留安装
+pwsh ./install.ps1 -Detect
+
+# 清理残留安装（只删本技能写入的文件，不会碰客户端自己的数据）
+pwsh ./install.ps1 -Cleanup
+```
+
+`auto` 安装时默认会顺带执行同样的清理，因此不会再往不存在的客户端里写文件；
+需要保留残留目录时加 `-NoCleanup`。如果本机一个客户端都没检测到，会回退到通用
+`agents`（`~/.agents/skills`）。
 
 `auto` 会优先安装到客户端的原生 skill 目录；如果同时检测到通用 `agents`
 或 Copilot 的 `~/.agents/skills` 回退目录，会跳过通用回退，避免同一技能在客户端里
@@ -301,7 +328,8 @@ Remove-Item ".clinerules/wpf-ui-style.md" -Force
 | 问题 | 处理 |
 |---|---|
 | 客户端看不到 skill | 重启客户端；确认 `SKILL.md` 在 `<skills>/<name>/SKILL.md`；确认 frontmatter 的 `name`/`description` |
-| `-Clients auto` 没装任何东西 | 客户端配置目录不在检测列表；用 `-Detect` 查看，或 `-Clients all` / 显式指定 |
+| `-Clients auto` 没装任何东西 | 客户端未真正安装或不在检测列表；用 `-Detect` 查看检测依据，或 `-Clients all` / 显式指定 |
+| `-Detect` 显示 `Stale` | 客户端已卸载但技能还在；运行 `pwsh ./install.ps1 -Cleanup` 删除残留（只删本技能写入的文件） |
 | 规则文件没有生效 | 检查客户端是否读取该路径；部分客户端只读项目级规则，不读用户级规则 |
 | 重复安装出现重复 frontmatter | 已修复；规则文件会整体替换。若旧文件损坏，加 `-Force` 重装 |
 | 不想覆盖已有文件 | 默认跳过；`-Force` 会先备份：规则文件备份为同目录的 `.bak-<timestamp>`（只保留最新 3 份），技能目录备份到 `~/.wpf-ui-style-backups/<client>/`（避免被客户端当成过期 skill 扫描到） |

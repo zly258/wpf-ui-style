@@ -40,7 +40,14 @@ pwsh ./install.ps1 -Scope Global -Clients all
 
 # 项目级：写入目标仓库，可提交给团队
 pwsh ./install.ps1 -Scope Project -Root "D:/Demo/YourApp" -Clients all
+
+# 清理已卸载客户端里的残留安装（只删本技能写入的文件）
+pwsh ./install.ps1 -Cleanup
 ```
+
+`-Clients auto` 只安装到“软件确实存在”的客户端：检测可执行文件、程序安装目录和
+配置目录里的真实数据；如果配置目录里只有早期 `-Clients all` 留下的本技能文件，
+会被视为残留，并在安装时自动清理。
 
 手动安装（任选其一）：
 
