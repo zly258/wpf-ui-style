@@ -1,0 +1,134 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- ======================================================================
+         Ribbon 线性图标 (24x24 / stroke 2 / round cap & join)
+         由 tools/IconGen.py xaml 生成，请勿手改：改 catalog/icons.json 后重跑。
+         用法见 SKILL.md「WPF 集成」一节。
+         ====================================================================== -->
+
+    <Style x:Key="Icon.Ribbon" TargetType="Path">
+        <Setter Property="Fill" Value="{x:Null}" />
+        <Setter Property="Stroke"
+                Value="{Binding Path=(TextElement.Foreground),
+                                RelativeSource={RelativeSource Self},
+                                FallbackValue={StaticResource Brush.Text.Primary}}" />
+        <Setter Property="StrokeThickness" Value="2" />
+        <Setter Property="StrokeStartLineCap" Value="Round" />
+        <Setter Property="StrokeEndLineCap" Value="Round" />
+        <Setter Property="StrokeLineJoin" Value="Round" />
+        <!-- 固定 24x24 设计画布：几何本身不铺满时也保持同一光学尺寸，
+             外层 Viewbox 负责缩放到 Icon.Size.*，不要改成 Uniform。 -->
+        <Setter Property="Width" Value="24" />
+        <Setter Property="Height" Value="24" />
+        <Setter Property="Stretch" Value="None" />
+        <Setter Property="UseLayoutRounding" Value="True" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+    </Style>
+
+    <!-- 虚线=框选/范围/剖切面；2 3 / stroke 2 = WPF 的 1 1.5 -->
+    <Style x:Key="Icon.Ribbon.Dash" TargetType="Path" BasedOn="{StaticResource Icon.Ribbon}">
+        <Setter Property="StrokeDashArray" Value="1 1.5" />
+    </Style>
+
+
+    <!-- 文件与数据 (File & Data) -->
+    <!-- 新建文件 / New File -->
+    <StreamGeometry x:Key="Icon.Ribbon.NewFile">M13 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9z M13 3v6h6 M12 12v6M9 15h6</StreamGeometry>
+    <!-- 打开 / Open -->
+    <StreamGeometry x:Key="Icon.Ribbon.Open">M3 8a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z</StreamGeometry>
+    <!-- 保存 / Save -->
+    <StreamGeometry x:Key="Icon.Ribbon.Save">M6 4H18A2 2 0 0 1 20 6V18A2 2 0 0 1 18 20H6A2 2 0 0 1 4 18V6A2 2 0 0 1 6 4Z M8 4v6h8V4 M9 14H15A1 1 0 0 1 16 15V19A1 1 0 0 1 15 20H9A1 1 0 0 1 8 19V15A1 1 0 0 1 9 14Z</StreamGeometry>
+    <!-- 导出 / Export -->
+    <StreamGeometry x:Key="Icon.Ribbon.Export">M4 14v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4 M12 15V4M8 8l4-4 4 4</StreamGeometry>
+    <!-- 导入 / Import -->
+    <StreamGeometry x:Key="Icon.Ribbon.Import">M4 14v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4 M12 3v12M8 11l4 4 4-4</StreamGeometry>
+    <!-- 打印 / Print -->
+    <StreamGeometry x:Key="Icon.Ribbon.Print">M7 9V4h10v5 M5 9H19A2 2 0 0 1 21 11V14A2 2 0 0 1 19 16H5A2 2 0 0 1 3 14V11A2 2 0 0 1 5 9Z M8 16H16A1 1 0 0 1 17 17V20A1 1 0 0 1 16 21H8A1 1 0 0 1 7 20V17A1 1 0 0 1 8 16Z</StreamGeometry>
+
+    <!-- 历史操作 (History) -->
+    <!-- 撤销 / Undo -->
+    <StreamGeometry x:Key="Icon.Ribbon.Undo">M4 10h10a4.5 4.5 0 0 1 0 9h-5 M8 6L4 10l4 4</StreamGeometry>
+    <!-- 重做 / Redo -->
+    <StreamGeometry x:Key="Icon.Ribbon.Redo">M20 10H10a4.5 4.5 0 0 0 0 9h5 M16 6l4 4-4 4</StreamGeometry>
+
+    <!-- 选择与筛选 (Selection & Filter) -->
+    <!-- 选择 / Select -->
+    <StreamGeometry x:Key="Icon.Ribbon.Select">M5 3l14 8-5.4 1.6L16 20l-3 1-3-7.4L5 18z</StreamGeometry>
+    <!-- 框选 / Box Select -->
+    <StreamGeometry x:Key="Icon.Ribbon.BoxSelect">M9 8H15A1 1 0 0 1 16 9V15A1 1 0 0 1 15 16H9A1 1 0 0 1 8 15V9A1 1 0 0 1 9 8Z</StreamGeometry>
+    <StreamGeometry x:Key="Icon.Ribbon.BoxSelect.Dash">M5 3H19A2 2 0 0 1 21 5V19A2 2 0 0 1 19 21H5A2 2 0 0 1 3 19V5A2 2 0 0 1 5 3Z</StreamGeometry>
+    <!-- 批量选择 / Batch Select -->
+    <StreamGeometry x:Key="Icon.Ribbon.BatchSelect">M5 4H15A1 1 0 0 1 16 5V15A1 1 0 0 1 15 16H5A1 1 0 0 1 4 15V5A1 1 0 0 1 5 4Z</StreamGeometry>
+    <StreamGeometry x:Key="Icon.Ribbon.BatchSelect.Dash">M10 9H19A1 1 0 0 1 20 10V19A1 1 0 0 1 19 20H10A1 1 0 0 1 9 19V10A1 1 0 0 1 10 9Z</StreamGeometry>
+    <!-- 筛选 / Filter -->
+    <StreamGeometry x:Key="Icon.Ribbon.Filter">M3 4h18l-7 8v7l-4 2v-9z</StreamGeometry>
+
+    <!-- 编辑与变换 (Edit & Transform) -->
+    <!-- 移动 / Move -->
+    <StreamGeometry x:Key="Icon.Ribbon.Move">M12 3v18M3 12h18 M9 6l3-3 3 3M9 18l3 3 3-3M6 9l-3 3 3 3M18 9l3 3-3 3</StreamGeometry>
+    <!-- 复制 / Copy -->
+    <StreamGeometry x:Key="Icon.Ribbon.Copy">M6 4H14A2 2 0 0 1 16 6V14A2 2 0 0 1 14 16H6A2 2 0 0 1 4 14V6A2 2 0 0 1 6 4Z M8 20h10a2 2 0 0 0 2-2V8</StreamGeometry>
+    <!-- 旋转 / Rotate -->
+    <StreamGeometry x:Key="Icon.Ribbon.Rotate">M12 6a7 7 0 1 1-7 7 M9 3l3 3-3 3</StreamGeometry>
+    <!-- 镜像 / Mirror -->
+    <StreamGeometry x:Key="Icon.Ribbon.Mirror">M9 6L4 12l5 6z M15 6l5 6-5 6z</StreamGeometry>
+    <StreamGeometry x:Key="Icon.Ribbon.Mirror.Dash">M12 3v18</StreamGeometry>
+    <!-- 修剪 / Trim -->
+    <StreamGeometry x:Key="Icon.Ribbon.Trim">M8 4l8 16M16 4L8 20 M4 6A2 2 0 1 0 8 6A2 2 0 1 0 4 6Z M4 18A2 2 0 1 0 8 18A2 2 0 1 0 4 18Z</StreamGeometry>
+    <!-- 延伸 / Extend -->
+    <StreamGeometry x:Key="Icon.Ribbon.Extend">M20 3v18 M4 12h12 M13 9l3 3-3 3</StreamGeometry>
+    <!-- 圆角 / Fillet -->
+    <StreamGeometry x:Key="Icon.Ribbon.Fillet">M5 20V10a5 5 0 0 1 5-5h10</StreamGeometry>
+    <!-- 倒角 / Chamfer -->
+    <StreamGeometry x:Key="Icon.Ribbon.Chamfer">M5 20V10l5-5h10</StreamGeometry>
+
+    <!-- 绘图与标注 (Draw & Annotate) -->
+    <!-- 直线 / Line -->
+    <StreamGeometry x:Key="Icon.Ribbon.Line">M4 20L20 4 M3 20A1 1 0 1 0 5 20A1 1 0 1 0 3 20Z M19 4A1 1 0 1 0 21 4A1 1 0 1 0 19 4Z</StreamGeometry>
+    <!-- 多段线 / Polyline -->
+    <StreamGeometry x:Key="Icon.Ribbon.Polyline">M3 18l4.5-8 5 5L21 4</StreamGeometry>
+    <!-- 矩形 / Rectangle -->
+    <StreamGeometry x:Key="Icon.Ribbon.Rectangle">M5 5H19A1 1 0 0 1 20 6V18A1 1 0 0 1 19 19H5A1 1 0 0 1 4 18V6A1 1 0 0 1 5 5Z</StreamGeometry>
+    <!-- 圆 / Circle -->
+    <StreamGeometry x:Key="Icon.Ribbon.Circle">M4 12A8 8 0 1 0 20 12A8 8 0 1 0 4 12Z</StreamGeometry>
+    <!-- 填充 / Hatch -->
+    <StreamGeometry x:Key="Icon.Ribbon.Hatch">M5 4H19A1 1 0 0 1 20 5V19A1 1 0 0 1 19 20H5A1 1 0 0 1 4 19V5A1 1 0 0 1 5 4Z M7 17L17 7M7 11l4-4M13 17l4-4</StreamGeometry>
+    <!-- 文字 / Text -->
+    <StreamGeometry x:Key="Icon.Ribbon.Text">M4 4h16M12 4v16</StreamGeometry>
+    <!-- 尺寸标注 / Dimension -->
+    <StreamGeometry x:Key="Icon.Ribbon.Dimension">M4 7v10M20 7v10M4 12h16 M7 9l-3 3 3 3M17 9l3 3-3 3</StreamGeometry>
+    <!-- 测量 / Measure -->
+    <StreamGeometry x:Key="Icon.Ribbon.Measure">M5 8H19A1 1 0 0 1 20 9V15A1 1 0 0 1 19 16H5A1 1 0 0 1 4 15V9A1 1 0 0 1 5 8Z M8 8v3M12 8v4M16 8v3</StreamGeometry>
+    <!-- 阵列 / Array -->
+    <StreamGeometry x:Key="Icon.Ribbon.Array">M5 4H9A1 1 0 0 1 10 5V9A1 1 0 0 1 9 10H5A1 1 0 0 1 4 9V5A1 1 0 0 1 5 4Z</StreamGeometry>
+    <StreamGeometry x:Key="Icon.Ribbon.Array.Dash">M15 4H19A1 1 0 0 1 20 5V9A1 1 0 0 1 19 10H15A1 1 0 0 1 14 9V5A1 1 0 0 1 15 4Z M5 14H9A1 1 0 0 1 10 15V19A1 1 0 0 1 9 20H5A1 1 0 0 1 4 19V15A1 1 0 0 1 5 14Z</StreamGeometry>
+    <!-- 分解 / Explode -->
+    <StreamGeometry x:Key="Icon.Ribbon.Explode">M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z</StreamGeometry>
+
+    <!-- 视图与捕捉 (View & Snap) -->
+    <!-- 缩放至适合 / Zoom to Fit -->
+    <StreamGeometry x:Key="Icon.Ribbon.ZoomFit">M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5 M9 8H15A1 1 0 0 1 16 9V15A1 1 0 0 1 15 16H9A1 1 0 0 1 8 15V9A1 1 0 0 1 9 8Z</StreamGeometry>
+    <!-- 平移视图 / Pan -->
+    <StreamGeometry x:Key="Icon.Ribbon.Pan">M8 13V6a1.5 1.5 0 0 1 3 0v5M11 11V4.5a1.5 1.5 0 0 1 3 0V11M14 11V6.5a1.5 1.5 0 0 1 3 0V15a5 5 0 0 1-5 5h-1a5 5 0 0 1-4.3-2.5L4.6 14.4a1.6 1.6 0 0 1 2.7-1.7L9 15</StreamGeometry>
+    <!-- 捕捉 / Snap -->
+    <StreamGeometry x:Key="Icon.Ribbon.Snap">M12 3v3M12 18v3M3 12h3M18 12h3 M9 8H15A1 1 0 0 1 16 9V15A1 1 0 0 1 15 16H9A1 1 0 0 1 8 15V9A1 1 0 0 1 9 8Z</StreamGeometry>
+    <!-- 正交 / Ortho -->
+    <StreamGeometry x:Key="Icon.Ribbon.Ortho">M5 20V6h14 M5 16h4v4H5z</StreamGeometry>
+    <!-- 图层 / Layers -->
+    <StreamGeometry x:Key="Icon.Ribbon.Layer">M12 3l9 4.5-9 4.5-9-4.5z M3 12l9 4.5 9-4.5M3 16.5L12 21l9-4.5</StreamGeometry>
+    <!-- 三维视图 / 3D View -->
+    <StreamGeometry x:Key="Icon.Ribbon.CubeIso">M12 3l8 4.5v9L12 21l-8-4.5v-9z M12 12V3M12 12l8-4.5M12 12L4 7.5</StreamGeometry>
+    <!-- 剖切视图 / Section View -->
+    <StreamGeometry x:Key="Icon.Ribbon.Section">M12 3l8 4.5v9L12 21l-8-4.5v-9z</StreamGeometry>
+    <StreamGeometry x:Key="Icon.Ribbon.Section.Dash">M3 12h18</StreamGeometry>
+
+    <!-- 系统与设置 (System) -->
+    <!-- 设置 / Settings -->
+    <StreamGeometry x:Key="Icon.Ribbon.Settings">M4 8h4M12 8h8M4 16h8M16 16h4 M8 8A2 2 0 1 0 12 8A2 2 0 1 0 8 8Z M12 16A2 2 0 1 0 16 16A2 2 0 1 0 12 16Z</StreamGeometry>
+    <!-- 查找 / Search -->
+    <StreamGeometry x:Key="Icon.Ribbon.Search">M4 10.5A6.5 6.5 0 1 0 17 10.5A6.5 6.5 0 1 0 4 10.5Z M15.2 15.2L20.5 20.5</StreamGeometry>
+    <!-- 锁定 / 约束 / Lock / Constraint -->
+    <StreamGeometry x:Key="Icon.Ribbon.Lock">M8 11H16A2 2 0 0 1 18 13V18A2 2 0 0 1 16 20H8A2 2 0 0 1 6 18V13A2 2 0 0 1 8 11Z M8.5 11V8a3.5 3.5 0 0 1 7 0v3</StreamGeometry>
+
+</ResourceDictionary>

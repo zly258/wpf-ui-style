@@ -554,7 +554,9 @@ function Remove-StaleSkillBackups {
 # Directories that must never be copied into an installed skill folder.
 # `dist` holds the built preview executable and launcher .bat files (~450 KB);
 # it is a local build artifact, not part of the skill.
-$script:SkillCopyExcludeDirs = @('.git', '.vs', '.idea', 'bin', 'obj', '__pycache__', '.zcode', 'dist', '.tmp-shots', '.tmp')
+# `skills` holds companion skills (ribbon-icon-generator) that install themselves;
+# copying them inside wpf-ui-style would nest a second skill in this one.
+$script:SkillCopyExcludeDirs = @('.git', '.vs', '.idea', 'bin', 'obj', '__pycache__', '.zcode', 'dist', '.tmp-shots', '.tmp', 'skills', 'shots', '.playwright-mcp')
 
 function Copy-SkillTree {
     param([string]$SourcePath, [string]$TargetPath)

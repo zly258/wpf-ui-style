@@ -221,3 +221,31 @@
 - ❌ **缺少 0..24 边界锚点**：`Stretch="Uniform"` 会把 Chevron 等小图形放大，导致同一行的图标大小不一。
 - ❌ **线型控件描边随意**：复选框勾、下拉箭头、折叠箭头必须统一 1.5–1.6px，避免与图标字重不匹配。
 
+---
+
+## 8. 描边式 Ribbon 线性图标 (Monoline Ribbon Icons)
+
+Material Symbols 是**填充式 (Fill)** 几何；Ribbon 工具条有时需要**等宽描边 (Stroke)** 的极简线性图标。
+这类图标由配套技能 [`skills/ribbon-icon-generator/`](../skills/ribbon-icon-generator/SKILL.md) 统一生成，
+两者可以共存，但**同一个图标组内不得混用**。
+
+| 维度 | Material Symbols（本仓库默认） | Ribbon 线性（配套技能） |
+|---|---|---|
+| 渲染方式 | `Fill` + 闭合几何 | `Stroke` + `StrokeThickness=2` |
+| 网格 | 24×24，末尾 `M0,0 L24,24` 锚点 | 24×24，`Stretch=None` + 固定 24×24 画布 |
+| 尺寸 | `Icon.Size.*` | 同左，外层 `Viewbox` 缩放 |
+| 着色 | `Fill` 绑定 `TextElement.Foreground` | `Stroke` 绑定 `TextElement.Foreground` |
+| 深浅主题 | 继承画刷 | 深 `#FFFFFF` / 浅 `#4A4A4A`，实测 12.89:1 / 7.99:1 |
+
+**为什么不用边界锚点**：描边图标若追加 `M0,0 L24,24` 会真的画出一条对角线。
+因此改为在 `Style` 里固定 `Width/Height=24`、`Stretch=None`，让 Path 占满 24×24 布局槽位，
+再由外层 `Viewbox` 等比缩放到 `Icon.Size.*`，同样保证小图形不会被放大。
+
+生成与校验：
+
+```bash
+python skills/ribbon-icon-generator/tools/IconGen.py check --strict
+python skills/ribbon-icon-generator/tools/IconGen.py xaml --out samples/RibbonIcons.xaml
+python skills/ribbon-icon-generator/tools/IconGen.py preview --out preview/icons.html
+```
+

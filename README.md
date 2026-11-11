@@ -72,6 +72,23 @@ exe 的程序安装目录、Windows 卸载注册表/MSIX 安装记录，以及�
 Skill 会先读 `SKILL.md`，再按需打开 `references/cheatsheet.md`、
 `docs/02-control-states.md`、`docs/03-layout.md` 和 `docs/04-common-pitfalls.md`。
 
+### 0.1 配套技能：Ribbon 线性图标生成器
+
+`skills/ribbon-icon-generator/` 是一个**独立 skill**（安装脚本不会把它套娃复制进 `wpf-ui-style`）。
+它提供 24×24 单色线性图标的 40 个成品、SVG / WPF `StreamGeometry` 生成器、深浅双主题预览页，
+以及安全边距 / 复杂度 / 对比度校验，专门解决 Ribbon 工具条在 16px 下的辨识度问题：
+
+```powershell
+pwsh ./skills/ribbon-icon-generator/install.ps1            # 装到本机已存在的客户端
+pwsh ./skills/ribbon-icon-generator/install.ps1 -All -Force
+```
+
+```bash
+python skills/ribbon-icon-generator/tools/IconGen.py list
+python skills/ribbon-icon-generator/tools/IconGen.py check --strict
+python skills/ribbon-icon-generator/tools/IconGen.py xaml --out samples/RibbonIcons.xaml
+```
+
 ---
 
 ## 1. 文件结构
@@ -119,6 +136,12 @@ wpf-styles/
 │  ├─ icons/IconGalleryWindow.xaml
 │  └─ README.md
 ├─ preview/                          ← 可运行案例中心（侧边导航 + 10 个案例页 + 密度切换 + 截图）
+├─ skills/
+│  └─ ribbon-icon-generator/         ← 配套独立技能：24x24 Ribbon 线性图标生成器
+│     ├─ SKILL.md                    ← 图标规范、工作流、WPF 集成
+│     ├─ catalog/icons.json          ← 40 个图标几何（唯一数据源）
+│     ├─ tools/IconGen.py            ← SVG / XAML / 预览 / 校验 / 提示词
+│     └─ samples/                    ← 生成的 SVG 与 RibbonIcons.xaml
 ├─ tools/
 │  ├─ ContrastCheck.py               ← 对比度自动检查（Python 3 标准库）
 │  ├─ LayoutCheck.py                 ← 布局/防截断/TabControl 规则自动检查

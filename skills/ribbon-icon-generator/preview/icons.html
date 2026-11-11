@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ribbon 图标预览</title>
+<style>
+:root { color-scheme: dark; }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "Segoe UI", "Microsoft YaHei", system-ui, sans-serif; }
+section { padding: 28px 32px 36px; }
+section.dark { background: #2D323A; color: #FFFFFF; }
+section.light { background: #F3F3F3; color: #4A4A4A; }
+h1 { font-size: 20px; margin: 0 0 4px; font-weight: 600; letter-spacing: .2px; }
+h2 { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .12em;
+     opacity: .62; margin: 28px 0 10px; }
+p.sub { margin: 0 0 22px; font-size: 12px; opacity: .66; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 10px; }
+.card { border: 1px solid currentColor; border-color: rgba(128,128,128,.22);
+        border-radius: 8px; padding: 12px 12px 10px; display: flex; flex-direction: column; gap: 10px; }
+.row { display: flex; align-items: center; gap: 10px; min-height: 40px; }
+.icon { display: flex; align-items: center; justify-content: center; flex: none; }
+.tile { background: rgba(128,128,128,.14); border-radius: 4px; padding: 4px; }
+.name { font-size: 12px; line-height: 1.35; }
+.name b { font-weight: 600; display: block; }
+.name span { font-size: 10.5px; opacity: .58; letter-spacing: .02em; }
+.sizes { display: flex; align-items: flex-end; gap: 14px; padding-top: 2px; opacity: .9; }
+.sizes figure { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.sizes figcaption { font-size: 9.5px; opacity: .55; }
+</style>
+</head>
+<body>
+<section class="dark">
+  <h1>Ribbon 线性图标 · Dark 模式</h1>
+  <p class="sub">24×24 网格 / stroke 2 / round cap / 前景 #FFFFFF · 背景 #2D323A</p>
+  <h2>文件与数据 · File & Data</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M13 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9z" />
+  <path d="M13 3v6h6" />
+  <path d="M12 12v6M9 15h6" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M13 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9z" />
+  <path d="M13 3v6h6" />
+  <path d="M12 12v6M9 15h6" />
+</svg></div>
+      </div>
+      <div class="name"><b>新建文件</b><span>new-file · New File</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M3 8a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M3 8a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+</svg></div>
+      </div>
+      <div class="name"><b>打开</b><span>open · Open</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="4" y="4" width="16" height="16" rx="2" />
+  <path d="M8 4v6h8V4" />
+  <rect x="8" y="14" width="8" height="6" rx="1" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="4" y="4" width="16" height="16" rx="2" />
+  <path d="M8 4v6h8V4" />
+  <rect x="8" y="14" width="8" height="6" rx="1" />
+</svg></div>
+      </div>
+      <div class="name"><b>保存</b><span>save · Save</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 14v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4" />
+  <path d="M12 15V4M8 8l4-4 4 4" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 14v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4" />
+  <path d="M12 15V4M8 8l4-4 4 4" />
+</svg></div>
+      </div>
+      <div class="name"><b>导出</b><span>export · Export</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 14v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4" />
+  <path d="M12 3v12M8 11l4 4 4-4" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 14v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4" />
+  <path d="M12 3v12M8 11l4 4 4-4" />
+</svg></div>
+      </div>
+      <div class="name"><b>导入</b><span>import · Import</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M7 9V4h10v5" />
+  <rect x="3" y="9" width="18" height="7" rx="2" />
+  <rect x="7" y="16" width="10" height="5" rx="1" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M7 9V4h10v5" />
+  <rect x="3" y="9" width="18" height="7" rx="2" />
+  <rect x="7" y="16" width="10" height="5" rx="1" />
+</svg></div>
+      </div>
+      <div class="name"><b>打印</b><span>print · Print</span></div>
+    </div>
+  </div>
+  <h2>历史操作 · History</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 10h10a4.5 4.5 0 0 1 0 9h-5" />
+  <path d="M8 6L4 10l4 4" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 10h10a4.5 4.5 0 0 1 0 9h-5" />
+  <path d="M8 6L4 10l4 4" />
+</svg></div>
+      </div>
+      <div class="name"><b>撤销</b><span>undo · Undo</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M20 10H10a4.5 4.5 0 0 0 0 9h5" />
+  <path d="M16 6l4 4-4 4" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M20 10H10a4.5 4.5 0 0 0 0 9h5" />
+  <path d="M16 6l4 4-4 4" />
+</svg></div>
+      </div>
+      <div class="name"><b>重做</b><span>redo · Redo</span></div>
+    </div>
+  </div>
+  <h2>选择与筛选 · Selection & Filter</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M5 3l14 8-5.4 1.6L16 20l-3 1-3-7.4L5 18z" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M5 3l14 8-5.4 1.6L16 20l-3 1-3-7.4L5 18z" />
+</svg></div>
+      </div>
+      <div class="name"><b>选择</b><span>select · Select</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="2 3" />
+  <rect x="8" y="8" width="8" height="8" rx="1" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="2 3" />
+  <rect x="8" y="8" width="8" height="8" rx="1" />
+</svg></div>
+      </div>
+      <div class="name"><b>框选</b><span>box-select · Box Select</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="4" y="4" width="12" height="12" rx="1" />
+  <rect x="9" y="9" width="11" height="11" rx="1" stroke-dasharray="2 3" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="4" y="4" width="12" height="12" rx="1" />
+  <rect x="9" y="9" width="11" height="11" rx="1" stroke-dasharray="2 3" />
+</svg></div>
+      </div>
+      <div class="name"><b>批量选择</b><span>batch-select · Batch Select</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M3 4h18l-7 8v7l-4 2v-9z" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M3 4h18l-7 8v7l-4 2v-9z" />
+</svg></div>
+      </div>
+      <div class="name"><b>筛选</b><span>filter · Filter</span></div>
+    </div>
+  </div>
+  <h2>编辑与变换 · Edit & Transform</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3v18M3 12h18" />
+  <path d="M9 6l3-3 3 3M9 18l3 3 3-3M6 9l-3 3 3 3M18 9l3 3-3 3" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3v18M3 12h18" />
+  <path d="M9 6l3-3 3 3M9 18l3 3 3-3M6 9l-3 3 3 3M18 9l3 3-3 3" />
+</svg></div>
+      </div>
+      <div class="name"><b>移动</b><span>move · Move</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="4" y="4" width="12" height="12" rx="2" />
+  <path d="M8 20h10a2 2 0 0 0 2-2V8" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="4" y="4" width="12" height="12" rx="2" />
+  <path d="M8 20h10a2 2 0 0 0 2-2V8" />
+</svg></div>
+      </div>
+      <div class="name"><b>复制</b><span>copy · Copy</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 6a7 7 0 1 1-7 7" />
+  <path d="M9 3l3 3-3 3" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 6a7 7 0 1 1-7 7" />
+  <path d="M9 3l3 3-3 3" />
+</svg></div>
+      </div>
+      <div class="name"><b>旋转</b><span>rotate · Rotate</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3v18" stroke-dasharray="2 3" />
+  <path d="M9 6L4 12l5 6z" />
+  <path d="M15 6l5 6-5 6z" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3v18" stroke-dasharray="2 3" />
+  <path d="M9 6L4 12l5 6z" />
+  <path d="M15 6l5 6-5 6z" />
+</svg></div>
+      </div>
+      <div class="name"><b>镜像</b><span>mirror · Mirror</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M8 4l8 16M16 4L8 20" />
+  <circle cx="6" cy="6" r="2" />
+  <circle cx="6" cy="18" r="2" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M8 4l8 16M16 4L8 20" />
+  <circle cx="6" cy="6" r="2" />
+  <circle cx="6" cy="18" r="2" />
+</svg></div>
+      </div>
+      <div class="name"><b>修剪</b><span>trim · Trim</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M20 3v18" />
+  <path d="M4 12h12" />
+  <path d="M13 9l3 3-3 3" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M20 3v18" />
+  <path d="M4 12h12" />
+  <path d="M13 9l3 3-3 3" />
+</svg></div>
+      </div>
+      <div class="name"><b>延伸</b><span>extend · Extend</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M5 20V10a5 5 0 0 1 5-5h10" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M5 20V10a5 5 0 0 1 5-5h10" />
+</svg></div>
+      </div>
+      <div class="name"><b>圆角</b><span>fillet · Fillet</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M5 20V10l5-5h10" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M5 20V10l5-5h10" />
+</svg></div>
+      </div>
+      <div class="name"><b>倒角</b><span>chamfer · Chamfer</span></div>
+    </div>
+  </div>
+  <h2>绘图与标注 · Draw & Annotate</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 20L20 4" />
+  <circle cx="4" cy="20" r="1" />
+  <circle cx="20" cy="4" r="1" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 20L20 4" />
+  <circle cx="4" cy="20" r="1" />
+  <circle cx="20" cy="4" r="1" />
+</svg></div>
+      </div>
+      <div class="name"><b>直线</b><span>line · Line</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M3 18l4.5-8 5 5L21 4" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M3 18l4.5-8 5 5L21 4" />
+</svg></div>
+      </div>
+      <div class="name"><b>多段线</b><span>polyline · Polyline</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="4" y="5" width="16" height="14" rx="1" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="4" y="5" width="16" height="14" rx="1" />
+</svg></div>
+      </div>
+      <div class="name"><b>矩形</b><span>rectangle · Rectangle</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="12" r="8" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="12" r="8" />
+</svg></div>
+      </div>
+      <div class="name"><b>圆</b><span>circle · Circle</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="4" y="4" width="16" height="16" rx="1" />
+  <path d="M7 17L17 7M7 11l4-4M13 17l4-4" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="4" y="4" width="16" height="16" rx="1" />
+  <path d="M7 17L17 7M7 11l4-4M13 17l4-4" />
+</svg></div>
+      </div>
+      <div class="name"><b>填充</b><span>hatch · Hatch</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 4h16M12 4v16" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 4h16M12 4v16" />
+</svg></div>
+      </div>
+      <div class="name"><b>文字</b><span>text · Text</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 7v10M20 7v10M4 12h16" />
+  <path d="M7 9l-3 3 3 3M17 9l3 3-3 3" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 7v10M20 7v10M4 12h16" />
+  <path d="M7 9l-3 3 3 3M17 9l3 3-3 3" />
+</svg></div>
+      </div>
+      <div class="name"><b>尺寸标注</b><span>dimension · Dimension</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="4" y="8" width="16" height="8" rx="1" />
+  <path d="M8 8v3M12 8v4M16 8v3" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="4" y="8" width="16" height="8" rx="1" />
+  <path d="M8 8v3M12 8v4M16 8v3" />
+</svg></div>
+      </div>
+      <div class="name"><b>测量</b><span>measure · Measure</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="4" y="4" width="6" height="6" rx="1" />
+  <rect x="14" y="4" width="6" height="6" rx="1" stroke-dasharray="2 3" />
+  <rect x="4" y="14" width="6" height="6" rx="1" stroke-dasharray="2 3" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="4" y="4" width="6" height="6" rx="1" />
+  <rect x="14" y="4" width="6" height="6" rx="1" stroke-dasharray="2 3" />
+  <rect x="4" y="14" width="6" height="6" rx="1" stroke-dasharray="2 3" />
+</svg></div>
+      </div>
+      <div class="name"><b>阵列</b><span>array · Array</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z" />
+</svg></div>
+      </div>
+      <div class="name"><b>分解</b><span>explode · Explode</span></div>
+    </div>
+  </div>
+  <h2>视图与捕捉 · View & Snap</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" />
+  <rect x="8" y="8" width="8" height="8" rx="1" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" />
+  <rect x="8" y="8" width="8" height="8" rx="1" />
+</svg></div>
+      </div>
+      <div class="name"><b>缩放至适合</b><span>zoom-fit · Zoom to Fit</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M8 13V6a1.5 1.5 0 0 1 3 0v5M11 11V4.5a1.5 1.5 0 0 1 3 0V11M14 11V6.5a1.5 1.5 0 0 1 3 0V15a5 5 0 0 1-5 5h-1a5 5 0 0 1-4.3-2.5L4.6 14.4a1.6 1.6 0 0 1 2.7-1.7L9 15" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M8 13V6a1.5 1.5 0 0 1 3 0v5M11 11V4.5a1.5 1.5 0 0 1 3 0V11M14 11V6.5a1.5 1.5 0 0 1 3 0V15a5 5 0 0 1-5 5h-1a5 5 0 0 1-4.3-2.5L4.6 14.4a1.6 1.6 0 0 1 2.7-1.7L9 15" />
+</svg></div>
+      </div>
+      <div class="name"><b>平移视图</b><span>pan · Pan</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3v3M12 18v3M3 12h3M18 12h3" />
+  <rect x="8" y="8" width="8" height="8" rx="1" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3v3M12 18v3M3 12h3M18 12h3" />
+  <rect x="8" y="8" width="8" height="8" rx="1" />
+</svg></div>
+      </div>
+      <div class="name"><b>捕捉</b><span>snap · Snap</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M5 20V6h14" />
+  <path d="M5 16h4v4H5z" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M5 20V6h14" />
+  <path d="M5 16h4v4H5z" />
+</svg></div>
+      </div>
+      <div class="name"><b>正交</b><span>ortho · Ortho</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3l9 4.5-9 4.5-9-4.5z" />
+  <path d="M3 12l9 4.5 9-4.5M3 16.5L12 21l9-4.5" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3l9 4.5-9 4.5-9-4.5z" />
+  <path d="M3 12l9 4.5 9-4.5M3 16.5L12 21l9-4.5" />
+</svg></div>
+      </div>
+      <div class="name"><b>图层</b><span>layer · Layers</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z" />
+  <path d="M12 12V3M12 12l8-4.5M12 12L4 7.5" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z" />
+  <path d="M12 12V3M12 12l8-4.5M12 12L4 7.5" />
+</svg></div>
+      </div>
+      <div class="name"><b>三维视图</b><span>cube-iso · 3D View</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z" />
+  <path d="M3 12h18" stroke-dasharray="2 3" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z" />
+  <path d="M3 12h18" stroke-dasharray="2 3" />
+</svg></div>
+      </div>
+      <div class="name"><b>剖切视图</b><span>section · Section View</span></div>
+    </div>
+  </div>
+  <h2>系统与设置 · System</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 8h4M12 8h8M4 16h8M16 16h4" />
+  <circle cx="10" cy="8" r="2" />
+  <circle cx="14" cy="16" r="2" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 8h4M12 8h8M4 16h8M16 16h4" />
+  <circle cx="10" cy="8" r="2" />
+  <circle cx="14" cy="16" r="2" />
+</svg></div>
+      </div>
+      <div class="name"><b>设置</b><span>settings · Settings</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="10.5" cy="10.5" r="6.5" />
+  <path d="M15.2 15.2L20.5 20.5" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="10.5" cy="10.5" r="6.5" />
+  <path d="M15.2 15.2L20.5 20.5" />
+</svg></div>
+      </div>
+      <div class="name"><b>查找</b><span>search · Search</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="6" y="11" width="12" height="9" rx="2" />
+  <path d="M8.5 11V8a3.5 3.5 0 0 1 7 0v3" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="6" y="11" width="12" height="9" rx="2" />
+  <path d="M8.5 11V8a3.5 3.5 0 0 1 7 0v3" />
+</svg></div>
+      </div>
+      <div class="name"><b>锁定 / 约束</b><span>lock · Lock / Constraint</span></div>
+    </div>
+  </div>
+</section>
+<section class="light">
+  <h1>Ribbon 线性图标 · Light 模式</h1>
+  <p class="sub">24×24 网格 / stroke 2 / round cap / 前景 #4A4A4A · 背景 #F3F3F3</p>
+  <h2>文件与数据 · File & Data</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M13 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9z" />
+  <path d="M13 3v6h6" />
+  <path d="M12 12v6M9 15h6" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M13 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9z" />
+  <path d="M13 3v6h6" />
+  <path d="M12 12v6M9 15h6" />
+</svg></div>
+      </div>
+      <div class="name"><b>新建文件</b><span>new-file · New File</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M3 8a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M3 8a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+</svg></div>
+      </div>
+      <div class="name"><b>打开</b><span>open · Open</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="4" y="4" width="16" height="16" rx="2" />
+  <path d="M8 4v6h8V4" />
+  <rect x="8" y="14" width="8" height="6" rx="1" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="4" y="4" width="16" height="16" rx="2" />
+  <path d="M8 4v6h8V4" />
+  <rect x="8" y="14" width="8" height="6" rx="1" />
+</svg></div>
+      </div>
+      <div class="name"><b>保存</b><span>save · Save</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 14v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4" />
+  <path d="M12 15V4M8 8l4-4 4 4" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 14v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4" />
+  <path d="M12 15V4M8 8l4-4 4 4" />
+</svg></div>
+      </div>
+      <div class="name"><b>导出</b><span>export · Export</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 14v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4" />
+  <path d="M12 3v12M8 11l4 4 4-4" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 14v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4" />
+  <path d="M12 3v12M8 11l4 4 4-4" />
+</svg></div>
+      </div>
+      <div class="name"><b>导入</b><span>import · Import</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M7 9V4h10v5" />
+  <rect x="3" y="9" width="18" height="7" rx="2" />
+  <rect x="7" y="16" width="10" height="5" rx="1" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M7 9V4h10v5" />
+  <rect x="3" y="9" width="18" height="7" rx="2" />
+  <rect x="7" y="16" width="10" height="5" rx="1" />
+</svg></div>
+      </div>
+      <div class="name"><b>打印</b><span>print · Print</span></div>
+    </div>
+  </div>
+  <h2>历史操作 · History</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 10h10a4.5 4.5 0 0 1 0 9h-5" />
+  <path d="M8 6L4 10l4 4" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 10h10a4.5 4.5 0 0 1 0 9h-5" />
+  <path d="M8 6L4 10l4 4" />
+</svg></div>
+      </div>
+      <div class="name"><b>撤销</b><span>undo · Undo</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M20 10H10a4.5 4.5 0 0 0 0 9h5" />
+  <path d="M16 6l4 4-4 4" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M20 10H10a4.5 4.5 0 0 0 0 9h5" />
+  <path d="M16 6l4 4-4 4" />
+</svg></div>
+      </div>
+      <div class="name"><b>重做</b><span>redo · Redo</span></div>
+    </div>
+  </div>
+  <h2>选择与筛选 · Selection & Filter</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M5 3l14 8-5.4 1.6L16 20l-3 1-3-7.4L5 18z" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M5 3l14 8-5.4 1.6L16 20l-3 1-3-7.4L5 18z" />
+</svg></div>
+      </div>
+      <div class="name"><b>选择</b><span>select · Select</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="2 3" />
+  <rect x="8" y="8" width="8" height="8" rx="1" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="3" y="3" width="18" height="18" rx="2" stroke-dasharray="2 3" />
+  <rect x="8" y="8" width="8" height="8" rx="1" />
+</svg></div>
+      </div>
+      <div class="name"><b>框选</b><span>box-select · Box Select</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="4" y="4" width="12" height="12" rx="1" />
+  <rect x="9" y="9" width="11" height="11" rx="1" stroke-dasharray="2 3" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="4" y="4" width="12" height="12" rx="1" />
+  <rect x="9" y="9" width="11" height="11" rx="1" stroke-dasharray="2 3" />
+</svg></div>
+      </div>
+      <div class="name"><b>批量选择</b><span>batch-select · Batch Select</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M3 4h18l-7 8v7l-4 2v-9z" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M3 4h18l-7 8v7l-4 2v-9z" />
+</svg></div>
+      </div>
+      <div class="name"><b>筛选</b><span>filter · Filter</span></div>
+    </div>
+  </div>
+  <h2>编辑与变换 · Edit & Transform</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3v18M3 12h18" />
+  <path d="M9 6l3-3 3 3M9 18l3 3 3-3M6 9l-3 3 3 3M18 9l3 3-3 3" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3v18M3 12h18" />
+  <path d="M9 6l3-3 3 3M9 18l3 3 3-3M6 9l-3 3 3 3M18 9l3 3-3 3" />
+</svg></div>
+      </div>
+      <div class="name"><b>移动</b><span>move · Move</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="4" y="4" width="12" height="12" rx="2" />
+  <path d="M8 20h10a2 2 0 0 0 2-2V8" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="4" y="4" width="12" height="12" rx="2" />
+  <path d="M8 20h10a2 2 0 0 0 2-2V8" />
+</svg></div>
+      </div>
+      <div class="name"><b>复制</b><span>copy · Copy</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 6a7 7 0 1 1-7 7" />
+  <path d="M9 3l3 3-3 3" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 6a7 7 0 1 1-7 7" />
+  <path d="M9 3l3 3-3 3" />
+</svg></div>
+      </div>
+      <div class="name"><b>旋转</b><span>rotate · Rotate</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3v18" stroke-dasharray="2 3" />
+  <path d="M9 6L4 12l5 6z" />
+  <path d="M15 6l5 6-5 6z" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3v18" stroke-dasharray="2 3" />
+  <path d="M9 6L4 12l5 6z" />
+  <path d="M15 6l5 6-5 6z" />
+</svg></div>
+      </div>
+      <div class="name"><b>镜像</b><span>mirror · Mirror</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M8 4l8 16M16 4L8 20" />
+  <circle cx="6" cy="6" r="2" />
+  <circle cx="6" cy="18" r="2" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M8 4l8 16M16 4L8 20" />
+  <circle cx="6" cy="6" r="2" />
+  <circle cx="6" cy="18" r="2" />
+</svg></div>
+      </div>
+      <div class="name"><b>修剪</b><span>trim · Trim</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M20 3v18" />
+  <path d="M4 12h12" />
+  <path d="M13 9l3 3-3 3" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M20 3v18" />
+  <path d="M4 12h12" />
+  <path d="M13 9l3 3-3 3" />
+</svg></div>
+      </div>
+      <div class="name"><b>延伸</b><span>extend · Extend</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M5 20V10a5 5 0 0 1 5-5h10" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M5 20V10a5 5 0 0 1 5-5h10" />
+</svg></div>
+      </div>
+      <div class="name"><b>圆角</b><span>fillet · Fillet</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M5 20V10l5-5h10" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M5 20V10l5-5h10" />
+</svg></div>
+      </div>
+      <div class="name"><b>倒角</b><span>chamfer · Chamfer</span></div>
+    </div>
+  </div>
+  <h2>绘图与标注 · Draw & Annotate</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 20L20 4" />
+  <circle cx="4" cy="20" r="1" />
+  <circle cx="20" cy="4" r="1" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 20L20 4" />
+  <circle cx="4" cy="20" r="1" />
+  <circle cx="20" cy="4" r="1" />
+</svg></div>
+      </div>
+      <div class="name"><b>直线</b><span>line · Line</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M3 18l4.5-8 5 5L21 4" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M3 18l4.5-8 5 5L21 4" />
+</svg></div>
+      </div>
+      <div class="name"><b>多段线</b><span>polyline · Polyline</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="4" y="5" width="16" height="14" rx="1" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="4" y="5" width="16" height="14" rx="1" />
+</svg></div>
+      </div>
+      <div class="name"><b>矩形</b><span>rectangle · Rectangle</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="12" r="8" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="12" r="8" />
+</svg></div>
+      </div>
+      <div class="name"><b>圆</b><span>circle · Circle</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="4" y="4" width="16" height="16" rx="1" />
+  <path d="M7 17L17 7M7 11l4-4M13 17l4-4" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="4" y="4" width="16" height="16" rx="1" />
+  <path d="M7 17L17 7M7 11l4-4M13 17l4-4" />
+</svg></div>
+      </div>
+      <div class="name"><b>填充</b><span>hatch · Hatch</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 4h16M12 4v16" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 4h16M12 4v16" />
+</svg></div>
+      </div>
+      <div class="name"><b>文字</b><span>text · Text</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 7v10M20 7v10M4 12h16" />
+  <path d="M7 9l-3 3 3 3M17 9l3 3-3 3" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 7v10M20 7v10M4 12h16" />
+  <path d="M7 9l-3 3 3 3M17 9l3 3-3 3" />
+</svg></div>
+      </div>
+      <div class="name"><b>尺寸标注</b><span>dimension · Dimension</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="4" y="8" width="16" height="8" rx="1" />
+  <path d="M8 8v3M12 8v4M16 8v3" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="4" y="8" width="16" height="8" rx="1" />
+  <path d="M8 8v3M12 8v4M16 8v3" />
+</svg></div>
+      </div>
+      <div class="name"><b>测量</b><span>measure · Measure</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="4" y="4" width="6" height="6" rx="1" />
+  <rect x="14" y="4" width="6" height="6" rx="1" stroke-dasharray="2 3" />
+  <rect x="4" y="14" width="6" height="6" rx="1" stroke-dasharray="2 3" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="4" y="4" width="6" height="6" rx="1" />
+  <rect x="14" y="4" width="6" height="6" rx="1" stroke-dasharray="2 3" />
+  <rect x="4" y="14" width="6" height="6" rx="1" stroke-dasharray="2 3" />
+</svg></div>
+      </div>
+      <div class="name"><b>阵列</b><span>array · Array</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z" />
+</svg></div>
+      </div>
+      <div class="name"><b>分解</b><span>explode · Explode</span></div>
+    </div>
+  </div>
+  <h2>视图与捕捉 · View & Snap</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" />
+  <rect x="8" y="8" width="8" height="8" rx="1" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5" />
+  <rect x="8" y="8" width="8" height="8" rx="1" />
+</svg></div>
+      </div>
+      <div class="name"><b>缩放至适合</b><span>zoom-fit · Zoom to Fit</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M8 13V6a1.5 1.5 0 0 1 3 0v5M11 11V4.5a1.5 1.5 0 0 1 3 0V11M14 11V6.5a1.5 1.5 0 0 1 3 0V15a5 5 0 0 1-5 5h-1a5 5 0 0 1-4.3-2.5L4.6 14.4a1.6 1.6 0 0 1 2.7-1.7L9 15" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M8 13V6a1.5 1.5 0 0 1 3 0v5M11 11V4.5a1.5 1.5 0 0 1 3 0V11M14 11V6.5a1.5 1.5 0 0 1 3 0V15a5 5 0 0 1-5 5h-1a5 5 0 0 1-4.3-2.5L4.6 14.4a1.6 1.6 0 0 1 2.7-1.7L9 15" />
+</svg></div>
+      </div>
+      <div class="name"><b>平移视图</b><span>pan · Pan</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3v3M12 18v3M3 12h3M18 12h3" />
+  <rect x="8" y="8" width="8" height="8" rx="1" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3v3M12 18v3M3 12h3M18 12h3" />
+  <rect x="8" y="8" width="8" height="8" rx="1" />
+</svg></div>
+      </div>
+      <div class="name"><b>捕捉</b><span>snap · Snap</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M5 20V6h14" />
+  <path d="M5 16h4v4H5z" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M5 20V6h14" />
+  <path d="M5 16h4v4H5z" />
+</svg></div>
+      </div>
+      <div class="name"><b>正交</b><span>ortho · Ortho</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3l9 4.5-9 4.5-9-4.5z" />
+  <path d="M3 12l9 4.5 9-4.5M3 16.5L12 21l9-4.5" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3l9 4.5-9 4.5-9-4.5z" />
+  <path d="M3 12l9 4.5 9-4.5M3 16.5L12 21l9-4.5" />
+</svg></div>
+      </div>
+      <div class="name"><b>图层</b><span>layer · Layers</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z" />
+  <path d="M12 12V3M12 12l8-4.5M12 12L4 7.5" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z" />
+  <path d="M12 12V3M12 12l8-4.5M12 12L4 7.5" />
+</svg></div>
+      </div>
+      <div class="name"><b>三维视图</b><span>cube-iso · 3D View</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z" />
+  <path d="M3 12h18" stroke-dasharray="2 3" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z" />
+  <path d="M3 12h18" stroke-dasharray="2 3" />
+</svg></div>
+      </div>
+      <div class="name"><b>剖切视图</b><span>section · Section View</span></div>
+    </div>
+  </div>
+  <h2>系统与设置 · System</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 8h4M12 8h8M4 16h8M16 16h4" />
+  <circle cx="10" cy="8" r="2" />
+  <circle cx="14" cy="16" r="2" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4 8h4M12 8h8M4 16h8M16 16h4" />
+  <circle cx="10" cy="8" r="2" />
+  <circle cx="14" cy="16" r="2" />
+</svg></div>
+      </div>
+      <div class="name"><b>设置</b><span>settings · Settings</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="10.5" cy="10.5" r="6.5" />
+  <path d="M15.2 15.2L20.5 20.5" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="10.5" cy="10.5" r="6.5" />
+  <path d="M15.2 15.2L20.5 20.5" />
+</svg></div>
+      </div>
+      <div class="name"><b>查找</b><span>search · Search</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="6" y="11" width="12" height="9" rx="2" />
+  <path d="M8.5 11V8a3.5 3.5 0 0 1 7 0v3" />
+</svg></div>
+        <div class="icon tile"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#4A4A4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="6" y="11" width="12" height="9" rx="2" />
+  <path d="M8.5 11V8a3.5 3.5 0 0 1 7 0v3" />
+</svg></div>
+      </div>
+      <div class="name"><b>锁定 / 约束</b><span>lock · Lock / Constraint</span></div>
+    </div>
+  </div>
+</section>
+</body>
+</html>
