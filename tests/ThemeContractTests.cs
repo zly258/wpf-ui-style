@@ -904,6 +904,94 @@ namespace WpfStyles.Tests
         }
 
         [Fact]
+        public void KeyedControlStyles_DoNotSilentlyFallBackToSystemDefaults()
+        {
+            // WPF 里带 x:Key 的 Style 不会继承隐式样式。一个 keyed 样式若既没 BasedOn、
+            // 也没自己的 Template，用它的控件就静默退回系统默认外观——表格里的复选框
+            // 就是这样变成方角深灰框的，和旁边用隐式样式的表头复选框长得不一样。
+            var files = new[] { TokensPath, ControlsPath, DataControlsPath, IconsPath, ExtrasPath };
+            var docs = files.ToDictionary(f => f, Load);
+
+            var templatedTargets = new HashSet<string>();
+            foreach (var doc in docs.Values)
+            {
+                foreach (var style in doc.Root.Elements().Where(e => e.Name.LocalName == "Style"))
+                {
+                    if (style.Attribute(X + "Key") != null) continue;
+                    if (!SetsTemplate(style)) continue;
+                    templatedTargets.Add((string)style.Attribute("TargetType") ?? "");
+                }
+            }
+
+            var offenders = new List<string>();
+            foreach (var kv in docs)
+            {
+                foreach (var style in kv.Value.Root.Elements().Where(e => e.Name.LocalName == "Style"))
+                {
+                    string key = (string)style.Attribute(X + "Key");
+                    string target = (string)style.Attribute("TargetType") ?? "";
+                    if (string.IsNullOrEmpty(key) || key.StartsWith("{x:Static")) continue;
+                    if (!templatedTargets.Contains(target)) continue;
+                    if (style.Attribute("BasedOn") != null || SetsTemplate(style)) continue;
+                    offenders.Add($"{Path.GetFileName(kv.Key)}:{key} ({target})");
+                }
+            }
+
+            Assert.True(offenders.Count == 0,
+                "keyed styles inherit nothing from the implicit style and render as system defaults: "
+                + string.Join(", ", offenders));
+        }
+
+        private static bool SetsTemplate(XElement style)
+        {
+            return style.Elements().Any(s =>
+                s.Name.LocalName == "Setter" && (string)s.Attribute("Property") == "Template");
+        }
+
+        [Fact]
+        public void ItemContainers_DefineTheirOwnTemplate()
+        {
+            // WPF 默认的 TreeViewItem / ListBoxItem / ListViewItem 模板用
+            // SystemColors.HighlightBrushKey 画选中（系统蓝 #0078D7 + 白字），
+            // 样式里只写 Background/Foreground 触发器根本不起作用。
+            // 这几类容器必须自带模板，否则选中态一定跑成系统默认外观。
+            var docs = new[] { DataControlsPath, ExtrasPath, ControlsPath }.Select(Load);
+
+            var templates = new HashSet<string>();
+            foreach (var doc in docs)
+            {
+                foreach (var t in doc.Root.Elements().Where(e => e.Name.LocalName == "ControlTemplate"))
+                {
+                    string target = (string)t.Attribute("TargetType") ?? "";
+                    if (target.Contains("ListBoxItem") || target.Contains("TreeViewItem"))
+                        templates.Add(target);
+                }
+            }
+
+            var offenders = new List<string>();
+            foreach (var doc in docs)
+            {
+                foreach (var style in doc.Root.Elements().Where(e => e.Name.LocalName == "Style"))
+                {
+                    string target = (string)style.Attribute("TargetType") ?? "";
+                    if (!target.EndsWith("TreeViewItem}") && !target.EndsWith("ListBoxItem}")
+                        && !target.EndsWith("ListViewItem}"))
+                        continue;
+
+                    bool ownTemplate = SetsTemplate(style);
+                    bool basedOn = style.Attribute("BasedOn") != null;
+                    if (!ownTemplate && !basedOn) offenders.Add(target);
+                }
+            }
+
+            Assert.True(offenders.Count == 0,
+                "item containers fall back to the system template, whose selection uses "
+                + "SystemColors.HighlightBrushKey (system blue + white text): "
+                + string.Join(", ", offenders));
+            Assert.NotEmpty(templates);
+        }
+
+        [Fact]
         public void CheckBox_SupportsIndeterminateAndDisabledStates()
         {
             XDocument controls = Load(ControlsPath);

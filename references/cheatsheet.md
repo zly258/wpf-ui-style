@@ -98,6 +98,14 @@
 - 三态必须区分：`IsChecked="True"` 白勾、`{x:Null}` 白横杠、`False` 空框；
 - 禁用态勾/横杠切 `Brush.Text.Disabled`，不留白色 glyph；
 - 全选框用 `IsThreeState="True"` + `Focusable="False"`（避免启动时抢焦点框）。
+- 表格里用 `Style="{StaticResource DataGrid.Element.CheckBox}"` 时必须确保该 keyed 样式 `BasedOn="{StaticResource {x:Type CheckBox}}"`，否则会退回系统方角复选框。
+
+## 树 / 列表选中态
+
+- `TreeViewItem`、`ListBoxItem`、`ListViewItem`、`DataGridRow` **必须自带模板**：默认模板用 `SystemColors.HighlightBrushKey` 画选中（系统蓝 + 白字），样式触发器够不到；
+- 自定义 `TreeViewItem` 模板要自己绑 `IsExpanded` 隐藏 `ItemsPresenter`，否则折叠节点仍画出子项；
+- 展开箭头用 `HasItems` 控制可见性（不是 `IsExpanded`）；子项缩进 18px 与箭头对齐；
+- `ListViewItem` 直接 `BasedOn="{StaticResource {x:Type ListBoxItem}}"`，别复制触发器——否则残留系统焦点虚线框。
 
 ## 批量操作条（Zone 3 工具条）
 

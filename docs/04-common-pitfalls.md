@@ -1430,3 +1430,59 @@ DatePicker 的弹层里放的是 **DatePicker 自己创建的 Calendar 实例**�
 - `LayoutCheck --strict`：0 错误；居中输入内容会报 WARN；
 - 在 150% DPI 与宿主最小宽度下，输入框仍完整可见；
 - 目视确认标签与控件共享同一条左基线。
+
+---
+
+## 36. 树/列表选中项变成系统蓝底白字
+
+**症状**
+
+`TreeView` 里点中一个节点，背景是 Windows 主题蓝（`#0078D7`）配白字，和旁边的浅蓝 `Brush.Selection` 完全不是一套；鼠标移开也不消失，某些主题下白字还会和浅色背景撞在一起看不清。
+
+**根因**
+
+样式里给 `TreeViewItem` 写了 `IsSelected` 触发器，但没有替换 `Template`。WPF 默认的 `TreeViewItem` 模板在选中时直接用 `SystemColors.HighlightBrushKey` / `HighlightTextBrushKey` 画，**模板内部硬编码，样式触发器根本够不到**。`ListBoxItem`、`ListViewItem`、`DataGridRow` 的默认模板同理。
+
+**修复**
+
+这几类 item 容器必须自带模板（或 `BasedOn` 到带模板的样式）：
+
+```xml
+<Style TargetType="{x:Type TreeViewItem}">
+    <Setter Property="Template">
+        <Setter.Value>
+            <ControlTemplate TargetType="{x:Type TreeViewItem}">
+                <StackPanel>
+                    <Border x:Name="Bd" Background="{TemplateBinding Background}"
+                            Padding="{TemplateBinding Padding}">
+                        <Grid> ... 展开箭头 + ContentPresenter ... </Grid>
+                    </Border>
+                    <Border x:Name="ItemsHost" Margin="18,0,0,0" Visibility="Collapsed">
+                        <ItemsPresenter />
+                    </Border>
+                </StackPanel>
+                <ControlTemplate.Triggers>
+                    <Trigger Property="IsSelected" Value="True">
+                        <Setter TargetName="Bd" Property="Background"
+                                Value="{StaticResource Brush.Selection}" />
+                        <Setter Property="Foreground"
+                                Value="{StaticResource Brush.Text.Primary}" />
+                    </Trigger>
+                </ControlTemplate.Triggers>
+            </ControlTemplate>
+        </Setter.Value>
+    </Setter>
+</Style>
+```
+
+三个容易漏的点：
+
+1. **自定义模板不会自动处理折叠**：默认模板里有隐藏 `ItemsPresenter` 的逻辑，自己写就得绑 `IsExpanded`，否则折叠的节点仍然把子项全部画出来。
+2. **箭头用 `HasItems` 控制可见性**，不要用 `IsExpanded`——折叠的父节点也需要箭头。
+3. **`ListViewItem` 直接 `BasedOn` 到 `ListBoxItem`**，不要复制一遍触发器；否则默认模板残留的焦点虚线框会留在选中项外面。
+
+**验证**
+
+- 选中节点后取背景色，应是 `Brush.Selection`（`#E4EEF5`），不是 `#0078D7`；
+- 折叠一个有子项的节点，子项必须消失；
+- 选中项外围不应有虚线焦点框。

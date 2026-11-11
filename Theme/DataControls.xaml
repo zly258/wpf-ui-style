@@ -43,6 +43,46 @@
         <Setter Property="SnapsToDevicePixels" Value="True" />
     </Style>
 
+    <!-- ListBoxItem / ListViewItem 共用同一套模板（ListViewItem 继承 ListBoxItem，
+         模板的 TargetType 直接写 ListBoxItem 即可）。必须自带模板：WPF 默认模板
+         用 SystemColors.HighlightBrushKey 画选中，且会在选中项上叠一圈焦点虚线框，
+         与主题的浅蓝 Brush.Selection 完全不搭。 -->
+    <ControlTemplate x:Key="ListBoxItem.Template" TargetType="{x:Type ListBoxItem}">
+        <Border x:Name="Bd"
+                Background="{TemplateBinding Background}"
+                Padding="{TemplateBinding Padding}"
+                SnapsToDevicePixels="True">
+            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                              TextElement.Foreground="{TemplateBinding Foreground}" />
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Control.Hover}" />
+                <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
+            </Trigger>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Selection}" />
+                <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsSelected" Value="True" />
+                    <Condition Property="IsMouseOver" Value="True" />
+                </MultiTrigger.Conditions>
+                <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Selection.Hover}" />
+                <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
+            </MultiTrigger>
+            <Trigger Property="IsKeyboardFocused" Value="True">
+                <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Focus}" />
+                <Setter TargetName="Bd" Property="BorderThickness" Value="1" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Foreground" Value="{StaticResource Brush.Text.Disabled}" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
     <Style TargetType="{x:Type ListBoxItem}">
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
@@ -53,45 +93,7 @@
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                    <Border x:Name="Bd"
-                            Background="{TemplateBinding Background}"
-                            Padding="{TemplateBinding Padding}"
-                            SnapsToDevicePixels="True">
-                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                          TextElement.Foreground="{TemplateBinding Foreground}" />
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Control.Hover}" />
-                            <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
-                        </Trigger>
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Selection}" />
-                            <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
-                        </Trigger>
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="IsSelected" Value="True" />
-                                <Condition Property="IsMouseOver" Value="True" />
-                            </MultiTrigger.Conditions>
-                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Selection.Hover}" />
-                            <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
-                        </MultiTrigger>
-                        <Trigger Property="IsKeyboardFocused" Value="True">
-                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Focus}" />
-                            <Setter TargetName="Bd" Property="BorderThickness" Value="1" />
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Foreground" Value="{StaticResource Brush.Text.Disabled}" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
+        <Setter Property="Template" Value="{StaticResource ListBoxItem.Template}" />
     </Style>
 
     <!-- ============================================================
@@ -107,36 +109,8 @@
         <Setter Property="SnapsToDevicePixels" Value="True" />
     </Style>
 
-    <Style TargetType="{x:Type ListViewItem}">
-        <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
-        <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
-        <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
-        <Setter Property="Background" Value="Transparent" />
+    <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
         <Setter Property="Padding" Value="{DynamicResource Layout.ListViewItemPadding}" />
-        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-        <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="SnapsToDevicePixels" Value="True" />
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource Brush.Control.Hover}" />
-                <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
-            </Trigger>
-            <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="{StaticResource Brush.Selection}" />
-                <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
-            </Trigger>
-            <MultiTrigger>
-                <MultiTrigger.Conditions>
-                    <Condition Property="IsSelected" Value="True" />
-                    <Condition Property="IsMouseOver" Value="True" />
-                </MultiTrigger.Conditions>
-                <Setter Property="Background" Value="{StaticResource Brush.Selection.Hover}" />
-                <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
-            </MultiTrigger>
-            <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground" Value="{StaticResource Brush.Text.Disabled}" />
-            </Trigger>
-        </Style.Triggers>
     </Style>
 
     <Style TargetType="{x:Type GridViewColumnHeader}">
@@ -328,16 +302,21 @@
         <Setter Property="Padding" Value="0,0,4,0" />
     </Style>
 
-    <!-- 表格展示态：复选框居中 -->
-    <Style x:Key="DataGrid.Element.CheckBox" TargetType="{x:Type CheckBox}">
+    <!-- 表格展示态：复选框居中。
+         必须 BasedOn 到隐式 CheckBox 样式：WPF 里带 x:Key 的 Style 不会自动继承隐式样式，
+         不写 BasedOn 就等于把这些单元格里的复选框退回系统默认外观（方角、深灰描边），
+         与表头那个没用 Key 的复选框长得不一样。 -->
+    <Style x:Key="DataGrid.Element.CheckBox" TargetType="{x:Type CheckBox}"
+           BasedOn="{StaticResource {x:Type CheckBox}}">
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="Padding" Value="0" />
     </Style>
 
-    <!-- 表格编辑态：复选框居中 -->
-    <Style x:Key="DataGrid.Editing.CheckBox" TargetType="{x:Type CheckBox}">
+    <!-- 表格编辑态：复选框居中（同样必须 BasedOn，理由同上） -->
+    <Style x:Key="DataGrid.Editing.CheckBox" TargetType="{x:Type CheckBox}"
+           BasedOn="{StaticResource {x:Type CheckBox}}">
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Margin" Value="0" />
@@ -450,25 +429,125 @@
         <Setter Property="Padding" Value="2" />
     </Style>
 
+    <!-- 展开/收起箭头：与 Expander 的 Chevron 同一套几何与描边，
+         旋转 90° 表示展开，保证树与折叠面板的视觉语言一致。 -->
+    <ControlTemplate x:Key="TreeView.Expander.Template" TargetType="{x:Type ToggleButton}">
+        <Border Background="Transparent" Width="16" Height="16">
+            <Path x:Name="Chevron"
+                  Width="6" Height="10"
+                  Data="M 0 0 L 5 5 L 0 10"
+                  Stroke="{StaticResource Brush.Text.Secondary}"
+                  StrokeThickness="1.5"
+                  StrokeStartLineCap="Round"
+                  StrokeEndLineCap="Round"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  RenderTransformOrigin="0.5,0.5">
+                <Path.RenderTransform>
+                    <RotateTransform Angle="0" />
+                </Path.RenderTransform>
+            </Path>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter TargetName="Chevron" Property="RenderTransform">
+                    <Setter.Value>
+                        <RotateTransform Angle="90" />
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="Chevron" Property="Stroke" Value="{StaticResource Brush.Text.Primary}" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
     <Style TargetType="{x:Type TreeViewItem}">
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
         <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Padding" Value="{DynamicResource Layout.ListViewItemPadding}" />
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource Brush.Control.Hover}" />
-                <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
-            </Trigger>
-            <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="{StaticResource Brush.Selection}" />
-                <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
-            </Trigger>
-            <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground" Value="{StaticResource Brush.Text.Disabled}" />
-            </Trigger>
-        </Style.Triggers>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <!-- 必须自带模板：WPF 默认的 TreeViewItem 模板把选中态写死成
+             SystemColors.HighlightBrushKey（系统蓝 #0078D7 + 白字），
+             只写 Background/Foreground 触发器完全不起作用——树里的选中行
+             会与主题的浅蓝 Brush.Selection 不一致，深色主题下更是刺眼。 -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TreeViewItem}">
+                    <StackPanel>
+                        <Border x:Name="Bd"
+                                Background="{TemplateBinding Background}"
+                                Padding="{TemplateBinding Padding}"
+                                SnapsToDevicePixels="True">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <ToggleButton x:Name="Expander"
+                                              Grid.Column="0"
+                                              Width="16" Height="16"
+                                              MinWidth="0"
+                                              Padding="0"
+                                              Margin="0,0,2,0"
+                                              VerticalAlignment="Center"
+                                              Focusable="False"
+                                              IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                              Template="{StaticResource TreeView.Expander.Template}"
+                                              Visibility="Collapsed" />
+                                <ContentPresenter x:Name="PART_Header"
+                                                  Grid.Column="1"
+                                                  ContentSource="Header"
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                  TextElement.Foreground="{TemplateBinding Foreground}" />
+                            </Grid>
+                        </Border>
+                        <!-- 缩进与箭头宽度对齐（16 箭头 + 2 间距）：子项文字正好落在
+                             父项文字的左基线上，不会因为箭头折叠而左右跳动。
+                             子项容器必须自己响应 IsExpanded：自定义模板里没有默认模板
+                             那层隐藏逻辑，不绑的话折叠节点仍会画出全部子项。 -->
+                        <Border x:Name="ItemsHost" Margin="18,0,0,0" Visibility="Collapsed">
+                            <ItemsPresenter />
+                        </Border>
+                    </StackPanel>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsExpanded" Value="True">
+                            <Setter TargetName="ItemsHost" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                        <!-- 有子项才显示箭头（折叠时向右、展开时向下）。
+                             不能拿 IsExpanded 控制可见性：折叠的父节点仍需要箭头。 -->
+                        <Trigger Property="HasItems" Value="True">
+                            <Setter TargetName="Expander" Property="Visibility" Value="Visible" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Control.Hover}" />
+                            <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Selection}" />
+                            <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsSelected" Value="True" />
+                                <Condition Property="IsMouseOver" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Selection.Hover}" />
+                            <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
+                        </MultiTrigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="{StaticResource Brush.Text.Disabled}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
 </ResourceDictionary>

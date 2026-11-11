@@ -229,6 +229,7 @@ python tools/UiTest.py --xaml preview/Views/SafeFormView.xaml --shot .tmp-shots/
 - [ ] 表单标签与控件共享左基线：宽面板单 Grid 两列，窄面板 `FormStack` 单列。
 - [ ] 输入框/下拉框内部文字左对齐（数值列允许右对齐），没有居中。
 - [ ] 复选框对勾是填充路径、几何从 (0,0) 起笔（否则居中会右下偏移），三态可区分（`IsChecked=null` 显示横杠，不是空框）。
+- [ ] 树/列表/表格的 item 容器（`TreeViewItem`/`ListBoxItem`/`ListViewItem`/`DataGridRow`）自带模板，选中态是 `Brush.Selection` 而不是系统蓝底白字。
 - [ ] 默认按钮使用 `Brush.Border.Control` 描边（≥3:1），悬停切到 Accent 描边。
 - [ ] 未要求使用图标的按钮均为纯文本按钮，无多余装饰性矢量 Path。
 - [ ] 纯图标按钮均包含有效 `ToolTip`。
