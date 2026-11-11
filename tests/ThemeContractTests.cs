@@ -965,6 +965,53 @@ namespace WpfStyles.Tests
         }
 
         [Fact]
+        public void TextBox_ContentHostDoesNotDoubleApplyPadding()
+        {
+            // TextBox 会把 Padding 交给 PART_ContentHost；模板若再给它一个
+            // Margin="{TemplateBinding Padding}"，左内边距就变成两倍（6px→12px），
+            // 同一表单里输入框的文字比下拉框多缩进一大截。
+            XDocument controls = Load(ControlsPath);
+            XElement template = controls.Descendants()
+                .FirstOrDefault(e => e.Name.LocalName == "ControlTemplate"
+                    && (string)e.Attribute(X + "Key") == "TextBox.Template");
+            Assert.NotNull(template);
+
+            XElement host = template.Descendants()
+                .FirstOrDefault(e => e.Name.LocalName == "ScrollViewer"
+                    && (string)e.Attribute(X + "Name") == "PART_ContentHost");
+            Assert.NotNull(host);
+            Assert.Null(host.Attribute("Margin"));
+        }
+
+        [Fact]
+        public void CheckBox_WithoutContentHasNoLabelMargin()
+        {
+            // 隐式 CheckBox/RadioButton 带的是“文字与方框的间距”。表头全选框、
+            // 单元格里的独立复选框没有 Content，这个间距会把它们推离中心。
+            foreach (var (path, target) in new[]
+            {
+                (ControlsPath, "{x:Type CheckBox}"),
+                (ControlsPath, "{x:Type RadioButton}")
+            })
+            {
+                XDocument doc = Load(path);
+                XElement style = doc.Root.Elements()
+                    .FirstOrDefault(e => e.Name.LocalName == "Style"
+                        && (string)e.Attribute("TargetType") == target
+                        && e.Attribute(X + "Key") == null);
+                Assert.NotNull(style);
+
+                bool guarded = style.Elements()
+                    .Where(e => e.Name.LocalName == "Style.Triggers")
+                    .SelectMany(e => e.Elements())
+                    .Any(t => (string)t.Attribute("Property") == "HasContent"
+                        && t.Elements().Any(s => (string)s.Attribute("Property") == "Margin"
+                            && (string)s.Attribute("Value") == "0"));
+                Assert.True(guarded, target + " must drop its label margin when it has no content");
+            }
+        }
+
+        [Fact]
         public void KeyedControlStyles_DoNotSilentlyFallBackToSystemDefaults()
         {
             // WPF 里带 x:Key 的 Style 不会继承隐式样式。一个 keyed 样式若既没 BasedOn、

@@ -373,11 +373,13 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <!-- 日期文本：右侧留出日历按钮的位置，文字不会被压住 -->
+                    <!-- 日期文本：右内边距（DatePickerPadding）已经留出日历按钮的位置。
+                         这里**不能**再补 Margin：DatePickerTextBox 继承 TextBox，
+                         会把 Padding 交给 PART_ContentHost，再叠一层左边距就比
+                         普通输入框多缩进 6px，同一列里日期框的文字会偏右。 -->
                     <DatePickerTextBox x:Name="PART_TextBox"
                                       Grid.Column="0"
                                       Style="{StaticResource DatePickerTextBox.Base}"
-                                      Margin="6,0,0,0"
                                       VerticalContentAlignment="Center" />
 
                     <!-- 日历按钮：主题图标 + 主题悬停底。

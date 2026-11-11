@@ -364,24 +364,29 @@
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Height" Value="Auto" />
         <Setter Property="MinHeight" Value="{DynamicResource Layout.CellControlHeight}" />
-        <Setter Property="Margin" Value="0" />
+        <!-- 左右负外边距抵消单元格自带的 8px 内边距：下拉框要铺满整格
+             （hover 底色才像单元格悬停），文字靠自身 Padding 对齐列左边缘。
+             Padding 取 6 而不是 8：ComboBox 显示内容比 TextBox 少约 2px 内缩，
+             内容区补了 2px（见 Controls.xaml 的 ComboBox 模板），6+2=8 才和表头文字同一条竖线。 -->
+        <Setter Property="Margin" Value="-8,0,-8,0" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Background" Value="Transparent" />
-        <!-- 左 Padding 8px，与表头文字左边缘严密对齐 -->
-        <Setter Property="Padding" Value="8,0,24,0" />
+        <!-- 左 Padding 6 (+2 内容补偿) = 8px，与表头文字左边缘严密对齐 -->
+        <Setter Property="Padding" Value="6,0,22,0" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Style.Triggers>
+            <!-- 边框 0→1 时左/右内边距各减 1，文字与箭头位置不跳动 -->
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource Brush.Control.Hover}" />
                 <Setter Property="BorderThickness" Value="1" />
                 <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />
-                <Setter Property="Padding" Value="7,0,24,0" />
+                <Setter Property="Padding" Value="5,0,21,0" />
             </Trigger>
             <Trigger Property="IsDropDownOpen" Value="True">
                 <Setter Property="Background" Value="{StaticResource Brush.Surface}" />
                 <Setter Property="BorderThickness" Value="1" />
                 <Setter Property="BorderBrush" Value="{StaticResource Brush.Focus}" />
-                <Setter Property="Padding" Value="7,0,24,0" />
+                <Setter Property="Padding" Value="5,0,21,0" />
             </Trigger>
         </Style.Triggers>
     </Style>

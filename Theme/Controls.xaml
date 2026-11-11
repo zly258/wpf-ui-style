@@ -270,11 +270,14 @@
                  收缩，点击输入框右侧空白处无法进入编辑；只跟随
                  VerticalContentAlignment 则会让高度收缩，上下留白点不进去。
                  文本本身的对齐由 ScrollViewer 的 Horizontal/VerticalContentAlignment
-                 继续传递给内部 TextBoxView。 -->
+                 继续传递给内部 TextBoxView。
+
+                 这里**不能再加 Margin="{TemplateBinding Padding}"**：TextBox 自己已把
+                 Padding 交给 PART_ContentHost，再叠一层就是双倍左内边距，同一个表单里
+                 输入框文字会比下拉框多缩进一大截。 -->
             <ScrollViewer x:Name="PART_ContentHost"
                           Focusable="False"
                           Background="Transparent"
-                          Margin="{TemplateBinding Padding}"
                           HorizontalAlignment="Stretch"
                           VerticalAlignment="Stretch"
                           HorizontalContentAlignment="Stretch"
@@ -398,7 +401,7 @@
                 Background="{TemplateBinding Background}"
                 BorderBrush="{TemplateBinding BorderBrush}"
                 BorderThickness="{TemplateBinding BorderThickness}"
-                CornerRadius="{StaticResource Radius.Small}"
+                CornerRadius="{StaticResource Radius.Input}"
                 SnapsToDevicePixels="True">
             <Path x:Name="Arrow"
                   HorizontalAlignment="Right"
@@ -499,26 +502,38 @@
                                       ClickMode="Press"
                                       Focusable="False"
                                       Template="{StaticResource ComboBox.Toggle.Template}" />
-                        <ContentPresenter x:Name="ContentSite"
-                                          Margin="{TemplateBinding Padding}"
-                                          IsHitTestVisible="False"
-                                          Content="{TemplateBinding SelectionBoxItem}"
-                                          ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
-                                          ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"
-                                          TextElement.Foreground="{TemplateBinding Foreground}"
-                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
-                        <TextBox x:Name="PART_EditableTextBox"
-                                 Style="{StaticResource ComboBox.EditableTextBox}"
-                                 Margin="{TemplateBinding Padding}"
-                                 HorizontalAlignment="Stretch"
-                                 VerticalAlignment="Stretch"
-                                 HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                 VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                 Foreground="{TemplateBinding Foreground}"
-                                 IsReadOnly="{TemplateBinding IsReadOnly}"
-                                 Focusable="True"
-                                 Visibility="Collapsed" />
+                        <!-- 内容区要绕开 1px 边框：ToggleButton 只负责画边框，它下面的
+                             Grid 从 0 开始。ContentPresenter 直接叠在 Grid 上、只吃 Padding，
+                             文字会比 TextBox（Border 1 + Padding 6 = 7）少 1px，
+                             同一行的输入框和下拉框左边缘就对不齐。
+                             再补 2px 是因为 TextBox 的文字由 TextBoxView 渲染，它自带
+                             约 2px 内缩；这里不补的话，下拉框文字会比输入框靠左 2px。 -->
+                        <Border BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}"
+                                Margin="2,0,0,0"
+                                IsHitTestVisible="False">
+                            <ContentPresenter x:Name="ContentSite"
+                                              Content="{TemplateBinding SelectionBoxItem}"
+                                              ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                              ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"
+                                              TextElement.Foreground="{TemplateBinding Foreground}"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        </Border>
+                        <Border BorderThickness="{TemplateBinding BorderThickness}"
+                                Padding="{TemplateBinding Padding}">
+                            <TextBox x:Name="PART_EditableTextBox"
+                                     Style="{StaticResource ComboBox.EditableTextBox}"
+                                     Width="Auto"
+                                     HorizontalAlignment="Stretch"
+                                     VerticalAlignment="Stretch"
+                                     HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                     VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                     Foreground="{TemplateBinding Foreground}"
+                                     IsReadOnly="{TemplateBinding IsReadOnly}"
+                                     Focusable="True"
+                                     Visibility="Collapsed" />
+                        </Border>
                         <Popup x:Name="PART_Popup"
                                AllowsTransparency="True"
                                Focusable="False"
@@ -735,6 +750,14 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <!-- 没有文字的就不要留“文字间距”：表头全选框、表格单元格里的独立复选框
+                 没有 Content，右边那 12px 会把它们整体推离中心（表头那个就偏左 3px，
+                 和下面的行复选框对不上一条竖线）。 -->
+            <Trigger Property="HasContent" Value="False">
+                <Setter Property="Margin" Value="0" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <Style TargetType="{x:Type RadioButton}">
@@ -790,6 +813,12 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <!-- 同上：无文字的独立单选框不要留 14px 文字间距 -->
+            <Trigger Property="HasContent" Value="False">
+                <Setter Property="Margin" Value="0" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <!-- ============================================================

@@ -1486,3 +1486,66 @@ DatePicker 的弹层里放的是 **DatePicker 自己创建的 Calendar 实例**�
 - 选中节点后取背景色，应是 `Brush.Selection`（`#E4EEF5`），不是 `#0078D7`；
 - 折叠一个有子项的节点，子项必须消失；
 - 选中项外围不应有虚线焦点框。
+
+---
+
+## 37. 输入框文字比下拉框靠右一大截
+
+**症状**
+
+同一个表单里，`TextBox` 的文字比 `ComboBox` 缩进多出 6~8px；换成 `DatePicker` 又是另一个位置。左边缘对不齐一整列。
+
+**根因**
+
+`TextBox` 会把 `Padding` 交给 `PART_ContentHost`（滚动宿主）。模板里再写一层
+`Margin="{TemplateBinding Padding}"` 就等于把内边距算了两遍。另外 `DatePicker` 的
+`PART_TextBox` 模板上多写了一个 `Margin="6,0,0,0"`，同样叠在 `Padding` 之上。
+
+**修复**
+
+模板里不要给 `PART_ContentHost` / `PART_TextBox` 再加 Margin，只保留 `Padding`：
+
+```xml
+<ScrollViewer x:Name="PART_ContentHost" Focusable="False" Background="Transparent"
+              HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ... />
+```
+
+`ComboBox` 的显示内容不是 TextBox 渲染的（没有 `TextBoxView` 自带的约 2px 内缩），
+所以内容区要补 2px 才能和输入框落在同一条竖线上。
+
+**验证**
+
+- 并排渲染 `TextBox` / `ComboBox` / 可编辑 `ComboBox` / `DatePicker`，量首字墨迹的 x：
+  四者应当一致（当前 Medium 档都是 30px 处起笔）；
+- 契约测试 `TextBox_ContentHostDoesNotDoubleApplyPadding` 守住模板不再叠 Margin。
+
+---
+
+## 38. 表头全选框比下面的行复选框偏左
+
+**症状**
+
+`DataGrid` 表头列里的全选复选框，和下面每一行的行复选框不在一条竖线上，通常偏左 3px 左右。
+
+**根因**
+
+隐式 `CheckBox` / `RadioButton` 样式带 `Margin="0,2,12,2"`，右边那 12px 是给
+“复选框 + 文字”留的间距。表头全选框、单元格里的独立复选框没有文字，这 12px
+就变成纯偏移，把控件整体推出中心。
+
+**修复**
+
+无文字的复选框不要继承文字间距——隐式样式里按 `HasContent` 收掉：
+
+```xml
+<Style.Triggers>
+    <Trigger Property="HasContent" Value="False">
+        <Setter Property="Margin" Value="0" />
+    </Trigger>
+</Style.Triggers>
+```
+
+**验证**
+
+- 渲染表格，量表头框与行框的墨迹中心 x 应为同一条线；
+- 契约测试 `CheckBox_WithoutContentHasNoLabelMargin` 守住这条触发器存在。

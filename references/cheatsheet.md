@@ -91,6 +91,7 @@
 
 - 不要给 `TextBox` / `PasswordBox` / `ComboBox` 设 `HorizontalContentAlignment="Left"`。
 - 标签页选中态不能只剩一条 1px 横线；仍禁止用 tab 承载整窗多任务导航。
+- **内容左边缘必须一致**：`PART_ContentHost` / `PART_TextBox` 只吃 `Padding`，**不要再加 `Margin="{TemplateBinding Padding}"`**（TextBox 自己会把 Padding 交给宿主，叠加即双倍）；`ComboBox` 显示内容由 ContentPresenter 渲染、没有 `TextBoxView` 的约 2px 内缩，需要补 2px 才和输入框对齐。
 
 ## 复选框
 
@@ -98,6 +99,7 @@
 - 三态必须区分：`IsChecked="True"` 白勾、`{x:Null}` 白横杠、`False` 空框；
 - 禁用态勾/横杠切 `Brush.Text.Disabled`，不留白色 glyph；
 - 全选框用 `IsThreeState="True"` + `Focusable="False"`（避免启动时抢焦点框）。
+- 无文字的独立复选框（表头全选框、单元格里的）会由隐式样式的 `HasContent=False` 触发器把 `Margin` 归零，和行内复选框落在同一条竖线上。
 - 表格里用 `Style="{StaticResource DataGrid.Element.CheckBox}"` 时必须确保该 keyed 样式 `BasedOn="{StaticResource {x:Type CheckBox}}"`，否则会退回系统方角复选框。
 
 ## 表格单元格下拉框
