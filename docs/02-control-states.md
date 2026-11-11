@@ -202,18 +202,19 @@ WPF 会按声明顺序应用 `Trigger`，后声明的覆盖前面的。不要靠
 
 | 状态 | Background | Foreground | BorderBrush | 边框 |
 |---|---|---|---|---|
-| Normal（未选中） | `Brush.SurfaceAlt` | `Brush.Text.Secondary` | `Brush.Border.Control` | 四边 1px |
+| Normal（未选中） | `Brush.SurfaceAlt` | `Brush.Text.Secondary` | `Brush.Border.Tab` | 四边 1px |
 | Hover | `Brush.Control.Hover` | `Brush.Text.Primary` | `Brush.Accent` | 四边 1px |
-| Selected | `Brush.Surface` | `Brush.Text.Primary`（SemiBold） | `Brush.Border.Control` | 左/上/右 1px，**无下边框** |
+| Selected | `Brush.Surface` | `Brush.Text.Primary`（SemiBold） | `Brush.Border.Tab` | 左/上/右 1px，**无下边框** |
 | Selected+Hover | `Brush.Surface` | `Brush.Text.Primary` | `Brush.Accent` | 左/上/右 1px |
 | Selected+Disabled | `Brush.Control.Disabled` | `Brush.Text.Disabled` | `Brush.Border` | 左/上/右 1px |
 | Focused | 不变 | 不变 | `Brush.Focus` | 保持原厚度 |
 | Disabled | `Brush.Control.Disabled` | `Brush.Text.Disabled` | `Brush.Border` | 四边 1px |
 
 - 采用**原生方角页签**：每个页签都是 1px 实线方框，**不用圆角、不用底部强调条**。未选中也要有可见边框，让用户一眼看出「这是可点击的页签」。
-- **选中页签与内容区连成一体**：选中时去掉下边框、铺 `Brush.Surface` 盖住标签栏基线；内容区本身是 `1px Border.Control + Surface` 的方框。禁止再用「下划线指示器」表达选中。
+- 方框描边用 `Brush.Border.Tab`（`#98A1AD`，对 Surface 2.52:1），比按钮/输入框的 `Brush.Border.Control` 浅一档：页签靠文字识别，方框只承担分组轮廓，整块框线不至于压住内容。**不要把按钮、输入框换成这个令牌。**
+- **选中页签与内容区连成一体**：选中时去掉下边框、铺 `Brush.Surface` 盖住标签栏基线；内容区本身是 `1px Border.Tab + Surface` 的方框。禁止再用「下划线指示器」表达选中。
 - 悬停用 `Control.Hover` 底 + `Accent` 描边；禁用统一 `Control.Disabled + Text.Disabled + Border`。
-- 标签栏下方有一条贯穿的 1px `Brush.Border` 基线；选中标签的底条压在这条基线上。
+- 标签栏下方有一条贯穿的 1px `Brush.Border.Tab` 基线；选中标签的底条压在这条基线上。
 - 标签页仅用于局部切换（分组设置、属性分类、画廊演示）；整窗多任务导航仍按 R12 拆分窗口。
 
 ---
@@ -328,9 +329,11 @@ WPF 会按声明顺序应用 `Trigger`，后声明的覆盖前面的。不要靠
 | BorderBrush | `Brush.Tooltip.Background` |
 | Padding | `8,5` |
 | FontSize | `FontSize.Caption` |
+| MaxWidth | `460`（超出后按 `TextWrapping="Wrap"` 折行） |
 
 深底白字，对比度 14.76:1。
 不要让 ToolTip 使用系统默认白底黑字或黑底黑字。
+字符串内容由 `ContentPresenter` 自动生成 `TextBlock`，模板给内容宿主挂了只含 `TextWrapping="Wrap"` 的隐式 `TextBlock` 样式——长提示必须折行，**不要靠 `TextTrimming` 或放任它撑出屏幕**。
 
 ---
 

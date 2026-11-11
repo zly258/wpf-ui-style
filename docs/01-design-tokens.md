@@ -17,6 +17,7 @@
 | `Color.Border` | `#D0D5DB` | 普通边框、分隔线 | 装饰性，不强制 3:1 |
 | `Color.BorderStrong` | `#AEB7C2` | 选中/悬停表面、弹层边框 | 比普通边框更明显 |
 | `Color.BorderControl` | `#7C8795` | 按钮、输入框、下拉框的活动描边 | 对 Surface 3.52:1、对窗口底 3.10:1 |
+| `Color.BorderTab` | `#98A1AD` | 标签页方框、标签栏基线 | 对 Surface 2.52:1；页签靠文字识别，方框只做分组轮廓，允许低于 3:1 |
 | `Color.Focus` | `#2F6F9F` | 键盘焦点边框 | 与 Surface 约 5.2:1 |
 
 ### 1.2 文字

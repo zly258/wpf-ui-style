@@ -72,10 +72,14 @@
 | `Border.Control` `#7C8795` | `Surface` `#FAFBFC` | 3.52:1 | ✅ 按钮/输入框描边 |
 | `Border.Control` `#7C8795` | `WindowBackground` `#E9EDF2` | 3.10:1 | ✅ 按钮在窗口底色上的边界 |
 | `Border.Control` `#7C8795` | `Control.Hover` `#F0F3F6` | 3.28:1 | ✅ 悬停态边界 |
+| `Border.Tab` `#98A1AD` | `Surface` `#FAFBFC` | 2.52:1 | ⚠️ 标签页方框；页签由文字识别，方框只做分组轮廓 |
 
 > `Border`/`Border.Strong` 是装饰性边框（分隔线、卡片边），不满足 3:1 是允许的；
 > 但**按钮/输入框的可点击边界**必须使用 `Border.Control`，
 > **焦点环、错误边框、选中指示**必须使用 `Focus`/`Danger`/`Accent`。
+> `Border.Tab` 是唯一低于 3:1 的交互区域边框：页签本身由文字标签标识，
+> 方框只需读作「一块分组轮廓」，所以刻意比 `Border.Control` 浅一档；
+> 不要把它扩散到按钮、输入框。
 
 ---
 

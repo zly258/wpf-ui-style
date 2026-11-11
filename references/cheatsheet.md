@@ -52,8 +52,8 @@
 | 列表 Selected | `Brush.Selection` | `Brush.Text.Primary` | 透明 |
 | 列表 Selected+Hover | `Brush.Selection.Hover` | `Brush.Text.Primary` | 透明 |
 | ComboBoxItem Selected | `Brush.Accent.Subtle` | `Brush.Text.Primary` | 透明 |
-| 标签页 Normal | `Brush.SurfaceAlt` | `Brush.Text.Secondary` | `Brush.Border.Control` 四边 |
-| 标签页 Selected | `Brush.Surface` | `Brush.Text.Primary` | `Brush.Border.Control`（无下边框，与内容区连通） |
+| 标签页 Normal | `Brush.SurfaceAlt` | `Brush.Text.Secondary` | `Brush.Border.Tab` 四边 |
+| 标签页 Selected | `Brush.Surface` | `Brush.Text.Primary` | `Brush.Border.Tab`（无下边框，与内容区连通） |
 | ToolTip | `Brush.Tooltip.Background` | `Brush.Tooltip.Foreground` | 同背景 |
 
 ## 多行文本高度与自适应

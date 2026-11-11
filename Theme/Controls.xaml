@@ -965,12 +965,14 @@
          原生方角标签（贴近 Win32 经典页签），不使用圆角、不使用底部强调条：
            - 每个标签都是一个 1px 实线描边的方框，未选中也有可见边界，
              一眼能看出「这是一个可点击的页签」；
-           - 未选中：SurfaceAlt 底 + Border.Control 描边（含下边，与基线同色）；
-           - 选中：Surface 底 + Border.Control 描边 + 去掉下边框，
+           - 未选中：SurfaceAlt 底 + Border.Tab 描边（含下边，与基线同色）；
+           - 选中：Surface 底 + Border.Tab 描边 + 去掉下边框，
              落到基线上并盖住它，与右侧内容区连成一体；
            - 悬停给 Control.Hover 底 + Accent 描边；
-           - 内容区是一整个 1px 方框（Border.Control + Surface），
+           - 内容区是一整个 1px 方框（Border.Tab + Surface），
              与选中的标签共用同一条上边线。
+           - 描边用比 Border.Control 浅一档的 Border.Tab：页签靠文字识别，
+             方框只做分组轮廓，整块框线比按钮/输入框轻一档。
          注意：R12 仍然禁止用 TabControl 做整窗多任务导航，
          本样式适用于分组设置、属性分类、画廊演示等局部切换。
          ============================================================ -->
@@ -992,7 +994,7 @@
                         <Grid Grid.Row="0">
                             <!-- 标签栏基线：未选中标签的下边框、以及内容区的上边线都落在这一行上 -->
                             <Border VerticalAlignment="Bottom"
-                                    BorderBrush="{StaticResource Brush.Border.Control}"
+                                    BorderBrush="{StaticResource Brush.Border.Tab}"
                                     BorderThickness="0,0,0,1"
                                     SnapsToDevicePixels="True" />
                             <TabPanel x:Name="HeaderPanel"
@@ -1003,7 +1005,7 @@
                         <!-- 内容区：与选中标签共用上边线，形成完整的方框 -->
                         <Border Grid.Row="1"
                                 Background="{StaticResource Brush.Surface}"
-                                BorderBrush="{StaticResource Brush.Border.Control}"
+                                BorderBrush="{StaticResource Brush.Border.Tab}"
                                 BorderThickness="1,0,1,1"
                                 SnapsToDevicePixels="True">
                             <ContentPresenter x:Name="PART_SelectedContentHost"
@@ -1025,14 +1027,14 @@
         <Setter Property="FontWeight" Value="Normal" />
         <Setter Property="Foreground" Value="{StaticResource Brush.Text.Secondary}" />
         <Setter Property="Background" Value="{StaticResource Brush.SurfaceAlt}" />
-        <Setter Property="BorderBrush" Value="{StaticResource Brush.Border.Control}" />
+        <Setter Property="BorderBrush" Value="{StaticResource Brush.Border.Tab}" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TabItem}">
                     <!-- 方角页签：没有圆角、没有底部强调条。
-                         未选中标签下边框用 Border.Control，与基线同色，标签栏是一条连续的线；
+                         未选中标签下边框用 Border.Tab，与基线同色，标签栏是一条连续的线；
                          选中标签去掉下边框并铺满到底，盖住基线，与内容区连成一体。 -->
                     <Border x:Name="Bd"
                             Background="{TemplateBinding Background}"
@@ -1055,7 +1057,7 @@
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Surface}" />
-                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Border.Control}" />
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Border.Tab}" />
                             <Setter TargetName="Bd" Property="BorderThickness" Value="1,1,1,0" />
                             <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
                             <Setter Property="FontWeight" Value="SemiBold" />
@@ -1117,7 +1119,17 @@
                             BorderThickness="{TemplateBinding BorderThickness}"
                             CornerRadius="{StaticResource Radius.Small}"
                             Padding="{TemplateBinding Padding}">
-                        <ContentPresenter TextElement.Foreground="{TemplateBinding Foreground}" />
+                        <!-- 长文本按 MaxWidth 换行：字符串内容由 ContentPresenter
+                             自动生成 TextBlock，这里给内容宿主挂一条只加
+                             TextWrapping 的隐式 TextBlock 样式；它同时让字号/行高
+                             回落到 ToolTip 自身的继承值（Caption）。 -->
+                        <ContentPresenter TextElement.Foreground="{TemplateBinding Foreground}">
+                            <ContentPresenter.Resources>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="TextWrapping" Value="Wrap" />
+                                </Style>
+                            </ContentPresenter.Resources>
+                        </ContentPresenter>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

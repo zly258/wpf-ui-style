@@ -776,6 +776,62 @@ namespace WpfStyles.Tests
         }
 
         [Fact]
+        public void TabItem_FrameUsesSofterBorderTabToken()
+        {
+            XDocument controls = Load(ControlsPath);
+            XElement tabItem = controls.Root.Elements()
+                .FirstOrDefault(e => e.Name.LocalName == "Style"
+                    && (string)e.Attribute("TargetType") == "{x:Type TabItem}"
+                    && e.Attribute(X + "Key") == null);
+            Assert.NotNull(tabItem);
+
+            // 页签方框走比 Border.Control 浅一档的 Border.Tab
+            Assert.Equal("{StaticResource Brush.Border.Tab}",
+                SetterValue(tabItem, "BorderBrush", "TabItem"));
+
+            XElement selected = FindTrigger(tabItem, "IsSelected", "True");
+            Assert.NotNull(selected);
+            Assert.Contains(selected.Elements(), x => (string)x.Attribute("TargetName") == "Bd"
+                && (string)x.Attribute("Property") == "BorderBrush"
+                && (string)x.Attribute("Value") == "{StaticResource Brush.Border.Tab}");
+
+            // 内容区方框和标签栏基线必须与页签同色，否则方框会断开
+            var frame = controls.Descendants()
+                .Where(e => e.Name.LocalName == "Border"
+                    && (string)e.Attribute("BorderBrush") == "{StaticResource Brush.Border.Tab}")
+                .ToList();
+            Assert.True(frame.Count >= 2, "TabControl 的标签栏基线与内容区方框也该用 Border.Tab");
+
+            // 按钮/输入框仍保持 3:1 的 Border.Control，不能被浅一档令牌顶替
+            Assert.Equal("{StaticResource Brush.Border.Control}",
+                KeyedStyleSetterValue(ControlsPath, "Button.Base", "BorderBrush"));
+        }
+
+        [Fact]
+        public void ToolTip_WrapsLongTextWithinMaxWidth()
+        {
+            XElement toolTip = Load(ControlsPath).Root.Elements()
+                .FirstOrDefault(e => e.Name.LocalName == "Style"
+                    && (string)e.Attribute("TargetType") == "{x:Type ToolTip}"
+                    && e.Attribute(X + "Key") == null);
+            Assert.NotNull(toolTip);
+
+            Assert.Equal("460", SetterValue(toolTip, "MaxWidth", "ToolTip"));
+
+            // 字符串内容由 ContentPresenter 生成 TextBlock，必须显式给 Wrap，
+            // 否则长提示会一路撑到屏幕外（历史事故：换行根本没生效）。
+            XElement presenter = toolTip.Descendants()
+                .FirstOrDefault(e => e.Name.LocalName == "ContentPresenter");
+            Assert.NotNull(presenter);
+
+            XElement wrapping = presenter.Descendants()
+                .FirstOrDefault(e => e.Name.LocalName == "Setter"
+                    && (string)e.Attribute("Property") == "TextWrapping");
+            Assert.True(wrapping != null, "ToolTip 内容缺少 TextWrapping=\"Wrap\"");
+            Assert.Equal("Wrap", (string)wrapping.Attribute("Value"));
+        }
+
+        [Fact]
         public void SecondaryButton_HasVisibleBorderAndCompactHeight()
         {
             XElement baseStyle = FindKeyedStyle(ControlsPath, "Button.Base");

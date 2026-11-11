@@ -173,7 +173,7 @@ description: Apply and audit the WPF UI Skills style system (tokens, three-level
 
 ### R16. 输入区占满、标签页可识别 (Fill & Visible Tabs)
 - **输入区横向占满**：`TextBox` / `PasswordBox` / `ComboBox` 的文本宿主必须横向 `Stretch`。严禁在业务 XAML 里把 `HorizontalContentAlignment` 改成 `Left`，否则右侧会是无法点击的空白，长值也更容易被截。
-- **标签页必须是「可见的方框」**：默认 `TabItem` 用原生方角样式——未选中也有 1px `Brush.Border.Control` 边框 + `SurfaceAlt` 底；选中页签铺 `Brush.Surface`、去掉下边框，与内容区连成一体。**禁止圆角、禁止底部强调条/下划线指示器**；浅色卡片上只画一条线无法看出这是可切换的页签。
+- **标签页必须是「可见的方框」**：默认 `TabItem` 用原生方角样式——未选中也有 1px `Brush.Border.Tab` 边框 + `SurfaceAlt` 底；选中页签铺 `Brush.Surface`、去掉下边框，与内容区连成一体。**禁止圆角、禁止底部强调条/下划线指示器**；浅色卡片上只画一条线无法看出这是可切换的页签。方框比按钮/输入框的 `Border.Control` 浅一档（`Border.Tab` 对 Surface 2.52:1），因为它只做分组轮廓、页签靠文字识别。
 - **标签页仍是局部切换**：R12 的「窗口内禁止多 Tab 导航」继续生效；本样式用于分组设置、属性分类、画廊演示等局部区域。
 - **按钮边界可见**：默认按钮是「白底 + `Brush.Border.Control` 描边」。严禁把按钮描边改成 `Brush.Border` 或更浅的颜色，也不要用 `Opacity` 弱化。
 

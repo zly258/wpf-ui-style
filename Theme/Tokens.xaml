@@ -28,6 +28,11 @@
     <!-- 按钮/可点击控件的描边：必须与白底有 ≥3:1 的可感知边界，
          否则「白底 + 浅边」在低亮度显示器上几乎看不见。 -->
     <Color x:Key="Color.BorderControl">#FF7C8795</Color>
+    <!-- 标签页方框描边：比 Border.Control 浅一档（对 Surface 约 2.50:1）。
+         页签由文字本身标识、边框只是分组轮廓，不属于 WCAG 1.4.11 必须
+         ≥3:1 的「唯一识别手段」，所以可以放轻；按钮/输入框仍用
+         Border.Control，不要换成这个。 -->
+    <Color x:Key="Color.BorderTab">#FF98A1AD</Color>
 
     <Color x:Key="Color.TextPrimary">#FF1F2933</Color>
     <Color x:Key="Color.TextSecondary">#FF4B5563</Color>
@@ -110,6 +115,7 @@
     <SolidColorBrush x:Key="Brush.Border" Color="{StaticResource Color.Border}" />
     <SolidColorBrush x:Key="Brush.Border.Strong" Color="{StaticResource Color.BorderStrong}" />
     <SolidColorBrush x:Key="Brush.Border.Control" Color="{StaticResource Color.BorderControl}" />
+    <SolidColorBrush x:Key="Brush.Border.Tab" Color="{StaticResource Color.BorderTab}" />
 
     <SolidColorBrush x:Key="Brush.Text.Primary" Color="{StaticResource Color.TextPrimary}" />
     <SolidColorBrush x:Key="Brush.Text.Secondary" Color="{StaticResource Color.TextSecondary}" />
