@@ -100,6 +100,12 @@
 - 全选框用 `IsThreeState="True"` + `Focusable="False"`（避免启动时抢焦点框）。
 - 表格里用 `Style="{StaticResource DataGrid.Element.CheckBox}"` 时必须确保该 keyed 样式 `BasedOn="{StaticResource {x:Type CheckBox}}"`，否则会退回系统方角复选框。
 
+## 表格单元格下拉框
+
+- 用 `Style="{StaticResource DataGrid.Cell.ComboBox}"`（单次点击直接展开）；
+- 高度取 `Layout.CellControlHeight`（= 行高 − 2），**不要用 `Layout.RowHeight`**：行底有 1px 网格线，撑满整行的盒子 hover/展开时描边会压在分隔线上；
+- 数据源绑定别写死 `AncestorType=Window`：页面是 `UserControl` 时会解析成 null，单元格空白、下拉点开是一个空壳（模板里已加 `HasItems=False` 隐藏空壳兜底，但根因是绑定）。
+
 ## 树 / 列表选中态
 
 - `TreeViewItem`、`ListBoxItem`、`ListViewItem`、`DataGridRow` **必须自带模板**：默认模板用 `SystemColors.HighlightBrushKey` 画选中（系统蓝 + 白字），样式触发器够不到；

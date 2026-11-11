@@ -187,8 +187,12 @@
                     <!-- 列 5：下拉单元格：材质选择（单击直接展开，高度横向 100% 占满） -->
                     <DataGridTemplateColumn Header="材质牌号" Width="140">
                         <DataGridTemplateColumn.CellTemplate>
+                            <!-- ItemsSource 必须挂在页面自身的 DataContext 上：
+                                 本页是 UserControl（DataContext = this），外层窗口只负责
+                                 尺寸与标题、DataContext 为空，写 AncestorType=Window 会
+                                 解析成 null —— 单元格空白、下拉点开是一个空壳。 -->
                             <DataTemplate>
-                                <ComboBox ItemsSource="{Binding DataContext.AvailableMaterials, RelativeSource={RelativeSource AncestorType=Window}}"
+                                <ComboBox ItemsSource="{Binding DataContext.AvailableMaterials, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                           SelectedItem="{Binding MaterialType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                           Style="{StaticResource DataGrid.Cell.ComboBox}" />
                             </DataTemplate>

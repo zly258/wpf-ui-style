@@ -217,6 +217,9 @@
     <sys:Double x:Key="Layout.IconButton.Large">32</sys:Double>
     <sys:Double x:Key="Layout.RowHeight">28</sys:Double>
     <sys:Double x:Key="Layout.HeaderHeight">30</sys:Double>
+    <!-- 单元格内控件高度 = 行高 - 2：数据行底部有 1px 网格线，控件撑满整行时
+         描边会压到分隔线上（hover/展开时看起来像溢出行高）。 -->
+    <sys:Double x:Key="Layout.CellControlHeight">26</sys:Double>
     <!-- 复选框/单选框靶心固定 16，不随密度缩小（可访问性下限）。 -->
     <sys:Double x:Key="Layout.CheckBox.Size">16</sys:Double>
     <sys:Double x:Key="Layout.RadioButton.Size">16</sys:Double>

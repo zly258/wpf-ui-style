@@ -356,12 +356,14 @@
 
     <!-- 表格单元格专用下拉框（单次点击直接展开）。
          展示态单元格 ContentPresenter 垂直居中，Stretch 不生效，
-         必须 MinHeight=RowHeight 才能与单元格高度保持一致。 -->
+         必须给 MinHeight 才能与单元格高度保持一致，但要用 Layout.CellControlHeight
+         （行高 - 2）而不是 Layout.RowHeight：数据行底部有 1px 网格线，控件撑满整行时
+         hover/展开态的描边会正好压在分隔线上，看起来像溢到下一行。 -->
     <Style x:Key="DataGrid.Cell.ComboBox" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource ComboBox.Base}">
         <Setter Property="HorizontalAlignment" Value="Stretch" />
-        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Height" Value="Auto" />
-        <Setter Property="MinHeight" Value="{DynamicResource Layout.RowHeight}" />
+        <Setter Property="MinHeight" Value="{DynamicResource Layout.CellControlHeight}" />
         <Setter Property="Margin" Value="0" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Background" Value="Transparent" />

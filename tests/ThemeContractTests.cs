@@ -904,6 +904,67 @@ namespace WpfStyles.Tests
         }
 
         [Fact]
+        public void CellControlHeight_IsRowHeightMinusGridLine()
+        {
+            // 数据行底部有 1px 网格线。单元格内控件若按行高撑满，hover/展开态的描边
+            // 会正好压在分隔线上，看起来像溢到下一行——所以单元格控件高度必须留 2px。
+            var densityFiles = new[]
+            {
+                TokensPath,
+                Path.Combine(StylesRoot, "Theme", "Density.Compact.xaml"),
+                Path.Combine(StylesRoot, "Theme", "Density.Medium.xaml"),
+                Path.Combine(StylesRoot, "Theme", "Density.Relaxed.xaml")
+            };
+
+            foreach (string file in densityFiles)
+            {
+                XDocument doc = Load(file);
+                var doubles = doc.Root.Elements()
+                    .Where(e => e.Name.LocalName == "Double")
+                    .ToDictionary(e => (string)e.Attribute(X + "Key") ?? "", e => e.Value);
+
+                Assert.True(doubles.ContainsKey("Layout.CellControlHeight"),
+                    $"{Path.GetFileName(file)} is missing Layout.CellControlHeight");
+                double row = double.Parse(doubles["Layout.RowHeight"], CultureInfo.InvariantCulture);
+                double cell = double.Parse(doubles["Layout.CellControlHeight"], CultureInfo.InvariantCulture);
+                Assert.Equal(2.0, row - cell, 2);
+            }
+        }
+
+        [Fact]
+        public void CellComboBox_UsesInsetHeightNotRowHeight()
+        {
+            XDocument controls = Load(DataControlsPath);
+            XElement style = controls.Root.Elements()
+                .FirstOrDefault(e => e.Name.LocalName == "Style"
+                    && (string)e.Attribute(X + "Key") == "DataGrid.Cell.ComboBox");
+            Assert.NotNull(style);
+
+            Assert.Equal("{DynamicResource Layout.CellControlHeight}",
+                SetterValue(style, "MinHeight", "DataGrid.Cell.ComboBox"));
+        }
+
+        [Fact]
+        public void ComboBox_HidesEmptyDropDownShell()
+        {
+            // ItemsSource 为空（绑定失败/异步加载中）时，Popup 的 Border 只剩
+            // Padding + 边框，会在光标下方留一条 6px 的空胶囊。
+            XDocument controls = Load(ControlsPath);
+            XElement template = controls.Descendants()
+                .FirstOrDefault(e => e.Name.LocalName == "ControlTemplate"
+                    && (string)e.Attribute("TargetType") == "{x:Type ComboBox}");
+            Assert.NotNull(template);
+
+            bool guarded = template.Descendants()
+                .Where(e => e.Name.LocalName == "Trigger")
+                .Any(t => (string)t.Attribute("Property") == "HasItems"
+                    && t.Elements().Any(s => (string)s.Attribute("TargetName") == "DropDownBorder"
+                        && (string)s.Attribute("Property") == "Visibility"
+                        && (string)s.Attribute("Value") == "Collapsed"));
+            Assert.True(guarded, "empty ComboBox must collapse its DropDownBorder");
+        }
+
+        [Fact]
         public void KeyedControlStyles_DoNotSilentlyFallBackToSystemDefaults()
         {
             // WPF 里带 x:Key 的 Style 不会继承隐式样式。一个 keyed 样式若既没 BasedOn、

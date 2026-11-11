@@ -32,6 +32,7 @@
 | `Layout.ControlHeight.Large` | 32 | **36** | 40 |
 | `Layout.RowHeight` | 24 | **28** | 32 |
 | `Layout.HeaderHeight` | 26 | **30** | 34 |
+| `Layout.CellControlHeight` | 22 | **26** | 30 |
 | `Layout.ButtonMinWidth` | 56 | **64** | 72 |
 | `Layout.ButtonMinWidth.Small` | 40 | **48** | 56 |
 | `Layout.ButtonPadding` | 10,0 | **12,0** | 16,0 |
@@ -64,6 +65,9 @@
 | `Layout.TagHeight` | 22 | **24** | 26 |
 
 `Density.Profile` 是字符串令牌（`compact` / `medium` / `relaxed`），便于调试和截图脚本识别当前档位。
+
+`Layout.CellControlHeight` 恒等于 `Layout.RowHeight - 2`，专门给**单元格内控件**（表格下拉框等）用：
+数据行底部有 1px 网格线，控件若按行高撑满，hover/展开态的描边会压在分隔线上，看起来像溢出行高。
 
 ---
 

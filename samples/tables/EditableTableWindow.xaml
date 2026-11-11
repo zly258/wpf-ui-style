@@ -177,6 +177,9 @@
                     <!-- 下拉单元格列：材质种类（单次点击直接展开，高度横向 100% 占满） -->
                     <DataGridTemplateColumn Header="材质牌号" Width="140">
                         <DataGridTemplateColumn.CellTemplate>
+                            <!-- 数据源挂在本 Window 上，所以按 Window 取 DataContext。
+                                 把这段表格复制进 UserControl 时要同步改成 AncestorType=UserControl，
+                                 否则绑定会静默解析成 null：单元格空白、下拉点开只是一个空壳。 -->
                             <DataTemplate>
                                 <ComboBox ItemsSource="{Binding DataContext.AvailableMaterials, RelativeSource={RelativeSource AncestorType=Window}}"
                                           SelectedItem="{Binding MaterialType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"

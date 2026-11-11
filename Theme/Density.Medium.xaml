@@ -27,6 +27,7 @@
     <!-- 数据行 / 表头 -->
     <sys:Double x:Key="Layout.RowHeight">28</sys:Double>
     <sys:Double x:Key="Layout.HeaderHeight">30</sys:Double>
+    <sys:Double x:Key="Layout.CellControlHeight">26</sys:Double>
 
     <!-- 按钮 -->
     <sys:Double x:Key="Layout.ButtonMinWidth">64</sys:Double>
