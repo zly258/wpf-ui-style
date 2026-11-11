@@ -882,10 +882,25 @@ namespace WpfStyles.Tests
             }
 
             Assert.True(xs.Count >= 3, "check geometry is too simple");
-            Assert.True(Math.Abs((xs.Min() + xs.Max()) / 2 - 8.0) <= 0.6, "check is not horizontally centered");
-            Assert.True(Math.Abs((ys.Min() + ys.Max()) / 2 - 8.0) <= 0.6, "check is not vertically centered");
-            Assert.True(xs.Max() - xs.Min() >= 6.0, "check is too small horizontally");
-            Assert.True(ys.Max() - ys.Min() >= 5.0, "check is too small vertically");
+
+            // 几何必须从 (0,0) 起笔：Path 的 DesiredSize 取的是“到原点的外包”，
+            // 若从 (2.6,3.8) 起笔，Center 对齐后墨迹会整体右下偏移（约 1.3px / 1.9px），
+            // 视觉上就是不居中。起笔归零后 DesiredSize == 外包，对齐才真正居中。
+            Assert.True(Math.Abs(xs.Min()) <= 0.01, "check geometry must start at x=0, otherwise it renders off-center");
+            Assert.True(Math.Abs(ys.Min()) <= 0.01, "check geometry must start at y=0, otherwise it renders off-center");
+
+            double glyphWidth = xs.Max() - xs.Min();
+            double glyphHeight = ys.Max() - ys.Min();
+            Assert.True(glyphWidth >= 6.0, "check is too small horizontally");
+            Assert.True(glyphHeight >= 5.0, "check is too small vertically");
+
+            // 16px 方框去掉 1px 边框后内容区为 14×14，字形必须放得下才不会被裁切
+            Assert.True(glyphWidth <= 14.0 && glyphHeight <= 14.0, "check overflows the 16px box content area");
+
+            // 外包取偶数：内容区 14×14，SnapsToDevicePixels 会把 (14-w)/2 取整，
+            // 奇数宽高取整后墨迹会偏半个像素，偶数才能稳稳落在正中
+            Assert.True(Math.Abs(glyphWidth % 2) <= 0.01, "check width must be even to stay pixel-centered");
+            Assert.True(Math.Abs(glyphHeight % 2) <= 0.01, "check height must be even to stay pixel-centered");
         }
 
         [Fact]
