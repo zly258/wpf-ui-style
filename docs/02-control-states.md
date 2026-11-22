@@ -215,7 +215,7 @@ WPF 会按声明顺序应用 `Trigger`，后声明的覆盖前面的。不要靠
 - **选中页签与内容区连成一体**：选中时去掉下边框、铺 `Brush.Surface` 盖住标签栏基线；内容区本身是 `1px Border.Tab + Surface` 的方框。禁止再用「下划线指示器」表达选中。
 - 悬停用 `Control.Hover` 底 + `Accent` 描边；禁用统一 `Control.Disabled + Text.Disabled + Border`。
 - 标签栏下方有一条贯穿的 1px `Brush.Border.Tab` 基线；选中标签的底条压在这条基线上。
-- 标签页仅用于局部切换（分组设置、属性分类、画廊演示）；整窗多任务导航仍按 R12 拆分窗口。
+- 标签页可用于分组设置、属性分类或固定/弹性窗口的多页签切换；在 `SizeToContent="Height"` 窗口中使用时需按 R12 固定 `Height`，防止切换时窗口高度跳变。相邻页签间留 `2px` 间隙避免边框重叠。
 
 ---
 

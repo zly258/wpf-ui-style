@@ -147,7 +147,11 @@
 
     <!-- 开关样式：轨道 + 圆点 -->
     <Style x:Key="ToggleSwitch" TargetType="{x:Type ToggleButton}">
+        <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
+        <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
+        <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
         <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="Template">
             <Setter.Value>
@@ -157,7 +161,7 @@
                                 Width="40" Height="20"
                                 CornerRadius="10"
                                 Background="{StaticResource Brush.SurfaceAlt}"
-                                BorderBrush="{StaticResource Brush.Border}"
+                                BorderBrush="{StaticResource Brush.Border.Control}"
                                 BorderThickness="1"
                                 VerticalAlignment="Center">
                             <Ellipse x:Name="Knob"
@@ -171,14 +175,29 @@
                                           TextElement.Foreground="{TemplateBinding Foreground}" />
                     </StackPanel>
                     <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Track" Property="BorderBrush" Value="{StaticResource Brush.Accent}" />
+                        </Trigger>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter TargetName="Track" Property="BorderBrush" Value="{StaticResource Brush.Focus}" />
+                        </Trigger>
                         <Trigger Property="IsChecked" Value="True">
                             <Setter TargetName="Track" Property="Background" Value="{StaticResource Brush.Accent}" />
                             <Setter TargetName="Track" Property="BorderBrush" Value="{StaticResource Brush.Accent}" />
                             <Setter TargetName="Knob" Property="Fill" Value="{StaticResource Brush.OnAccent}" />
                             <Setter TargetName="Knob" Property="Margin" Value="22,0,0,0" />
                         </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsChecked" Value="True" />
+                                <Condition Property="IsMouseOver" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Track" Property="Background" Value="{StaticResource Brush.Accent.Hover}" />
+                            <Setter TargetName="Track" Property="BorderBrush" Value="{StaticResource Brush.Accent.Hover}" />
+                        </MultiTrigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="Track" Property="Background" Value="{StaticResource Brush.Control.Disabled}" />
+                            <Setter TargetName="Track" Property="BorderBrush" Value="{StaticResource Brush.Border}" />
                             <Setter TargetName="Knob" Property="Fill" Value="{StaticResource Brush.Text.Disabled}" />
                             <Setter Property="Foreground" Value="{StaticResource Brush.Text.Disabled}" />
                             <Setter Property="Cursor" Value="Arrow" />
@@ -247,26 +266,40 @@
         </Setter>
     </Style>
 
+    <Style x:Key="Slider.DecreaseButton.Vertical" TargetType="{x:Type RepeatButton}">
+        <Setter Property="IsTabStop" Value="False" />
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RepeatButton}">
+                    <Border Background="{StaticResource Brush.Accent}" Width="4" CornerRadius="2" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style x:Key="Slider.Base" TargetType="{x:Type Slider}">
         <Setter Property="Height" Value="{DynamicResource Layout.ControlHeight}" />
         <Setter Property="Minimum" Value="0" />
         <Setter Property="Maximum" Value="100" />
-        <Setter Property="IsSnapToTickEnabled" Value="True" />
-        <Setter Property="TickFrequency" Value="1" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Slider}">
-                    <Grid VerticalAlignment="Center" SnapsToDevicePixels="True">
-                        <Border Height="4"
+                    <Grid x:Name="RootGrid" VerticalAlignment="Center" SnapsToDevicePixels="True">
+                        <Border x:Name="TrackBorder"
+                                Height="4"
                                 Background="{StaticResource Brush.SurfaceAlt}"
                                 BorderBrush="{StaticResource Brush.Border}"
                                 BorderThickness="1"
                                 CornerRadius="2" />
                         <Track x:Name="PART_Track">
                             <Track.DecreaseRepeatButton>
-                                <RepeatButton Command="{x:Static Slider.DecreaseLarge}"
+                                <RepeatButton x:Name="DecreaseBtn"
+                                              Command="{x:Static Slider.DecreaseLarge}"
                                               Style="{StaticResource Slider.DecreaseButton}" />
                             </Track.DecreaseRepeatButton>
                             <Track.Thumb>
@@ -278,9 +311,26 @@
                             </Track.IncreaseRepeatButton>
                         </Track>
                     </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Orientation" Value="Vertical">
+                            <Setter TargetName="RootGrid" Property="VerticalAlignment" Value="Stretch" />
+                            <Setter TargetName="RootGrid" Property="HorizontalAlignment" Value="Center" />
+                            <Setter TargetName="TrackBorder" Property="Height" Value="Auto" />
+                            <Setter TargetName="TrackBorder" Property="Width" Value="4" />
+                            <Setter TargetName="DecreaseBtn" Property="Style" Value="{StaticResource Slider.DecreaseButton.Vertical}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <Trigger Property="Orientation" Value="Vertical">
+                <Setter Property="Height" Value="Auto" />
+                <Setter Property="Width" Value="{DynamicResource Layout.ControlHeight}" />
+                <Setter Property="VerticalAlignment" Value="Stretch" />
+                <Setter Property="HorizontalAlignment" Value="Center" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <Style TargetType="{x:Type Slider}" BasedOn="{StaticResource Slider.Base}" />
@@ -343,6 +393,106 @@
            2. 系统日历图标是蓝色位图外观，与主题图标体系冲突。
          弹层仍是 DatePickerCalendar（日历面板），外观通过 Calendar 隐式样式统一底色与文字色。
          ============================================================ -->
+
+    <!-- 日历天数格与年月按钮主题样式：消除 WPF 系统默认的 #FF0078D7 亮蓝高亮
+         必须定义在 DatePicker.Template 之前，否则 StaticResource 向前查找失败。 -->
+    <Style x:Key="Calendar.DayButtonStyle" TargetType="{x:Type CalendarDayButton}">
+        <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
+        <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
+        <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="MinWidth" Value="28" />
+        <Setter Property="MinHeight" Value="26" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type CalendarDayButton}">
+                    <Border x:Name="Bd"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="Transparent"
+                            BorderThickness="1"
+                            CornerRadius="{StaticResource Radius.Small}"
+                            Margin="1"
+                            SnapsToDevicePixels="True">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          TextElement.Foreground="{TemplateBinding Foreground}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsInactive" Value="True">
+                            <Setter Property="Foreground" Value="{StaticResource Brush.Text.Disabled}" />
+                        </Trigger>
+                        <Trigger Property="IsToday" Value="True">
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Accent}" />
+                            <Setter Property="FontWeight" Value="SemiBold" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Control.Hover}" />
+                            <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Accent}" />
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Accent}" />
+                            <Setter Property="Foreground" Value="{StaticResource Brush.OnAccent}" />
+                            <Setter Property="FontWeight" Value="SemiBold" />
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsSelected" Value="True" />
+                                <Condition Property="IsMouseOver" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Accent.Hover}" />
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Accent.Hover}" />
+                            <Setter Property="Foreground" Value="{StaticResource Brush.OnAccent}" />
+                        </MultiTrigger>
+                        <Trigger Property="IsBlackedOut" Value="True">
+                            <Setter Property="Foreground" Value="{StaticResource Brush.Text.Disabled}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="Calendar.ButtonStyle" TargetType="{x:Type CalendarButton}">
+        <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
+        <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
+        <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="MinWidth" Value="42" />
+        <Setter Property="MinHeight" Value="36" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type CalendarButton}">
+                    <Border x:Name="Bd"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="{StaticResource Radius.Small}"
+                            Margin="2"
+                            SnapsToDevicePixels="True">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          TextElement.Foreground="{TemplateBinding Foreground}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Control.Hover}" />
+                            <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
+                        </Trigger>
+                        <Trigger Property="HasSelectedDays" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Selection}" />
+                            <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
+                            <Setter Property="FontWeight" Value="SemiBold" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
     <!-- 日期输入区：与主题输入框同源，但去掉边框，右侧给日历按钮留 26px -->
     <Style x:Key="DatePickerTextBox.Base" TargetType="{x:Type DatePickerTextBox}"
@@ -438,14 +588,25 @@
                           Foreground="{StaticResource Brush.Text.Primary}"
                           BorderBrush="{StaticResource Brush.Border}"
                           FontFamily="{StaticResource Font.Ui}"
-                          FontSize="{StaticResource FontSize.Body}" />
+                          FontSize="{StaticResource FontSize.Body}"
+                          CalendarDayButtonStyle="{StaticResource Calendar.DayButtonStyle}"
+                          CalendarButtonStyle="{StaticResource Calendar.ButtonStyle}" />
             </Popup>
         </Grid>
         <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="PART_Root" Property="BorderBrush" Value="{StaticResource Brush.Accent}" />
+            </Trigger>
+            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                <Setter TargetName="PART_Root" Property="BorderBrush" Value="{StaticResource Brush.Focus}" />
+            </Trigger>
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Foreground" Value="{StaticResource Brush.Text.Disabled}" />
                 <Setter TargetName="PART_Root" Property="Background"
                         Value="{StaticResource Brush.Control.Disabled}" />
+                <Setter TargetName="PART_Root" Property="BorderBrush"
+                        Value="{StaticResource Brush.Border}" />
+                <Setter Property="Cursor" Value="Arrow" />
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
@@ -455,11 +616,12 @@
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
         <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
         <Setter Property="Background" Value="{StaticResource Brush.Surface}" />
-        <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />
+        <Setter Property="BorderBrush" Value="{StaticResource Brush.Border.Control}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Height" Value="{DynamicResource Layout.ControlHeight}" />
         <Setter Property="Padding" Value="0" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="Cursor" Value="Hand" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="Template" Value="{StaticResource DatePicker.Template}" />
@@ -485,6 +647,8 @@
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
         <Setter Property="MinWidth" Value="240" />
+        <Setter Property="CalendarDayButtonStyle" Value="{StaticResource Calendar.DayButtonStyle}" />
+        <Setter Property="CalendarButtonStyle" Value="{StaticResource Calendar.ButtonStyle}" />
     </Style>
 
 
@@ -519,117 +683,6 @@
         <Setter Property="Margin" Value="4,2" />
     </Style>
 
-    <!-- ============================================================
-         Menu / MenuItem（完整模板，避免系统色）
-         ============================================================ -->
-    <Style TargetType="{x:Type Menu}">
-        <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
-        <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
-        <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
-        <Setter Property="Background" Value="{StaticResource Brush.Surface}" />
-        <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />
-        <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Padding" Value="2" />
-        <Setter Property="SnapsToDevicePixels" Value="True" />
-    </Style>
-
-    <!-- MenuItem：一套模板覆盖 TopLevelHeader / SubmenuHeader / SubmenuItem 三种角色。
-         下拉弹层用浅色 Surface 底，避免落到系统默认配色。 -->
-    <Style x:Key="MenuItem.Base" TargetType="{x:Type MenuItem}">
-        <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
-        <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
-        <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="Padding" Value="{DynamicResource Layout.MenuItemPadding}" />
-        <Setter Property="Cursor" Value="Hand" />
-        <Setter Property="SnapsToDevicePixels" Value="True" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type MenuItem}">
-                    <Border x:Name="Bd"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            SnapsToDevicePixels="True">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" MinWidth="18" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-
-                            <Path x:Name="Check"
-                                  Grid.Column="0"
-                                  Data="{StaticResource Icon.Geo.Check}"
-                                  Style="{StaticResource Icon.Small}"
-                                  Margin="4,0,6,0"
-                                  Visibility="Collapsed" />
-
-                            <ContentPresenter x:Name="HeaderHost"
-                                              Grid.Column="1"
-                                              Margin="{TemplateBinding Padding}"
-                                              ContentSource="Header"
-                                              RecognizesAccessKey="True"
-                                              VerticalAlignment="Center"
-                                              TextElement.Foreground="{TemplateBinding Foreground}" />
-
-                            <TextBlock x:Name="Gesture"
-                                       Grid.Column="2"
-                                       Text="{TemplateBinding InputGestureText}"
-                                       Margin="16,0,12,0"
-                                       Foreground="{TemplateBinding Foreground}"
-                                       VerticalAlignment="Center" />
-
-                            <Popup x:Name="PART_Popup"
-                                   AllowsTransparency="True"
-                                   Focusable="False"
-                                   IsOpen="{Binding IsSubmenuOpen, RelativeSource={RelativeSource TemplatedParent}}"
-                                   Placement="Bottom"
-                                   PopupAnimation="Fade">
-                                <Border Background="{StaticResource Brush.Surface}"
-                                        BorderBrush="{StaticResource Brush.Border.Strong}"
-                                        BorderThickness="1"
-                                        CornerRadius="{StaticResource Radius.Card}"
-                                        Padding="4"
-                                        SnapsToDevicePixels="True">
-                                    <StackPanel IsItemsHost="True"
-                                                KeyboardNavigation.DirectionalNavigation="Cycle" />
-                                </Border>
-                            </Popup>
-                        </Grid>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsHighlighted" Value="True">
-                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Control.Hover}" />
-                            <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
-                        </Trigger>
-                        <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="Check" Property="Visibility" Value="Visible" />
-                        </Trigger>
-                        <!-- 顶层菜单向下弹出；子菜单向右弹出 -->
-                        <Trigger Property="Role" Value="TopLevelHeader">
-                            <Setter TargetName="PART_Popup" Property="Placement" Value="Bottom" />
-                        </Trigger>
-                        <Trigger Property="Role" Value="SubmenuHeader">
-                            <Setter TargetName="PART_Popup" Property="Placement" Value="Right" />
-                        </Trigger>
-                        <Trigger Property="Role" Value="TopLevelItem">
-                            <Setter TargetName="PART_Popup" Property="IsOpen" Value="False" />
-                        </Trigger>
-                        <Trigger Property="Role" Value="SubmenuItem">
-                            <Setter TargetName="PART_Popup" Property="IsOpen" Value="False" />
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Foreground" Value="{StaticResource Brush.Text.Disabled}" />
-                            <Setter Property="Cursor" Value="Arrow" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource MenuItem.Base}" />
+    <!-- Menu / MenuItem 样式统一收敛在 Controls.xaml，避免两处定义互相覆盖产生冲突。 -->
 
 </ResourceDictionary>

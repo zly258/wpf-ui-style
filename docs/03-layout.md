@@ -658,22 +658,21 @@ WPF 界面必须严格区分两类窗口形态，**严禁对所有界面一刀�
 | 表格列写死宽度 | 长值显示不全 | `Width="*"` + `MinWidth` + `ToolTip` |
 | 省略号没有 `ToolTip` | 用户永远看不到全文 | 补 `ToolTip` |
 
-### 14.6 多 tab 与窗口高度（Tab 与窗口高度跳变）
+### 14.6 TabControl 与窗口高度防跳变（R12）
 
-**一个窗口只做一件事**：不要用一个 `TabControl` 在窗口内做多 tab 导航
-（“日志 / 参数 / 关于”这类并排任务）。并排任务请拆成多个窗口，
-或改用 `GroupBox` / `Expander` 分组、主从（列表 + 详情）布局。
+可以在设置窗口、工作台、属性分组中正常使用 `TabControl` 做多页签切换，但必须防止切换 Tab 时窗口高度上下跳变：
 
-若确实需要 `TabControl`（同一区域的分视图），**必须固定它的高度**：
+- **固定高度 / 弹性布局窗口**：把 `TabControl` 放在 `Grid` 的 `Height="*"` 行中（内容区多时由内部 `ScrollViewer` 滚动），窗口大小保持稳定。
+- **`SizeToContent="Height"` 自适应弹窗**：若包含 `TabControl`，**必须显式指定固定 `Height`**，并在内容过多的页签内部使用 `ScrollViewer`：
 
 ```xml
-<!-- Wrong：切换 tab 时窗口高度跳变 -->
+<!-- Wrong：SizeToContent="Height" 窗口中 TabControl 无固定高度，切换 tab 时窗口跳变 -->
 <TabControl>
     <TabItem Header="处理日志">…</TabItem>
     <TabItem Header="转换参数">…</TabItem>
 </TabControl>
 
-<!-- Correct：高度固定，内容多时在 tab 内部滚动 -->
+<!-- Correct：高度固定（或放在固定高度窗口的 * 行中），内容多时在 tab 内部滚动 -->
 <TabControl Height="140">
     <TabItem Header="处理日志">
         <ScrollViewer VerticalScrollBarVisibility="Auto">…</ScrollViewer>
@@ -684,11 +683,10 @@ WPF 界面必须严格区分两类窗口形态，**严禁对所有界面一刀�
 
 | 症状 | 原因 | 正确做法 |
 |---|---|---|
-| 切到内容少的 tab 时窗口缩矮，切回又拉高 | `SizeToContent="Height"` 的窗口按内容自然高度定高，`TabControl` 高度随选中 tab 变化 | `TabControl` 写死 `Height`，滚动放在 tab 内部 |
-| 各 tab 内容高度差异大，底部按钮栏位置漂移 | tab 内容直接决定窗口高度 | 固定 tab 高度；差异大的 tab 内容自己滚动 |
+| 切到内容少的 tab 时窗口缩矮，切回又拉高 | `SizeToContent="Height"` 的窗口按内容自然高度定高，`TabControl` 高度随选中 tab 变化 | `TabControl` 指定固定 `Height`（或改用固定高度窗口的 `*` 行），滚动放在 tab 内部 |
+| 各 tab 内容高度差异大，底部按钮栏位置漂移 | tab 内容直接决定窗口高度 | 固定 tab 高度或放入 `*` 行；差异大的 tab 内容自己滚动 |
 
-`LayoutCheck` 会报 ERROR：窗口使用 `SizeToContent="Height"` 时，
-`TabControl` 没有固定 `Height`（固定高度窗口里报 WARN）。
+`LayoutCheck` 会检查：窗口使用 `SizeToContent="Height"` 且 `TabControl` 没有固定 `Height` 时报 ERROR；在固定高度窗口的 `*` 行中使用时完全合规，不报警告。
 
 ### 14.7 自查清单
 
@@ -697,11 +695,10 @@ WPF 界面必须严格区分两类窗口形态，**严禁对所有界面一刀�
 1. 标签列是 `Auto` + `MinWidth`，没有固定像素列宽；
 2. 输入列是 `*` + `MinWidth`，输入框没有写死 `Width`；
 3. 所有省略号都有 `ToolTip`；
-4. 窗口没有写死 `Height`，内容区有 `ScrollViewer`；
+4. 纯表单窗口用 `SizeToContent="Height"`，视图/工作台窗口使用固定初始宽高配合 `*` 行和 `ScrollViewer`；
 5. 底部按钮栏独占一行，状态文案在它上面；
 6. 没有负 `Margin`，没有 `Canvas` 绝对定位；
-7. 窗口内没有多 tab 导航；若有 `TabControl`，它的高度是固定的，
-   切换 tab 时窗口高度不变；
+7. `SizeToContent="Height"` 窗口中的 `TabControl` 固定了 `Height`，弹性窗口中的 `TabControl` 放在 `*` 行，切换 tab 时窗口高度不变；
 8. 在 100% / 150% DPI 和 `MinWidth` 下目视检查过。
 
 ---

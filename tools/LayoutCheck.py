@@ -293,8 +293,8 @@ def check_window_height(path: Path, text: str) -> None:
             continue
         if re.search(r'SizeToContent\s*=\s*"Height"', attrs):
             continue
-        # Viewport/workspace windows handle scrolling within '*' rows
-        if any(ctrl in text for ctrl in ("DataGrid", "ListView", "TreeView", "ScrollViewer", "GridSplitter")):
+        # Viewport/workspace windows and tabbed views handle sizing within '*' rows
+        if any(ctrl in text for ctrl in ("DataGrid", "ListView", "TreeView", "ScrollViewer", "GridSplitter", "TabControl")):
             continue
         report(
             "WARN",
@@ -399,14 +399,22 @@ def check_star_row_without_scroll(path: Path, text: str) -> None:
 
 
 def check_tabcontrol_height(path: Path, text: str) -> None:
-    """A TabControl without a fixed height resizes the window when tabs are switched."""
+    """A TabControl in a SizeToContent="Height" window without a fixed Height resizes the window when tabs switch.
+
+    In fixed-height windows or '*' Grid rows, TabControl stretches cleanly and should not be flagged.
+    """
     matches = [m for m in ELEMENT_RE.finditer(text) if not m.group(1) and m.group(2) == "TabControl"]
     if not matches:
         return
 
-    # A window that sizes itself to its content turns any tab height change
-    # into a window height change.
+    # Only SizeToContent="Height" windows turn tab content height changes into window jumps.
     size_to_content = bool(re.search(r'<Window\b[^>]*SizeToContent\s*=\s*"Height"', text))
+    if not size_to_content:
+        # In non-SizeToContent files, check whether TabControl is placed in a '*' Grid row
+        star_rows_exist = any(_star_row_indexes(text[s:e]) for s, e in iter_element_blocks(text, "Grid"))
+        if star_rows_exist:
+            return
+
     level = "ERROR" if size_to_content else "WARN"
 
     for match in matches:
@@ -417,9 +425,8 @@ def check_tabcontrol_height(path: Path, text: str) -> None:
             level,
             path,
             line_number(text, match.start()),
-            "TabControl has no fixed Height; switching to a tab with less content "
-            "changes the content height and the window jumps. Give the TabControl a "
-            'fixed Height (e.g. 140) or a fixed-height content area',
+            "TabControl has no fixed Height in a content-sized container; switching tabs "
+            "may cause the layout height to jump. Give the TabControl a fixed Height or place it in a '*' Grid row",
         )
 
 

@@ -1,6 +1,6 @@
 ---
 name: wpf-ui-style
-description: Apply and audit the WPF UI Skills style system (tokens, three-level density, control states, layout, contrast, automated checks). Use when creating or modifying WPF/XAML windows, styles, resource dictionaries, themes, buttons, inputs, lists, data grids, dialogs, tabs, or when auditing XAML layout, contrast, and truncation issues. 适用于：WPF 视觉与交互规范、紧凑/中等/宽松三档密度、默认 12px 正文 / 30px 控件高 / 28px 表格行高、防截断表单、无多Tab窗口高度跳变、前景背景状态契约、对比度与布局自动化检查脚本。
+description: Apply and audit the WPF UI Skills style system (tokens, three-level density, control states, layout, contrast, automated checks). Use when creating or modifying WPF/XAML windows, styles, resource dictionaries, themes, buttons, inputs, lists, data grids, dialogs, tabs, or when auditing XAML layout, contrast, and truncation issues. 适用于：WPF 视觉与交互规范、紧凑/中等/宽松三档密度、默认 12px 正文 / 30px 控件高 / 28px 表格行高、防截断表单、TabControl 防高度跳变、前景背景状态契约、对比度与布局自动化检查脚本。
 ---
 
 # WPF UI Skills
@@ -146,9 +146,9 @@ description: Apply and audit the WPF UI Skills style system (tokens, three-level
 5. **状态文案与按钮分行**：底部按钮栏固定在独立的底行；路径、处理状态等可能很长的状态文本必须单独占按钮栏上方的一行，严禁与按钮抢同行。
 6. **严禁遮挡写法**：严禁负 `Margin`（如 `Margin="-4,0,0,0"`），严禁使用 `Canvas` 绝对坐标排列表单。
 
-### R12. 窗口内禁止多 Tab 导航；Tab 切换不得让窗口高度跳变
-- 窗口内禁止使用 `TabControl` 做多任务页面导航（并排任务应拆分独立窗口或使用主从/折叠面板）。
-- **画廊/展示类例外**：演示控件的窗口若包含 `TabControl`，**必须显式指定固定 `Height`**（并在 Tab 内容区内部滚动），严禁在 `SizeToContent="Height"` 窗口中使用无固定高度的 `TabControl`，防止切换 Tab 时窗口产生上下跳变。
+### R12. 合理使用 TabControl，严禁切换 Tab 导致窗口高度跳变
+- **固定高度 / 弹性窗口**：可以正常使用 `TabControl` 进行分组设置、属性分类或多页签切换。将 `TabControl` 放在 `Grid` 的 `Height="*"` 行中（或在 Tab 内容区内部使用 `ScrollViewer`），窗口大小保持稳定，不随页签内容增减而跳变。
+- **`SizeToContent="Height"` 弹窗**：若在按内容自适应高度的窗口中使用 `TabControl`，**必须显式指定固定 `Height`**（并在 Tab 内容区内部滚动），严禁在 `SizeToContent="Height"` 窗口中使用无固定高度的 `TabControl`，防止切换 Tab 时窗口产生上下跳变。
 
 ### R13. 交互态必须验证完整
 改动控件或表格后必须验证：
@@ -173,8 +173,8 @@ description: Apply and audit the WPF UI Skills style system (tokens, three-level
 
 ### R16. 输入区占满、标签页可识别 (Fill & Visible Tabs)
 - **输入区横向占满**：`TextBox` / `PasswordBox` / `ComboBox` 的文本宿主必须横向 `Stretch`。严禁在业务 XAML 里把 `HorizontalContentAlignment` 改成 `Left`，否则右侧会是无法点击的空白，长值也更容易被截。
-- **标签页必须是「可见的方框」**：默认 `TabItem` 用原生方角样式——未选中也有 1px `Brush.Border.Tab` 边框 + `SurfaceAlt` 底；选中页签铺 `Brush.Surface`、去掉下边框，与内容区连成一体。**禁止圆角、禁止底部强调条/下划线指示器**；浅色卡片上只画一条线无法看出这是可切换的页签。方框比按钮/输入框的 `Border.Control` 浅一档（`Border.Tab` 对 Surface 2.52:1），因为它只做分组轮廓、页签靠文字识别。
-- **标签页仍是局部切换**：R12 的「窗口内禁止多 Tab 导航」继续生效；本样式用于分组设置、属性分类、画廊演示等局部区域。
+- **标签页使用原生方角方框**：默认 `TabItem` 用原生方角样式——未选中也有 1px `Brush.Border.Tab` 边框 + `SurfaceAlt` 底，相邻页签留 2px 间隙避免双线重叠；选中页签铺 `Brush.Surface`、去掉下边框，与内容区连成一体。**禁止圆角、禁止底部强调条/下划线指示器**。
+- **TabControl 防高度跳变**：按 R12 要求，固定高度窗口中放入 `*` 行；`SizeToContent="Height"` 窗口中必须固定 `Height`。
 - **按钮边界可见**：默认按钮是「白底 + `Brush.Border.Control` 描边」。严禁把按钮描边改成 `Brush.Border` 或更浅的颜色，也不要用 `Opacity` 弱化。
 
 ### R17. 表单对齐与窄面板 (Form Alignment & Narrow Panels)
@@ -236,6 +236,6 @@ python tools/UiTest.py --xaml preview/Views/SafeFormView.xaml --shot .tmp-shots/
 - [ ] 标签列 `Auto` + `MinWidth`，输入列 `*` + `MinWidth`，无硬编码输入框宽度。
 - [ ] 窗口高度由 `SizeToContent="Height"` 弹性驱动，内容区带单一滚动保护。
 - [ ] 底部操作栏独占一行，长状态文本独占操作栏上方一行。
-- [ ] 窗口无未固定高度的多 Tab 切换。
+- [ ] 窗口无未固定高度且无 `*` 行约束的 `TabControl`（`SizeToContent="Height"` 窗口中的 `TabControl` 必须固定 `Height`）。
 - [ ] 禁用态无 `Opacity`，改背景必配前景，浅底深字无白字压浅蓝。
 - [ ] `LayoutCheck.py` 0 错误；`ContrastCheck.py` 全部通过；契约测试全部通过。

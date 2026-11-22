@@ -50,6 +50,8 @@
     <ControlTemplate x:Key="ListBoxItem.Template" TargetType="{x:Type ListBoxItem}">
         <Border x:Name="Bd"
                 Background="{TemplateBinding Background}"
+                BorderBrush="Transparent"
+                BorderThickness="1"
                 Padding="{TemplateBinding Padding}"
                 SnapsToDevicePixels="True">
             <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
@@ -75,7 +77,6 @@
             </MultiTrigger>
             <Trigger Property="IsKeyboardFocused" Value="True">
                 <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Focus}" />
-                <Setter TargetName="Bd" Property="BorderThickness" Value="1" />
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Foreground" Value="{StaticResource Brush.Text.Disabled}" />
@@ -154,7 +155,7 @@
 
     <Style TargetType="{x:Type DataGridRow}">
         <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
-        <Setter Property="Background" Value="{StaticResource Brush.Surface}" />
+        <!-- 默认不硬编码 Background，保留 DataGrid 的 RowBackground / AlternatingRowBackground 斑马纹。 -->
         <!-- 默认不锁死 MinHeight，由 DataGrid.RowHeight 决定行高，方便紧凑表格缩减行高 -->
         <Setter Property="MinHeight" Value="0" />
         <Style.Triggers>
@@ -201,6 +202,7 @@
         <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <!-- 左内边距必须与 DataGridColumnHeader 的 8px 严格一致，
              保证单元格文字与表头文字完全垂直对齐。 -->
         <Setter Property="Padding" Value="8,0" />
@@ -244,20 +246,53 @@
 
     <ControlTemplate x:Key="DataGridColumnHeader.Template" TargetType="{x:Type DataGridColumnHeader}">
         <Grid SnapsToDevicePixels="True">
-            <Border Background="{TemplateBinding Background}"
+            <Border x:Name="Bd"
+                    Background="{TemplateBinding Background}"
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}"
                     Padding="{TemplateBinding Padding}">
-                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                  RecognizesAccessKey="True"
-                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <ContentPresenter Grid.Column="0"
+                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                      RecognizesAccessKey="True"
+                                      SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    <Path x:Name="SortArrow"
+                          Grid.Column="1"
+                          Width="8" Height="5"
+                          Margin="6,0,0,0"
+                          VerticalAlignment="Center"
+                          Data="M 0,4 L 4,0 L 8,4"
+                          Stroke="{StaticResource Brush.Accent}"
+                          StrokeThickness="1.5"
+                          StrokeStartLineCap="Round"
+                          StrokeEndLineCap="Round"
+                          StrokeLineJoin="Round"
+                          Visibility="Collapsed" />
+                </Grid>
             </Border>
             <Thumb x:Name="PART_LeftHeaderGripper" HorizontalAlignment="Left"
                    Style="{StaticResource DataGridColumnHeader.Gripper}" />
             <Thumb x:Name="PART_RightHeaderGripper" HorizontalAlignment="Right"
                    Style="{StaticResource DataGridColumnHeader.Gripper}" />
         </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Control.Hover}" />
+            </Trigger>
+            <Trigger Property="SortDirection" Value="Ascending">
+                <Setter TargetName="SortArrow" Property="Visibility" Value="Visible" />
+                <Setter TargetName="SortArrow" Property="Data" Value="M 0,4 L 4,0 L 8,4" />
+            </Trigger>
+            <Trigger Property="SortDirection" Value="Descending">
+                <Setter TargetName="SortArrow" Property="Visibility" Value="Visible" />
+                <Setter TargetName="SortArrow" Property="Data" Value="M 0,0 L 4,4 L 8,0" />
+            </Trigger>
+        </ControlTemplate.Triggers>
     </ControlTemplate>
 
     <Style TargetType="{x:Type DataGridColumnHeader}">
@@ -466,6 +501,9 @@
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter TargetName="Chevron" Property="Stroke" Value="{StaticResource Brush.Text.Primary}" />
             </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="Chevron" Property="Stroke" Value="{StaticResource Brush.Text.Disabled}" />
+            </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
@@ -489,6 +527,8 @@
                     <StackPanel>
                         <Border x:Name="Bd"
                                 Background="{TemplateBinding Background}"
+                                BorderBrush="Transparent"
+                                BorderThickness="1"
                                 Padding="{TemplateBinding Padding}"
                                 SnapsToDevicePixels="True">
                             <Grid>
@@ -548,6 +588,9 @@
                             <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Selection.Hover}" />
                             <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
                         </MultiTrigger>
+                        <Trigger Property="IsKeyboardFocused" Value="True">
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Focus}" />
+                        </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter Property="Foreground" Value="{StaticResource Brush.Text.Disabled}" />
                         </Trigger>

@@ -63,7 +63,7 @@
 
     <sys:Double x:Key="Layout.TagHeight">26</sys:Double>
     <sys:Double x:Key="Layout.IconButton.Micro">28</sys:Double>
-    <sys:Double x:Key="Layout.IconButton.Small">32</sys:Double>
-    <sys:Double x:Key="Layout.IconButton.Large">36</sys:Double>
+    <sys:Double x:Key="Layout.IconButton.Small">34</sys:Double>
+    <sys:Double x:Key="Layout.IconButton.Large">40</sys:Double>
 
 </ResourceDictionary>
