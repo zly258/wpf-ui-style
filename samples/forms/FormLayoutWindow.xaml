@@ -1,0 +1,98 @@
+<!--
+    示例窗口：表单对齐与基线布局规范骨架。
+    演示点：
+      1. 标签与控件共享同一条左基线；
+      2. 宽面板（>= 520 DIP）：采用两列 Grid（标签 Auto+MinWidth，输入 *+MinWidth），列宽只声明一次；
+      3. 窄面板/侧边栏（< 520 DIP）：采用单列垂直堆叠，标签在上、控件在下，天然免疫宽度截断。
+-->
+<Window x:Class="YourApp.FormLayoutWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="表单对齐与响应式基线示例"
+        Width="1160"
+        Height="720"
+        MinWidth="700"
+        MinHeight="480"
+        WindowStartupLocation="CenterScreen">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Margin="{StaticResource Layout.WindowPadding}">
+
+            <TextBlock Text="表单对齐与空间密度规范" Style="{StaticResource Text.Title}" FontWeight="SemiBold" />
+            <TextBlock Text="标签与控件必须共享清晰的左对齐基线：宽面板推荐两列，窄面板强制改单列堆叠。"
+                       Style="{StaticResource Text.Caption}" Margin="0,3,0,14" />
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="16" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- 宽面板：标签在左、控件在右 -->
+                <Border Grid.Column="0" Style="{StaticResource Card}">
+                    <StackPanel>
+                        <TextBlock Text="宽面板布局（宽度 ≥ 520 DIP）" Style="{StaticResource Text.Section}" FontWeight="SemiBold" />
+                        <TextBlock Text="所有行共用一个 Grid，列宽只定义一次。标签居左、输入框自适应延展。"
+                                   Style="{StaticResource Text.Caption}" Margin="0,4,0,12" />
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" MinWidth="{StaticResource Layout.FormLabelMinWidth}" />
+                                <ColumnDefinition Width="*" MinWidth="{StaticResource Layout.InputMinWidth}" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="工程服务端口" Style="{StaticResource Text.Label}" VerticalAlignment="Center" />
+                            <TextBox Grid.Row="0" Grid.Column="1" Margin="0,3" Text="http://127.0.0.1:8080/v1" />
+
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="模型算子名称" Style="{StaticResource Text.Label}" VerticalAlignment="Center" />
+                            <TextBox Grid.Row="1" Grid.Column="1" Margin="0,3" Text="cad-mesh-engine-v2" />
+
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="处理超时阈值" Style="{StaticResource Text.Label}" VerticalAlignment="Center" />
+                            <TextBox Grid.Row="2" Grid.Column="1" Margin="0,3" Text="300" />
+
+                            <TextBlock Grid.Row="3" Grid.Column="0" Text="输出目标格式" Style="{StaticResource Text.Label}" VerticalAlignment="Center" />
+                            <ComboBox Grid.Row="3" Grid.Column="1" Margin="0,3" SelectedIndex="0">
+                                <ComboBoxItem Content="标准工业中间格式 (*.stp/*.step)" />
+                                <ComboBoxItem Content="轻量化三角网格 (*.obj/*.stl)" />
+                            </ComboBox>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- 窄面板：标签在上、控件在下 -->
+                <Border Grid.Column="2" Style="{StaticResource Card}">
+                    <StackPanel>
+                        <TextBlock Text="窄面板 / 侧边停靠窗（宽度 &lt; 520 DIP）" Style="{StaticResource Text.Section}" FontWeight="SemiBold" />
+                        <TextBlock Text="垂直单列堆叠：标签在上、控件在下，两者共用左边框，彻底杜绝输入框被挤压裁切。"
+                                   Style="{StaticResource Text.Caption}" Margin="0,4,0,12" />
+
+                        <Border Width="320" HorizontalAlignment="Left" Background="{StaticResource Brush.SurfaceSunken}" Padding="12" CornerRadius="{StaticResource Radius.Control}">
+                            <StackPanel Style="{StaticResource FormStack}">
+                                <TextBlock Text="装配体唯一编码" Style="{StaticResource Text.FieldLabel}" />
+                                <TextBox Text="ASM-202611-X01" />
+
+                                <TextBlock Text="公差配合等级" Style="{StaticResource Text.FieldLabel}" Margin="0,8,0,2" />
+                                <ComboBox SelectedIndex="0">
+                                    <ComboBoxItem Content="IT7 级精细配合" />
+                                    <ComboBoxItem Content="IT8 级标准配合" />
+                                    <ComboBoxItem Content="IT9 级粗糙加工" />
+                                </ComboBox>
+
+                                <TextBlock Text="热处理与表面工艺说明" Style="{StaticResource Text.FieldLabel}" Margin="0,8,0,2" />
+                                <TextBox Height="60" TextWrapping="Wrap" AcceptsReturn="True" Text="调质硬度 HRC 28-32；表面黑色氧化发蓝防锈处理。" />
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+        </StackPanel>
+    </ScrollViewer>
+</Window>

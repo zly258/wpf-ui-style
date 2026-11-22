@@ -1,0 +1,179 @@
+<!--
+    示例窗口：基础控件全景展示骨架。
+    涵盖：
+      1. 按钮家族（主/次/文本/危险/小号/图标/开关 ToggleButton）；
+      2. 输入与选择控件（TextBox、PasswordBox、ComboBox、DatePicker、Calendar）；
+      3. 选择与滑块（CheckBox、RadioButton、Slider）；
+      4. 原生方角页签 TabControl（上/下/左/右 多方向排布支持）；
+      5. 容器与数据控件（GroupBox、Expander、ListBox、DataGrid）。
+-->
+<Window x:Class="YourApp.ControlsGalleryWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="WPF 核心基础控件全景矩阵"
+        Width="1180"
+        Height="940"
+        MinWidth="800"
+        MinHeight="600"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="{StaticResource Layout.WindowPadding}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- 页头 -->
+        <Border Grid.Row="0" BorderBrush="{StaticResource Brush.Border}" BorderThickness="0,0,0,1"
+                Padding="0,0,0,12" Margin="0,0,0,12">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <TextBlock Text="WPF 核心基础控件全景矩阵" Style="{StaticResource Text.Title}" FontWeight="SemiBold" />
+                    <TextBlock Text="每个控件均内置正常态、悬停态、选中态、聚焦态与禁用态；所有颜色尺寸均由设计令牌驱动。"
+                               Style="{StaticResource Text.Caption}" Margin="0,4,0,0" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Content="次按钮" Style="{StaticResource Button.Secondary}" Margin="0,0,8,0" />
+                    <Button Content="主操作" Style="{StaticResource Button.Primary}" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- 控件全景滚动区 -->
+        <ScrollViewer Grid.Row="1" Style="{StaticResource ScrollViewer.Base}"
+                      VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel>
+
+                <!-- 1. 按钮家族 -->
+                <GroupBox Header="1. 按钮家族（主 / 次 / 文本 / 危险 / 小号 / 图标）">
+                    <StackPanel>
+                        <WrapPanel Margin="0,0,0,10">
+                            <Button Content="次按钮 (默认)" Margin="0,0,8,8" />
+                            <Button Style="{StaticResource Button.Primary}" Content="主操作按钮" Margin="0,0,8,8" />
+                            <Button Style="{StaticResource Button.Text}" Content="文本纯按钮" Margin="0,0,8,8" />
+                            <Button Style="{StaticResource Button.Danger}" Content="危险操作按钮" Margin="0,0,8,8" />
+                            <Button Style="{StaticResource Button.Secondary.Small}" Content="小号次按钮" Margin="0,0,8,8" />
+                            <Button Style="{StaticResource Button.Primary.Small}" Content="小号主按钮" Margin="0,0,8,8" />
+                            <Button Style="{StaticResource Button.Text.Small}" Content="小号文本" Margin="0,0,8,8" />
+                            <Button Style="{StaticResource Button.Danger.Small}" Content="小号危险" Margin="0,0,8,8" />
+                            <Button Content="禁用态次按钮" IsEnabled="False" Margin="0,0,8,8" />
+                            <Button Style="{StaticResource Button.Primary}" Content="禁用态主按钮" IsEnabled="False" Margin="0,0,8,8" />
+                        </WrapPanel>
+                    </StackPanel>
+                </GroupBox>
+
+                <!-- 2. 输入与下拉 -->
+                <GroupBox Header="2. 输入与下拉控件（单行 / 多行 / 密码 / 下拉 / 日期选择）" Margin="0,12,0,0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" MinWidth="{StaticResource Layout.FormLabelMinWidth}" />
+                            <ColumnDefinition Width="*" MinWidth="{StaticResource Layout.InputMinWidth}" />
+                            <ColumnDefinition Width="{StaticResource Layout.ColumnGap}" />
+                            <ColumnDefinition Width="Auto" MinWidth="{StaticResource Layout.FormLabelMinWidth}" />
+                            <ColumnDefinition Width="*" MinWidth="{StaticResource Layout.InputMinWidth}" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="单行文本框" Style="{StaticResource Text.Label}" VerticalAlignment="Center" />
+                        <TextBox Grid.Row="0" Grid.Column="1" Margin="{StaticResource Layout.FormRowMargin}" Text="标准输入内容" />
+
+                        <TextBlock Grid.Row="0" Grid.Column="3" Text="安全密码框" Style="{StaticResource Text.Label}" VerticalAlignment="Center" />
+                        <PasswordBox Grid.Row="0" Grid.Column="4" Margin="{StaticResource Layout.FormRowMargin}" Password="SecurePassword123" />
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="下拉单选框" Style="{StaticResource Text.Label}" VerticalAlignment="Center" />
+                        <ComboBox Grid.Row="1" Grid.Column="1" Margin="{StaticResource Layout.FormRowMargin}" SelectedIndex="0">
+                            <ComboBoxItem Content="选项一：标准工艺规程" />
+                            <ComboBoxItem Content="选项二：加急特殊流程" />
+                            <ComboBoxItem Content="选项三：仅归档不投产" />
+                        </ComboBox>
+
+                        <TextBlock Grid.Row="1" Grid.Column="3" Text="工程日期选择" Style="{StaticResource Text.Label}" VerticalAlignment="Center" />
+                        <DatePicker Grid.Row="1" Grid.Column="4" Margin="{StaticResource Layout.FormRowMargin}" />
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="禁用态输入" Style="{StaticResource Text.Label}" VerticalAlignment="Center" />
+                        <TextBox Grid.Row="2" Grid.Column="1" Margin="{StaticResource Layout.FormRowMargin}" Text="已锁定不可编辑" IsReadOnly="True" />
+
+                        <TextBlock Grid.Row="2" Grid.Column="3" Text="禁用态下拉" Style="{StaticResource Text.Label}" VerticalAlignment="Center" />
+                        <ComboBox Grid.Row="2" Grid.Column="4" Margin="{StaticResource Layout.FormRowMargin}" SelectedIndex="0" IsEnabled="False">
+                            <ComboBoxItem Content="系统预设参数 (禁用)" />
+                        </ComboBox>
+                    </Grid>
+                </GroupBox>
+
+                <!-- 3. 选择与滑块 -->
+                <GroupBox Header="3. 选择、单选与滑块控件（复选 / 单选 / 滑块刻度）" Margin="0,12,0,0">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="{StaticResource Layout.ColumnGap}" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="复选框状态：" Style="{StaticResource Text.Caption}" Margin="0,0,0,6" />
+                            <WrapPanel>
+                                <CheckBox Content="已勾选" IsChecked="True" Margin="0,0,16,6" />
+                                <CheckBox Content="未勾选" IsChecked="False" Margin="0,0,16,6" />
+                                <CheckBox Content="部分选中" IsChecked="{x:Null}" Margin="0,0,16,6" />
+                                <CheckBox Content="禁用已勾选" IsChecked="True" IsEnabled="False" Margin="0,0,16,6" />
+                                <CheckBox Content="禁用未勾选" IsChecked="False" IsEnabled="False" Margin="0,0,16,6" />
+                            </WrapPanel>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="连续值滑块（带刻度）：" Style="{StaticResource Text.Caption}" Margin="0,0,0,6" />
+                            <Slider Minimum="0" Maximum="100" Value="45" TickFrequency="10" TickPlacement="BottomRight" IsSnapToTickEnabled="False" Margin="0,4,0,8" />
+                            <WrapPanel>
+                                <RadioButton Content="单选方案 A" GroupName="DemoPlan" IsChecked="True" Margin="0,0,16,0" />
+                                <RadioButton Content="单选方案 B" GroupName="DemoPlan" Margin="0,0,16,0" />
+                                <RadioButton Content="单选方案 C (禁用)" GroupName="DemoPlan" IsEnabled="False" />
+                            </WrapPanel>
+                        </StackPanel>
+                    </Grid>
+                </GroupBox>
+
+                <!-- 4. 原生方角页签系统 -->
+                <GroupBox Header="4. 标签页系统（原生方角页签、无跳变、支持多方向排布）" Margin="0,12,0,0">
+                    <TabControl Height="140">
+                        <TabItem Header="常规设置">
+                            <Grid Margin="12">
+                                <TextBlock Text="常规系统运行参数面板：选中标签与内容区无缝融为一体，彻底告别悬浮下划线与多余圆角。" Style="{StaticResource Text.Body}" />
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="几何网格算子">
+                            <Grid Margin="12">
+                                <TextBlock Text="网格参数划分与曲率自适应配置。" Style="{StaticResource Text.Body}" />
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="高级渲染选项">
+                            <Grid Margin="12">
+                                <TextBlock Text="光影抗锯齿与多重采样设置。" Style="{StaticResource Text.Body}" />
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="已锁定模块" IsEnabled="False">
+                            <Grid Margin="12">
+                                <TextBlock Text="当前许可证未授权该模块。" Style="{StaticResource Text.Body}" />
+                            </Grid>
+                        </TabItem>
+                    </TabControl>
+                </GroupBox>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- 页脚 -->
+        <Border Grid.Row="2" BorderBrush="{StaticResource Brush.Border}" BorderThickness="0,1,0,0" Padding="0,10,0,0" Margin="0,10,0,0">
+            <TextBlock Text="所有控件样式均已预设于 Theme/Controls.xaml，开箱即用。" Style="{StaticResource Text.Caption}" Foreground="{StaticResource Brush.Text.Secondary}" />
+        </Border>
+    </Grid>
+</Window>

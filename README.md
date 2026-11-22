@@ -18,6 +18,44 @@
 
 ---
 
+## 视觉效果与案例中心
+
+本规范提供开箱即用的**案例中心（Preview Case Center）**与标准参考工程骨架（`samples/`），所有案例均经受过高 DPI、复杂状态与自动化测试检验。
+
+### 1. 案例中心总览与导航
+> 侧边分类导航 + 规范摘要 + 实时密度热切换（紧凑 26px / 中等 30px / 宽松 34px）。
+
+![案例中心总览](docs/images/overview.png)
+
+### 2. 复杂可编辑数据表格与批量操作
+> 表头全选/部分选中与行勾选双向联动、单元格单次点击就地编辑/下拉、数值居右对齐、状态徽章、展开明细行、批量操作工具条（未勾选时按钮中性禁用）与底部分页统计。
+
+![可编辑数据表格](docs/images/editable-table.png)
+
+### 3. 三栏工程工作台与装配树
+> 左侧特征树与快速过滤、中间 3D 视图与特征参数表格（带 `GridSplitter` 弹性分割）、右侧属性检查器、底部系统状态栏。
+
+![工程工作台](docs/images/workbench.png)
+
+### 4. 工况监控与生产调度看板
+> 4 组 KPI 指标卡片矩阵（吞吐量、自动校验率、待干预数、处理耗时）、实时任务队列进度与异常质检告警流协同。
+
+![监控看板](docs/images/dashboard.png)
+
+### 5. 多步骤工程向导对话框
+> 流程步骤指示器、步骤状态机联动、单层内容面板切换（规避多 Tab 跳变隐患）、标准化上一步/下一步/完成操作栏。
+
+![分步向导](docs/images/wizard.png)
+
+### 6. 双栏差异比对与密集参数设置
+> 左右分栏独立滚动对照、120 DIP 固定高度只读日志流；三列紧凑网格布局、一屏呈现多项配置。
+
+| 双栏设计差异比对与审计 (`compare`) | 密集参数设置表单 (`settings`) |
+|:---:|:---:|
+| ![双栏比对](docs/images/compare.png) | ![密集设置](docs/images/settings.png) |
+
+---
+
 ## 0. 作为 Skill 使用
 
 整个 `wpf-styles` 目录本身就是一个即开即用的 Skill：
@@ -125,16 +163,25 @@ wpf-styles/
 ├─ references/
 │  ├─ cheatsheet.md                  ← 一页速查
 │  └─ xaml-snippets.md               ← 可复制 XAML 片段
-├─ samples/                          ← 按用途分类的可复制 XAML
-│  ├─ forms/
-│  │  ├─ SafeFormWindow.xaml         ← 安全表单骨架
-│  │  ├─ TabsSettingsWindow.xaml     ← 标签页 + 输入占满
-│  │  └─ StackedFormWindow.xaml      ← 窄面板单列表单
-│  ├─ tables/EditableTableWindow.xaml
-│  ├─ layouts/WorkbenchWindow.xaml
-│  ├─ dialogs/WizardWindow.xaml
-│  ├─ icons/IconGalleryWindow.xaml
-│  └─ README.md
+├─ samples/                          ← 标准工程参考 XAML 案例库
+│  ├─ controls/                      ← 基础控件库与矢量图标
+│  │  ├─ ControlsGalleryWindow.xaml  ← 全套基础控件交互矩阵
+│  │  └─ IconGalleryWindow.xaml      ← 矢量图标系统与尺寸着色契约
+│  ├─ forms/                         ← 各类工程表单规范骨架
+│  │  ├─ SafeFormWindow.xaml         ← 防截断安全表单
+│  │  ├─ FormLayoutWindow.xaml       ← 宽面板两列 / 窄面板单列基线对齐
+│  │  ├─ StackedFormWindow.xaml      ← 侧边栏单列垂直堆叠表单
+│  │  ├─ SettingsWindow.xaml         ← 密集三列网格参数表单
+│  │  └─ TabsSettingsWindow.xaml     ← 原生方角页签与高度防跳变
+│  ├─ tables/
+│  │  └─ EditableTableWindow.xaml    ← 复杂可编辑表格与批量操作条
+│  ├─ layouts/                       ← 复杂多栏工作区布局
+│  │  ├─ WorkbenchWindow.xaml        ← 三栏特征树/视口/检查器工作台
+│  │  ├─ CompareWindow.xaml          ← 双栏差异对照与固定日志流
+│  │  └─ DashboardWindow.xaml        ← KPI 指标卡片与实时任务看板
+│  ├─ dialogs/
+│  │  └─ WizardWindow.xaml           ← 多步骤向导与流程状态机
+│  └─ README.md                      ← 案例分类索引与设计检查清单
 ├─ preview/                          ← 可运行案例中心（侧边导航 + 10 个案例页 + 密度切换 + 截图）
 ├─ skills/
 │  └─ ribbon-icon-generator/         ← 配套独立技能：24x24 Ribbon 线性图标生成器

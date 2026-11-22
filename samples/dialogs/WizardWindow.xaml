@@ -101,7 +101,7 @@
 
                         <StackPanel Grid.Row="0" Margin="0,0,0,14">
                             <TextBlock Text="选择待批处理的工程图纸与模型文件" Style="{StaticResource Text.Section}" FontWeight="SemiBold" />
-                            <TextBlock Text="支持 Autodesk Inventor (.idw/.dwg/.iam/.ipt) 文件批量导入解析。" Style="{StaticResource Text.Caption}" Margin="0,4,0,0" />
+                            <TextBlock Text="支持通用工程图纸与三维装配体模型文件批量导入解析。" Style="{StaticResource Text.Caption}" Margin="0,4,0,0" />
                         </StackPanel>
 
                         <Grid Grid.Row="1">

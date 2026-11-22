@@ -107,7 +107,7 @@
 
                         <StackPanel Grid.Row="0" Margin="0,0,0,14">
                             <TextBlock Text="选择待批处理的工程图纸与模型文件" Style="{StaticResource Text.Section}" FontWeight="SemiBold" />
-                            <TextBlock Text="支持 Autodesk Inventor (.idw/.dwg/.iam/.ipt) 文件批量导入解析。"
+                            <TextBlock Text="支持通用工程图纸与三维装配体模型文件批量导入解析。"
                                        Style="{StaticResource Text.Caption}" Margin="0,4,0,0" />
                         </StackPanel>
 
@@ -220,7 +220,7 @@
                                         <TextBlock Grid.Row="1" Grid.Column="0" Text="格式转换目标" Style="{StaticResource Text.Label}" VerticalAlignment="Center" />
                                         <ComboBox Grid.Row="1" Grid.Column="1" SelectedIndex="0" Margin="0,3">
                                             <ComboBoxItem Content="保持原 DWG 格式并生成 PDF 副本" />
-                                            <ComboBoxItem Content="转为 AutoCAD 2018 DXF 格式" />
+                                            <ComboBoxItem Content="转为标准工程交换 DXF 格式" />
                                             <ComboBoxItem Content="仅抽取 BOM 明细表为 XLSX" />
                                         </ComboBox>
 
