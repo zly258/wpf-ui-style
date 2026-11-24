@@ -48,7 +48,6 @@
 ```
 
 - **资源合并顺序**：`Tokens.xaml` 提供唯一色值、字体、圆角与中等密度兜底值；各控件字典（`Controls.xaml`、`DataControls.xaml`、`Icons.xaml`、`Extras.xaml`）通过 `{DynamicResource Layout.*}` 读取尺寸；`Density.*.xaml` 放在最后合并，确保所选密度档位优先命中。
-- **配套独立技能**：`skills/ribbon-icon-generator/` 为独立技能，用于生成与校验 24x24 单色线性 Ribbon 图标（`SVG` 与 WPF `StreamGeometry`），安装 `wpf-ui-style` 时不会将其嵌套复制。
 
 ## 使用示例
 
@@ -219,7 +218,6 @@ python tools/UiTest.py --all --test-clicks
 | 启动案例中心 | `dotnet run --project preview` | 支持 `-window`、`-page`、`-density`、`-shot`、`-scale`、`-all` |
 | 运行交互点击状态测试 | `python tools/UiTest.py --all --test-clicks` | 离屏渲染界面、模拟点击并断言状态迁移 |
 | 离屏渲染单个 XAML | `python tools/UiTest.py --xaml preview/Views/SafeFormView.xaml --shot .tmp-shots/verify.png` | 动态加载并导出指定 XAML 视图为 PNG |
-| 校验 Ribbon 图标（配套技能） | `python skills/ribbon-icon-generator/tools/IconGen.py check --strict` | 支持 `list`、`check --strict` 与 `xaml --out samples/RibbonIcons.xaml` |
 
 ## 配置与集成
 
@@ -247,14 +245,6 @@ python tools/UiTest.py --all --test-clicks
 - **业务 XAML 严禁硬编码字面量**：统一引用 `Brush.*`、`FontSize.*` 与 `Layout.*` 令牌，禁止散落 `#RRGGBB`、局部 `FontFamily` 或固定控件高度。
 - **防截断与稳定页签**：标签列用 `Auto` + `MinWidth`，输入列用 `*` + `MinWidth`，任何省略号文本必须配 `ToolTip`；`SizeToContent="Height"` 窗口内的 `TabControl` 必须固定 `Height`。
 
-### 配套独立技能：Ribbon 线性图标生成器
-
-`skills/ribbon-icon-generator/` 提供 40 个 24x24 单色线性图标成品、SVG 与 WPF `StreamGeometry` 生成器、深浅双主题预览页，以及安全边距、复杂度与对比度校验，可单独安装：
-
-```powershell
-pwsh ./skills/ribbon-icon-generator/install.ps1
-```
-
 ## 文档导航
 
 | 主题 | 内容说明 | 链接 |
@@ -274,5 +264,4 @@ pwsh ./skills/ribbon-icon-generator/install.ps1
 | 速查表与 XAML 片段 | 一页速查表与可直接复制的 XAML 代码片段 | [references/cheatsheet.md](./references/cheatsheet.md) / [references/xaml-snippets.md](./references/xaml-snippets.md) |
 | 参考案例与预览工程 | 分类 XAML 窗口骨架与案例中心命令行参数 | [samples/README.md](./samples/README.md) / [preview/README.md](./preview/README.md) |
 | 自动化脚本说明 | 脚本分工、退出码与 `LayoutCheck` / `UiTest` 参数说明 | [tools/README.md](./tools/README.md) |
-| Ribbon 图标生成器 | 独立 24x24 Ribbon 图标库与 `IconGen.py` 命令说明 | [skills/ribbon-icon-generator/README.md](./skills/ribbon-icon-generator/README.md) |
 | 第三方归属说明 | `Theme/Icons.xaml` 中 Google Material Symbols 的 Apache 2.0 声明 | [NOTICE.md](./NOTICE.md) |

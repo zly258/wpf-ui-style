@@ -48,7 +48,6 @@
 ```
 
 - **Resource merge order**: `Tokens.xaml` provides colors, typography, radii, and medium-density fallbacks. Control dictionaries (`Controls.xaml`, `DataControls.xaml`, `Icons.xaml`, `Extras.xaml`) resolve sizing through `{DynamicResource Layout.*}`, and `Density.*.xaml` is merged last so the selected density takes precedence.
-- **Companion skill**: `skills/ribbon-icon-generator/` is a standalone skill for generating and validating 24x24 monochrome Ribbon icons (`SVG` and WPF `StreamGeometry`) and is not nested into `wpf-ui-style` during installation.
 
 ## Usage Example
 
@@ -219,7 +218,6 @@ python tools/UiTest.py --all --test-clicks
 | Launch Preview Case Center | `dotnet run --project preview` | Supports `-window`, `-page`, `-density`, `-shot`, `-scale`, `-all` |
 | Run UI click-state tests | `python tools/UiTest.py --all --test-clicks` | Off-screen renders views, simulates clicks, and asserts state transitions |
 | Render a single XAML file | `python tools/UiTest.py --xaml preview/Views/SafeFormView.xaml --shot .tmp-shots/verify.png` | Dynamically loads and renders a XAML view to PNG |
-| Generate Ribbon icons (companion skill) | `python skills/ribbon-icon-generator/tools/IconGen.py check --strict` | Supports `list`, `check --strict`, and `xaml --out samples/RibbonIcons.xaml` |
 
 ## Configuration and Integrations
 
@@ -247,14 +245,6 @@ Density profiles change sizing, padding, and row heights only. Colors, font size
 - **No hardcoded literals in business XAML**: Use `Brush.*`, `FontSize.*`, and `Layout.*` tokens instead of `#RRGGBB`, local `FontFamily`, or hardcoded control heights.
 - **Safe layout and stable tabs**: Use `Auto` + `MinWidth` for label columns, `*` + `MinWidth` for input columns, `ToolTip` on any ellipsized text, and fixed `Height` on any `TabControl` inside a `SizeToContent="Height"` window.
 
-### Companion Skill: Ribbon Icon Generator
-
-`skills/ribbon-icon-generator/` is an independent skill for 24x24 monochrome linear Ribbon icons (40 catalog icons, SVG/WPF `StreamGeometry` generator, light/dark HTML preview, and margin/complexity/contrast validation). Install it separately if needed:
-
-```powershell
-pwsh ./skills/ribbon-icon-generator/install.ps1
-```
-
 ## Documentation
 
 | Topic | What it covers | Link |
@@ -274,5 +264,4 @@ pwsh ./skills/ribbon-icon-generator/install.ps1
 | Quick reference and snippets | One-page cheatsheet and copyable XAML snippets | [references/cheatsheet.md](./references/cheatsheet.md) / [references/xaml-snippets.md](./references/xaml-snippets.md) |
 | Sample windows and preview app | Categorized XAML window skeletons and Preview Case Center CLI options | [samples/README.md](./samples/README.md) / [preview/README.md](./preview/README.md) |
 | Verification scripts | Script architecture, exit codes, and `LayoutCheck` / `UiTest` options | [tools/README.md](./tools/README.md) |
-| Ribbon icon generator skill | Standalone 24x24 Ribbon icon catalog and `IconGen.py` CLI | [skills/ribbon-icon-generator/README.md](./skills/ribbon-icon-generator/README.md) |
 | Third-party notices | Apache 2.0 attribution for Google Material Symbols geometries in `Theme/Icons.xaml` | [NOTICE.md](./NOTICE.md) |
