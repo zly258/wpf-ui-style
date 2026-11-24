@@ -1,210 +1,138 @@
-# WPF UI Skills
+<h1 align="center">WPF UI Skills</h1>
 
-面向桌面工具与工程插件的高质量 WPF 视觉规范、**三档密度（紧凑 / 中等 / 宽松）**布局体系与自动化校验工具。
+<p align="center">A WPF/XAML design system, three-level density theme, AI coding skill, and automated verification toolkit for desktop tools and engineering plugins.</p>
 
-目标是把**设计令牌、可切换密度、状态契约（前景/背景/悬停/选中/禁用）与防截断骨架**固定为可执行的标准规范，避免出现：
+<p align="center">
+  <a href="./README.md">English</a> | <a href="./README.zh-CN.md">简体中文</a>
+</p>
 
-- 字体过大、内边距过厚、一屏展示信息量过少；
-- 主按钮蓝底深灰字；
-- 浅色悬停背景上仍然是白字；
-- 禁用按钮用 `Opacity=0.45`，文字几乎看不见；
-- 列表选中项白字压在浅蓝底上；
-- 窗口多 tab 切换导致窗口高度跳变；
-- ComboBox 弹出层还是系统默认白底黑字，和主界面割裂；
-- 同一个项目里 28/32 两种控件高度混用；
-- 输入框文字只占左半边，右侧点击不能继续输入；
-- 标签页选中后只有一条细横线，看不出当前在哪一页；
-- 白底按钮的描边太浅，在浅色窗口里几乎看不见按钮边界。
+<p align="center">
+  <img src="https://img.shields.io/badge/WPF-XAML-3776AB?style=flat-square" alt="WPF XAML"> <img src="https://img.shields.io/badge/.NET-4.8%20%7C%208%2B-3776AB?style=flat-square" alt=".NET Framework 4.8 and .NET 8+"> <img src="https://img.shields.io/badge/Checks-Python%203-3776AB?style=flat-square" alt="Python 3 verification scripts"> <img src="https://img.shields.io/badge/Platform-Windows-4B5563?style=flat-square" alt="Windows"> <a href="./docs/README.md"><img src="https://img.shields.io/badge/Docs-Reference-4F46E5?style=flat-square" alt="Documentation"></a>
+</p>
 
----
+`wpf-ui-style` packages executable WPF resource dictionaries, explicit foreground/background state contracts, anti-truncation layout rules, a runnable Preview Case Center, and static/runtime quality gates into one repository that works both as a drop-in WPF theme and as an installable AI agent skill (`SKILL.md`).
 
-## 视觉效果与案例中心
+## Highlights
 
-本规范提供开箱即用的**案例中心（Preview Case Center）**与标准参考工程骨架（`samples/`），所有案例均经受过高 DPI、复杂状态与自动化测试检验。
+| Highlight | Why it matters |
+|---|---|
+| Three-level density (`Compact` / `Medium` / `Relaxed`) | Adjusts control height (26 / 30 / 34 px), table row height (24 / 28 / 32 px), and padding via `{DynamicResource Layout.*}` without changing colors or font sizes, supporting runtime switching. |
+| Explicit control state contracts and WCAG AA contrast | Every state transition declares both `Background` and `Foreground`, bans `Opacity` for disabled states, and enforces contrast ratios (body text >= 4.5:1, borders/icons/disabled text >= 3:1) checked by `tools/ContrastCheck.py`. |
+| Anti-truncation and stable-height layout rules | Prevents clipped labels, stretched multiline inputs, unclickable input whitespace, and `TabControl` height jumps in `SizeToContent="Height"` windows, enforced by `tools/LayoutCheck.py`. |
+| Runnable Preview Case Center and XAML samples | Includes 10 interactive `UserControl` case views in `preview/` and copyable window skeletons in `samples/`, supporting off-screen PNG rendering and DPI scale testing. |
+| Automated quality gate and multi-client skill installer | Combines Python 3 standard-library static checks, xUnit contract tests (`tests/WpfStyleContractTests.csproj`), click-state UI tests (`tools/UiTest.py`), and `install.ps1` for major AI coding clients. |
+| Zero third-party UI dependencies | Targets both .NET Framework 4.8 and .NET 8+ using standard WPF controls only, suitable for standalone desktop apps and host-embedded engineering plugins. |
 
-### 1. 案例中心总览与导航
-> 侧边分类导航 + 规范摘要 + 实时密度热切换（紧凑 26px / 中等 30px / 宽松 34px）。
-
-![案例中心总览](docs/images/overview.png)
-
-### 2. 复杂可编辑数据表格与批量操作
-> 表头全选/部分选中与行勾选双向联动、单元格单次点击就地编辑/下拉、数值居右对齐、状态徽章、展开明细行、批量操作工具条（未勾选时按钮中性禁用）与底部分页统计。
-
-![可编辑数据表格](docs/images/editable-table.png)
-
-### 3. 三栏工程工作台与装配树
-> 左侧特征树与快速过滤、中间 3D 视图与特征参数表格（带 `GridSplitter` 弹性分割）、右侧属性检查器、底部系统状态栏。
-
-![工程工作台](docs/images/workbench.png)
-
-### 4. 工况监控与生产调度看板
-> 4 组 KPI 指标卡片矩阵（吞吐量、自动校验率、待干预数、处理耗时）、实时任务队列进度与异常质检告警流协同。
-
-![监控看板](docs/images/dashboard.png)
-
-### 5. 多步骤工程向导对话框
-> 流程步骤指示器、步骤状态机联动、单层内容面板切换（规避多 Tab 跳变隐患）、标准化上一步/下一步/完成操作栏。
-
-![分步向导](docs/images/wizard.png)
-
-### 6. 双栏差异比对与密集参数设置
-> 左右分栏独立滚动对照、120 DIP 固定高度只读日志流；三列紧凑网格布局、一屏呈现多项配置。
-
-| 双栏设计差异比对与审计 (`compare`) | 密集参数设置表单 (`settings`) |
-|:---:|:---:|
-| ![双栏比对](docs/images/compare.png) | ![密集设置](docs/images/settings.png) |
-
----
-
-## 0. 作为 Skill 使用
-
-整个 `wpf-styles` 目录本身就是一个即开即用的 Skill：
-
-- 入口：`SKILL.md`（含完整规范、紧凑布局基准与自动化校验命令）。
-- 速查：`references/cheatsheet.md`。
-- 代码片段：`references/xaml-snippets.md`。
-- 可执行主题：`Theme/Theme.xaml`。
-- 校验工具：`tools/ContrastCheck.py`、`tools/LayoutCheck.py`（附 `.ps1` 薄包装）。
-- 契约测试：`tests/`（`dotnet test tests/WpfStyleContractTests.csproj`）。
-
-一键安装：
-
-```powershell
-# 查看本机检测到哪些客户端
-pwsh ./install.ps1 -Detect
-
-# 用户级：安装到本机检测到的所有客户端
-pwsh ./install.ps1 -Scope Global -Clients auto
-
-# 用户级：安装到全部支持的客户端
-pwsh ./install.ps1 -Scope Global -Clients all
-
-# 项目级：写入目标仓库，可提交给团队
-pwsh ./install.ps1 -Scope Project -Root "D:/Demo/YourApp" -Clients all
-
-# 清理已卸载客户端里的残留安装（只删本技能写入的文件）
-pwsh ./install.ps1 -Cleanup
-```
-
-`-Clients auto` 只安装到“软件确实存在”的客户端：检测 PATH 上的可执行文件、仍含
-exe 的程序安装目录、Windows 卸载注册表/MSIX 安装记录，以及配置目录近 90 天内
-（`-MaxAgeDays` 可调）的真实写入。卸载后残留的旧配置目录、或早期 `-Clients all`
-留下的本技能文件，会被视为残留并在安装时自动清理。
-
-手动安装（任选其一）：
+## Architecture
 
 ```text
-# 全局
-%USERPROFILE%\.agents\skills\wpf-ui-style\      ← 把整个 wpf-styles 目录内容放进去
-
-# 项目级
-<repo>\.zcode\skills\wpf-ui-style\              ← 同上
+┌────────────────────────────────────────────────────────────────────────────┐
+│                        AI Skill & Specification Layer                      │
+│   SKILL.md   │   install.ps1   │   docs/   │   references/   │   samples/  │
+└────────────────────────────────────┬───────────────────────────────────────┘
+                                     │ guides & configures
+                                     ▼
+┌────────────────────────────────────────────────────────────────────────────┐
+│                         Theme Resource Layer (Theme/)                      │
+│  Theme.xaml / Theme.Compact.xaml / Theme.Relaxed.xaml                      │
+│    Tokens.xaml ──▶ Controls / DataControls / Icons / Extras ──▶ Density.*  │
+└───────────────────┬───────────────────────────────────────┬────────────────┘
+                    │ linked via ResourceDictionary         │ validated by
+                    ▼                                       ▼
+┌───────────────────────────────────────┐   ┌────────────────────────────────┐
+│       Preview Case Center (preview/)  │   │   Automated Verification Gate  │
+│  MainWindow + CaseCatalog (10 views)  │◀──│  LayoutCheck.py (XAML rules)   │
+│  DensitySwitcher + UiTestEngine       │   │  ContrastCheck.py (WCAG AA)    │
+│  Off-screen PNG & click-state runner  │   │  UiTest.py + xUnit tests/      │
+└───────────────────────────────────────┘   └────────────────────────────────┘
 ```
 
-支持的客户端、路径、参数、卸载方式见 [INSTALL.md](INSTALL.md)。
+- **Resource merge order**: `Tokens.xaml` provides colors, typography, radii, and medium-density fallbacks. Control dictionaries (`Controls.xaml`, `DataControls.xaml`, `Icons.xaml`, `Extras.xaml`) resolve sizing through `{DynamicResource Layout.*}`, and `Density.*.xaml` is merged last so the selected density takes precedence.
+- **Companion skill**: `skills/ribbon-icon-generator/` is a standalone skill for generating and validating 24x24 monochrome Ribbon icons (`SVG` and WPF `StreamGeometry`) and is not nested into `wpf-ui-style` during installation.
 
-安装后，在对话里直接说：
+## Usage Example
 
-> 按 `wpf-ui-style` 规范修改这个窗口，重点检查前景/背景、悬停、选中和多行文本高度。
+The Preview Case Center (`preview/`) links directly to `Theme/` and demonstrates all standard layouts, interactive states, and live density switching.
 
-Skill 会先读 `SKILL.md`，再按需打开 `references/cheatsheet.md`、
-`docs/02-control-states.md`、`docs/03-layout.md` 和 `docs/04-common-pitfalls.md`。
-
-### 0.1 配套技能：Ribbon 线性图标生成器
-
-`skills/ribbon-icon-generator/` 是一个**独立 skill**（安装脚本不会把它套娃复制进 `wpf-ui-style`）。
-它提供 24×24 单色线性图标的 40 个成品、SVG / WPF `StreamGeometry` 生成器、深浅双主题预览页，
-以及安全边距 / 复杂度 / 对比度校验，专门解决 Ribbon 工具条在 16px 下的辨识度问题：
-
-```powershell
-pwsh ./skills/ribbon-icon-generator/install.ps1            # 装到本机已存在的客户端
-pwsh ./skills/ribbon-icon-generator/install.ps1 -All -Force
-```
+Run the interactive Preview Case Center or export an off-screen PNG:
 
 ```bash
-python skills/ribbon-icon-generator/tools/IconGen.py list
-python skills/ribbon-icon-generator/tools/IconGen.py check --strict
-python skills/ribbon-icon-generator/tools/IconGen.py xaml --out samples/RibbonIcons.xaml
+dotnet run --project preview
+dotnet run --project preview -- -window home -page workbench
+dotnet run --project preview -- -window editable-table -density Compact -shot out/table.png -scale 1.5
 ```
 
----
+### Preview Case Center Overview
 
-## 1. 文件结构
+Sidebar category navigation, specification summary, and live density switching (`Compact` 26 px / `Medium` 30 px / `Relaxed` 34 px).
 
-```
-wpf-styles/
-├─ README.md                         ← 本文件
-├─ INSTALL.md                        ← 安装/配置/卸载说明
-├─ install.ps1                       ← 一键安装到主流客户端
-├─ SKILL.md                          ← 给 AI/编码代理使用的执行规范
-├─ Theme/
-│  ├─ Tokens.xaml                    ← 唯一色值、字体、尺寸兜底值、圆角、文本样式
-│  ├─ Density.Compact.xaml           ← 紧凑密度（26px 控件 / 24px 行高）
-│  ├─ Density.Medium.xaml            ← 中等密度（默认，30px 控件 / 28px 行高）
-│  ├─ Density.Relaxed.xaml           ← 宽松密度（34px 控件 / 32px 行高）
-│  ├─ Controls.xaml                  ← 按钮、输入框、下拉框、复选、分组、Tab、ToolTip…
-│  ├─ DataControls.xaml              ← ListBox、ListView、DataGrid、TreeView
-│  ├─ Icons.xaml                     ← 24x24 图标几何、尺寸阶梯、图标按钮
-│  ├─ Extras.xaml                    ← Slider、DatePicker、Menu、ToolBar、Card、Badge…
-│  ├─ Theme.xaml                     ← 默认入口（中等密度）
-│  ├─ Theme.Compact.xaml             ← 整包入口（紧凑密度）
-│  ├─ Theme.Relaxed.xaml             ← 整包入口（宽松密度）
-│  └─ README.md                      ← 主题文件使用说明
-├─ docs/
-│  ├─ README.md                      ← 文档索引
-│  ├─ 01-design-tokens.md            ← 设计令牌
-│  ├─ 02-control-states.md           ← 控件状态矩阵（核心）
-│  ├─ 03-layout.md                   ← 布局规范（含防截断与密度）
-│  ├─ 04-common-pitfalls.md          ← 常见错误与修复
-│  ├─ 05-accessibility-contrast.md   ← 对比度与可访问性
-│  ├─ 06-density.md                  ← 三档密度说明与切换方式
-│  ├─ 07-testing.md                  ← 自动化与人工验证
-│  └─ 09-icon-system.md              ← 矢量图标系统与契约
-├─ references/
-│  ├─ cheatsheet.md                  ← 一页速查
-│  └─ xaml-snippets.md               ← 可复制 XAML 片段
-├─ samples/                          ← 标准工程参考 XAML 案例库
-│  ├─ controls/                      ← 基础控件库与矢量图标
-│  │  ├─ ControlsGalleryWindow.xaml  ← 全套基础控件交互矩阵
-│  │  └─ IconGalleryWindow.xaml      ← 矢量图标系统与尺寸着色契约
-│  ├─ forms/                         ← 各类工程表单规范骨架
-│  │  ├─ SafeFormWindow.xaml         ← 防截断安全表单
-│  │  ├─ FormLayoutWindow.xaml       ← 宽面板两列 / 窄面板单列基线对齐
-│  │  ├─ StackedFormWindow.xaml      ← 侧边栏单列垂直堆叠表单
-│  │  ├─ SettingsWindow.xaml         ← 密集三列网格参数表单
-│  │  └─ TabsSettingsWindow.xaml     ← 原生方角页签与高度防跳变
-│  ├─ tables/
-│  │  └─ EditableTableWindow.xaml    ← 复杂可编辑表格与批量操作条
-│  ├─ layouts/                       ← 复杂多栏工作区布局
-│  │  ├─ WorkbenchWindow.xaml        ← 三栏特征树/视口/检查器工作台
-│  │  ├─ CompareWindow.xaml          ← 双栏差异对照与固定日志流
-│  │  └─ DashboardWindow.xaml        ← KPI 指标卡片与实时任务看板
-│  ├─ dialogs/
-│  │  └─ WizardWindow.xaml           ← 多步骤向导与流程状态机
-│  └─ README.md                      ← 案例分类索引与设计检查清单
-├─ preview/                          ← 可运行案例中心（侧边导航 + 10 个案例页 + 密度切换 + 截图）
-├─ skills/
-│  └─ ribbon-icon-generator/         ← 配套独立技能：24x24 Ribbon 线性图标生成器
-│     ├─ SKILL.md                    ← 图标规范、工作流、WPF 集成
-│     ├─ catalog/icons.json          ← 40 个图标几何（唯一数据源）
-│     ├─ tools/IconGen.py            ← SVG / XAML / 预览 / 校验 / 提示词
-│     └─ samples/                    ← 生成的 SVG 与 RibbonIcons.xaml
-├─ tools/
-│  ├─ ContrastCheck.py               ← 对比度自动检查（Python 3 标准库）
-│  ├─ LayoutCheck.py                 ← 布局/防截断/TabControl 规则自动检查
-│  ├─ ContrastCheck.ps1              ← 薄包装（自动探测 Python）
-│  ├─ LayoutCheck.ps1                ← 薄包装（自动探测 Python）
-│  └─ README.md                      ← 脚本分工与调用方式
-└─ tests/
-   ├─ ThemeContractTests.cs          ← xUnit 契约测试
-   └─ WpfStyleContractTests.csproj   ← 可直接 dotnet test
+![Preview Case Center overview showing sidebar navigation and case cards](./docs/images/overview.png)
+
+### Editable DataGrid and Batch Actions
+
+Header select-all and row checkbox binding, single-click inline edit/dropdown cells, right-aligned numeric values, status badges, expandable row details, and a neutral disabled state on batch danger actions when zero rows are selected.
+
+![Editable DataGrid with batch toolbar, status badges, and pagination footer](./docs/images/editable-table.png)
+
+### Three-Pane Engineering Workbench
+
+Feature tree with quick filter on the left, viewport and parameter table with `GridSplitter` in the center, property inspector on the right, and bottom status bar.
+
+![Three-pane engineering workbench layout with feature tree and property inspector](./docs/images/workbench.png)
+
+### Operations Dashboard and Multi-Step Wizard
+
+Four KPI metric cards with live task queue and alert table (`dashboard`), alongside a multi-step wizard dialog (`wizard`) using single-layer panel switching to avoid tab height jumps.
+
+| Operations Dashboard (`dashboard`) | Multi-Step Wizard (`wizard`) |
+|---|---|
+| ![Operations dashboard with KPI cards and task queue](./docs/images/dashboard.png) | ![Multi-step engineering wizard dialog](./docs/images/wizard.png) |
+
+### Dual-Pane Diff Compare and Dense Settings Form
+
+Side-by-side independent scroll panes with a fixed-height read-only log stream (`compare`), and a compact three-column parameter grid (`settings`).
+
+| Dual-Pane Diff Compare (`compare`) | Dense Settings Form (`settings`) |
+|---|---|
+| ![Dual-pane diff comparison view with fixed-height log stream](./docs/images/compare.png) | ![Dense three-column settings form](./docs/images/settings.png) |
+
+## Quick Install
+
+### Prerequisites
+
+- **WPF application / preview**: Windows with .NET Framework 4.8 or .NET 8+ SDK (`preview/WpfStylePreview.csproj` targets `net8.0-windows`; `tests/WpfStyleContractTests.csproj` targets `net8.0`).
+- **Verification scripts**: Python 3 (standard library only, no `pip install` required). PowerShell `.ps1` wrappers auto-detect `py -3`, `python3`, or `python`.
+- **Skill installer**: PowerShell (`pwsh` or Windows PowerShell) with zero external dependencies.
+
+### Option 1: Install as an AI Coding Skill
+
+Clone the repository and run `install.ps1` to install `wpf-ui-style` into detected AI coding clients (or write project-level skill/rule files):
+
+```powershell
+git clone https://github.com/zly258/wpf-ui-style.git
+cd wpf-ui-style
+
+pwsh ./install.ps1 -Detect
+pwsh ./install.ps1 -Scope Global -Clients auto
 ```
 
----
+For project-level installation that can be committed for a team:
 
-## 2. 快速接入
+```powershell
+pwsh ./install.ps1 -Scope Project -Root "D:/Demo/YourApp" -Clients all
+```
 
-### 2.1 App.xaml 合并
+See [INSTALL.md](./INSTALL.md) for all supported clients, rule-file fallbacks, cleanup flags, and uninstall instructions.
+
+### Option 2: Add the WPF Theme to a Project
+
+Copy `Theme/` into your WPF project (or link the XAML files from a shared UI assembly as shown in [preview/WpfStylePreview.csproj](./preview/WpfStylePreview.csproj)), then merge `Theme/Theme.xaml` into your resource dictionary.
+
+## Quick Start
+
+### 1. Merge the Theme Dictionary
+
+In a standard WPF application (`App.xaml`):
 
 ```xml
 <Application.Resources>
@@ -217,7 +145,7 @@ wpf-styles/
 </Application.Resources>
 ```
 
-工程插件项目通常没有 `App.xaml`，在窗口构造时合并：
+In a CAD/engineering plugin without `App.xaml`, merge before `InitializeComponent()` in the window constructor:
 
 ```csharp
 public static void Apply(Window window)
@@ -231,48 +159,30 @@ public static void Apply(Window window)
 }
 ```
 
-> 注意：`YourAssembly` 必须是**实际包含 Theme 文件的程序集名**。
-> 如果主题放在共享库 `YourApp.UI` 中，就写
-> `pack://application:,,,/YourApp.UI;component/Theme/Theme.xaml`。
+Replace `YourAssembly` with the assembly name that actually contains the `Theme/` files.
 
-### 2.2 使用样式
+### 2. Use Implicit and Variant Styles
+
+Core controls (`Button`, `TextBox`, `PasswordBox`, `ComboBox`, `CheckBox`, `RadioButton`, `GroupBox`, `TabControl`, `ListBox`, `DataGrid`, `TreeView`, etc.) are styled implicitly. Apply explicit keys only for variants:
 
 ```xml
-<Button Content="保存" Style="{StaticResource Button.Primary}" />
-<Button Content="取消" />
+<Button Content="Save" Style="{StaticResource Button.Primary}" />
+<Button Content="Cancel" />
 <TextBox Text="{Binding Name}" />
-<GroupBox Header="翻译选项">
+<GroupBox Header="Options">
     <StackPanel>
-        <CheckBox Content="启用术语库" />
+        <CheckBox Content="Enable glossary" />
         <ComboBox SelectedIndex="0">
-            <ComboBoxItem Content="替换原文" />
-            <ComboBoxItem Content="追加译文" />
+            <ComboBoxItem Content="Replace source" />
+            <ComboBoxItem Content="Append translation" />
         </ComboBox>
     </StackPanel>
 </GroupBox>
 ```
 
-- `Button`、`TextBox`、`ComboBox`、`CheckBox`、`RadioButton`、`ListBox`、`DataGrid` 等都有隐式样式，**不需要逐个指定**。
-- 只有变体需要显式指定：`Button.Primary`、`Button.Danger`、`Button.Text`、`TextBox.Multiline`、`TextBox.Code`、`Button.Primary.Small`、`Button.Secondary.Large` 等。
-- `TextBox` / `PasswordBox` / `ComboBox` 的内容区默认横向占满，点击右侧空白也能继续输入。
-- `TabItem` 是原生方角页签：每个页签都有 1px `Brush.Border.Tab` 边框（未选中可见、可点击），选中页签去掉下边框与内容区连成一体；无圆角、无底部强调条。方框比按钮/输入框的 `Border.Control` 浅一档，整块框线不压内容。
+### 3. Switch Density (Optional)
 
-### 2.3 选择密度（紧凑 / 中等 / 宽松）
-
-默认是 **中等**；换密度只需更换入口文件名：
-
-```xml
-<!-- 紧凑：工程插件工具条、属性面板、大表格 -->
-<ResourceDictionary Source="pack://application:,,,/YourAssembly;component/Theme/Theme.Compact.xaml" />
-
-<!-- 中等（默认） -->
-<ResourceDictionary Source="pack://application:,,,/YourAssembly;component/Theme/Theme.xaml" />
-
-<!-- 宽松：触屏 / 演示 / 培训 -->
-<ResourceDictionary Source="pack://application:,,,/YourAssembly;component/Theme/Theme.Relaxed.xaml" />
-```
-
-运行时热切换（控件全部使用 `{DynamicResource Layout.*}`，可即时生效）：
+Default `Theme.xaml` uses `Medium` density. To select another density at startup, change the entry file to `Theme.Compact.xaml` or `Theme.Relaxed.xaml`. To switch density at runtime:
 
 ```csharp
 Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary
@@ -283,181 +193,86 @@ Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary
 });
 ```
 
-| 令牌 | 紧凑 | 中等（默认） | 宽松 |
-|---|---:|---:|---:|
-| `Layout.ControlHeight`（按钮/输入/下拉） | 26 | **30** | 34 |
-| `Layout.ControlHeight.Small`（工具条） | 24 | **26** | 30 |
-| `Layout.RowHeight`（表格行） | 24 | **28** | 32 |
-| `Layout.HeaderHeight`（表头） | 26 | **30** | 34 |
-| `Layout.TabPadding` | 10,4 | **12,6** | 16,8 |
-| `Layout.ButtonPadding` | 10,0 | **12,0** | 16,0 |
-| `Layout.WindowPadding` | 8 | **12** | 16 |
-| `Layout.FormRowMargin` | 0,2 | **0,3** | 0,5 |
+### 4. Run the Automated Verification Pipeline
 
-字号与颜色**不随密度变化**；只在 `Density.*.xaml` 中改尺寸、内边距和行高。
-完整说明见 [docs/06-density.md](docs/06-density.md)。
-
----
-
-## 3. 核心硬规则
-
-1. **每个状态必须同时声明背景和前景。**
-   只改 `Background` 不改 `Foreground`，是“看不清文字”的头号原因。
-
-2. **禁止用 `Opacity` 表达禁用。**
-   禁用态使用 `Brush.Control.Disabled` + `Brush.Text.Disabled`。
-   透明度会让白字和浅底一起变淡，对比度直接崩掉。
-
-3. **隐式 `TextBlock` 不得硬编码前景色。**
-   必须使用“跟随最近 `ContentPresenter`”的绑定（见 `Theme/Controls.xaml`）。
-   否则 `Button.Primary` 的白字会被全局样式覆盖成正文深灰。
-
-4. **浅色背景只用深色文字，深色背景只用白色文字。**
-   白字只允许出现在：
-   `Accent` / `Accent.Hover` / `Accent.Pressed` /
-   `Danger` / `Danger.Hover` / `Danger.Pressed` / `Tooltip.Background`。
-   选中列表项、ComboBox 项、悬停项一律使用浅底深字。
-
-5. **组合状态必须用 `MultiTrigger` 显式处理。**
-   典型是“选中 + 悬停”。只写两个独立 `Trigger` 会依赖声明顺序，
-   后声明的触发器覆盖前面的，容易出现浅底白字。
-
-6. **多行文本不要默认撑满。**
-   表单多行输入：`Height="Auto"` + `VerticalAlignment="Top"`，不要强制 `MinHeight`。
-   只有日志/列表/表格/主内容 ScrollViewer 才放在 `Grid` 的 `*` 行。
-   禁止在控件上写 `Height="*"`。
-
-7. **不截断、不遮挡。**
-   标签列 `Auto` + `MinWidth`（长标签换行，不裁）；输入列 `*` + `MinWidth`（不写死 `Width`）；
-   省略号必须配 `ToolTip`；窗口用 `SizeToContent="Height"` + 一层 `ScrollViewer`；
-   底部按钮栏独占一行，状态文案另起一行；禁止负 `Margin` 与 `Canvas` 绝对定位。
-   详见 `SKILL.md` 的 R14、`docs/03-layout.md` §14 与 `samples/forms/SafeFormWindow.xaml`。
-
-8. **密度只改变尺寸，不改变颜色与字号。**
-   控件内部通过 `{DynamicResource Layout.*}` 读取高度、内边距与行高；
-   业务 XAML 不要写死 `Height="32"` 或 `Padding="8,0"`。
-   紧凑 / 中等 / 宽松三档由 `Theme/Density.*.xaml` 提供，默认中等。
-
----
-
-## 4. 状态速查
-
-| 控件/状态 | 背景 | 前景 | 边框 |
-|---|---|---|---|
-| 次要按钮 正常 | `Brush.Surface` | `Brush.Text.Primary` | `Brush.Border.Control` |
-| 次要按钮 悬停 | `Brush.Control.Hover` | `Brush.Text.Primary` | `Brush.Accent` |
-| 次要按钮 按下 | `Brush.Control.Pressed` | `Brush.Text.Primary` | `Brush.Accent.Pressed` |
-| 主按钮 正常 | `Brush.Accent` | `Brush.OnAccent` | `Brush.Accent` |
-| 主按钮 悬停 | `Brush.Accent.Hover` | `Brush.OnAccent` | `Brush.Accent.Hover` |
-| 主按钮 禁用 | `Brush.Control.Disabled` | `Brush.Text.Disabled` | `Brush.Border` |
-| 输入框 正常 | `Brush.Surface` | `Brush.Text.Primary` | `Brush.Border.Control` |
-| 输入框 聚焦 | `Brush.Surface` | `Brush.Text.Primary` | `Brush.Focus` |
-| 标签页 悬停 | `Brush.Control.Hover` | `Brush.Text.Primary` | `Brush.Accent` |
-| 标签页 未选中 | `Brush.SurfaceAlt` | `Brush.Text.Secondary` | `Brush.Border.Tab`（四边） |
-| 标签页 选中 | `Brush.Surface` | `Brush.Text.Primary`（SemiBold） | `Brush.Border.Tab`（去掉下边框） |
-| 列表项 悬停 | `Brush.Control.Hover` | `Brush.Text.Primary` | 透明 |
-| 列表项 选中 | `Brush.Selection` | `Brush.Text.Primary` | 透明 |
-| 列表项 选中+悬停 | `Brush.Selection.Hover` | `Brush.Text.Primary` | 透明 |
-| 危险按钮 悬停 | `Brush.Danger.Subtle` | `Brush.Danger.Hover` | `Brush.Danger.Hover` |
-| ToolTip | `Brush.Tooltip.Background` | `Brush.Tooltip.Foreground` | 同背景 |
-
-完整矩阵见 [docs/02-control-states.md](docs/02-control-states.md)。
-
----
-
-## 5. 对比度要求
-
-- 正文文字：≥ **4.5:1**（WCAG AA）。
-- 大号文字（≥ 18.66px 粗体或 ≥ 24px）：≥ **3:1**。
-- 焦点边框、图标、输入框/按钮边框等非文字元素：≥ **3:1**。
-  按钮与输入框描边使用 `Brush.Border.Control`（对白底 3.52:1、对窗口底 3.10:1）。
-- 禁用文字：WCAG 不强制，但本规范要求 ≥ **3:1**，建议 ≥ 4.5:1。
-- 白字压品牌色：本规范所有 Accent/Danger 组合均 ≥ 5.3:1。
-
-运行（`.ps1` 是薄包装，会自动探测 `py -3` / `python3` / `python`）：
-
-```powershell
-pwsh ./tools/ContrastCheck.ps1
-pwsh ./tools/LayoutCheck.ps1 -Root "D:/Demo/YourApp"
-```
-
-也可以直接调用 Python（CI / Linux / macOS 推荐）：
+Run these checks after modifying theme files or business XAML:
 
 ```bash
+python tools/LayoutCheck.py --root . --theme-dir Theme
 python tools/ContrastCheck.py
-python tools/LayoutCheck.py --root . --strict
+dotnet test tests/WpfStyleContractTests.csproj
+dotnet build preview/WpfStylePreview.csproj
+python tools/UiTest.py --all --test-clicks
 ```
 
-`LayoutCheck` 会检查多行文本撑满、控件 `Height="*"`、换行文本 `Stretch`、
-嵌套 `ScrollViewer`、`TabControl` 缺固定高度等布局反模式。脚本分工见 [tools/README.md](tools/README.md)。
+## Commands
 
-完整色值与实测比值见 [docs/05-accessibility-contrast.md](docs/05-accessibility-contrast.md)，
-布局约束见 [docs/03-layout.md](docs/03-layout.md)。
+| Task | Command | Notes |
+|---|---|---|
+| Detect local AI clients | `pwsh ./install.ps1 -Detect` | Lists installed clients and stale skill installations |
+| Install skill globally | `pwsh ./install.ps1 -Scope Global -Clients auto` | Installs to verified local clients and cleans stale files |
+| Clean stale client installs | `pwsh ./install.ps1 -Cleanup` | Removes only files written by this skill |
+| Run layout anti-pattern check | `python tools/LayoutCheck.py --root . --theme-dir Theme` | Exits non-zero on errors; add `--strict` to fail on warnings |
+| Run WCAG contrast check | `python tools/ContrastCheck.py` | Verifies foreground/background pairs defined in `Theme/Tokens.xaml` |
+| Run PowerShell check wrappers | `pwsh ./tools/LayoutCheck.ps1 -Root "D:/Demo/YourApp"` | Auto-detects `py -3` / `python3` / `python`; same for `ContrastCheck.ps1` |
+| Run xUnit contract tests | `dotnet test tests/WpfStyleContractTests.csproj` | Verifies theme token and style invariants |
+| Launch Preview Case Center | `dotnet run --project preview` | Supports `-window`, `-page`, `-density`, `-shot`, `-scale`, `-all` |
+| Run UI click-state tests | `python tools/UiTest.py --all --test-clicks` | Off-screen renders views, simulates clicks, and asserts state transitions |
+| Render a single XAML file | `python tools/UiTest.py --xaml preview/Views/SafeFormView.xaml --shot .tmp-shots/verify.png` | Dynamically loads and renders a XAML view to PNG |
+| Generate Ribbon icons (companion skill) | `python skills/ribbon-icon-generator/tools/IconGen.py check --strict` | Supports `list`, `check --strict`, and `xaml --out samples/RibbonIcons.xaml` |
 
----
+## Configuration and Integrations
 
-## 6. 兼容性
+### Three-Level Density Tokens
 
-- 适用于 .NET Framework 4.8 与 .NET 8+ 的 WPF。
-- 不使用第三方控件库、动画库或 Windows 11 专属 API。
-- 主题文件只依赖 WPF 基础控件，工程插件可直接链接。
-- 推荐 `TextOptions.TextFormattingMode="Display"`（已在 `Window` 样式中设置），
-  小字号更清晰；不要在子元素上改成 `Ideal`。
-- 高 DPI 下保持 `UseLayoutRounding="True"`、`SnapsToDevicePixels="True"`，
-  避免 1px 边框发虚。
+Density profiles change sizing, padding, and row heights only. Colors, font sizes, corner radii, and the 16 px `CheckBox`/`RadioButton` target size remain constant across densities.
 
----
+| Token | Compact | Medium (Default) | Relaxed |
+|---|---:|---:|---:|
+| `Layout.ControlHeight` | 26 | 30 | 34 |
+| `Layout.ControlHeight.Small` | 24 | 26 | 30 |
+| `Layout.RowHeight` | 24 | 28 | 32 |
+| `Layout.HeaderHeight` | 26 | 30 | 34 |
+| `Layout.TabPadding` | 10,4 | 12,6 | 16,8 |
+| `Layout.ButtonPadding` | 10,0 | 12,0 | 16,0 |
+| `Layout.WindowPadding` | 8 | 12 | 16 |
+| `Layout.FormRowMargin` | 0,2 | 0,3 | 0,5 |
 
-## 7. 不建议做的事
+### Core Design Rules
 
-- 不要在每个窗口里复制一套颜色和按钮模板。
-- 不要直接写 `#FF...`，一律引用 `Brush.*`。
-- 不要给 `TextBlock` 设置局部 `Foreground` 去“修”颜色；
-  先确认它所在的 `ContentPresenter` / 控件前景是否正确。
-- 不要用 `Opacity` 做禁用、悬停或选中。
-- 不要在浅色悬停背景上保留白字。
-- 未明确要求时不要滥用图标；默认纯文本更清晰整洁。
+- **Pair Background with Foreground**: Every state trigger that changes `Background` must also set `Foreground` (and `BorderBrush` when applicable).
+- **No `Opacity` for disabled states**: Use `Brush.Control.Disabled`, `Brush.Text.Disabled`, and `Brush.Border`.
+- **Inherit `TextBlock` foreground**: Implicit `TextBlock` binds to ancestor `(TextElement.Foreground)` so white text on `Button.Primary` is never overridden.
+- **White text on dark surfaces only**: Permitted only on `Accent*`, `Danger*`, and `Tooltip.Background`. Hover and selected list/combo items always use light fills with dark text, with `MultiTrigger` handling `IsSelected + IsMouseOver`.
+- **No hardcoded literals in business XAML**: Use `Brush.*`, `FontSize.*`, and `Layout.*` tokens instead of `#RRGGBB`, local `FontFamily`, or hardcoded control heights.
+- **Safe layout and stable tabs**: Use `Auto` + `MinWidth` for label columns, `*` + `MinWidth` for input columns, `ToolTip` on any ellipsized text, and fixed `Height` on any `TabControl` inside a `SizeToContent="Height"` window.
 
----
+### Companion Skill: Ribbon Icon Generator
 
-## 8. 使用说明
+`skills/ribbon-icon-generator/` is an independent skill for 24x24 monochrome linear Ribbon icons (40 catalog icons, SVG/WPF `StreamGeometry` generator, light/dark HTML preview, and margin/complexity/contrast validation). Install it separately if needed:
 
-安装后，在支持 skill 的客户端里直接描述任务即可，例如：
-
-```text
-按 wpf-ui-style 规范检查这个 WPF 窗口
-把 SettingsWindow 迁移到 wpf-ui-style，修前景/背景、悬停、选中和禁用态
-检查这个 XAML 的多行文本高度，避免 TextBox 撑满 Grid 的 * 行
-用 wpf-ui-style 的 Token 重做这个对话框的配色和间距
+```powershell
+pwsh ./skills/ribbon-icon-generator/install.ps1
 ```
 
-Skill 会按以下顺序工作：
+## Documentation
 
-1. 读取 `SKILL.md` 的硬规则。
-2. 按需打开 `references/cheatsheet.md`、`docs/02-control-states.md`、
-   `docs/03-layout.md`、`docs/04-common-pitfalls.md`。
-3. 用 `Theme/Theme.xaml` 替换局部样式。
-4. 运行 `tools/ContrastCheck.ps1` 和 `tools/LayoutCheck.ps1`。
-5. 用 `dotnet test tests/WpfStyleContractTests.csproj` 做回归检查。
-
-如果客户端只支持规则文件（Windsurf、Cline、Roo、Kilo、Continue、JetBrains 等），
-安装器会写入精简规则并指向已安装的 `SKILL.md`；如果只选了规则型客户端，
-还会自动补装一份通用 `agents` skill，保证路径有效。
-
-完整安装参数、客户端路径、卸载和排错见 [INSTALL.md](INSTALL.md)。
-
----
-
-## 9. 相关文档
-
-- [文档索引](docs/README.md)
-- [设计令牌](docs/01-design-tokens.md)
-- [控件状态矩阵](docs/02-control-states.md)
-- [布局规范](docs/03-layout.md)
-- [三档密度](docs/06-density.md)
-- [常见错误](docs/04-common-pitfalls.md)
-- [对比度与可访问性](docs/05-accessibility-contrast.md)
-- [测试与验证](docs/07-testing.md)
-- [矢量图标系统](docs/09-icon-system.md)
-- [速查表](references/cheatsheet.md)
-- [可复制 XAML 片段](references/xaml-snippets.md)
+| Topic | What it covers | Link |
+|---|---|---|
+| Skill installation and clients | Installer parameters, supported AI clients, verification, and uninstall | [INSTALL.md](./INSTALL.md) |
+| Agent execution specification | Mandatory rules R1-R17, token tables, verification pipeline, and checklist | [SKILL.md](./SKILL.md) |
+| Theme integration guide | Resource dictionary responsibilities, merge order, plugin loader, and troubleshooting | [Theme/README.md](./Theme/README.md) |
+| Documentation index | Full map of specification docs and common validation commands | [docs/README.md](./docs/README.md) |
+| Design tokens | Color palette, typography scale, spacing, and corner radii | [docs/01-design-tokens.md](./docs/01-design-tokens.md) |
+| Control state matrix | Normal, Hover, Pressed, Focused, Selected, and Disabled token combinations | [docs/02-control-states.md](./docs/02-control-states.md) |
+| Layout specification | Anti-truncation forms, narrow/wide alignment, scroll protection, and tabs | [docs/03-layout.md](./docs/03-layout.md) |
+| Common pitfalls | Symptom-to-fix reference for recurring WPF styling bugs | [docs/04-common-pitfalls.md](./docs/04-common-pitfalls.md) |
+| Accessibility and contrast | Measured WCAG contrast ratios and contrast rules | [docs/05-accessibility-contrast.md](./docs/05-accessibility-contrast.md) |
+| Three-level density | Compact, Medium, and Relaxed token sets and runtime hot-switching | [docs/06-density.md](./docs/06-density.md) |
+| Testing and verification | Static checks, xUnit contract tests, and manual verification matrix | [docs/07-testing.md](./docs/07-testing.md) |
+| Vector icon system | 24x24 Material Symbols geometry contract and icon button rules | [docs/09-icon-system.md](./docs/09-icon-system.md) |
+| Quick reference and snippets | One-page cheatsheet and copyable XAML snippets | [references/cheatsheet.md](./references/cheatsheet.md) / [references/xaml-snippets.md](./references/xaml-snippets.md) |
+| Sample windows and preview app | Categorized XAML window skeletons and Preview Case Center CLI options | [samples/README.md](./samples/README.md) / [preview/README.md](./preview/README.md) |
+| Verification scripts | Script architecture, exit codes, and `LayoutCheck` / `UiTest` options | [tools/README.md](./tools/README.md) |
+| Ribbon icon generator skill | Standalone 24x24 Ribbon icon catalog and `IconGen.py` CLI | [skills/ribbon-icon-generator/README.md](./skills/ribbon-icon-generator/README.md) |
+| Third-party notices | Apache 2.0 attribution for Google Material Symbols geometries in `Theme/Icons.xaml` | [NOTICE.md](./NOTICE.md) |
