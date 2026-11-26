@@ -393,7 +393,7 @@
                     </GroupBox>
 
                     <!-- 8. 标签页 -->
-                    <GroupBox Header="8. 标签页（方角页签：每个页签都有 1px 边框，选中页签与内容区连成一体）">
+                    <GroupBox Header="8. 标签页（Material 底部指示条）">
                         <TabControl Height="170">
                             <TabItem Header="基本信息">
                                 <Grid Margin="0,8,0,0">

@@ -92,14 +92,13 @@
         </Border>
         <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Control.Hover}" />
-                <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Accent}" />
+                <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Control.Pressed}" />
                 <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
             </Trigger>
             <Trigger Property="IsChecked" Value="True">
                 <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Accent.Subtle}" />
                 <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Accent}" />
-                <Setter Property="Foreground" Value="{StaticResource Brush.Accent}" />
+                <Setter Property="Foreground" Value="{StaticResource Brush.Accent.Pressed}" />
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
                 <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Accent.SubtleHover}" />
@@ -120,8 +119,8 @@
         <Setter Property="Height" Value="{DynamicResource Layout.ControlHeight}" />
         <Setter Property="MinWidth" Value="{DynamicResource Layout.ButtonMinWidth}" />
         <Setter Property="Padding" Value="{DynamicResource Layout.ButtonPadding}" />
-        <Setter Property="Background" Value="{StaticResource Brush.Surface}" />
-        <Setter Property="BorderBrush" Value="{StaticResource Brush.Border.Control}" />
+        <Setter Property="Background" Value="{StaticResource Brush.SurfaceAlt}" />
+        <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
@@ -347,7 +346,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Border.Strong}" />
+                            <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Accent}" />
                         </Trigger>
                         <Trigger Property="IsKeyboardFocusWithin" Value="True">
                             <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Focus}" />
@@ -606,9 +605,26 @@
         <Setter Property="Background" Value="{StaticResource Brush.Surface}" />
         <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Padding" Value="{DynamicResource Layout.ToolBarPadding}" />
+        <Setter Property="Padding" Value="6,3" />
         <Setter Property="Height" Value="{DynamicResource Layout.ToolBarHeight}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToolBar}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{StaticResource Radius.Card}"
+                            Padding="{TemplateBinding Padding}"
+                            SnapsToDevicePixels="True">
+                        <ToolBarPanel x:Name="PART_ToolBarPanel"
+                                      IsItemsHost="True"
+                                      Orientation="Horizontal"
+                                      VerticalAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style TargetType="{x:Type ToolBar}" BasedOn="{StaticResource ToolBar.Base}" />

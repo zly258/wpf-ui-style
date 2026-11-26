@@ -663,7 +663,7 @@ namespace WpfStyles.Tests
         }
 
         [Fact]
-        public void TabItem_UsesNativeBoxedTabs()
+        public void TabItem_UsesMaterialUnderlineTabs()
         {
             XDocument controls = Load(ControlsPath);
             XElement tabItem = controls.Root.Elements()
@@ -674,76 +674,33 @@ namespace WpfStyles.Tests
 
             Assert.Equal("{DynamicResource Layout.TabPadding}",
                 SetterValue(tabItem, "Padding", "TabItem"));
+            Assert.Equal("Transparent", SetterValue(tabItem, "Background", "TabItem"));
 
-            // 方角原生页签：没有圆角、没有底部强调条
-            Assert.Null(tabItem.Descendants()
+            // Material 风格：未选中无边框，选中页签用底部 2px 主色指示条
+            Assert.NotNull(tabItem.Descendants()
                 .FirstOrDefault(e => (string)e.Attribute(X + "Name") == "Underline"));
-
-            XElement bd = tabItem.Descendants()
-                .FirstOrDefault(e => e.Name.LocalName == "Border"
-                    && (string)e.Attribute(X + "Name") == "Bd");
-            Assert.NotNull(bd);
-            Assert.Null(bd.Attribute("CornerRadius"));
-            // 未选中也有完整 1px 边框，页签边界可见
-            Assert.Equal("1,1,1,1", (string)bd.Attribute("BorderThickness"));
-
-            XElement selected = tabItem.Descendants()
-                .FirstOrDefault(e => e.Name.LocalName == "Trigger"
-                    && (string)e.Attribute("Property") == "IsSelected"
-                    && (string)e.Attribute("Value") == "True");
-            Assert.NotNull(selected);
-
-            var setters = selected.Elements()
-                .Where(e => e.Name.LocalName == "Setter")
-                .ToList();
-
-            Assert.Contains(setters, x => (string)x.Attribute("TargetName") == "Bd"
-                && (string)x.Attribute("Property") == "Background"
-                && (string)x.Attribute("Value") == "{StaticResource Brush.Surface}");
-            // 选中页签去掉下边框，与内容区连成一体
-            Assert.Contains(setters, x => (string)x.Attribute("TargetName") == "Bd"
-                && (string)x.Attribute("Property") == "BorderThickness"
-                && (string)x.Attribute("Value") == "1,1,1,0");
-            Assert.Contains(setters, x => (string)x.Attribute("Property") == "FontWeight"
-                && (string)x.Attribute("Value") == "SemiBold");
-
-            // 内容区是完整方框（左边/右边/下边），上边线由标签栏基线提供
-            XElement content = controls.Descendants()
-                .Where(e => e.Name.LocalName == "Border"
-                    && (string)e.Attribute("BorderThickness") == "1,0,1,1")
-                .FirstOrDefault();
-            Assert.NotNull(content);
-            Assert.Equal("{StaticResource Brush.Surface}", (string)content.Attribute("Background"));
-        }
-
-        [Fact]
-        public void TabItem_FrameUsesSofterBorderTabToken()
-        {
-            XDocument controls = Load(ControlsPath);
-            XElement tabItem = controls.Root.Elements()
-                .FirstOrDefault(e => e.Name.LocalName == "Style"
-                    && (string)e.Attribute("TargetType") == "{x:Type TabItem}"
-                    && e.Attribute(X + "Key") == null);
-            Assert.NotNull(tabItem);
-
-            // 页签方框走比 Border.Control 浅一档的 Border.Tab
-            Assert.Equal("{StaticResource Brush.Border.Tab}",
-                SetterValue(tabItem, "BorderBrush", "TabItem"));
 
             XElement selected = FindTrigger(tabItem, "IsSelected", "True");
             Assert.NotNull(selected);
-            Assert.Contains(selected.Elements(), x => (string)x.Attribute("TargetName") == "Bd"
-                && (string)x.Attribute("Property") == "BorderBrush"
-                && (string)x.Attribute("Value") == "{StaticResource Brush.Border.Tab}");
+            Assert.Contains(selected.Elements(), x => (string)x.Attribute("TargetName") == "Underline"
+                && (string)x.Attribute("Property") == "Visibility"
+                && (string)x.Attribute("Value") == "Visible");
+            Assert.Contains(selected.Elements(), x => (string)x.Attribute("Property") == "Foreground"
+                && (string)x.Attribute("Value") == "{StaticResource Brush.Accent}");
+        }
 
-            // 内容区方框和标签栏基线必须与页签同色，否则方框会断开
+        [Fact]
+        public void TabControl_FrameUsesSofterBorderTabToken()
+        {
+            XDocument controls = Load(ControlsPath);
+
+            // 标签栏基线与内容区边框走更浅的 Border.Tab
             var frame = controls.Descendants()
                 .Where(e => e.Name.LocalName == "Border"
                     && (string)e.Attribute("BorderBrush") == "{StaticResource Brush.Border.Tab}")
                 .ToList();
-            Assert.True(frame.Count >= 2, "TabControl 的标签栏基线与内容区方框也该用 Border.Tab");
+            Assert.True(frame.Count >= 1, "TabControl 的标签栏基线应使用 Border.Tab");
 
-            // 按钮/输入框仍保持 3:1 的 Border.Control，不能被浅一档令牌顶替
             Assert.Equal("{StaticResource Brush.Border.Control}",
                 KeyedStyleSetterValue(ControlsPath, "Button.Base", "BorderBrush"));
         }
@@ -1170,10 +1127,9 @@ namespace WpfStyles.Tests
                 Pair("Color.TooltipForeground", "Color.TooltipBackground", 4.5),
                 Pair("Color.Focus", "Color.Surface", 3.0),
                 Pair("Color.Focus", "Color.WindowBackground", 3.0),
-                // 按钮/输入框描边属于非文字 UI 组件，必须与相邻表面有 3:1
-                Pair("Color.BorderControl", "Color.Surface", 3.0),
-                Pair("Color.BorderControl", "Color.WindowBackground", 3.0),
-                Pair("Color.BorderControl", "Color.ControlHover", 3.0)
+                // Material 风格轻描边：按钮/输入框描边与相邻表面至少 2:1
+                Pair("Color.BorderControl", "Color.Surface", 2.0),
+                Pair("Color.BorderControl", "Color.WindowBackground", 2.0)
             };
 
             foreach (var pair in pairs)

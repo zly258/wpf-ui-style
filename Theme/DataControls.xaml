@@ -27,6 +27,22 @@
         <Setter Property="SnapsToDevicePixels" Value="True" />
     </Style>
 
+    <ControlTemplate x:Key="ListBox.Template" TargetType="{x:Type ItemsControl}">
+        <Border Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                CornerRadius="{StaticResource Radius.Card}"
+                Padding="{TemplateBinding Padding}"
+                SnapsToDevicePixels="True">
+            <ScrollViewer Focusable="False"
+                          Padding="0"
+                          HorizontalScrollBarVisibility="{Binding (ScrollViewer.HorizontalScrollBarVisibility), RelativeSource={RelativeSource TemplatedParent}}"
+                          VerticalScrollBarVisibility="{Binding (ScrollViewer.VerticalScrollBarVisibility), RelativeSource={RelativeSource TemplatedParent}}">
+                <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+            </ScrollViewer>
+        </Border>
+    </ControlTemplate>
+
     <Style TargetType="{x:Type ListBox}">
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
@@ -34,10 +50,11 @@
         <Setter Property="Background" Value="{StaticResource Brush.Surface}" />
         <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Padding" Value="0" />
+        <Setter Property="Padding" Value="3" />
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Template" Value="{StaticResource ListBox.Template}" />
     </Style>
 
     <ControlTemplate x:Key="ListBoxItem.Template" TargetType="{x:Type ListBoxItem}">
@@ -45,6 +62,8 @@
                 Background="{TemplateBinding Background}"
                 BorderBrush="Transparent"
                 BorderThickness="1"
+                CornerRadius="{StaticResource Radius.Small}"
+                Margin="0,1"
                 Padding="{TemplateBinding Padding}"
                 SnapsToDevicePixels="True">
             <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
@@ -97,7 +116,9 @@
         <Setter Property="Background" Value="{StaticResource Brush.Surface}" />
         <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />
         <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="Padding" Value="3" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Template" Value="{StaticResource ListBox.Template}" />
     </Style>
 
     <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
@@ -276,7 +297,7 @@
         <Setter Property="Foreground" Value="{StaticResource Brush.Text.Secondary}" />
         <Setter Property="Background" Value="{StaticResource Brush.SurfaceAlt}" />
         <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />
-        <Setter Property="BorderThickness" Value="0,0,1,1" />
+        <Setter Property="BorderThickness" Value="0,0,0,1" />
         <Setter Property="Padding" Value="8,2" />
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="Template" Value="{StaticResource DataGridColumnHeader.Template}" />
@@ -407,7 +428,8 @@
         <Setter Property="Background" Value="{StaticResource Brush.Surface}" />
         <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />
         <Setter Property="BorderThickness" Value="1" />
-        <Setter Property="Padding" Value="2" />
+        <Setter Property="Padding" Value="3" />
+        <Setter Property="Template" Value="{StaticResource ListBox.Template}" />
     </Style>
 
     <ControlTemplate x:Key="TreeView.Expander.Template" TargetType="{x:Type ToggleButton}">
@@ -462,6 +484,8 @@
                                 Background="{TemplateBinding Background}"
                                 BorderBrush="Transparent"
                                 BorderThickness="1"
+                                CornerRadius="{StaticResource Radius.Small}"
+                                Margin="0,1"
                                 Padding="{TemplateBinding Padding}"
                                 SnapsToDevicePixels="True">
                             <Grid>
