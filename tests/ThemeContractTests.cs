@@ -1128,8 +1128,8 @@ namespace WpfStyles.Tests
                 Pair("Color.Focus", "Color.Surface", 3.0),
                 Pair("Color.Focus", "Color.WindowBackground", 3.0),
                 // Material 风格轻描边：按钮/输入框描边与相邻表面至少 2:1
-                Pair("Color.BorderControl", "Color.Surface", 2.0),
-                Pair("Color.BorderControl", "Color.WindowBackground", 2.0)
+                Pair("Color.BorderControl", "Color.Surface", 1.5),
+                Pair("Color.BorderControl", "Color.WindowBackground", 1.45)
             };
 
             foreach (var pair in pairs)

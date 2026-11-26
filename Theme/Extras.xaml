@@ -465,15 +465,34 @@
         </Setter>
     </Style>
 
-    <Style x:Key="DatePickerTextBox.Base" TargetType="{x:Type DatePickerTextBox}"
-           BasedOn="{StaticResource TextBox.Base}">
-        <Setter Property="Height" Value="{DynamicResource Layout.ControlHeight}" />
-        <Setter Property="MinHeight" Value="{DynamicResource Layout.ControlHeight}" />
-        <Setter Property="Padding" Value="{DynamicResource Layout.DatePickerPadding}" />
-        <Setter Property="HorizontalAlignment" Value="Stretch" />
-        <Setter Property="BorderThickness" Value="0" />
+    <Style x:Key="DatePickerTextBox.Base" TargetType="{x:Type DatePickerTextBox}">
+        <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
+        <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
+        <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
         <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="{DynamicResource Layout.InputPadding}" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="CaretBrush" Value="{StaticResource Brush.Text.Primary}" />
+        <Setter Property="SelectionBrush" Value="{StaticResource Brush.Accent}" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type DatePickerTextBox}">
+                    <ScrollViewer x:Name="PART_ContentHost"
+                                  Focusable="False"
+                                  Background="Transparent"
+                                  HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Stretch"
+                                  HorizontalContentAlignment="Stretch"
+                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <ControlTemplate x:Key="DatePicker.Template" TargetType="{x:Type DatePicker}">

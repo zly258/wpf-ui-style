@@ -20,10 +20,10 @@
     <Color x:Key="Color.SurfaceAlt">#FFEEF2F7</Color>
     <Color x:Key="Color.SurfaceSunken">#FFF7F9FC</Color>
 
-    <Color x:Key="Color.Border">#FFE3E7EE</Color>
-    <Color x:Key="Color.BorderStrong">#FFD0D6E0</Color>
-    <Color x:Key="Color.BorderControl">#FFA3ACB9</Color>
-    <Color x:Key="Color.BorderTab">#FFE3E7EE</Color>
+    <Color x:Key="Color.Border">#FFE2E6EE</Color>
+    <Color x:Key="Color.BorderStrong">#FFD3D9E3</Color>
+    <Color x:Key="Color.BorderControl">#FFC2CAD6</Color>
+    <Color x:Key="Color.BorderTab">#FFE2E6EE</Color>
 
     <Color x:Key="Color.TextPrimary">#FF1F2933</Color>
     <Color x:Key="Color.TextSecondary">#FF4B5563</Color>
