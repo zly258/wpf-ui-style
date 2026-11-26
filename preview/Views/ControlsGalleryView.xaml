@@ -58,24 +58,24 @@
                             <!-- 图标按钮混用 24 / 28 / 32 三档时必须用水平 StackPanel：
                                  WrapPanel 会忽略子元素的 VerticalAlignment，
                                  同一行的图标会高低错开。 -->
-                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                                <Button Style="{StaticResource Button.Icon}" ToolTip="设置" Margin="0,0,6,8">
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                                <Button Style="{StaticResource Button.Icon}" ToolTip="设置" Margin="0,0,6,0">
                                     <Path Data="{StaticResource Icon.Geo.Settings}" Style="{StaticResource Icon.Regular}" />
                                 </Button>
-                                <Button Style="{StaticResource Button.Icon.Small}" ToolTip="复制" Margin="0,0,6,8">
+                                <Button Style="{StaticResource Button.Icon.Small}" ToolTip="复制" Margin="0,0,6,0">
                                     <Path Data="{StaticResource Icon.Geo.Copy}" Style="{StaticResource Icon.Small}" />
                                 </Button>
-                                <Button Style="{StaticResource Button.Icon.Large}" ToolTip="下载" Margin="0,0,6,8">
+                                <Button Style="{StaticResource Button.Icon.Large}" ToolTip="下载" Margin="0,0,6,0">
                                     <Path Data="{StaticResource Icon.Geo.Download}" Style="{StaticResource Icon.Medium}" />
                                 </Button>
-                                <Button Style="{StaticResource Button.Icon.Danger}" ToolTip="删除" Margin="0,0,6,8">
+                                <Button Style="{StaticResource Button.Icon.Danger}" ToolTip="删除" Margin="0,0,6,0">
                                     <Path Data="{StaticResource Icon.Geo.Trash}" Style="{StaticResource Icon.Regular}" />
                                 </Button>
-                                <Button Style="{StaticResource Button.Icon.Danger.Small}" ToolTip="移除" Margin="0,0,24,8">
+                                <Button Style="{StaticResource Button.Icon.Danger.Small}" ToolTip="移除" Margin="0,0,24,0">
                                     <Path Data="{StaticResource Icon.Geo.Close}" Style="{StaticResource Icon.Small}" />
                                 </Button>
 
-                                <Button Style="{StaticResource Button.Icon}" IsEnabled="False" ToolTip="禁用态" Margin="0,0,6,8">
+                                <Button Style="{StaticResource Button.Icon}" IsEnabled="False" ToolTip="禁用态" Margin="0,0,6,0">
                                     <Path Data="{StaticResource Icon.Geo.Settings}" Style="{StaticResource Icon.Regular}" />
                                 </Button>
                                 <Button Style="{StaticResource Button.Icon.Danger}" IsEnabled="False" ToolTip="禁用态">
