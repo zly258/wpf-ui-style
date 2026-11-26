@@ -15,25 +15,25 @@
           Radius.* = 圆角
     -->
 
-    <Color x:Key="Color.WindowBackground">#FFF3F6FA</Color>
+    <Color x:Key="Color.WindowBackground">#FFF8FAFD</Color>
     <Color x:Key="Color.Surface">#FFFFFFFF</Color>
-    <Color x:Key="Color.SurfaceAlt">#FFEEF2F7</Color>
-    <Color x:Key="Color.SurfaceSunken">#FFF7F9FC</Color>
+    <Color x:Key="Color.SurfaceAlt">#FFF0F4F9</Color>
+    <Color x:Key="Color.SurfaceSunken">#FFF4F7FB</Color>
 
-    <Color x:Key="Color.Border">#FFE2E6EE</Color>
-    <Color x:Key="Color.BorderStrong">#FFD3D9E3</Color>
-    <Color x:Key="Color.BorderControl">#FFC2CAD6</Color>
-    <Color x:Key="Color.BorderTab">#FFE2E6EE</Color>
+    <Color x:Key="Color.Border">#FFE3E7EF</Color>
+    <Color x:Key="Color.BorderStrong">#FFD4DAE5</Color>
+    <Color x:Key="Color.BorderControl">#FFC8D0DC</Color>
+    <Color x:Key="Color.BorderTab">#FFE3E7EF</Color>
 
     <Color x:Key="Color.TextPrimary">#FF1F2933</Color>
     <Color x:Key="Color.TextSecondary">#FF4B5563</Color>
     <Color x:Key="Color.TextDisabled">#FF667085</Color>
 
-    <Color x:Key="Color.Accent">#FF2563A8</Color>
-    <Color x:Key="Color.AccentHover">#FF1E5490</Color>
-    <Color x:Key="Color.AccentPressed">#FF1A4778</Color>
-    <Color x:Key="Color.AccentSubtle">#FFE1ECF8</Color>
-    <Color x:Key="Color.AccentSubtleHover">#FFD3E3F5</Color>
+    <Color x:Key="Color.Accent">#FF1967D2</Color>
+    <Color x:Key="Color.AccentHover">#FF1558B6</Color>
+    <Color x:Key="Color.AccentPressed">#FF124B9C</Color>
+    <Color x:Key="Color.AccentSubtle">#FFE8F0FE</Color>
+    <Color x:Key="Color.AccentSubtleHover">#FFD2E3FC</Color>
     <Color x:Key="Color.OnAccent">#FFFFFFFF</Color>
 
     <Color x:Key="Color.Danger">#FFB43B32</Color>
@@ -48,14 +48,14 @@
     <Color x:Key="Color.Warning">#FF7A5A1E</Color>
     <Color x:Key="Color.WarningSubtle">#FFF7F0E3</Color>
 
-    <Color x:Key="Color.ControlHover">#FFEEF2F7</Color>
-    <Color x:Key="Color.ControlPressed">#FFE1E6ED</Color>
+    <Color x:Key="Color.ControlHover">#FFF1F4F9</Color>
+    <Color x:Key="Color.ControlPressed">#FFE4E9F1</Color>
     <Color x:Key="Color.ControlDisabled">#FFF1F3F6</Color>
 
-    <Color x:Key="Color.Selection">#FFE1ECF8</Color>
-    <Color x:Key="Color.SelectionHover">#FFD3E3F5</Color>
+    <Color x:Key="Color.Selection">#FFE8F0FE</Color>
+    <Color x:Key="Color.SelectionHover">#FFD2E3FC</Color>
 
-    <Color x:Key="Color.Focus">#FF2563A8</Color>
+    <Color x:Key="Color.Focus">#FF1967D2</Color>
 
     <Color x:Key="Color.TooltipBackground">#FF1F2933</Color>
     <Color x:Key="Color.TooltipForeground">#FFFFFFFF</Color>
@@ -63,15 +63,15 @@
     <Color x:Key="Color.ScrollThumb">#FFC3CAD3</Color>
     <Color x:Key="Color.ScrollThumbHover">#FFA7B0BB</Color>
 
-    <Color x:Key="Color.CardSystem">#FFEEF2F7</Color>
-    <Color x:Key="Color.CardUser">#FFE1ECF8</Color>
+    <Color x:Key="Color.CardSystem">#FFF0F4F9</Color>
+    <Color x:Key="Color.CardUser">#FFE8F0FE</Color>
     <Color x:Key="Color.CardAi">#FFFFFFFF</Color>
     <Color x:Key="Color.CardError">#FFFBEDEC</Color>
 
-    <Color x:Key="Color.BadgeIdleBackground">#FFEEF2F7</Color>
+    <Color x:Key="Color.BadgeIdleBackground">#FFF0F4F9</Color>
     <Color x:Key="Color.BadgeIdleForeground">#FF4B5563</Color>
-    <Color x:Key="Color.BadgeActiveBackground">#FFE1ECF8</Color>
-    <Color x:Key="Color.BadgeActiveForeground">#FF2563A8</Color>
+    <Color x:Key="Color.BadgeActiveBackground">#FFE8F0FE</Color>
+    <Color x:Key="Color.BadgeActiveForeground">#FF1967D2</Color>
     <Color x:Key="Color.BadgeDoneBackground">#FFE9F4EE</Color>
     <Color x:Key="Color.BadgeDoneForeground">#FF2A704E</Color>
     <Color x:Key="Color.BadgeStoppedBackground">#FFF7F0E3</Color>
@@ -224,10 +224,10 @@
     <sys:Double x:Key="Layout.ToolBarHeight">40</sys:Double>
     <sys:Double x:Key="Layout.ProgressBarHeight">4</sys:Double>
 
-    <CornerRadius x:Key="Radius.Small">4</CornerRadius>
-    <CornerRadius x:Key="Radius.Card">6</CornerRadius>
-    <CornerRadius x:Key="Radius.Input">4</CornerRadius>
-    <CornerRadius x:Key="Radius.Pill">12</CornerRadius>
+    <CornerRadius x:Key="Radius.Small">6</CornerRadius>
+    <CornerRadius x:Key="Radius.Card">10</CornerRadius>
+    <CornerRadius x:Key="Radius.Input">8</CornerRadius>
+    <CornerRadius x:Key="Radius.Pill">14</CornerRadius>
 
     <Style x:Key="Text.Title" TargetType="{x:Type TextBlock}">
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />

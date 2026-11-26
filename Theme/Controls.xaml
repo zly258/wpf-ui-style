@@ -62,7 +62,7 @@
                 Background="{TemplateBinding Background}"
                 BorderBrush="{TemplateBinding BorderBrush}"
                 BorderThickness="{TemplateBinding BorderThickness}"
-                CornerRadius="{StaticResource Radius.Small}"
+                CornerRadius="{StaticResource Radius.Pill}"
                 SnapsToDevicePixels="True">
             <ContentPresenter Margin="{TemplateBinding Padding}"
                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
@@ -121,14 +121,14 @@
                 Background="{TemplateBinding Background}"
                 BorderBrush="{TemplateBinding BorderBrush}"
                 BorderThickness="{TemplateBinding BorderThickness}"
-                CornerRadius="{StaticResource Radius.Small}"
+                CornerRadius="{StaticResource Radius.Pill}"
                 SnapsToDevicePixels="True">
             <Grid>
                 <Border x:Name="FocusRing"
                         Margin="2"
                         BorderBrush="{StaticResource Brush.OnAccent}"
                         BorderThickness="1"
-                        CornerRadius="3"
+                        CornerRadius="12"
                         Visibility="Collapsed"
                         IsHitTestVisible="False" />
                 <ContentPresenter Margin="{TemplateBinding Padding}"
@@ -299,6 +299,7 @@
                 <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Accent}" />
             </Trigger>
             <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Surface}" />
                 <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Focus}" />
             </Trigger>
             <DataTrigger Binding="{Binding IsReadOnly, RelativeSource={RelativeSource TemplatedParent}}" Value="True">
@@ -317,8 +318,8 @@
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
         <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
-        <Setter Property="Background" Value="{StaticResource Brush.Surface}" />
-        <Setter Property="BorderBrush" Value="{StaticResource Brush.Border.Control}" />
+        <Setter Property="Background" Value="{StaticResource Brush.SurfaceSunken}" />
+        <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Height" Value="{DynamicResource Layout.ControlHeight}" />
         <Setter Property="MinHeight" Value="0" />
@@ -394,6 +395,7 @@
                 <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Accent}" />
             </Trigger>
             <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                <Setter TargetName="Bd" Property="Background" Value="{StaticResource Brush.Surface}" />
                 <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Focus}" />
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
@@ -408,8 +410,8 @@
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
         <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
-        <Setter Property="Background" Value="{StaticResource Brush.Surface}" />
-        <Setter Property="BorderBrush" Value="{StaticResource Brush.Border.Control}" />
+        <Setter Property="Background" Value="{StaticResource Brush.SurfaceSunken}" />
+        <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Height" Value="{DynamicResource Layout.ControlHeight}" />
         <Setter Property="MinHeight" Value="0" />
@@ -494,8 +496,8 @@
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
         <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
-        <Setter Property="Background" Value="{StaticResource Brush.Surface}" />
-        <Setter Property="BorderBrush" Value="{StaticResource Brush.Border.Control}" />
+        <Setter Property="Background" Value="{StaticResource Brush.SurfaceSunken}" />
+        <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Height" Value="{DynamicResource Layout.ControlHeight}" />
         <Setter Property="MinHeight" Value="0" />
@@ -910,7 +912,7 @@
                                     <ControlTemplate TargetType="{x:Type ToggleButton}">
                                         <Border x:Name="HeaderBorder"
                                                 Background="{TemplateBinding Background}"
-                                                CornerRadius="5"
+                                                CornerRadius="9"
                                                 Padding="{DynamicResource Layout.ExpanderHeaderPadding}">
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
@@ -939,7 +941,7 @@
                                         </Border>
                                         <ControlTemplate.Triggers>
                                             <Trigger Property="IsChecked" Value="True">
-                                                <Setter TargetName="HeaderBorder" Property="CornerRadius" Value="5,5,0,0" />
+                                                <Setter TargetName="HeaderBorder" Property="CornerRadius" Value="9,9,0,0" />
                                                 <Setter TargetName="Chevron" Property="RenderTransform">
                                                     <Setter.Value>
                                                         <RotateTransform Angle="90" />
@@ -1003,7 +1005,7 @@
                             <Border x:Name="HeaderContainer"
                                     DockPanel.Dock="Top"
                                     Background="{StaticResource Brush.SurfaceSunken}"
-                                    CornerRadius="5,5,0,0">
+                                    CornerRadius="9,9,0,0">
                                 <Grid>
                                 <Border x:Name="BaselineBorder"
                                         VerticalAlignment="Bottom"
@@ -1025,14 +1027,14 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="TabStripPlacement" Value="Bottom">
-                            <Setter TargetName="HeaderContainer" Property="CornerRadius" Value="0,0,5,5" />
+                            <Setter TargetName="HeaderContainer" Property="CornerRadius" Value="0,0,9,9" />
                             <Setter TargetName="HeaderContainer" Property="DockPanel.Dock" Value="Bottom" />
                             <Setter TargetName="BaselineBorder" Property="VerticalAlignment" Value="Top" />
                             <Setter TargetName="BaselineBorder" Property="BorderThickness" Value="0,1,0,0" />
                             <Setter TargetName="HeaderPanel" Property="Margin" Value="6,0,6,4" />
                         </Trigger>
                         <Trigger Property="TabStripPlacement" Value="Left">
-                            <Setter TargetName="HeaderContainer" Property="CornerRadius" Value="5,0,0,5" />
+                            <Setter TargetName="HeaderContainer" Property="CornerRadius" Value="9,0,0,9" />
                             <Setter TargetName="HeaderContainer" Property="DockPanel.Dock" Value="Left" />
                             <Setter TargetName="BaselineBorder" Property="VerticalAlignment" Value="Stretch" />
                             <Setter TargetName="BaselineBorder" Property="HorizontalAlignment" Value="Right" />
@@ -1040,7 +1042,7 @@
                             <Setter TargetName="HeaderPanel" Property="Margin" Value="4,6,0,6" />
                         </Trigger>
                         <Trigger Property="TabStripPlacement" Value="Right">
-                            <Setter TargetName="HeaderContainer" Property="CornerRadius" Value="0,5,5,0" />
+                            <Setter TargetName="HeaderContainer" Property="CornerRadius" Value="0,9,9,0" />
                             <Setter TargetName="HeaderContainer" Property="DockPanel.Dock" Value="Right" />
                             <Setter TargetName="BaselineBorder" Property="VerticalAlignment" Value="Stretch" />
                             <Setter TargetName="BaselineBorder" Property="HorizontalAlignment" Value="Left" />

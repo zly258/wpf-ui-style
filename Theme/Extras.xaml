@@ -82,7 +82,7 @@
                 Background="{TemplateBinding Background}"
                 BorderBrush="{TemplateBinding BorderBrush}"
                 BorderThickness="{TemplateBinding BorderThickness}"
-                CornerRadius="{StaticResource Radius.Small}"
+                CornerRadius="{StaticResource Radius.Pill}"
                 SnapsToDevicePixels="True">
             <ContentPresenter Margin="{TemplateBinding Padding}"
                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
@@ -588,8 +588,8 @@
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
         <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
-        <Setter Property="Background" Value="{StaticResource Brush.Surface}" />
-        <Setter Property="BorderBrush" Value="{StaticResource Brush.Border.Control}" />
+        <Setter Property="Background" Value="{StaticResource Brush.SurfaceSunken}" />
+        <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Height" Value="{DynamicResource Layout.ControlHeight}" />
         <Setter Property="Padding" Value="0" />
