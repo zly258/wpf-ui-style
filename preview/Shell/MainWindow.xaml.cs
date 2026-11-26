@@ -16,7 +16,6 @@ namespace WpfStylePreview.Shell
     {
         private readonly Dictionary<string, UserControl> _pages = new Dictionary<string, UserControl>();
         private CaseDescriptor _current;
-        private bool _densityReady;
 
         public MainWindow(string initialKey = "overview")
         {
@@ -25,13 +24,6 @@ namespace WpfStylePreview.Shell
             var view = new ListCollectionView(CaseCatalog.All.ToList());
             view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(CaseDescriptor.Category)));
             NavList.ItemsSource = view;
-
-            string profile = Application.Current?.TryFindResource("Density.Profile") as string;
-            DensityCombo.SelectedIndex =
-                string.Equals(profile, "compact", StringComparison.OrdinalIgnoreCase) ? 0 :
-                string.Equals(profile, "relaxed", StringComparison.OrdinalIgnoreCase) ? 2 : 1;
-
-            _densityReady = true;
 
             NavList.SelectedItem = CaseCatalog.Find(initialKey) ?? CaseCatalog.All[0];
         }
@@ -71,21 +63,6 @@ namespace WpfStylePreview.Shell
             {
                 NavList.SelectedItem = target;
             }
-        }
-
-        private void DensityCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (!_densityReady) return;
-
-            string profile;
-            switch (DensityCombo.SelectedIndex)
-            {
-                case 0: profile = "Compact"; break;
-                case 2: profile = "Relaxed"; break;
-                default: profile = "Medium"; break;
-            }
-
-            DensitySwitcher.Apply(profile);
         }
 
         private void StandaloneButton_Click(object sender, RoutedEventArgs e)

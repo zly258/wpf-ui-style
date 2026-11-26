@@ -33,14 +33,14 @@ namespace WpfStylePreview.Shell
             new CaseDescriptor
             {
                 Key = "overview", Category = "开始",
-                Title = "案例总览", Subtitle = "规范、密度与全部业务案例入口",
+                Title = "案例总览", Subtitle = "规范与全部业务案例入口",
                 Width = 1280, Height = 860,
                 Create = () => new OverviewView()
             },
             new CaseDescriptor
             {
                 Key = "controls", Category = "基础",
-                Title = "基础控件", Subtitle = "按钮、输入、下拉、复选、标签页与密度切换",
+                Title = "基础控件", Subtitle = "按钮、输入、下拉、复选、标签页等基础控件",
                 Width = 1180, Height = 940,
                 Create = () => new ControlsGalleryView()
             },

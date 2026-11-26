@@ -202,8 +202,8 @@
 
 ### 6.1 列表
 
-- 行高 28（`Layout.RowHeight`，中等密度）。
-- 表头 30（`Layout.HeaderHeight`，中等密度）。
+- 行高 26（`Layout.RowHeight`）。
+- 表头 28（`Layout.HeaderHeight`）。
 - 列宽：短序号 40–56，名称/路径 `*`，状态 80–100。
 - 长文本列使用 `TextTrimming="CharacterEllipsis"` 或 `ToolTip` 显示完整内容。
 - 不要在列表项里放多层嵌套控件；一行最多一个主文本 + 一个次要文本 + 一个状态标签。
@@ -765,7 +765,7 @@ AI 生成 WPF 界面时极易犯以下**四大结构性坏味道**：
 ### 15.4 紧凑不等于拥挤 (Compact ≠ Cramped)
 
 1. **控件尺寸紧凑，但模块之间要有清晰留白**：
-   - 控件本身使用当前密度的 `Layout.ControlHeight`（紧凑 26 / 中等 30 / 宽松 34），同一窗口只用一档；
+   - 控件本身使用`Layout.ControlHeight`（28），同一窗口不混用其它高度；
    - 筛选栏与工具栏之间保持 8px~10px 呼吸间距，严禁所有控件黏连在一起；
 2. **筛选列限制**：
    - 一行内的筛选组合（Label + Input）**不得超过 3~4 组**；
@@ -773,20 +773,9 @@ AI 生成 WPF 界面时极易犯以下**四大结构性坏味道**：
 
 ---
 
-## 16. 密度与控件可识别性
+## 16. 控件可识别性
 
-### 16.1 三档密度
-
-布局尺寸不再只有一个固定值，而是由 `Theme/Density.*.xaml` 提供三档：
-
-- **紧凑 Compact**：26px 控件、24px 表格行，适合工程插件工具条与属性面板；
-- **中等 Medium（默认）**：30px 控件、28px 表格行，适合绝大多数业务窗口；
-- **宽松 Relaxed**：34px 控件、32px 表格行，适合触屏、演示与低密度看板。
-
-业务 XAML 引用 `{StaticResource Layout.*}`；主题内部引用 `{DynamicResource Layout.*}` 以支持运行时换挡。
-**同一窗口只用一档**，不要把 26px 输入框和 34px 按钮排在同一行。完整键值见 [06-density.md](06-density.md)。
-
-### 16.2 输入框必须占满可用宽度
+### 16.1 输入框必须占满可用宽度
 
 `TextBox` / `PasswordBox` / `ComboBox` 的文本宿主默认 `HorizontalAlignment="Stretch"`。
 如果业务代码把 `HorizontalContentAlignment` 改成 `Left`：
@@ -797,12 +786,12 @@ AI 生成 WPF 界面时极易犯以下**四大结构性坏味道**：
 
 正确做法是让输入列 `Width="*"`，输入框自身不写 `Width`；需要上限时用 `MaxWidth`。
 
-### 16.3 标签页必须有明确选中态
+### 16.2 标签页必须有明确选中态
 
 默认 `TabItem` 是**原生方角页签**：1px `Brush.Border.Tab` 边框、无圆角、无底部强调条；选中页签去掉下边框并与内容区连成一体。
 它不是装饰，而是「当前位置」的唯一视觉锚点。只画一条 1px 横线（或只改文字颜色）在低对比显示器上无法辨认。
 
-### 16.4 按钮边界与高度
+### 16.3 按钮边界与高度
 
 - 默认按钮是白底 + `Brush.Border.Control` 描边（对白底 3.52:1）；
 - 悬停时描边切到 `Brush.Accent`，按下切到 `Brush.Accent.Pressed`；

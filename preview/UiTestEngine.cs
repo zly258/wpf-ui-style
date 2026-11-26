@@ -322,7 +322,6 @@ namespace WpfStylePreview
             var nav = FindElementByName<ListBox>(root, "NavList");
             var host = FindElementByName<ContentControl>(root, "PageHost");
             var title = FindElementByName<TextBlock>(root, "PageTitle");
-            var density = FindElementByName<ComboBox>(root, "DensityCombo");
 
             int step = 1;
 
@@ -374,32 +373,6 @@ namespace WpfStylePreview
                     Message = pass ? "导航与内容区联动正常" : "导航未切换到预期页面",
                     SnapshotPath = SaveStepSnapshot(root, window, shotDir, $"{report.WindowName}_02_nav_table.png", scale)
                 });
-            }
-
-            // Step 3: 全局密度切换
-            if (density != null)
-            {
-                density.SelectedIndex = 0;
-                root.UpdateLayout();
-                string profile = Application.Current.TryFindResource("Density.Profile") as string;
-                bool pass = string.Equals(profile, "compact", StringComparison.OrdinalIgnoreCase);
-
-                report.Steps.Add(new StepResult
-                {
-                    Step = step++,
-                    Action = "Change Density",
-                    TargetName = "DensityCombo",
-                    Description = "主壳密度下拉切到紧凑档，验证全局 Density.Profile 生效",
-                    BeforeState = "medium",
-                    AfterState = profile ?? "<null>",
-                    Passed = pass,
-                    Message = pass ? "密度切换即时生效" : "密度未切换到 compact",
-                    SnapshotPath = SaveStepSnapshot(root, window, shotDir, $"{report.WindowName}_03_density_compact.png", scale)
-                });
-
-                // 复位到中等，避免影响后续截图
-                density.SelectedIndex = 1;
-                root.UpdateLayout();
             }
         }
 

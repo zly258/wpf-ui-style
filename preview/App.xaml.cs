@@ -31,7 +31,6 @@ namespace WpfStylePreview
             bool verify = false;
             string shotDir = null;
             string xamlFile = null;
-            string density = null;
             string page = "overview";
             bool json = false;
 
@@ -42,7 +41,6 @@ namespace WpfStylePreview
                     case "-shot": shot = args[++i]; break;
                     case "-scale": scale = double.Parse(args[++i], CultureInfo.InvariantCulture); break;
                     case "-window": which = args[++i]; break;
-                    case "-density": density = args[++i]; break;
                     case "-page": page = args[++i]; break;
                     case "-all": all = true; break;
                     case "-menu": menu = true; break;
@@ -64,12 +62,6 @@ namespace WpfStylePreview
             }
 
             DefaultPage = page;
-
-            // 运行时密度（Compact / Medium / Relaxed），未指定时使用 Theme.xaml 的默认中等档
-            if (!string.IsNullOrWhiteSpace(density))
-            {
-                DensitySwitcher.Apply(density);
-            }
 
             // 动态 XAML 渲染模式
             if (!string.IsNullOrEmpty(xamlFile))

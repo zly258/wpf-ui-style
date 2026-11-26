@@ -33,7 +33,7 @@
                                    FontSize="{StaticResource FontSize.Display}"
                                    FontWeight="SemiBold"
                                    Foreground="{StaticResource Brush.Text.Primary}" />
-                        <TextBlock Text="面向工程桌面与 CAD 插件的 WPF 视觉规范、三档密度与自动化校验。"
+                        <TextBlock Text="面向工程桌面与 CAD 插件的 WPF 视觉规范、Material 3 扁平风格与自动化校验。"
                                    Style="{StaticResource Text.Body}"
                                    Foreground="{StaticResource Brush.Text.Secondary}"
                                    Margin="0,6,0,0" />
@@ -43,7 +43,7 @@
                                     CornerRadius="{StaticResource Radius.Pill}"
                                     Padding="{DynamicResource Layout.BadgePadding}"
                                     Margin="0,0,8,0">
-                                <TextBlock Text="默认中等密度"
+                                <TextBlock Text="Material 3 扁平"
                                            FontSize="{StaticResource FontSize.Caption}"
                                            Foreground="{StaticResource Brush.Accent}" />
                             </Border>
@@ -51,7 +51,7 @@
                                     CornerRadius="{StaticResource Radius.Pill}"
                                     Padding="{DynamicResource Layout.BadgePadding}"
                                     Margin="0,0,8,0">
-                                <TextBlock Text="3 档密度"
+                                <TextBlock Text="控件高 28 px"
                                            FontSize="{StaticResource FontSize.Caption}"
                                            Foreground="{StaticResource Brush.Accent}" />
                             </Border>
@@ -80,8 +80,8 @@
             <UniformGrid Columns="3" Margin="0,12,0,0">
                 <Border Style="{StaticResource Card}" Margin="0,0,10,0">
                     <StackPanel>
-                        <TextBlock Text="密度只改尺寸" Style="{StaticResource Text.Section}" FontWeight="SemiBold" />
-                        <TextBlock Text="紧凑 / 中等 / 宽松只改变控件高度、行高与内边距；颜色、字号、16px 勾选框保持不变。"
+                        <TextBlock Text="极简、紧凑" Style="{StaticResource Text.Section}" FontWeight="SemiBold" />
+                        <TextBlock Text="控件高 28、小号 24、表格行 26，圆角 4–6；颜色与字号全部来自 Tokens。"
                                    Style="{StaticResource Text.Caption}" Margin="0,4,0,0" />
                     </StackPanel>
                 </Border>
@@ -134,7 +134,7 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
 
-            <TextBlock Text="左侧导航按分类列出全部案例；右上角可在紧凑 / 中等 / 宽松之间实时切换密度。"
+            <TextBlock Text="左侧导航按分类列出全部案例。"
                        Style="{StaticResource Text.Caption}" Margin="0,4,0,0" />
         </StackPanel>
     </ScrollViewer>

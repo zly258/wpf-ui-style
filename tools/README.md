@@ -76,9 +76,8 @@ LayoutCheck 识别主题文件的方式：默认 `theme` 目录及 `Theme/Window
 | 业务 XAML 硬编码色值 | `#RGB` / `#RRGGBB` / `#AARRGGBB` 只允许出现在 `Theme/` 里 |
 | 业务 XAML 本地 `FontFamily` | 字体栈由 Window 样式统一提供，禁止局部覆盖 |
 | `SizeToContent="Height"` 窗口里的 `TabControl` 没有固定 `Height` | 切到内容少的 tab 时窗口会缩矮（固定高度窗口里报 WARN） |
-| 密度键误用 `StaticResource` | `Theme/` 内的 `Layout.*` 密度键必须用 `DynamicResource`，否则换档不生效 |
-| 密度档案不完整 | `Density.Compact/Medium/Relaxed.xaml` 键集必须完全一致，且 `Tokens.xaml` 保留兜底值 |
-| `DynamicResource` 引用了未定义的密度键 | 防止拼写错误导致运行时尺寸回退到 0 |
+| 尺寸键误用 `StaticResource` | `Theme/` 内的 `Layout.*` 尺寸键必须用 `DynamicResource` |
+| `DynamicResource` 引用了未定义的尺寸键 | 防止拼写错误导致运行时尺寸回退到 0 |
 
 **警告（WARN，`--strict` 下才失败）**
 

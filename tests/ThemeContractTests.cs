@@ -541,7 +541,7 @@ namespace WpfStyles.Tests
                 "DatePicker.Template 的 Calendar 缺少 MinWidth，弹层可能塌成竖条");
         }
 
-        private static readonly string[] DensityProfiles = { "Compact", "Medium", "Relaxed" };
+        private static readonly string[] DensityProfiles = { "Medium" };
 
         private static string ThemeFile(string name) => Path.Combine(StylesRoot, "Theme", name);
 
@@ -561,24 +561,15 @@ namespace WpfStyles.Tests
         public void DensityProfiles_DefineTheSameLayoutKeys()
         {
             Dictionary<string, XElement> tokens = KeyedResources(TokensPath);
-            Dictionary<string, XElement> compact = DensityProfile("Compact");
             Dictionary<string, XElement> medium = DensityProfile("Medium");
-            Dictionary<string, XElement> relaxed = DensityProfile("Relaxed");
-
-            string[] compactKeys = compact.Keys.OrderBy(k => k, StringComparer.Ordinal).ToArray();
-            Assert.Equal(compactKeys, medium.Keys.OrderBy(k => k, StringComparer.Ordinal).ToArray());
-            Assert.Equal(compactKeys, relaxed.Keys.OrderBy(k => k, StringComparer.Ordinal).ToArray());
-
-            foreach (string key in compactKeys)
+            foreach (string key in medium.Keys)
             {
                 // Tokens 必须保留同名兜底值，单独合并 Controls 的项目才不会缺资源。
                 Assert.True(tokens.ContainsKey(key), "Tokens.xaml is missing density key " + key);
-                Assert.Equal(tokens[key].Name.LocalName, compact[key].Name.LocalName);
+                Assert.Equal(tokens[key].Name.LocalName, medium[key].Name.LocalName);
             }
 
-            Assert.Equal("compact", compact["Density.Profile"].Value.Trim());
             Assert.Equal("medium", medium["Density.Profile"].Value.Trim());
-            Assert.Equal("relaxed", relaxed["Density.Profile"].Value.Trim());
         }
 
         [Fact]
@@ -586,9 +577,7 @@ namespace WpfStyles.Tests
         {
             foreach (var pair in new[]
             {
-                new KeyValuePair<string, string>("Theme.xaml", "Density.Medium.xaml"),
-                new KeyValuePair<string, string>("Theme.Compact.xaml", "Density.Compact.xaml"),
-                new KeyValuePair<string, string>("Theme.Relaxed.xaml", "Density.Relaxed.xaml")
+                new KeyValuePair<string, string>("Theme.xaml", "Density.Medium.xaml")
             })
             {
                 var sources = Load(ThemeFile(pair.Key)).Root
@@ -632,54 +621,6 @@ namespace WpfStyles.Tests
                     Assert.True(densityKeys.Contains(key),
                         path + " references unknown density token " + key);
                 }
-            }
-        }
-
-        [Fact]
-        public void DensityProfiles_AreStrictlyOrderedCompactMediumRelaxed()
-        {
-            var compact = DensityProfile("Compact");
-            var medium = DensityProfile("Medium");
-            var relaxed = DensityProfile("Relaxed");
-
-            foreach (string key in new[]
-            {
-                "Layout.ControlHeight",
-                "Layout.ControlHeight.Small",
-                "Layout.ControlHeight.Large",
-                "Layout.RowHeight",
-                "Layout.HeaderHeight",
-                "Layout.ButtonMinWidth",
-                "Layout.FormLabelMaxWidth",
-                "Layout.ProgressBarHeight"
-            })
-            {
-                double c = double.Parse(compact[key].Value);
-                double m = double.Parse(medium[key].Value);
-                double r = double.Parse(relaxed[key].Value);
-                Assert.True(c < m && m < r, key + " must grow: " + c + " < " + m + " < " + r);
-            }
-
-            foreach (string key in new[]
-            {
-                "Layout.TabPadding",
-                "Layout.InputPadding",
-                "Layout.FormRowMargin",
-                "Layout.ListItemPadding"
-            })
-            {
-                double[] c = compact[key].Value.Split(',').Select(double.Parse).ToArray();
-                double[] m = medium[key].Value.Split(',').Select(double.Parse).ToArray();
-                double[] r = relaxed[key].Value.Split(',').Select(double.Parse).ToArray();
-                Assert.True(c[0] <= m[0] && m[0] <= r[0], key + " left/start inset must grow");
-            }
-
-            // 按钮上下内边距必须为 0：高度由 Height 控制，避免“按钮显得过高”。
-            foreach (var profile in new[] { compact, medium, relaxed })
-            {
-                double[] padding = profile["Layout.ButtonPadding"].Value.Split(',').Select(double.Parse).ToArray();
-                Assert.Equal(2, padding.Length);
-                Assert.Equal(0, padding[1]);
             }
         }
 
@@ -843,8 +784,8 @@ namespace WpfStyles.Tests
             XElement secondary = FindKeyedStyle(ControlsPath, "Button.Secondary");
             XElement hover = FindTrigger(secondary, "IsMouseOver", "True");
             Assert.NotNull(hover);
-            Assert.Equal("{StaticResource Brush.Accent}",
-                SetterValue(hover, "BorderBrush", "Button.Secondary hover"));
+            Assert.Equal("{StaticResource Brush.Accent.SubtleHover}",
+                SetterValue(hover, "Background", "Button.Secondary hover"));
         }
 
         [Fact]
@@ -967,9 +908,7 @@ namespace WpfStyles.Tests
             var densityFiles = new[]
             {
                 TokensPath,
-                Path.Combine(StylesRoot, "Theme", "Density.Compact.xaml"),
-                Path.Combine(StylesRoot, "Theme", "Density.Medium.xaml"),
-                Path.Combine(StylesRoot, "Theme", "Density.Relaxed.xaml")
+                Path.Combine(StylesRoot, "Theme", "Density.Medium.xaml")
             };
 
             foreach (string file in densityFiles)

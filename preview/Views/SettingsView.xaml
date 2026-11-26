@@ -33,7 +33,7 @@
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="转换设置" Style="{StaticResource Text.Title}" FontWeight="SemiBold" VerticalAlignment="Center" />
                     <TextBlock Grid.Column="1"
-                               Text="紧凑骨架：三列并排，行距 3px，中等密度控件高 30px"
+                               Text="紧凑骨架：三列并排，行距 2px，控件高 28px"
                                Style="{StaticResource Text.Caption}"
                                VerticalAlignment="Center" />
                 </Grid>

@@ -18,21 +18,21 @@
     <!-- ============================================================
          1. 基础色板（低饱和工业桌面配色）
          ============================================================ -->
-    <Color x:Key="Color.WindowBackground">#FFE9EDF2</Color>
-    <Color x:Key="Color.Surface">#FFFAFBFC</Color>
-    <Color x:Key="Color.SurfaceAlt">#FFF2F4F7</Color>
-    <Color x:Key="Color.SurfaceSunken">#FFF7F8FA</Color>
+    <Color x:Key="Color.WindowBackground">#FFF3F6FA</Color>
+    <Color x:Key="Color.Surface">#FFFFFFFF</Color>
+    <Color x:Key="Color.SurfaceAlt">#FFEEF2F7</Color>
+    <Color x:Key="Color.SurfaceSunken">#FFF7F9FC</Color>
 
-    <Color x:Key="Color.Border">#FFD0D5DB</Color>
-    <Color x:Key="Color.BorderStrong">#FFAEB7C2</Color>
+    <Color x:Key="Color.Border">#FFDCE1E8</Color>
+    <Color x:Key="Color.BorderStrong">#FFB6BEC9</Color>
     <!-- 按钮/可点击控件的描边：必须与白底有 ≥3:1 的可感知边界，
          否则「白底 + 浅边」在低亮度显示器上几乎看不见。 -->
-    <Color x:Key="Color.BorderControl">#FF7C8795</Color>
+    <Color x:Key="Color.BorderControl">#FF7F8A98</Color>
     <!-- 标签页方框描边：比 Border.Control 浅一档（对 Surface 约 2.50:1）。
          页签由文字本身标识、边框只是分组轮廓，不属于 WCAG 1.4.11 必须
          ≥3:1 的「唯一识别手段」，所以可以放轻；按钮/输入框仍用
          Border.Control，不要换成这个。 -->
-    <Color x:Key="Color.BorderTab">#FF98A1AD</Color>
+    <Color x:Key="Color.BorderTab">#FF9AA3AF</Color>
 
     <Color x:Key="Color.TextPrimary">#FF1F2933</Color>
     <Color x:Key="Color.TextSecondary">#FF4B5563</Color>
@@ -40,11 +40,11 @@
     <Color x:Key="Color.TextDisabled">#FF667085</Color>
 
     <!-- Accent：唯一品牌色。白字只允许压在 Accent/AccentHover/AccentPressed 上。 -->
-    <Color x:Key="Color.Accent">#FF2F6F9F</Color>
-    <Color x:Key="Color.AccentHover">#FF285F88</Color>
-    <Color x:Key="Color.AccentPressed">#FF22506F</Color>
-    <Color x:Key="Color.AccentSubtle">#FFE4EEF5</Color>
-    <Color x:Key="Color.AccentSubtleHover">#FFD8E6F0</Color>
+    <Color x:Key="Color.Accent">#FF2563A8</Color>
+    <Color x:Key="Color.AccentHover">#FF1E5490</Color>
+    <Color x:Key="Color.AccentPressed">#FF1A4778</Color>
+    <Color x:Key="Color.AccentSubtle">#FFE1ECF8</Color>
+    <Color x:Key="Color.AccentSubtleHover">#FFD3E3F5</Color>
     <Color x:Key="Color.OnAccent">#FFFFFFFF</Color>
 
     <!-- 语义色 -->
@@ -60,16 +60,16 @@
     <Color x:Key="Color.WarningSubtle">#FFF7F0E3</Color>
 
     <!-- 交互态 -->
-    <Color x:Key="Color.ControlHover">#FFF0F3F6</Color>
-    <Color x:Key="Color.ControlPressed">#FFE4E8EE</Color>
-    <Color x:Key="Color.ControlDisabled">#FFF2F4F7</Color>
+    <Color x:Key="Color.ControlHover">#FFEEF2F7</Color>
+    <Color x:Key="Color.ControlPressed">#FFE1E6ED</Color>
+    <Color x:Key="Color.ControlDisabled">#FFF1F3F6</Color>
 
     <!-- 选中态：浅底深字，禁止白字。 -->
-    <Color x:Key="Color.Selection">#FFE4EEF5</Color>
-    <Color x:Key="Color.SelectionHover">#FFD8E6F0</Color>
+    <Color x:Key="Color.Selection">#FFE1ECF8</Color>
+    <Color x:Key="Color.SelectionHover">#FFD3E3F5</Color>
 
     <!-- 焦点环：非文字元素 3:1 以上 -->
-    <Color x:Key="Color.Focus">#FF2F6F9F</Color>
+    <Color x:Key="Color.Focus">#FF2563A8</Color>
 
     <!-- Tooltip：深底白字，最高对比度。 -->
     <Color x:Key="Color.TooltipBackground">#FF1F2933</Color>
@@ -80,15 +80,15 @@
     <Color x:Key="Color.ScrollThumbHover">#FFA7B0BB</Color>
 
     <!-- 卡片 / 消息 / 状态标签 -->
-    <Color x:Key="Color.CardSystem">#FFF2F4F7</Color>
-    <Color x:Key="Color.CardUser">#FFE4EEF5</Color>
-    <Color x:Key="Color.CardAi">#FFFAFBFC</Color>
+    <Color x:Key="Color.CardSystem">#FFEEF2F7</Color>
+    <Color x:Key="Color.CardUser">#FFE1ECF8</Color>
+    <Color x:Key="Color.CardAi">#FFFFFFFF</Color>
     <Color x:Key="Color.CardError">#FFFBEDEC</Color>
 
-    <Color x:Key="Color.BadgeIdleBackground">#FFF2F4F7</Color>
+    <Color x:Key="Color.BadgeIdleBackground">#FFEEF2F7</Color>
     <Color x:Key="Color.BadgeIdleForeground">#FF4B5563</Color>
-    <Color x:Key="Color.BadgeActiveBackground">#FFE4EEF5</Color>
-    <Color x:Key="Color.BadgeActiveForeground">#FF2F6F9F</Color>
+    <Color x:Key="Color.BadgeActiveBackground">#FFE1ECF8</Color>
+    <Color x:Key="Color.BadgeActiveForeground">#FF2563A8</Color>
     <Color x:Key="Color.BadgeDoneBackground">#FFE9F4EE</Color>
     <Color x:Key="Color.BadgeDoneForeground">#FF2A704E</Color>
     <Color x:Key="Color.BadgeStoppedBackground">#FFF7F0E3</Color>
@@ -211,21 +211,21 @@
          ============================================================ -->
     <sys:String x:Key="Density.Profile">medium</sys:String>
 
-    <sys:Double x:Key="Layout.ControlHeight">30</sys:Double>
-    <sys:Double x:Key="Layout.ControlHeight.Small">26</sys:Double>
-    <sys:Double x:Key="Layout.ControlHeight.Large">36</sys:Double>
+    <sys:Double x:Key="Layout.ControlHeight">28</sys:Double>
+    <sys:Double x:Key="Layout.ControlHeight.Small">24</sys:Double>
+    <sys:Double x:Key="Layout.ControlHeight.Large">32</sys:Double>
     <!-- 日志/代码 TextBox 的可选高度上限（见 R9：只对日志限制 MaxHeight，
          不强制 MinHeight，避免撑爆小窗口）。 -->
     <sys:Double x:Key="Layout.LogMaxHeight">220</sys:Double>
-    <sys:Double x:Key="Layout.TagHeight">24</sys:Double>
-    <sys:Double x:Key="Layout.IconButton.Micro">24</sys:Double>
-    <sys:Double x:Key="Layout.IconButton.Small">30</sys:Double>
-    <sys:Double x:Key="Layout.IconButton.Large">36</sys:Double>
-    <sys:Double x:Key="Layout.RowHeight">28</sys:Double>
-    <sys:Double x:Key="Layout.HeaderHeight">30</sys:Double>
+    <sys:Double x:Key="Layout.TagHeight">20</sys:Double>
+    <sys:Double x:Key="Layout.IconButton.Micro">22</sys:Double>
+    <sys:Double x:Key="Layout.IconButton.Small">26</sys:Double>
+    <sys:Double x:Key="Layout.IconButton.Large">32</sys:Double>
+    <sys:Double x:Key="Layout.RowHeight">26</sys:Double>
+    <sys:Double x:Key="Layout.HeaderHeight">28</sys:Double>
     <!-- 单元格内控件高度 = 行高 - 2：数据行底部有 1px 网格线，控件撑满整行时
          描边会压到分隔线上（hover/展开时看起来像溢出行高）。 -->
-    <sys:Double x:Key="Layout.CellControlHeight">26</sys:Double>
+    <sys:Double x:Key="Layout.CellControlHeight">24</sys:Double>
     <!-- 复选框/单选框靶心固定 16，不随密度缩小（可访问性下限）。 -->
     <sys:Double x:Key="Layout.CheckBox.Size">16</sys:Double>
     <sys:Double x:Key="Layout.RadioButton.Size">16</sys:Double>
@@ -260,36 +260,36 @@
 
 
     <Thickness x:Key="Layout.WindowPadding">12</Thickness>
-    <Thickness x:Key="Layout.GroupPadding">10</Thickness>
-    <Thickness x:Key="Layout.CardPadding">10</Thickness>
-    <Thickness x:Key="Layout.FormRowMargin">0,3,0,3</Thickness>
-    <Thickness x:Key="Layout.SectionMargin">0,0,0,10</Thickness>
-    <sys:Double x:Key="Layout.ButtonMinWidth">64</sys:Double>
-    <sys:Double x:Key="Layout.ButtonMinWidth.Small">48</sys:Double>
+    <Thickness x:Key="Layout.GroupPadding">8</Thickness>
+    <Thickness x:Key="Layout.CardPadding">8</Thickness>
+    <Thickness x:Key="Layout.FormRowMargin">0,2,0,2</Thickness>
+    <Thickness x:Key="Layout.SectionMargin">0,0,0,8</Thickness>
+    <sys:Double x:Key="Layout.ButtonMinWidth">56</sys:Double>
+    <sys:Double x:Key="Layout.ButtonMinWidth.Small">40</sys:Double>
     <Thickness x:Key="Layout.ButtonPadding">12,0</Thickness>
     <Thickness x:Key="Layout.ButtonPadding.Small">8,0</Thickness>
     <Thickness x:Key="Layout.InputPadding">6,0</Thickness>
     <Thickness x:Key="Layout.InputPadding.Multiline">6,6</Thickness>
     <Thickness x:Key="Layout.ComboBoxPadding">6,0,22,0</Thickness>
-    <Thickness x:Key="Layout.ComboBoxItemPadding">8,4</Thickness>
+    <Thickness x:Key="Layout.ComboBoxItemPadding">8,3</Thickness>
     <Thickness x:Key="Layout.DatePickerPadding">6,0,28,0</Thickness>
-    <Thickness x:Key="Layout.ListItemPadding">8,5</Thickness>
+    <Thickness x:Key="Layout.ListItemPadding">8,3</Thickness>
     <Thickness x:Key="Layout.ListViewItemPadding">3,2</Thickness>
-    <Thickness x:Key="Layout.MenuItemPadding">8,5</Thickness>
-    <Thickness x:Key="Layout.TabPadding">12,6</Thickness>
+    <Thickness x:Key="Layout.MenuItemPadding">8,3</Thickness>
+    <Thickness x:Key="Layout.TabPadding">12,4</Thickness>
     <Thickness x:Key="Layout.TooltipPadding">8,4</Thickness>
     <Thickness x:Key="Layout.BadgePadding">8,2</Thickness>
-    <Thickness x:Key="Layout.ExpanderHeaderPadding">10,6</Thickness>
+    <Thickness x:Key="Layout.ExpanderHeaderPadding">8,4</Thickness>
     <Thickness x:Key="Layout.ExpanderContentPadding">8,6</Thickness>
-    <Thickness x:Key="Layout.ToolBarPadding">5,3</Thickness>
-    <sys:Double x:Key="Layout.ToolBarHeight">44</sys:Double>
-    <sys:Double x:Key="Layout.ProgressBarHeight">8</sys:Double>
+    <Thickness x:Key="Layout.ToolBarPadding">4,2</Thickness>
+    <sys:Double x:Key="Layout.ToolBarHeight">40</sys:Double>
+    <sys:Double x:Key="Layout.ProgressBarHeight">4</sys:Double>
 
 
-    <CornerRadius x:Key="Radius.Small">2</CornerRadius>
-    <CornerRadius x:Key="Radius.Card">4</CornerRadius>
+    <CornerRadius x:Key="Radius.Small">4</CornerRadius>
+    <CornerRadius x:Key="Radius.Card">6</CornerRadius>
     <CornerRadius x:Key="Radius.Input">4</CornerRadius>
-    <CornerRadius x:Key="Radius.Pill">10</CornerRadius>
+    <CornerRadius x:Key="Radius.Pill">12</CornerRadius>
 
     <!-- ============================================================
          5. 文本样式（仅用于静态文本）

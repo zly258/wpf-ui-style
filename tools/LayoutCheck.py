@@ -513,7 +513,7 @@ def check_redundant_demo_chatter(path: Path, text: str) -> None:
 # Controls must read density-sensitive Layout.* tokens through DynamicResource so
 # that swapping the density dictionary at runtime actually re-sizes them.
 DENSITY_PROFILE_KEYS: dict[str, set[str]] = {}
-DENSITY_PROFILE_NAMES = ("Density.Compact.xaml", "Density.Medium.xaml", "Density.Relaxed.xaml")
+DENSITY_PROFILE_NAMES = ("Density.Medium.xaml",)
 DYNAMIC_LAYOUT_RE = re.compile(r"\{DynamicResource\s+(Layout\.[A-Za-z0-9.]+)\}")
 STATIC_LAYOUT_RE = re.compile(r"\{StaticResource\s+(Layout\.[A-Za-z0-9.]+)\}")
 
@@ -557,7 +557,7 @@ def check_density_theme(path: Path, text: str) -> None:
                 "ERROR",
                 path,
                 line_number(text, match.start()),
-                f"{key} is density-sensitive; use DynamicResource so Compact/Relaxed can override it",
+                f"{key} is density-sensitive; use DynamicResource so runtime overrides take effect",
             )
 
     for match in DYNAMIC_LAYOUT_RE.finditer(text):
@@ -577,7 +577,7 @@ def check_density_profiles(root: Path) -> None:
     if not found:
         return
 
-    baseline_name = DENSITY_PROFILE_NAMES[1]
+    baseline_name = DENSITY_PROFILE_NAMES[0]
     baseline = found.get(baseline_name) or next(iter(found.values()))
 
     for name, keys in found.items():

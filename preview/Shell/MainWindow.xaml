@@ -49,8 +49,8 @@
                 <Border DockPanel.Dock="Bottom" Padding="18,10"
                         BorderBrush="{StaticResource Brush.Border}" BorderThickness="0,1,0,0">
                     <StackPanel>
-                        <TextBlock Text="三档密度：紧凑 / 中等 / 宽松" Style="{StaticResource Text.Caption}" />
-                        <TextBlock Text="右上角切换，整窗即时生效" Style="{StaticResource Text.Caption}" Margin="0,2,0,0" />
+                        <TextBlock Text="Material 3 · 扁平 · 紧凑" Style="{StaticResource Text.Caption}" />
+                        <TextBlock Text="颜色、尺寸全部来自 Theme/Tokens" Style="{StaticResource Text.Caption}" Margin="0,2,0,0" />
                     </StackPanel>
                 </Border>
 
@@ -115,20 +115,10 @@
                         <TextBlock x:Name="PageTitle" Style="{StaticResource Text.Title}"
                                    FontWeight="SemiBold" Text="案例总览" />
                         <TextBlock x:Name="PageSubtitle" Style="{StaticResource Text.Caption}"
-                                   Margin="0,2,0,0" Text="规范、密度与全部业务案例入口" />
+                                   Margin="0,2,0,0" Text="规范与全部业务案例入口" />
                     </StackPanel>
 
                     <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock Text="密度" Style="{StaticResource Text.Caption}"
-                                   VerticalAlignment="Center" Margin="0,0,6,0" />
-                        <ComboBox x:Name="DensityCombo" Width="96" Margin="0,0,10,0"
-                                  SelectedIndex="1"
-                                  SelectionChanged="DensityCombo_SelectionChanged"
-                                  ToolTip="切换紧凑 / 中等 / 宽松三档密度">
-                            <ComboBoxItem Content="紧凑" />
-                            <ComboBoxItem Content="中等" />
-                            <ComboBoxItem Content="宽松" />
-                        </ComboBox>
                         <Button x:Name="StandaloneButton" Content="独立窗口"
                                 Style="{StaticResource Button.Secondary.Small}"
                                 Click="StandaloneButton_Click"

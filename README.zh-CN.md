@@ -1,6 +1,6 @@
 <h1 align="center">WPF UI Skills</h1>
 
-<p align="center">面向桌面工具与工程插件的 WPF/XAML 视觉规范、三档密度主题、AI 编码技能与自动化校验工具集。</p>
+<p align="center">面向桌面工具与工程插件的 WPF/XAML 视觉规范、Material Design 3 扁平紧凑主题、AI 编码技能与自动化校验工具集。</p>
 
 <p align="center">
   <a href="./README.md">English</a> | <a href="./README.zh-CN.md">简体中文</a>
@@ -16,10 +16,10 @@
 
 | 特性 | 价值说明 |
 |---|---|
-| 三档密度体系（紧凑 / 中等 / 宽松） | 通过 `{DynamicResource Layout.*}` 统一调节控件高度（26 / 30 / 34 px）、表格行高（24 / 28 / 32 px）与内边距，不改变颜色与字号，支持运行时热切换。 |
+| Material Design 3 扁平紧凑尺寸 | 单一尺寸档：控件高 28 / 小号 24 / 大号 32 px，表格行 26 px，表头 28 px，圆角 4–6；通过 `{DynamicResource Layout.*}` 统一调节；主色 `#2563A8`，次要按钮为 tonal 浅蓝底无描边。 |
 | 显式状态契约与 WCAG AA 对比度 | 每次状态切换必须同时声明 `Background` 与 `Foreground`，禁止用 `Opacity` 表达禁用态，由 `tools/ContrastCheck.py` 校验正文 >= 4.5:1、边框/图标/禁用文字 >= 3:1。 |
 | 防截断与防高度跳变布局规范 | 避免标签被裁切、多行输入撑满网格、输入框右侧空白不可点击以及 `SizeToContent="Height"` 窗口切换 Tab 导致高度跳变，由 `tools/LayoutCheck.py` 自动扫描。 |
-| 可运行案例中心与参考骨架 | `preview/` 内置 10 个交互式 `UserControl` 案例页，`samples/` 提供分类可复制窗口骨架，支持离屏渲染 PNG 与高 DPI 倍率验证。 |
+| 可运行案例中心 | `preview/` 内置 10 个交互式 `UserControl` 案例页（`preview/Views`），支持离屏渲染 PNG 与高 DPI 倍率验证。 |
 | 自动化验证流水线与多客户端安装器 | 整合 Python 3 标准库静态检查、xUnit 契约测试（`tests/WpfStyleContractTests.csproj`）、UI 点击状态机测试（`tools/UiTest.py`）以及面向主流 AI 客户端的 `install.ps1`。 |
 | 零第三方 UI 控件依赖 | 仅依赖标准 WPF 基础控件，同时兼容 .NET Framework 4.8 与 .NET 8+，适用于独立桌面工具和宿主内嵌工程插件。 |
 
@@ -28,42 +28,42 @@
 ```text
 ┌────────────────────────────────────────────────────────────────────────────┐
 │                        AI 技能与规范层 (Skill & Docs)                       │
-│   SKILL.md   │   install.ps1   │   docs/   │   references/   │   samples/  │
+│   SKILL.md   │   install.ps1   │   docs/   │   references/              │
 └────────────────────────────────────┬───────────────────────────────────────┘
                                      │ 指导与配置
                                      ▼
 ┌────────────────────────────────────────────────────────────────────────────┐
 │                         主题资源层 (Theme/)                                 │
-│  Theme.xaml / Theme.Compact.xaml / Theme.Relaxed.xaml                      │
-│    Tokens.xaml ──▶ Controls / DataControls / Icons / Extras ──▶ Density.*  │
+│  Theme.xaml                                                                 │
+│    Tokens.xaml ──▶ Controls / DataControls / Icons / Extras ──▶ Density.Medium │
 └───────────────────┬───────────────────────────────────────┬────────────────┘
                     │ 通过 ResourceDictionary 链接           │ 接受校验
                     ▼                                       ▼
 ┌───────────────────────────────────────┐   ┌────────────────────────────────┐
 │       可运行案例中心 (preview/)        │   │       自动化验证门禁            │
 │  MainWindow + CaseCatalog (10 案例页) │◀──│  LayoutCheck.py (XAML 规则)    │
-│  DensitySwitcher + UiTestEngine       │   │  ContrastCheck.py (WCAG AA)    │
+│  UiTestEngine                         │   │  ContrastCheck.py (WCAG AA)    │
 │  离屏渲染 PNG 与交互点击测试运行器      │   │  UiTest.py + xUnit tests/      │
 └───────────────────────────────────────┘   └────────────────────────────────┘
 ```
 
-- **资源合并顺序**：`Tokens.xaml` 提供唯一色值、字体、圆角与中等密度兜底值；各控件字典（`Controls.xaml`、`DataControls.xaml`、`Icons.xaml`、`Extras.xaml`）通过 `{DynamicResource Layout.*}` 读取尺寸；`Density.*.xaml` 放在最后合并，确保所选密度档位优先命中。
+- **资源合并顺序**：`Tokens.xaml` 提供唯一色值、字体、圆角与兜底尺寸；各控件字典（`Controls.xaml`、`DataControls.xaml`、`Icons.xaml`、`Extras.xaml`）通过 `{DynamicResource Layout.*}` 读取尺寸；`Density.Medium.xaml` 放在最后合并，提供唯一尺寸档。
 
 ## 使用示例
 
-可运行案例中心（`preview/`）直接链接根目录 `Theme/`，用于集中展示各类工程布局、控件交互状态与实时密度切换效果。
+可运行案例中心（`preview/`）直接链接根目录 `Theme/`，用于集中展示各类工程布局、控件交互状态。
 
 启动交互式案例中心或离屏导出 PNG：
 
 ```bash
 dotnet run --project preview
 dotnet run --project preview -- -window home -page workbench
-dotnet run --project preview -- -window editable-table -density Compact -shot out/table.png -scale 1.5
+dotnet run --project preview -- -window editable-table -shot out/table.png -scale 1.5
 ```
 
 ### 案例中心总览与导航
 
-侧边分类导航、规范摘要与实时密度热切换（紧凑 26 px / 中等 30 px / 宽松 34 px）。
+侧边分类导航与规范摘要。
 
 ![案例中心总览界面，包含侧边分类导航与全部案例卡片](./docs/images/overview.png)
 
@@ -179,20 +179,7 @@ public static void Apply(Window window)
 </GroupBox>
 ```
 
-### 3. 选择或切换密度（可选）
-
-默认 `Theme.xaml` 为中等密度；如需在启动时切换档位，直接将入口替换为 `Theme.Compact.xaml` 或 `Theme.Relaxed.xaml`。如需在运行时热切换：
-
-```csharp
-Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary
-{
-    Source = new Uri(
-        "pack://application:,,,/YourAssembly;component/Theme/Density.Compact.xaml",
-        UriKind.Absolute)
-});
-```
-
-### 4. 运行自动化验证流水线
+### 3. 运行自动化验证流水线
 
 修改主题或业务 XAML 后，依次执行以下检查：
 
@@ -215,26 +202,27 @@ python tools/UiTest.py --all --test-clicks
 | WCAG 对比度检查 | `python tools/ContrastCheck.py` | 校验 `Theme/Tokens.xaml` 中关键前景/背景组合的对比度 |
 | PowerShell 校验包装脚本 | `pwsh ./tools/LayoutCheck.ps1 -Root "D:/Demo/YourApp"` | 自动探测 `py -3` / `python3` / `python`；`ContrastCheck.ps1` 同理 |
 | 运行 xUnit 契约测试 | `dotnet test tests/WpfStyleContractTests.csproj` | 校验主题令牌与样式契约不变式 |
-| 启动案例中心 | `dotnet run --project preview` | 支持 `-window`、`-page`、`-density`、`-shot`、`-scale`、`-all` |
+| 启动案例中心 | `dotnet run --project preview` | 支持 `-window`、`-page`、`-shot`、`-scale`、`-all` |
 | 运行交互点击状态测试 | `python tools/UiTest.py --all --test-clicks` | 离屏渲染界面、模拟点击并断言状态迁移 |
 | 离屏渲染单个 XAML | `python tools/UiTest.py --xaml preview/Views/SafeFormView.xaml --shot .tmp-shots/verify.png` | 动态加载并导出指定 XAML 视图为 PNG |
 
 ## 配置与集成
 
-### 三档密度令牌对照
+### 尺寸令牌
 
-三档密度仅改变控件尺寸、内边距与行高；颜色、字号、圆角以及 16 px 的 `CheckBox`/`RadioButton` 靶心尺寸在各档位下保持一致。
+单一尺寸档（`Theme/Density.Medium.xaml`，`Density.Profile=medium`）；颜色、字号及 16 px 的 `CheckBox`/`RadioButton` 靶心尺寸定义在 `Tokens.xaml`。
 
-| 令牌 | 紧凑 | 中等（默认） | 宽松 |
-|---|---:|---:|---:|
-| `Layout.ControlHeight` | 26 | 30 | 34 |
-| `Layout.ControlHeight.Small` | 24 | 26 | 30 |
-| `Layout.RowHeight` | 24 | 28 | 32 |
-| `Layout.HeaderHeight` | 26 | 30 | 34 |
-| `Layout.TabPadding` | 10,4 | 12,6 | 16,8 |
-| `Layout.ButtonPadding` | 10,0 | 12,0 | 16,0 |
-| `Layout.WindowPadding` | 8 | 12 | 16 |
-| `Layout.FormRowMargin` | 0,2 | 0,3 | 0,5 |
+| 令牌 | 数值 |
+|---|---:|
+| `Layout.ControlHeight` | 28 |
+| `Layout.ControlHeight.Small` | 24 |
+| `Layout.ControlHeight.Large` | 32 |
+| `Layout.RowHeight` | 26 |
+| `Layout.HeaderHeight` | 28 |
+| `Layout.TabPadding` | 12,4 |
+| `Layout.ButtonPadding` | 12,0 |
+| `Layout.WindowPadding` | 12 |
+| `Layout.FormRowMargin` | 0,2 |
 
 ### 核心硬规则摘要
 
@@ -258,10 +246,9 @@ python tools/UiTest.py --all --test-clicks
 | 布局规范 | 防截断表单、宽窄面板对齐、滚动保护与标签页规范 | [docs/03-layout.md](./docs/03-layout.md) |
 | 常见错误与修复 | 高频 WPF 样式与布局问题对照排查 | [docs/04-common-pitfalls.md](./docs/04-common-pitfalls.md) |
 | 对比度与可访问性 | WCAG 实测对比度比值与配色约束 | [docs/05-accessibility-contrast.md](./docs/05-accessibility-contrast.md) |
-| 三档密度体系 | 紧凑、中等、宽松档位键集与运行时热切换方式 | [docs/06-density.md](./docs/06-density.md) |
 | 测试与验证 | 静态脚本、xUnit 契约测试与人工回归矩阵 | [docs/07-testing.md](./docs/07-testing.md) |
 | 矢量图标系统 | 24x24 Material Symbols 几何契约与图标按钮规范 | [docs/09-icon-system.md](./docs/09-icon-system.md) |
 | 速查表与 XAML 片段 | 一页速查表与可直接复制的 XAML 代码片段 | [references/cheatsheet.md](./references/cheatsheet.md) / [references/xaml-snippets.md](./references/xaml-snippets.md) |
-| 参考案例与预览工程 | 分类 XAML 窗口骨架与案例中心命令行参数 | [samples/README.md](./samples/README.md) / [preview/README.md](./preview/README.md) |
+| 预览工程 | 案例中心页面与命令行参数 | [preview/README.md](./preview/README.md) |
 | 自动化脚本说明 | 脚本分工、退出码与 `LayoutCheck` / `UiTest` 参数说明 | [tools/README.md](./tools/README.md) |
 | 第三方归属说明 | `Theme/Icons.xaml` 中 Google Material Symbols 的 Apache 2.0 声明 | [NOTICE.md](./NOTICE.md) |

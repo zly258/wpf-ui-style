@@ -4,21 +4,17 @@
 
 | 文件 | 内容 |
 |---|---|
-| `Tokens.xaml` | `Color.*`、`Brush.*`、`Font*`、`Layout.*`（中等档兜底）、`Radius.*`、`Text.*`、`Icon.Size.*` |
-| `Density.Compact.xaml` | 紧凑密度：26px 控件 / 24px 行高 / 更紧的内边距 |
-| `Density.Medium.xaml` | 中等密度（默认）：30px 控件 / 28px 行高 |
-| `Density.Relaxed.xaml` | 宽松密度：34px 控件 / 32px 行高 |
+| `Tokens.xaml` | `Color.*`、`Brush.*`、`Font*`、`Layout.*`（兜底）、`Radius.*`、`Text.*`、`Icon.Size.*` |
+| `Density.Medium.xaml` | 唯一尺寸档（`Density.Profile=medium`）：28px 控件 / 26px 行高 / 28px 表头 |
 | `Controls.xaml` | Window、TextBlock/AccessText、Button、TextBox、PasswordBox、ComboBox、CheckBox、RadioButton、GroupBox、Expander、Tab、ToolTip、ProgressBar、StatusBar、ScrollBar、GridSplitter、ContextMenu |
 | `DataControls.xaml` | ListBox、ListView、DataGrid、TreeView、ScrollViewer.Base |
 | `Icons.xaml` | 24x24 矢量几何图形 (`Icon.Geo.*`)、基础与尺寸样式 (`Icon.*`)、图标按钮 (`Button.Icon*`) |
 | `Extras.xaml` | Slider、DatePicker、RichTextBox、ToggleButton、ToggleSwitch、Menu/MenuItem、ToolBar、Card、Badge、`ToolStrip`（批量操作条容器） |
-| `Theme.xaml` | 默认入口（中等），合并 Tokens + Density.Medium + 其它控件字典 |
-| `Theme.Compact.xaml` | 整包入口：紧凑密度 |
-| `Theme.Relaxed.xaml` | 整包入口：宽松密度 |
+| `Theme.xaml` | 唯一入口，合并 Tokens + Density.Medium + 其它控件字典 |
 
 `Controls.xaml`、`DataControls.xaml`、`Icons.xaml` 和 `Extras.xaml` 各自合并了
 `Tokens.xaml`（颜色/字体兜底）。尺寸类令牌在控件内部统一用
-`{DynamicResource Layout.*}` 读取，因此在运行时替换 `Density.*.xaml` 也能生效。
+`{DynamicResource Layout.*}` 读取，因此尺寸令牌可在运行时被覆盖。
 
 ---
 
@@ -106,25 +102,19 @@ public SettingsWindow()
     <ResourceDictionary Source="DataControls.xaml" />
     <ResourceDictionary Source="Icons.xaml" />
     <ResourceDictionary Source="Extras.xaml" />
-    <!-- 密度档案放最后 -->
+    <!-- 尺寸档案放最后 -->
     <ResourceDictionary Source="Density.Medium.xaml" />
 </ResourceDictionary.MergedDictionaries>
 ```
 
-顺序必须是：**Tokens → Controls → DataControls → Icons → Extras → Density.<档位>**。
-密度档案必须放最后：控件字典内部又合并了 `Tokens.xaml`（中等兜底），
-只有最后合并，`{DynamicResource Layout.*}` 查找时才会优先命中当前档位。
+顺序必须是：**Tokens → Controls → DataControls → Icons → Extras → Density.Medium**。
+`Density.Medium.xaml` 必须放最后：控件字典内部又合并了 `Tokens.xaml`（兜底），
+只有最后合并，`{DynamicResource Layout.*}` 查找时才会优先命中该尺寸档。
 
-如果使用 `Theme.xaml` / `Theme.Compact.xaml` / `Theme.Relaxed.xaml`，内部已经处理好。
-
-### 4.1 选择密度
-
-- 默认 `Theme.xaml` = 中等；
-- 紧凑用 `Theme.Compact.xaml`，宽松用 `Theme.Relaxed.xaml`；
-- 运行时热切换见 `docs/06-density.md`。
+如果使用 `Theme.xaml`，内部已经处理好。
 
 业务 XAML 引用 `{StaticResource Layout.*}` 即可；主题内部必须使用 `{DynamicResource Layout.*}`，
-否则换档不会重新求值。`LayoutCheck.py` 会拦截误用 `StaticResource` 的密度键。
+否则不会重新求值。`LayoutCheck.py` 会拦截误用 `StaticResource` 的尺寸键。
 
 ---
 

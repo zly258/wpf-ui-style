@@ -1,6 +1,6 @@
 <h1 align="center">WPF UI Skills</h1>
 
-<p align="center">A WPF/XAML design system, three-level density theme, AI coding skill, and automated verification toolkit for desktop tools and engineering plugins.</p>
+<p align="center">A WPF/XAML design system, compact Material Design 3 theme, AI coding skill, and automated verification toolkit for desktop tools and engineering plugins.</p>
 
 <p align="center">
   <a href="./README.md">English</a> | <a href="./README.zh-CN.md">简体中文</a>
@@ -16,10 +16,10 @@
 
 | Highlight | Why it matters |
 |---|---|
-| Three-level density (`Compact` / `Medium` / `Relaxed`) | Adjusts control height (26 / 30 / 34 px), table row height (24 / 28 / 32 px), and padding via `{DynamicResource Layout.*}` without changing colors or font sizes, supporting runtime switching. |
+| Compact flat Material Design 3 sizing | Single size profile (control height 28 / small 24 / large 32 px, table row 26 px, header 28 px, corner radius 4-6) driven by `{DynamicResource Layout.*}`; primary color `#2563A8`, secondary buttons use a tonal light-blue fill without outline. |
 | Explicit control state contracts and WCAG AA contrast | Every state transition declares both `Background` and `Foreground`, bans `Opacity` for disabled states, and enforces contrast ratios (body text >= 4.5:1, borders/icons/disabled text >= 3:1) checked by `tools/ContrastCheck.py`. |
 | Anti-truncation and stable-height layout rules | Prevents clipped labels, stretched multiline inputs, unclickable input whitespace, and `TabControl` height jumps in `SizeToContent="Height"` windows, enforced by `tools/LayoutCheck.py`. |
-| Runnable Preview Case Center and XAML samples | Includes 10 interactive `UserControl` case views in `preview/` and copyable window skeletons in `samples/`, supporting off-screen PNG rendering and DPI scale testing. |
+| Runnable Preview Case Center | Includes 10 interactive `UserControl` case views in `preview/Views`, supporting off-screen PNG rendering and DPI scale testing. |
 | Automated quality gate and multi-client skill installer | Combines Python 3 standard-library static checks, xUnit contract tests (`tests/WpfStyleContractTests.csproj`), click-state UI tests (`tools/UiTest.py`), and `install.ps1` for major AI coding clients. |
 | Zero third-party UI dependencies | Targets both .NET Framework 4.8 and .NET 8+ using standard WPF controls only, suitable for standalone desktop apps and host-embedded engineering plugins. |
 
@@ -28,42 +28,42 @@
 ```text
 ┌────────────────────────────────────────────────────────────────────────────┐
 │                        AI Skill & Specification Layer                      │
-│   SKILL.md   │   install.ps1   │   docs/   │   references/   │   samples/  │
+│   SKILL.md   │   install.ps1   │   docs/   │   references/              │
 └────────────────────────────────────┬───────────────────────────────────────┘
                                      │ guides & configures
                                      ▼
 ┌────────────────────────────────────────────────────────────────────────────┐
 │                         Theme Resource Layer (Theme/)                      │
-│  Theme.xaml / Theme.Compact.xaml / Theme.Relaxed.xaml                      │
-│    Tokens.xaml ──▶ Controls / DataControls / Icons / Extras ──▶ Density.*  │
+│  Theme.xaml                                                                 │
+│    Tokens.xaml ──▶ Controls / DataControls / Icons / Extras ──▶ Density.Medium │
 └───────────────────┬───────────────────────────────────────┬────────────────┘
                     │ linked via ResourceDictionary         │ validated by
                     ▼                                       ▼
 ┌───────────────────────────────────────┐   ┌────────────────────────────────┐
 │       Preview Case Center (preview/)  │   │   Automated Verification Gate  │
 │  MainWindow + CaseCatalog (10 views)  │◀──│  LayoutCheck.py (XAML rules)   │
-│  DensitySwitcher + UiTestEngine       │   │  ContrastCheck.py (WCAG AA)    │
+│  UiTestEngine                         │   │  ContrastCheck.py (WCAG AA)    │
 │  Off-screen PNG & click-state runner  │   │  UiTest.py + xUnit tests/      │
 └───────────────────────────────────────┘   └────────────────────────────────┘
 ```
 
-- **Resource merge order**: `Tokens.xaml` provides colors, typography, radii, and medium-density fallbacks. Control dictionaries (`Controls.xaml`, `DataControls.xaml`, `Icons.xaml`, `Extras.xaml`) resolve sizing through `{DynamicResource Layout.*}`, and `Density.*.xaml` is merged last so the selected density takes precedence.
+- **Resource merge order**: `Tokens.xaml` provides colors, typography, radii, and fallback sizes. Control dictionaries (`Controls.xaml`, `DataControls.xaml`, `Icons.xaml`, `Extras.xaml`) resolve sizing through `{DynamicResource Layout.*}`, and `Density.Medium.xaml` is merged last and holds the single size profile.
 
 ## Usage Example
 
-The Preview Case Center (`preview/`) links directly to `Theme/` and demonstrates all standard layouts, interactive states, and live density switching.
+The Preview Case Center (`preview/`) links directly to `Theme/` and demonstrates all standard layouts, interactive states.
 
 Run the interactive Preview Case Center or export an off-screen PNG:
 
 ```bash
 dotnet run --project preview
 dotnet run --project preview -- -window home -page workbench
-dotnet run --project preview -- -window editable-table -density Compact -shot out/table.png -scale 1.5
+dotnet run --project preview -- -window editable-table -shot out/table.png -scale 1.5
 ```
 
 ### Preview Case Center Overview
 
-Sidebar category navigation, specification summary, and live density switching (`Compact` 26 px / `Medium` 30 px / `Relaxed` 34 px).
+Sidebar category navigation, and specification summary.
 
 ![Preview Case Center overview showing sidebar navigation and case cards](./docs/images/overview.png)
 
@@ -179,20 +179,7 @@ Core controls (`Button`, `TextBox`, `PasswordBox`, `ComboBox`, `CheckBox`, `Radi
 </GroupBox>
 ```
 
-### 3. Switch Density (Optional)
-
-Default `Theme.xaml` uses `Medium` density. To select another density at startup, change the entry file to `Theme.Compact.xaml` or `Theme.Relaxed.xaml`. To switch density at runtime:
-
-```csharp
-Application.Current.Resources.MergedDictionaries.Add(new ResourceDictionary
-{
-    Source = new Uri(
-        "pack://application:,,,/YourAssembly;component/Theme/Density.Compact.xaml",
-        UriKind.Absolute)
-});
-```
-
-### 4. Run the Automated Verification Pipeline
+### 3. Run the Automated Verification Pipeline
 
 Run these checks after modifying theme files or business XAML:
 
@@ -215,26 +202,27 @@ python tools/UiTest.py --all --test-clicks
 | Run WCAG contrast check | `python tools/ContrastCheck.py` | Verifies foreground/background pairs defined in `Theme/Tokens.xaml` |
 | Run PowerShell check wrappers | `pwsh ./tools/LayoutCheck.ps1 -Root "D:/Demo/YourApp"` | Auto-detects `py -3` / `python3` / `python`; same for `ContrastCheck.ps1` |
 | Run xUnit contract tests | `dotnet test tests/WpfStyleContractTests.csproj` | Verifies theme token and style invariants |
-| Launch Preview Case Center | `dotnet run --project preview` | Supports `-window`, `-page`, `-density`, `-shot`, `-scale`, `-all` |
+| Launch Preview Case Center | `dotnet run --project preview` | Supports `-window`, `-page`, `-shot`, `-scale`, `-all` |
 | Run UI click-state tests | `python tools/UiTest.py --all --test-clicks` | Off-screen renders views, simulates clicks, and asserts state transitions |
 | Render a single XAML file | `python tools/UiTest.py --xaml preview/Views/SafeFormView.xaml --shot .tmp-shots/verify.png` | Dynamically loads and renders a XAML view to PNG |
 
 ## Configuration and Integrations
 
-### Three-Level Density Tokens
+### Size Tokens
 
-Density profiles change sizing, padding, and row heights only. Colors, font sizes, corner radii, and the 16 px `CheckBox`/`RadioButton` target size remain constant across densities.
+Single size profile (`Theme/Density.Medium.xaml`, `Density.Profile=medium`). Colors, font sizes, and the 16 px `CheckBox`/`RadioButton` target size are defined in `Tokens.xaml`.
 
-| Token | Compact | Medium (Default) | Relaxed |
-|---|---:|---:|---:|
-| `Layout.ControlHeight` | 26 | 30 | 34 |
-| `Layout.ControlHeight.Small` | 24 | 26 | 30 |
-| `Layout.RowHeight` | 24 | 28 | 32 |
-| `Layout.HeaderHeight` | 26 | 30 | 34 |
-| `Layout.TabPadding` | 10,4 | 12,6 | 16,8 |
-| `Layout.ButtonPadding` | 10,0 | 12,0 | 16,0 |
-| `Layout.WindowPadding` | 8 | 12 | 16 |
-| `Layout.FormRowMargin` | 0,2 | 0,3 | 0,5 |
+| Token | Value |
+|---|---:|
+| `Layout.ControlHeight` | 28 |
+| `Layout.ControlHeight.Small` | 24 |
+| `Layout.ControlHeight.Large` | 32 |
+| `Layout.RowHeight` | 26 |
+| `Layout.HeaderHeight` | 28 |
+| `Layout.TabPadding` | 12,4 |
+| `Layout.ButtonPadding` | 12,0 |
+| `Layout.WindowPadding` | 12 |
+| `Layout.FormRowMargin` | 0,2 |
 
 ### Core Design Rules
 
@@ -258,10 +246,9 @@ Density profiles change sizing, padding, and row heights only. Colors, font size
 | Layout specification | Anti-truncation forms, narrow/wide alignment, scroll protection, and tabs | [docs/03-layout.md](./docs/03-layout.md) |
 | Common pitfalls | Symptom-to-fix reference for recurring WPF styling bugs | [docs/04-common-pitfalls.md](./docs/04-common-pitfalls.md) |
 | Accessibility and contrast | Measured WCAG contrast ratios and contrast rules | [docs/05-accessibility-contrast.md](./docs/05-accessibility-contrast.md) |
-| Three-level density | Compact, Medium, and Relaxed token sets and runtime hot-switching | [docs/06-density.md](./docs/06-density.md) |
 | Testing and verification | Static checks, xUnit contract tests, and manual verification matrix | [docs/07-testing.md](./docs/07-testing.md) |
 | Vector icon system | 24x24 Material Symbols geometry contract and icon button rules | [docs/09-icon-system.md](./docs/09-icon-system.md) |
 | Quick reference and snippets | One-page cheatsheet and copyable XAML snippets | [references/cheatsheet.md](./references/cheatsheet.md) / [references/xaml-snippets.md](./references/xaml-snippets.md) |
-| Sample windows and preview app | Categorized XAML window skeletons and Preview Case Center CLI options | [samples/README.md](./samples/README.md) / [preview/README.md](./preview/README.md) |
+| Preview app | Preview Case Center views and CLI options | [preview/README.md](./preview/README.md) |
 | Verification scripts | Script architecture, exit codes, and `LayoutCheck` / `UiTest` options | [tools/README.md](./tools/README.md) |
 | Third-party notices | Apache 2.0 attribution for Google Material Symbols geometries in `Theme/Icons.xaml` | [NOTICE.md](./NOTICE.md) |

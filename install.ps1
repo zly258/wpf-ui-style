@@ -729,7 +729,7 @@ Non-negotiable rules:
 8. No multi-tab navigation in a window: use one window per task, or `GroupBox`/`Expander`
    sections. If a `TabControl` is used, give it a fixed `Height` and scroll inside the tab,
    so switching tabs never changes the window height.
-9. Compact by default: body text 12px, control height 32px, form row spacing 3px, window
+9. Compact by default: body text 12px, control height 28px, form row spacing 2px, window
    padding 12px. Do not enlarge fonts or spacing to create hierarchy — show more rows and
    columns per screen instead.
 10. Strict 4-zone layout and single action entry: Zone 1 Header (title + global Save/Export),

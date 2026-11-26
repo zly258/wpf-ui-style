@@ -1,6 +1,6 @@
 ---
 name: wpf-ui-style
-description: Apply and audit the WPF UI Skills style system (tokens, three-level density, control states, layout, contrast, automated checks). Use when creating or modifying WPF/XAML windows, styles, resource dictionaries, themes, buttons, inputs, lists, data grids, dialogs, tabs, or when auditing XAML layout, contrast, and truncation issues. 适用于：WPF 视觉与交互规范、紧凑/中等/宽松三档密度、默认 12px 正文 / 30px 控件高 / 28px 表格行高、防截断表单、TabControl 防高度跳变、前景背景状态契约、对比度与布局自动化检查脚本。
+description: Apply and audit the WPF UI Skills style system (tokens, control states, layout, contrast, automated checks). Use when creating or modifying WPF/XAML windows, styles, resource dictionaries, themes, buttons, inputs, lists, data grids, dialogs, tabs, or when auditing XAML layout, contrast, and truncation issues. 适用于：WPF 视觉与交互规范、Material Design 3 扁平紧凑、12px 正文 / 28px 控件高 / 26px 表格行高、防截断表单、TabControl 防高度跳变、前景背景状态契约、对比度与布局自动化检查脚本。
 ---
 
 # WPF UI Skills
@@ -11,7 +11,7 @@ description: Apply and audit the WPF UI Skills style system (tokens, three-level
 
 ## 核心设计原则
 
-1. **密度可切换，默认中等 (Density-aware, Medium by Default)**：紧凑 / 中等 / 宽松三档只改变尺寸与留白，不改变颜色和字号。默认采用中等密度，一屏展示更多数据；工具条/属性面板可切紧凑，演示/触屏可切宽松。
+1. **单一紧凑尺寸 (Compact by Design)**：采用 Material Design 3 扁平风格与单一尺寸档（控件高 28、表格行 26），一屏展示更多数据；次要按钮为 tonal 浅蓝底无描边，主色 `#2563A8`。
 2. **状态契约 (Explicit States)**：改 `Background` 必须显式声明 `Foreground`；禁用态严禁使用 `Opacity`；浅底必须配深字。
 3. **无截断与无遮挡 (No Truncation / No Occlusion)**：内容决定尺寸，弹性容器约束，防 DPI 缩放破坏；任何文本截断必须配 `ToolTip`。
 4. **无要求不用图标 (No Gratuitous Icons)**：默认采用清晰纯文本。没有明确要求使用图标时，一律不添加装饰性图标；纯图标按钮必须提供 `ToolTip`。
@@ -22,16 +22,16 @@ description: Apply and audit the WPF UI Skills style system (tokens, three-level
 ## 资产与工具索引
 
 - `Theme/Tokens.xaml`：全局唯一色值、字体、尺寸兜底值、圆角与间距令牌。
-- `Theme/Density.Compact.xaml` / `Density.Medium.xaml` / `Density.Relaxed.xaml`：三档密度；控件用 `{DynamicResource Layout.*}` 读取，可运行时切换。
+- `Theme/Density.Medium.xaml`：唯一尺寸档（`Density.Profile=medium`）；控件用 `{DynamicResource Layout.*}` 读取。
 - `Theme/Controls.xaml`：基础控件样式（Button, TextBox, ComboBox, CheckBox, RadioButton, GroupBox, Expander, TabControl, ToolTip, ScrollBar）。
 - `Theme/DataControls.xaml`：数据控件样式（DataGrid, ListBox, ListView, TreeView）。
 - `Theme/Extras.xaml`：扩展控件（Slider, DatePicker, ProgressBar, Menu, ToolBar, Badge）。
 - `Theme/Icons.xaml`：24×24 Google Material Symbols 矢量几何与图标按钮（可选）。
-- `Theme/Theme.xaml`：默认入口（中等密度）；`Theme.Compact.xaml` / `Theme.Relaxed.xaml` 为整包换挡入口。
+- `Theme/Theme.xaml`：唯一主题入口。
 - `tools/LayoutCheck.py`：布局/截断/多行文本/多Tab跳变静态规则检查（Python 3 标准库）。
 - `tools/ContrastCheck.py`：WCAG 颜色对比度自动化计算与检查。
 - `tests/ThemeContractTests.cs`：xUnit 契约测试（`dotnet test tests/WpfStyleContractTests.csproj`）。
-- `preview/`：WPF 案例中心（左侧分类导航 + 右侧 10 个 UserControl 案例页），支持 `-page` 选页、`-density` 换密度与 `-shot` 离屏截图。
+- `preview/`：WPF 案例中心（左侧分类导航 + 右侧 10 个 UserControl 案例页），支持 `-page` 选页与 `-shot` 离屏截图。
 
 ---
 
@@ -49,36 +49,33 @@ description: Apply and audit the WPF UI Skills style system (tokens, three-level
 | `FontSize.Code` | 11.5 | 17 | 日志、代码、路径、控制台等宽输出 |
 | `FontSize.Micro` | 10 | 14 | 极少极小徽章或辅助角标 |
 
-### 2. 三档密度与尺寸阶梯
+### 2. 尺寸令牌
 
-| 令牌名 | 紧凑 | 中等（默认） | 宽松 | 说明 |
-|---|---:|---:|---:|---|
-| `Layout.ControlHeight` | 26 | **30** | 34 | 按钮 / 单行输入 / 下拉 / 日期 |
-| `Layout.ControlHeight.Small` | 24 | **26** | 30 | 工具条 / 表格行内控件 |
-| `Layout.ControlHeight.Large` | 32 | **36** | 40 | 主操作 / 触屏 |
-| `Layout.RowHeight` | 24 | **28** | 32 | DataGrid / ListBox 行高 |
-| `Layout.HeaderHeight` | 26 | **30** | 34 | 表格列头 |
-| `Layout.TabPadding` | 10,4 | **12,6** | 16,8 | 标签页内边距 |
-| `Layout.ButtonPadding` | 10,0 | **12,0** | 16,0 | 按钮左右内边距（上下恒为 0） |
-| `Layout.InputPadding` | 4,0 | **6,0** | 8,0 | 单行输入左右内边距（不设上下） |
-| `Layout.WindowPadding` | 8 | **12** | 16 | 窗口根内边距 |
-| `Layout.GroupPadding` | 8 | **10** | 14 | GroupBox 内容内边距 |
-| `Layout.FormRowMargin` | 0,2 | **0,3** | 0,5 | 表单行上下间距 |
-| `Layout.ListItemPadding` | 6,4 | **8,5** | 10,6 | 列表项内边距 |
-| `Layout.ProgressBarHeight` | 6 | **8** | 10 | 进度条高度 |
-| `Layout.CheckBox.Size` / `RadioButton.Size` | 16 | **16** | 16 | 固定靶心，不随密度缩小 |
-| `Layout.ButtonMinWidth` | 56 | **64** | 72 | 标准按钮最小宽度 |
-| `Layout.ButtonMinWidth.Small` | 40 | **48** | 56 | 小号按钮最小宽度 |
-| `Layout.FormLabelMinWidth` | 80 | **80** | 80 | 标签列最小宽度（配合 `Auto`） |
-| `Layout.FormLabelMaxWidth` | 116 | **132** | 148 | 长标签换行上限（加在 TextBlock 上，不加在列上） |
-| `Layout.InputMinWidth` | 140 | **140** | 140 | 输入列最小宽度（配合 `*`） |
-| `Layout.WindowMinWidth` | 520 | **520** | 520 | 窗口最小宽度 |
-| `Layout.LogMaxHeight` | 220 | **220** | 220 | 日志框默认最大高度 |
+| 令牌名 | 数值 | 说明 |
+|---|---:|---|
+| `Layout.ControlHeight` | 28 | 按钮 / 单行输入 / 下拉 / 日期 |
+| `Layout.ControlHeight.Small` | 24 | 工具条 / 表格行内控件 |
+| `Layout.ControlHeight.Large` | 32 | 主操作 |
+| `Layout.RowHeight` | 26 | DataGrid / ListBox 行高 |
+| `Layout.HeaderHeight` | 28 | 表格列头 |
+| `Layout.TabPadding` | 12,4 | 标签页内边距 |
+| `Layout.ButtonPadding` | 12,0 | 按钮左右内边距（上下恒为 0） |
+| `Layout.InputPadding` | 6,0 | 单行输入左右内边距（不设上下） |
+| `Layout.WindowPadding` | 12 | 窗口根内边距 |
+| `Layout.GroupPadding` | 8 | GroupBox 内容内边距 |
+| `Layout.FormRowMargin` | 0,2 | 表单行上下间距 |
+| `Layout.ListItemPadding` | 8,3 | 列表项内边距 |
+| `Layout.ProgressBarHeight` | 4 | 进度条高度 |
+| `Layout.CheckBox.Size` / `RadioButton.Size` | 16 | 固定靶心 |
+| `Layout.ButtonMinWidth` | 56 | 标准按钮最小宽度 |
+| `Layout.ButtonMinWidth.Small` | 40 | 小号按钮最小宽度 |
+| `Layout.FormLabelMinWidth` | 80 | 标签列最小宽度（配合 `Auto`） |
+| `Layout.FormLabelMaxWidth` | 132 | 长标签换行上限（加在 TextBlock 上，不加在列上） |
+| `Layout.InputMinWidth` | 140 | 输入列最小宽度（配合 `*`） |
+| `Layout.WindowMinWidth` | 520 | 窗口最小宽度 |
+| `Layout.LogMaxHeight` | 220 | 日志框默认最大高度 |
 
-> 颜色、字号、圆角、CheckBox 靶心尺寸与最大高度**不随密度变化**。
-> 完整键集与切换方式见 `docs/06-density.md`。
-
----
+> 颜色、字号、圆角与 CheckBox 靶心尺寸定义在 `Tokens.xaml`；尺寸令牌见 `Theme/Density.Medium.xaml`。
 
 ## 强制规则 (Mandatory Rules)
 
@@ -115,11 +112,10 @@ description: Apply and audit the WPF UI Skills style system (tokens, three-level
 ### R6. 业务 XAML 必须使用 Token，严禁字面量
 业务界面中严禁硬编码 `#RRGGBB`、硬编码 `FontFamily`、硬编码字体字面量（如 `FontSize="13"`）或任意内边距；统一引用 `Theme/Tokens.xaml`。
 
-### R7. 三档密度统一，同界面禁止混用
-- 全项目提供 **紧凑 / 中等 / 宽松** 三档密度，默认 **中等**。同一窗口只允许一档，禁止 26px 与 34px 控件随机混排。
-- 密度只改尺寸、内边距、行高；**颜色、字号、圆角、CheckBox 靶心（16px）不随密度变化**。
+### R7. 尺寸统一，同界面禁止混用
+- 全项目只有一档尺寸（控件高 28 / 小号 24 / 大号 32，表格行 26）。同一窗口禁止随机混排不同高度的控件。
 - 业务 XAML 禁止写死控件 `Height` / `Padding`（如 `Height="32"`、`Padding="8,0"`）；一律引用 `Layout.*` 令牌。
-- 主题控件内部必须用 `{DynamicResource Layout.*}` 读取密度 token，才能在运行时换挡；业务 XAML 用 `{StaticResource Layout.*}` 即可（合并字典时已解析到当前档位）。
+- 主题控件内部用 `{DynamicResource Layout.*}` 读取尺寸 token；业务 XAML 用 `{StaticResource Layout.*}` 即可。
 
 ### R8. 单一主按钮原则
 每个对话框或主区域**最多允许一个** `Button.Primary`（主强调操作，回车默认）；其余操作均为 `Button.Secondary`、`Button.Text` 或 `Button.Danger`。
@@ -198,7 +194,7 @@ description: Apply and audit the WPF UI Skills style system (tokens, three-level
 AI 与开发者在交付任何 WPF 改动前，必须依次执行以下自动化检查：
 
 ```bash
-# 1. 静态布局与反模式检查（必须 0 Error；同时校验密度档案完整性与 DynamicResource 接线）
+# 1. 静态布局与反模式检查（必须 0 Error；同时校验 DynamicResource 接线）
 python tools/LayoutCheck.py --root . --theme-dir Theme
 
 # 2. 颜色对比度自动化检查（必须全部通过）
@@ -222,8 +218,8 @@ python tools/UiTest.py --xaml preview/Views/SafeFormView.xaml --shot .tmp-shots/
 ## 交付自查清单 (Review Checklist)
 
 - [ ] 界面没有使用硬编码 `#HEX` 颜色，全部引用 `Brush.*`。
-- [ ] 默认排版为中等密度（Body 12px, ControlHeight 30px, 表格行 28px, 表单行距 3px, 根边距 12px），未混用其它档位。
-- [ ] 控件尺寸/内边距引用 `Layout.*`，没有写死 `Height="32"` / `Padding="8,0"`；主题内部密度 token 使用 `DynamicResource`。
+- [ ] 默认排版为（Body 12px, ControlHeight 28px, 表格行 26px, 表单行距 2px, 根边距 12px），未混用其它高度。
+- [ ] 控件尺寸/内边距引用 `Layout.*`，没有写死 `Height="32"` / `Padding="8,0"`；主题内部尺寸 token 使用 `DynamicResource`。
 - [ ] 单行/多行输入与下拉框内容区横向占满，右侧空白可点击聚焦。
 - [ ] 标签页是方角页签：每个页签边框可见，选中页签与内容区连通，无圆角/无底部强调条。
 - [ ] 表单标签与控件共享左基线：宽面板单 Grid 两列，窄面板 `FormStack` 单列。

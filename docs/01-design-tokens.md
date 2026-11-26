@@ -133,7 +133,7 @@
 - 不要用 `FontWeight="Bold"`；需要强调时用 `SemiBold`。
 - 不要混用 Consolas、Arial、宋体；代码/日志也使用 `Font.Ui`，避免字体跳变。
 - 字号提升后，控件高度、行高、内边距必须同步放大，避免文字被挤压或裁切。
-- **密度与字号解耦**：字号固定为 Body 12 / Caption 11.5 / Title 13；紧凑/中等/宽松只改变控件高度与外边距，不改变字号。用密度换信息量，而不是用大字号制造层级。
+- **尺寸与字号解耦**：字号固定为 Body 12 / Caption 11.5 / Title 13；控件高度与外边距由 `Layout.*` 控制。用紧凑尺寸换信息量，而不是用大字号制造层级。
 
 ---
 
@@ -141,24 +141,23 @@
 
 ### 4.1 控件高度
 
-| 令牌 | 中等（默认） | 紧凑 / 宽松 | 用途 |
-|---|---:|---|---|
-| `Layout.ControlHeight` | 30 | 26 / 34 | 按钮、输入框、下拉框、密码框 |
-| `Layout.ControlHeight.Small` | 26 | 24 / 30 | 小号按钮、工具条 |
-| `Layout.ControlHeight.Large` | 36 | 32 / 40 | 主操作、触屏 |
-| `Layout.TagHeight` | 24 | 22 / 26 | 标签、徽章 |
-| `Layout.IconButton.Micro` | 24 | 22 / 28 | 紧凑图标按钮 |
-| `Layout.IconButton.Small` | 28 | 24 / 32 | 标准行内图标按钮 |
-| `Layout.IconButton.Large` | 32 | 28 / 36 | 大号工具条图标按钮 |
-| `Layout.RowHeight` | 28 | 24 / 32 | 列表/表格行 |
-| `Layout.HeaderHeight` | 30 | 26 / 34 | 表格表头 |
-| `Layout.FormLabelMaxWidth` | 132 | 116 / 148 | 长标签换行上限（设在 TextBlock 上） |
-| `Layout.CheckBox.Size` | 16 | 16 / 16 | 复选框方框（固定） |
-| `Layout.RadioButton.Size` | 16 | 16 / 16 | 单选框圆环（固定） |
+| 令牌 | 数值 | 用途 |
+|---|---:|---|
+| `Layout.ControlHeight` | 28 | 按钮、输入框、下拉框、密码框 |
+| `Layout.ControlHeight.Small` | 24 | 小号按钮、工具条 |
+| `Layout.ControlHeight.Large` | 32 | 主操作 |
+| `Layout.TagHeight` | 20 | 标签、徽章 |
+| `Layout.IconButton.Micro` | 22 | 紧凑图标按钮 |
+| `Layout.IconButton.Small` | 26 | 标准行内图标按钮 |
+| `Layout.IconButton.Large` | 32 | 大号工具条图标按钮 |
+| `Layout.RowHeight` | 26 | 列表/表格行 |
+| `Layout.HeaderHeight` | 28 | 表格表头 |
+| `Layout.FormLabelMaxWidth` | 132 | 长标签换行上限（设在 TextBlock 上） |
+| `Layout.CheckBox.Size` | 16 | 复选框方框（固定） |
+| `Layout.RadioButton.Size` | 16 | 单选框圆环（固定） |
 
-> 同一窗口内只使用一档密度，不要混用 26 / 30 / 34。
-> 复选框/单选框不得小于 16×16，且不随密度缩小。
-> 完整三档对照见 [06-density.md](06-density.md)。
+> 同一窗口内不要混用不同高度的控件。
+> 复选框/单选框不得小于 16×16。
 
 
 ### 4.1.1 图标尺寸阶梯 (Icon Sizing)
@@ -176,9 +175,9 @@
 
 | 令牌 | 按钮宽高 (px) | 适用图标尺寸 | 用途 |
 |---|---|---|---|
-| `Layout.IconButton.Micro` | 24（紧凑 22 / 宽松 28） | 14 (`Icon.Size.Small`) | 紧凑表格操作、搜索框清除按钮 |
-| `Layout.IconButton.Small` | 28（紧凑 24 / 宽松 32） | 16 (`Icon.Size.Regular`) | 标准工具条按钮、面板小操作 |
-| `Layout.IconButton.Large` | 32（紧凑 28 / 宽松 36） | 20 (`Icon.Size.Medium`) | 大号主工具条按钮 |
+| `Layout.IconButton.Micro` | 22 | 14 (`Icon.Size.Small`) | 紧凑表格操作、搜索框清除按钮 |
+| `Layout.IconButton.Small` | 26 | 16 (`Icon.Size.Regular`) | 标准工具条按钮、面板小操作 |
+| `Layout.IconButton.Large` | 32 | 20 (`Icon.Size.Medium`) | 大号主工具条按钮 |
 
 
 ### 4.2 间距
@@ -198,7 +197,7 @@
 | `Layout.TooltipPadding` | `8,4` | ToolTip 内边距 |
 
 > 按钮高度由 `Height="{DynamicResource Layout.ControlHeight}"` 控制，上下 Padding 固定为 0，
-> 不要用上下大内边距把按钮"垫高"。左右内边距按密度取 10 / 12 / 16px，避免中英双语文字被挤压。
+> 不要用上下大内边距把按钮"垫高"。左右内边距取 12px（小号 8px），避免中英双语文字被挤压。
 
 
 间距梯度：**2 / 3 / 5 / 8 / 10 / 12 / 16 / 20 / 24 / 32**。
@@ -244,5 +243,5 @@
 3. 新颜色必须给出在至少一个背景上的对比度。
 4. 不要新增“近似重复”的颜色（例如 `#2F6F9F` 与 `#2E6E9E`）。
 5. 新增后运行 `tools/ContrastCheck.ps1`。
-6. 若新增的是尺寸/内边距/行高类令牌，必须在 `Density.Compact.xaml`、`Density.Medium.xaml`、`Density.Relaxed.xaml` 三份档案中同时登记，并在 `Tokens.xaml` 保留中等档兜底值；然后运行 `LayoutCheck.py`。
+6. 若新增的是尺寸/内边距/行高类令牌，必须在 `Density.Medium.xaml` 登记，并在 `Tokens.xaml` 保留兜底值；然后运行 `LayoutCheck.py`。
 7. 在 `docs/01-design-tokens.md` 和 `docs/05-accessibility-contrast.md` 同步登记。

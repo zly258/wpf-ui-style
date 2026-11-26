@@ -392,7 +392,7 @@
                         </StackPanel>
                     </GroupBox>
 
-                    <!-- 8. 标签页与密度 -->
+                    <!-- 8. 标签页 -->
                     <GroupBox Header="8. 标签页（方角页签：每个页签都有 1px 边框，选中页签与内容区连成一体）">
                         <TabControl Height="170">
                             <TabItem Header="基本信息">
@@ -410,7 +410,7 @@
                                              Text="输入框内部会占满整行，点击右侧空白也能继续输入" />
                                     <TextBlock Grid.Row="1" Text="备注" Style="{StaticResource Text.Label}" />
                                     <TextBox Grid.Row="1" Grid.Column="1" Margin="0,3,0,3"
-                                             Text="切换密度后高度即时变化" />
+                                             Text="备注" />
                                 </Grid>
                             </TabItem>
                             <TabItem Header="高级选项">
@@ -431,7 +431,7 @@
 
             <Border Grid.Row="2" BorderBrush="{StaticResource Brush.Border}" BorderThickness="0,1,0,0"
                     Padding="0,12,0,0" Margin="0,12,0,0">
-                <TextBlock Text="控件高度、行高、表头与内边距均由 Layout.* 密度令牌驱动；在右侧顶部工具栏切换紧凑 / 中等 / 宽松。"
+                <TextBlock Text="控件高度、行高、表头与内边距均由 Layout.* 令牌驱动。"
                            Style="{StaticResource Text.Caption}" VerticalAlignment="Center" />
             </Border>
 

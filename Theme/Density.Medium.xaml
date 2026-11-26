@@ -20,18 +20,18 @@
     <sys:String x:Key="Density.Profile">medium</sys:String>
 
     <!-- 控件高度 -->
-    <sys:Double x:Key="Layout.ControlHeight">30</sys:Double>
-    <sys:Double x:Key="Layout.ControlHeight.Small">26</sys:Double>
-    <sys:Double x:Key="Layout.ControlHeight.Large">36</sys:Double>
+    <sys:Double x:Key="Layout.ControlHeight">28</sys:Double>
+    <sys:Double x:Key="Layout.ControlHeight.Small">24</sys:Double>
+    <sys:Double x:Key="Layout.ControlHeight.Large">32</sys:Double>
 
     <!-- 数据行 / 表头 -->
-    <sys:Double x:Key="Layout.RowHeight">28</sys:Double>
-    <sys:Double x:Key="Layout.HeaderHeight">30</sys:Double>
-    <sys:Double x:Key="Layout.CellControlHeight">26</sys:Double>
+    <sys:Double x:Key="Layout.RowHeight">26</sys:Double>
+    <sys:Double x:Key="Layout.HeaderHeight">28</sys:Double>
+    <sys:Double x:Key="Layout.CellControlHeight">24</sys:Double>
 
     <!-- 按钮 -->
-    <sys:Double x:Key="Layout.ButtonMinWidth">64</sys:Double>
-    <sys:Double x:Key="Layout.ButtonMinWidth.Small">48</sys:Double>
+    <sys:Double x:Key="Layout.ButtonMinWidth">56</sys:Double>
+    <sys:Double x:Key="Layout.ButtonMinWidth.Small">40</sys:Double>
     <Thickness x:Key="Layout.ButtonPadding">12,0</Thickness>
     <Thickness x:Key="Layout.ButtonPadding.Small">8,0</Thickness>
 
@@ -39,38 +39,38 @@
     <Thickness x:Key="Layout.InputPadding">6,0</Thickness>
     <Thickness x:Key="Layout.InputPadding.Multiline">6,6</Thickness>
     <Thickness x:Key="Layout.ComboBoxPadding">6,0,22,0</Thickness>
-    <Thickness x:Key="Layout.ComboBoxItemPadding">8,4</Thickness>
+    <Thickness x:Key="Layout.ComboBoxItemPadding">8,3</Thickness>
     <Thickness x:Key="Layout.DatePickerPadding">6,0,28,0</Thickness>
 
     <!-- 列表 / 菜单 -->
-    <Thickness x:Key="Layout.ListItemPadding">8,5</Thickness>
+    <Thickness x:Key="Layout.ListItemPadding">8,3</Thickness>
     <Thickness x:Key="Layout.ListViewItemPadding">3,2</Thickness>
-    <Thickness x:Key="Layout.MenuItemPadding">8,5</Thickness>
+    <Thickness x:Key="Layout.MenuItemPadding">8,3</Thickness>
 
     <!-- 容器 / 间距 -->
     <sys:Double x:Key="Layout.FormLabelMaxWidth">132</sys:Double>
 
     <Thickness x:Key="Layout.WindowPadding">12</Thickness>
-    <Thickness x:Key="Layout.GroupPadding">10</Thickness>
-    <Thickness x:Key="Layout.CardPadding">10</Thickness>
-    <Thickness x:Key="Layout.FormRowMargin">0,3,0,3</Thickness>
-    <Thickness x:Key="Layout.SectionMargin">0,0,0,10</Thickness>
+    <Thickness x:Key="Layout.GroupPadding">8</Thickness>
+    <Thickness x:Key="Layout.CardPadding">8</Thickness>
+    <Thickness x:Key="Layout.FormRowMargin">0,2,0,2</Thickness>
+    <Thickness x:Key="Layout.SectionMargin">0,0,0,8</Thickness>
 
     <!-- 标签页 -->
-    <Thickness x:Key="Layout.TabPadding">12,6</Thickness>
+    <Thickness x:Key="Layout.TabPadding">12,4</Thickness>
 
     <!-- 其它 -->
     <Thickness x:Key="Layout.TooltipPadding">8,4</Thickness>
     <Thickness x:Key="Layout.BadgePadding">8,2</Thickness>
-    <Thickness x:Key="Layout.ExpanderHeaderPadding">10,6</Thickness>
+    <Thickness x:Key="Layout.ExpanderHeaderPadding">8,4</Thickness>
     <Thickness x:Key="Layout.ExpanderContentPadding">8,6</Thickness>
-    <Thickness x:Key="Layout.ToolBarPadding">5,3</Thickness>
-    <sys:Double x:Key="Layout.ToolBarHeight">44</sys:Double>
-    <sys:Double x:Key="Layout.ProgressBarHeight">8</sys:Double>
+    <Thickness x:Key="Layout.ToolBarPadding">4,2</Thickness>
+    <sys:Double x:Key="Layout.ToolBarHeight">40</sys:Double>
+    <sys:Double x:Key="Layout.ProgressBarHeight">4</sys:Double>
 
-    <sys:Double x:Key="Layout.TagHeight">24</sys:Double>
-    <sys:Double x:Key="Layout.IconButton.Micro">24</sys:Double>
-    <sys:Double x:Key="Layout.IconButton.Small">30</sys:Double>
-    <sys:Double x:Key="Layout.IconButton.Large">36</sys:Double>
+    <sys:Double x:Key="Layout.TagHeight">20</sys:Double>
+    <sys:Double x:Key="Layout.IconButton.Micro">22</sys:Double>
+    <sys:Double x:Key="Layout.IconButton.Small">26</sys:Double>
+    <sys:Double x:Key="Layout.IconButton.Large">32</sys:Double>
 
 </ResourceDictionary>

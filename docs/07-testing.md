@@ -60,8 +60,7 @@ python tools/LayoutCheck.py --root . --strict
 - 多行 `TextBox` 不再强制要求 `MinHeight`（全局硬限制会导致小窗口被撑爆）。
 - `TabControl` 是否缺少固定高度（会导致切换 tab 时窗口高度跳变）。
 - 表单输入/下拉框是否被局部设为居中（`HorizontalContentAlignment` / `TextAlignment="Center"`）。
-- 密度令牌接线：`Theme/` 内密度键不得使用 `StaticResource`，三份 `Density.*.xaml` 键集必须一致，
-  `DynamicResource` 不得引用未定义键，`Tokens.xaml` 必须保留兜底值。
+- 尺寸令牌接线：`Theme/` 内尺寸键不得使用 `StaticResource`，`DynamicResource` 不得引用未定义键，`Tokens.xaml` 必须保留兜底值。
 
 截断 / 遮挡检查（R14）：
 
@@ -82,25 +81,21 @@ python tools/LayoutCheck.py --root . --strict
 
 ---
 
-## 1.2 三档密度验收
+## 1.2 尺寸验收
 
 ```bash
-# 密度档案键集一致 + DynamicResource 接线
+# DynamicResource 接线
 python tools/LayoutCheck.py --root . --theme-dir Theme
 
-# 契约测试：三档键集相同、严格递增、Tokens 兜底、TextBox 占满、TabItem 选中态
+# 契约测试
 dotnet test tests/WpfStyleContractTests.csproj
 ```
 
 人工验收：
 
-1. 用 `Theme.Compact.xaml` / `Theme.xaml` / `Theme.Relaxed.xaml` 分别启动预览，确认控件高度、
-   表格行高、Tab/按钮/输入内边距随之变化；
-2. 确认字号、颜色、圆角、复选框 16px 靶心**没有**变化；
-3. 在同一窗口中确认所有控件来自同一档；
-4. 在输入框右侧空白处点击，确认能聚焦并继续输入；
-5. 点选标签页，确认每个页签都有可见边框、选中页签与内容区连成一体；
-6. 在 `preview` 案例中心右上角切换「密度」，确认窗口即时换挡且无残影。
+1. 启动预览，确认控件高度（28）、表格行高（26）与 Tab/按钮/输入内边距符合规范；
+2. 在输入框右侧空白处点击，确认能聚焦并继续输入；
+3. 点选标签页，确认每个页签都有可见边框、选中页签与内容区连成一体。
 
 ---
 

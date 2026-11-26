@@ -1,14 +1,11 @@
 # 可复制 XAML 片段
 
-## 1. 合并主题与选择密度
+## 1. 合并主题
 
 ```xml
 <Application.Resources>
     <ResourceDictionary>
         <ResourceDictionary.MergedDictionaries>
-            <!-- 中等（默认）：Theme.xaml -->
-            <!-- 紧凑：Theme.Compact.xaml -->
-            <!-- 宽松：Theme.Relaxed.xaml -->
             <ResourceDictionary
                 Source="pack://application:,,,/YourAssembly;component/Theme/Theme.xaml" />
         </ResourceDictionary.MergedDictionaries>
@@ -16,26 +13,7 @@
 </Application.Resources>
 ```
 
-运行时热切换（控件全部使用 `{DynamicResource Layout.*}`）：
-
-```csharp
-static void ApplyDensity(string profile) // Compact / Medium / Relaxed
-{
-    var dict = new ResourceDictionary
-    {
-        Source = new Uri("pack://application:,,,/YourAssembly;component/Theme/Density." +
-                         profile + ".xaml", UriKind.Absolute)
-    };
-    var merged = Application.Current.Resources.MergedDictionaries;
-    for (int i = merged.Count - 1; i >= 0; i--)
-        if (merged[i].Source?.OriginalString.Contains("/Density.") == true)
-            merged.RemoveAt(i);
-    merged.Add(dict);
-}
-```
-
 > 业务 XAML 用 `{StaticResource Layout.*}`，主题内部用 `{DynamicResource Layout.*}`。
-> 三档键值与选型见 `docs/06-density.md`。
 
 ## 2. 按钮
 
@@ -269,7 +247,7 @@ static void ApplyDensity(string profile) // Compact / Medium / Relaxed
     <Path Data="{StaticResource Icon.Geo.Refresh}" Style="{StaticResource Icon.Regular}" />
 </Button>
 
-<!-- 紧凑小号（表格行操作） -->
+<!-- 小号（表格行操作） -->
 <Button Style="{StaticResource Button.Icon.Small}" ToolTip="删除此项">
     <Path Data="{StaticResource Icon.Geo.Trash}" Style="{StaticResource Icon.Small}" />
 </Button>

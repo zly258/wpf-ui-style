@@ -23,19 +23,16 @@
 
 - 业务 XAML 禁止出现 `FontFamily`，禁止写 `FontSize="13"` 字面量。
 - 复选框 / 单选框不得小于 **16×16**（`Layout.CheckBox.Size`）。
-- 字号不随密度变化；控件高度/行高由密度令牌控制：紧凑 26/24、中等 30/28、宽松 34/32。
+- 字号固定；控件高度/行高由 `Layout.*` 令牌控制：控件 28 / 小号 24 / 大号 32，表格行 26，表头 28。
 
-## 三档密度（默认中等）
+## 尺寸（单一档）
 
-| 密度 | 入口 | 控件高 | 表格行 | Tab 内边距 | 按钮内边距 |
-|---|---|---:|---:|---|---|
-| 紧凑 | `Theme.Compact.xaml` | 26 | 24 | 10,4 | 10,0 |
-| 中等 | `Theme.xaml` | **30** | **28** | **12,6** | **12,0** |
-| 宽松 | `Theme.Relaxed.xaml` | 34 | 32 | 16,8 | 16,0 |
+| 入口 | 控件高 | 表格行 | Tab 内边距 | 按钮内边距 |
+|---|---:|---:|---|---|
+| `Theme.xaml` | 28 | 26 | 12,4 | 12,0 |
 
-- 业务 XAML 用 `{StaticResource Layout.*}`；主题内部用 `{DynamicResource Layout.*}`（支持运行时换挡）。
-- 同一窗口只用一档；颜色、字号、圆角、16px 勾选框不随密度变化。
-- 运行时切换：替换应用级 `Density.*.xaml` 合并字典（见 `docs/06-density.md`）。
+- 业务 XAML 用 `{StaticResource Layout.*}`；主题内部用 `{DynamicResource Layout.*}`。
+- 同一窗口不混用不同高度；颜色、字号、16px 勾选框由 `Tokens.xaml` 固定。
 
 ## 状态速查
 
@@ -184,7 +181,7 @@
 
 ## 图标行对齐
 
-- 混排 24/28/32 三档图标按钮的行，用**水平 `StackPanel`**；`WrapPanel` 忽略 `VerticalAlignment`，会把图标排得高低错开。
+- 混排 24/28/32 不同尺寸图标按钮的行，用**水平 `StackPanel`**；`WrapPanel` 忽略 `VerticalAlignment`，会把图标排得高低错开。
 - 主题已给按钮/图标按钮设 `VerticalAlignment="Center"`，别改回 `Stretch`。
 
 ## 交互态自检（R15）
@@ -267,7 +264,7 @@ pwsh ./tools/LayoutCheck.ps1 -Root "D:\your\project"
 13. 输入框内容宿主 `Left` 对齐 → 右侧点不进去，长值像被截断。
 14. 标签页选中只画一条细线 → 分不清当前页。
 15. 白底按钮用浅色描边 → 按钮边界消失；应使用 `Brush.Border.Control`。
-16. 同一窗口混用 26/30/34 三档高度 → 基线不齐。
+16. 同一窗口混用不同高度控件 → 基线不齐。
 
 
 ---
@@ -292,6 +289,6 @@ pwsh ./tools/LayoutCheck.ps1 -Root "D:\your\project"
 - **严禁写死 Fill="#..."**。
 - 默认继承宿主 `(TextElement.Foreground)`，主按钮自动纯白，禁用自动变灰。
 - 纯图标按钮必带 `ToolTip`。
-- 图标按钮尺寸矩阵（中等密度）：`Button.Icon.Small` (24px) / `Button.Icon` (28px) / `Button.Icon.Large` (32px)；紧凑/宽松按 `Layout.IconButton.*` 自动换挡。
+- 图标按钮尺寸矩阵：`Button.Icon.Small` (24px) / `Button.Icon` (28px) / `Button.Icon.Large` (32px)。
 
 

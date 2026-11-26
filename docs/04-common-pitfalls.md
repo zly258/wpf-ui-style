@@ -1133,7 +1133,7 @@ Expander 的内容直接放在 `ContentPresenter` 里，没有滚动容器：
 
 **修复**
 
-- `DataGrid.RowHeight` 必须 ≥ 编辑器实际高度，主题已设为 `Layout.RowHeight`（中等 28，紧凑 24，宽松 32）。
+- `DataGrid.RowHeight` 必须 ≥ 编辑器实际高度，主题已设为 `Layout.RowHeight`（26）。
 - `DataGridRow.MinHeight` 同步。
 
 **验证**
@@ -1351,7 +1351,7 @@ DatePicker 的弹层里放的是 **DatePicker 自己创建的 Calendar 实例**�
 
 ---
 
-## 21. 同一窗口混用 26 / 30 / 34 三档尺寸
+## 21. 同一窗口混用不同高度的控件
 
 **症状**
 
@@ -1364,9 +1364,9 @@ DatePicker 的弹层里放的是 **DatePicker 自己创建的 Calendar 实例**�
 
 **修复**
 
-- 选定一档密度后，所有控件引用同一组 `Layout.*`，不要在业务 XAML 写死高度。
+- 所有控件引用同一组 `Layout.*`，不要在业务 XAML 写死高度。
 - 工具条/表格行内统一用 `Layout.ControlHeight.Small`，主表单统一用 `Layout.ControlHeight`。
-- `LayoutCheck` 会检查 `Padding`/`Height` 硬编码；`dotnet test` 会检查三档键集与递增关系。
+- `LayoutCheck` 会检查 `Padding`/`Height` 硬编码。
 
 ---
 

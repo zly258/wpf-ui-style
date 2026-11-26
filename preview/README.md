@@ -8,7 +8,7 @@
 ```text
 preview/
 ├─ Shell/
-│  ├─ MainWindow.xaml(.cs)   ← 案例中心：左侧分类导航 + 右侧案例宿主 + 密度切换
+│  ├─ MainWindow.xaml(.cs)   ← 案例中心：左侧分类导航 + 右侧案例宿主
 │  ├─ CaseCatalog.cs         ← 唯一案例清单（导航、首页卡片、截图入口共用）
 │  └─ CaseHostWindow.cs      ← 把单个案例页包成独立窗口，供截图/测试/“独立窗口”按钮
 ├─ Views/
@@ -25,7 +25,6 @@ preview/
 ├─ Diagnostics/
 │  └─ ProbeWindow.xaml       ← 交互态探针（不在导航中）
 ├─ App.xaml(.cs)             ← 入口、离屏渲染、命令行
-├─ DensitySwitcher.cs        ← 运行时密度切换
 └─ UiTestEngine.cs           ← 交互点击与自检引擎
 ```
 
@@ -37,7 +36,7 @@ preview/
 | 页面 | `-window` | 内容 |
 |---|---|---|
 | `OverviewView` | `home` / `overview` | 首页：规范定位、三条核心约束、全部案例入口 |
-| `ControlsGalleryView` | `controls` | 按钮/输入/下拉/复选/标签页/密度等基础控件矩阵 |
+| `ControlsGalleryView` | `controls` | 按钮/输入/下拉/复选/标签页等基础控件矩阵 |
 | `FormLayoutView` | `form-layout` | 表单对齐：宽面板两列、窄面板单列，标签与控件左对齐 |
 | `SafeFormView` | `safeform` | 标签不裁、值不藏、状态与按钮栏分行 |
 | `SettingsView` | `settings` | 三列并排的密集设置表单 |
@@ -77,9 +76,6 @@ dotnet run --project preview -- -window home -page dashboard -shot out/home-dash
 # 单个案例独立窗口
 dotnet run --project preview -- -window editable-table -shot out/table.png -scale 1.5
 
-# 指定密度（Compact / Medium / Relaxed）
-dotnet run --project preview -- -window home -density Compact -shot out/home-compact.png
-
 # 全部案例各出一张（含主壳首页）
 dotnet run --project preview -- -shot out/all.png -all -scale 1.0
 
@@ -91,7 +87,6 @@ dotnet run --project preview -- -shot out/menu.png -menu
 |---|---|
 | `-window <name>` | `home` / `overview` / `controls` / `safeform` / `settings` / `editable-table` / `compare` / `workbench` / `wizard` / `dashboard` / `probe` |
 | `-page <key>` | 主壳启动时显示的页面（默认 `overview`） |
-| `-density <档位>` | `Compact` / `Medium` / `Relaxed`，运行时热切换（默认中等） |
 | `-shot <path>` | 输出 PNG；`-all` 时按 `<目录>/<窗口名>.png` 输出全部案例页 |
 | `-scale <n>` | 渲染倍率，`1.5` 等价于 150% DPI 观感 |
 | `-all` | 全部案例各出一张（含主壳首页） |
@@ -104,8 +99,6 @@ dotnet run --project preview -- -shot out/menu.png -menu
 
 - **导航与页面解耦**：`CaseCatalog` 是唯一清单；主壳只负责选择/缓存页面，
   首页卡片通过 `CaseRequested` 事件请求切换，不直接持有导航逻辑。
-- **密度全局一处**：主壳右上角切换密度，所有页面通过 `{DynamicResource Layout.*}` 即时响应；
-  单个页面不再各自放密度下拉。
 - **页面可独立运行**：`CaseHostWindow` 复用同一 `UserControl`，截图与 UiTest 都走这条路径。
 - **向导取消/完成**：嵌在主壳时重置到第 1 步，不会关闭整个应用。
 - **清理无用案例**：旧的 Showcase、Layouts、AntiPattern、CaseTable 已移除，
