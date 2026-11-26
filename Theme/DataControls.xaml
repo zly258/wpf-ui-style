@@ -27,9 +27,6 @@
         <Setter Property="SnapsToDevicePixels" Value="True" />
     </Style>
 
-    <!-- ============================================================
-         ListBox
-         ============================================================ -->
     <Style TargetType="{x:Type ListBox}">
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
@@ -43,10 +40,6 @@
         <Setter Property="SnapsToDevicePixels" Value="True" />
     </Style>
 
-    <!-- ListBoxItem / ListViewItem 共用同一套模板（ListViewItem 继承 ListBoxItem，
-         模板的 TargetType 直接写 ListBoxItem 即可）。必须自带模板：WPF 默认模板
-         用 SystemColors.HighlightBrushKey 画选中，且会在选中项上叠一圈焦点虚线框，
-         与主题的浅蓝 Brush.Selection 完全不搭。 -->
     <ControlTemplate x:Key="ListBoxItem.Template" TargetType="{x:Type ListBoxItem}">
         <Border x:Name="Bd"
                 Background="{TemplateBinding Background}"
@@ -97,9 +90,6 @@
         <Setter Property="Template" Value="{StaticResource ListBoxItem.Template}" />
     </Style>
 
-    <!-- ============================================================
-         ListView
-         ============================================================ -->
     <Style TargetType="{x:Type ListView}">
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
@@ -126,9 +116,6 @@
         <Setter Property="HorizontalContentAlignment" Value="Left" />
     </Style>
 
-    <!-- ============================================================
-         DataGrid
-         ============================================================ -->
     <Style TargetType="{x:Type DataGrid}">
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
@@ -140,9 +127,6 @@
         <Setter Property="AlternatingRowBackground" Value="{StaticResource Brush.SurfaceSunken}" />
         <Setter Property="HorizontalGridLinesBrush" Value="{StaticResource Brush.Border}" />
         <Setter Property="VerticalGridLinesBrush" Value="{StaticResource Brush.Border}" />
-        <!-- 行高使用密度 token（紧凑 24 / 中等 28 / 宽松 32）。
-             编辑态 TextBox 为 Height=Auto、VerticalAlignment=Stretch，
-             会跟随行高伸展；单元格下载框的 MinHeight 也取同一 token。 -->
         <Setter Property="RowHeight" Value="{DynamicResource Layout.RowHeight}" />
         <Setter Property="ColumnHeaderHeight" Value="{DynamicResource Layout.HeaderHeight}" />
         <Setter Property="HeadersVisibility" Value="Column" />
@@ -155,8 +139,6 @@
 
     <Style TargetType="{x:Type DataGridRow}">
         <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
-        <!-- 默认不硬编码 Background，保留 DataGrid 的 RowBackground / AlternatingRowBackground 斑马纹。 -->
-        <!-- 默认不锁死 MinHeight，由 DataGrid.RowHeight 决定行高，方便紧凑表格缩减行高 -->
         <Setter Property="MinHeight" Value="0" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
@@ -182,10 +164,6 @@
         </Style.Triggers>
     </Style>
 
-    <!-- 单元格模板：WPF 默认的 DataGridCell 模板不消费 Padding，
-         ContentPresenter 会贴着列边界渲染，内容与表头错位、
-         文字压在竖向网格线上。这里显式给出模板，把 Padding 接到
-         ContentPresenter.Margin 上。 -->
     <ControlTemplate x:Key="DataGridCell.Template" TargetType="{x:Type DataGridCell}">
         <Border Background="{TemplateBinding Background}"
                 BorderBrush="{TemplateBinding BorderBrush}"
@@ -203,8 +181,6 @@
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-        <!-- 左内边距必须与 DataGridColumnHeader 的 8px 严格一致，
-             保证单元格文字与表头文字完全垂直对齐。 -->
         <Setter Property="Padding" Value="8,0" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
@@ -220,7 +196,6 @@
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Foreground" Value="{StaticResource Brush.Text.Disabled}" />
             </Trigger>
-            <!-- 编辑状态下：内边距归零，编辑器宽高 100% 占满单元格 -->
             <Trigger Property="IsEditing" Value="True">
                 <Setter Property="Padding" Value="0" />
                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -230,7 +205,6 @@
         </Style.Triggers>
     </Style>
 
-    <!-- 表头拖拽分隔手柄：完全透明，不产生任何多余黑线、阴影或立体边框 -->
     <Style x:Key="DataGridColumnHeader.Gripper" TargetType="{x:Type Thumb}">
         <Setter Property="Width" Value="8" />
         <Setter Property="Background" Value="Transparent" />
@@ -303,14 +277,11 @@
         <Setter Property="Background" Value="{StaticResource Brush.SurfaceAlt}" />
         <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />
         <Setter Property="BorderThickness" Value="0,0,1,1" />
-        <!-- 紧凑表头内边距：左内边距与单元格一致（8px），垂直紧凑 2px -->
         <Setter Property="Padding" Value="8,2" />
-        <!-- 默认靠左对齐，与单元格数据垂线对齐 -->
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="Template" Value="{StaticResource DataGridColumnHeader.Template}" />
     </Style>
 
-    <!-- 表头特殊居中/靠右样式（仅在需要全选勾选框居中或数值靠右时选配） -->
     <Style x:Key="DataGridColumnHeader.Center" TargetType="{x:Type DataGridColumnHeader}" BasedOn="{StaticResource {x:Type DataGridColumnHeader}}">
         <Setter Property="HorizontalContentAlignment" Value="Center" />
     </Style>
@@ -319,28 +290,18 @@
         <Setter Property="HorizontalContentAlignment" Value="Right" />
     </Style>
 
-    <!-- ============================================================
-         DataGrid 单元格元素与编辑态专用样式
-         ============================================================ -->
-
-    <!-- 表格展示态：文字居中 -->
     <Style x:Key="DataGrid.Element.TextCenter" TargetType="{x:Type TextBlock}">
         <Setter Property="TextAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="TextTrimming" Value="CharacterEllipsis" />
     </Style>
 
-    <!-- 表格展示态：文字靠右（数值/金额/计数） -->
     <Style x:Key="DataGrid.Element.TextRight" TargetType="{x:Type TextBlock}">
         <Setter Property="TextAlignment" Value="Right" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Padding" Value="0,0,4,0" />
     </Style>
 
-    <!-- 表格展示态：复选框居中。
-         必须 BasedOn 到隐式 CheckBox 样式：WPF 里带 x:Key 的 Style 不会自动继承隐式样式，
-         不写 BasedOn 就等于把这些单元格里的复选框退回系统默认外观（方角、深灰描边），
-         与表头那个没用 Key 的复选框长得不一样。 -->
     <Style x:Key="DataGrid.Element.CheckBox" TargetType="{x:Type CheckBox}"
            BasedOn="{StaticResource {x:Type CheckBox}}">
         <Setter Property="HorizontalAlignment" Value="Center" />
@@ -349,7 +310,6 @@
         <Setter Property="Padding" Value="0" />
     </Style>
 
-    <!-- 表格编辑态：复选框居中（同样必须 BasedOn，理由同上） -->
     <Style x:Key="DataGrid.Editing.CheckBox" TargetType="{x:Type CheckBox}"
            BasedOn="{StaticResource {x:Type CheckBox}}">
         <Setter Property="HorizontalAlignment" Value="Center" />
@@ -358,10 +318,6 @@
         <Setter Property="Padding" Value="0" />
     </Style>
 
-    <!-- 表格编辑态：单行输入框（适配行高，宽度与高度 100% 占满可用区域）。
-         必须显式套用共享 TextBox.Template：WPF 默认模板的 PART_ContentHost
-         不绑定 VerticalContentAlignment，编辑器拉伸占满单元格时文字会
-        贴在左上角而非垂直居中。 -->
     <Style x:Key="DataGrid.Editing.TextBox" TargetType="{x:Type TextBox}">
         <Setter Property="Template" Value="{StaticResource TextBox.Template}" />
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
@@ -383,34 +339,22 @@
         <Setter Property="SnapsToDevicePixels" Value="True" />
     </Style>
 
-    <!-- 表格编辑态：单行输入框靠右（数值编辑） -->
     <Style x:Key="DataGrid.Editing.TextBoxRight" TargetType="{x:Type TextBox}" BasedOn="{StaticResource DataGrid.Editing.TextBox}">
         <Setter Property="HorizontalContentAlignment" Value="Right" />
         <Setter Property="Padding" Value="2,1,7,1" />
     </Style>
 
-    <!-- 表格单元格专用下拉框（单次点击直接展开）。
-         展示态单元格 ContentPresenter 垂直居中，Stretch 不生效，
-         必须给 MinHeight 才能与单元格高度保持一致，但要用 Layout.CellControlHeight
-         （行高 - 2）而不是 Layout.RowHeight：数据行底部有 1px 网格线，控件撑满整行时
-         hover/展开态的描边会正好压在分隔线上，看起来像溢到下一行。 -->
     <Style x:Key="DataGrid.Cell.ComboBox" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource ComboBox.Base}">
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Height" Value="Auto" />
         <Setter Property="MinHeight" Value="{DynamicResource Layout.CellControlHeight}" />
-        <!-- 左右负外边距抵消单元格自带的 8px 内边距：下拉框要铺满整格
-             （hover 底色才像单元格悬停），文字靠自身 Padding 对齐列左边缘。
-             Padding 取 6 而不是 8：ComboBox 显示内容比 TextBox 少约 2px 内缩，
-             内容区补了 2px（见 Controls.xaml 的 ComboBox 模板），6+2=8 才和表头文字同一条竖线。 -->
         <Setter Property="Margin" Value="-8,0,-8,0" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Background" Value="Transparent" />
-        <!-- 左 Padding 6 (+2 内容补偿) = 8px，与表头文字左边缘严密对齐 -->
         <Setter Property="Padding" Value="6,0,22,0" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Style.Triggers>
-            <!-- 边框 0→1 时左/右内边距各减 1，文字与箭头位置不跳动 -->
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource Brush.Control.Hover}" />
                 <Setter Property="BorderThickness" Value="1" />
@@ -426,7 +370,6 @@
         </Style.Triggers>
     </Style>
 
-    <!-- 表格编辑态：下拉框（适配原生 DataGridComboBoxColumn，高度占满单元格） -->
     <Style x:Key="DataGrid.Editing.ComboBox" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource ComboBox.Base}">
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
@@ -444,7 +387,6 @@
         <Setter Property="SnapsToDevicePixels" Value="True" />
     </Style>
 
-    <!-- 表格详情行容器规范 -->
     <Style x:Key="DataGrid.RowDetails.Border" TargetType="{x:Type Border}">
         <Setter Property="Background" Value="{StaticResource Brush.SurfaceSunken}" />
         <Setter Property="BorderBrush" Value="{StaticResource Brush.Border}" />
@@ -458,9 +400,6 @@
         <Setter Property="BorderThickness" Value="0,0,1,0" />
     </Style>
 
-    <!-- ============================================================
-         TreeView（基础项；复杂模板请单独测试展开/选中）
-         ============================================================ -->
     <Style TargetType="{x:Type TreeView}">
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
@@ -471,8 +410,6 @@
         <Setter Property="Padding" Value="2" />
     </Style>
 
-    <!-- 展开/收起箭头：与 Expander 的 Chevron 同一套几何与描边，
-         旋转 90° 表示展开，保证树与折叠面板的视觉语言一致。 -->
     <ControlTemplate x:Key="TreeView.Expander.Template" TargetType="{x:Type ToggleButton}">
         <Border Background="Transparent" Width="16" Height="16">
             <Path x:Name="Chevron"
@@ -517,10 +454,6 @@
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
-        <!-- 必须自带模板：WPF 默认的 TreeViewItem 模板把选中态写死成
-             SystemColors.HighlightBrushKey（系统蓝 #0078D7 + 白字），
-             只写 Background/Foreground 触发器完全不起作用——树里的选中行
-             会与主题的浅蓝 Brush.Selection 不一致，深色主题下更是刺眼。 -->
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TreeViewItem}">
@@ -555,10 +488,6 @@
                                                   TextElement.Foreground="{TemplateBinding Foreground}" />
                             </Grid>
                         </Border>
-                        <!-- 缩进与箭头宽度对齐（16 箭头 + 2 间距）：子项文字正好落在
-                             父项文字的左基线上，不会因为箭头折叠而左右跳动。
-                             子项容器必须自己响应 IsExpanded：自定义模板里没有默认模板
-                             那层隐藏逻辑，不绑的话折叠节点仍会画出全部子项。 -->
                         <Border x:Name="ItemsHost" Margin="18,0,0,0" Visibility="Collapsed">
                             <ItemsPresenter />
                         </Border>
@@ -567,8 +496,6 @@
                         <Trigger Property="IsExpanded" Value="True">
                             <Setter TargetName="ItemsHost" Property="Visibility" Value="Visible" />
                         </Trigger>
-                        <!-- 有子项才显示箭头（折叠时向右、展开时向下）。
-                             不能拿 IsExpanded 控制可见性：折叠的父节点仍需要箭头。 -->
                         <Trigger Property="HasItems" Value="True">
                             <Setter TargetName="Expander" Property="Visibility" Value="Visible" />
                         </Trigger>

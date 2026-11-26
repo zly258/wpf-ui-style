@@ -15,9 +15,6 @@
           Radius.* = 圆角
     -->
 
-    <!-- ============================================================
-         1. 基础色板（低饱和工业桌面配色）
-         ============================================================ -->
     <Color x:Key="Color.WindowBackground">#FFF3F6FA</Color>
     <Color x:Key="Color.Surface">#FFFFFFFF</Color>
     <Color x:Key="Color.SurfaceAlt">#FFEEF2F7</Color>
@@ -25,21 +22,13 @@
 
     <Color x:Key="Color.Border">#FFDCE1E8</Color>
     <Color x:Key="Color.BorderStrong">#FFB6BEC9</Color>
-    <!-- 按钮/可点击控件的描边：必须与白底有 ≥3:1 的可感知边界，
-         否则「白底 + 浅边」在低亮度显示器上几乎看不见。 -->
     <Color x:Key="Color.BorderControl">#FF7F8A98</Color>
-    <!-- 标签页方框描边：比 Border.Control 浅一档（对 Surface 约 2.50:1）。
-         页签由文字本身标识、边框只是分组轮廓，不属于 WCAG 1.4.11 必须
-         ≥3:1 的「唯一识别手段」，所以可以放轻；按钮/输入框仍用
-         Border.Control，不要换成这个。 -->
     <Color x:Key="Color.BorderTab">#FF9AA3AF</Color>
 
     <Color x:Key="Color.TextPrimary">#FF1F2933</Color>
     <Color x:Key="Color.TextSecondary">#FF4B5563</Color>
-    <!-- 禁用文字：在 ControlDisabled(#F2F4F7) 上约 4.5:1，仍能看清。 -->
     <Color x:Key="Color.TextDisabled">#FF667085</Color>
 
-    <!-- Accent：唯一品牌色。白字只允许压在 Accent/AccentHover/AccentPressed 上。 -->
     <Color x:Key="Color.Accent">#FF2563A8</Color>
     <Color x:Key="Color.AccentHover">#FF1E5490</Color>
     <Color x:Key="Color.AccentPressed">#FF1A4778</Color>
@@ -47,7 +36,6 @@
     <Color x:Key="Color.AccentSubtleHover">#FFD3E3F5</Color>
     <Color x:Key="Color.OnAccent">#FFFFFFFF</Color>
 
-    <!-- 语义色 -->
     <Color x:Key="Color.Danger">#FFB43B32</Color>
     <Color x:Key="Color.DangerHover">#FF97302A</Color>
     <Color x:Key="Color.DangerPressed">#FF7E2823</Color>
@@ -59,27 +47,21 @@
     <Color x:Key="Color.Warning">#FF7A5A1E</Color>
     <Color x:Key="Color.WarningSubtle">#FFF7F0E3</Color>
 
-    <!-- 交互态 -->
     <Color x:Key="Color.ControlHover">#FFEEF2F7</Color>
     <Color x:Key="Color.ControlPressed">#FFE1E6ED</Color>
     <Color x:Key="Color.ControlDisabled">#FFF1F3F6</Color>
 
-    <!-- 选中态：浅底深字，禁止白字。 -->
     <Color x:Key="Color.Selection">#FFE1ECF8</Color>
     <Color x:Key="Color.SelectionHover">#FFD3E3F5</Color>
 
-    <!-- 焦点环：非文字元素 3:1 以上 -->
     <Color x:Key="Color.Focus">#FF2563A8</Color>
 
-    <!-- Tooltip：深底白字，最高对比度。 -->
     <Color x:Key="Color.TooltipBackground">#FF1F2933</Color>
     <Color x:Key="Color.TooltipForeground">#FFFFFFFF</Color>
 
-    <!-- 滚动条 -->
     <Color x:Key="Color.ScrollThumb">#FFC3CAD3</Color>
     <Color x:Key="Color.ScrollThumbHover">#FFA7B0BB</Color>
 
-    <!-- 卡片 / 消息 / 状态标签 -->
     <Color x:Key="Color.CardSystem">#FFEEF2F7</Color>
     <Color x:Key="Color.CardUser">#FFE1ECF8</Color>
     <Color x:Key="Color.CardAi">#FFFFFFFF</Color>
@@ -100,13 +82,8 @@
     <Color x:Key="Color.OverlayChipGlyph">#FF3C3C3C</Color>
     <Color x:Key="Color.OverlayChipHover">#F2B43B32</Color>
 
-    <!-- 以下为下游业务预留的浮层/遮罩资源（本主题文件自身不引用）。
-         Color.Shadow：浮层投影；Color.OverlayChip*：图片/画布上的悬浮角标。 -->
     <Color x:Key="Color.Shadow">#FF1F2933</Color>
 
-    <!-- ============================================================
-         2. 画刷（业务 XAML 唯一允许引用的颜色资源）
-         ============================================================ -->
     <SolidColorBrush x:Key="Brush.WindowBackground" Color="{StaticResource Color.WindowBackground}" />
     <SolidColorBrush x:Key="Brush.Surface" Color="{StaticResource Color.Surface}" />
     <SolidColorBrush x:Key="Brush.SurfaceAlt" Color="{StaticResource Color.SurfaceAlt}" />
@@ -176,46 +153,24 @@
 
     <SolidColorBrush x:Key="Brush.Shadow" Color="{StaticResource Color.Shadow}" />
 
-    <!-- ============================================================
-         3. 字体与字号
-         统一字体栈，禁止在业务窗口里混用其他字体。
-         ============================================================ -->
     <FontFamily x:Key="Font.Ui">Microsoft YaHei, Microsoft YaHei UI, Segoe UI</FontFamily>
 
-    <!-- 全局字号：收敛到 WPF 默认正文（12）附近，整窗再密一档。
-         目标是一屏看到更多行、更多列，而不是靠放大字号制造"层级"。
-         业务 XAML 禁止再写 FontFamily/FontSize 字面量，一律继承本表。 -->
     <sys:Double x:Key="FontSize.Title">13</sys:Double>
     <sys:Double x:Key="FontSize.Section">13</sys:Double>
     <sys:Double x:Key="FontSize.Body">12</sys:Double>
     <sys:Double x:Key="FontSize.Caption">11.5</sys:Double>
     <sys:Double x:Key="FontSize.Code">11.5</sys:Double>
-    <!-- 仅产品名 / 关于页主标题使用，避免业务窗口为一个大标题新造字号。 -->
     <sys:Double x:Key="FontSize.Display">16</sys:Double>
-    <!-- 缩略图角标 / 胶囊文件名等"比 Caption 更小"的场景；不用于正文。 -->
     <sys:Double x:Key="FontSize.Micro">10</sys:Double>
 
     <sys:Double x:Key="LineHeight.Body">18</sys:Double>
     <sys:Double x:Key="LineHeight.Caption">17</sys:Double>
 
-
-    <!-- ============================================================
-         4. 布局尺寸（缺省 = 中等密度 Medium）
-         ============================================================
-         这些键是「密度可变 token」：Theme.xaml 会在 Tokens 之后合并
-         Density.Medium.xaml（或 Compact / Relaxed），后者同名键覆盖本表。
-         控件内部统一用 {DynamicResource Layout.*} 读取，因此换密度时
-         尺寸会实时生效；只合并 Controls.xaml 的项目也能拿到本表兜底值。
-
-         完整对照表见 docs/06-density.md。
-         ============================================================ -->
     <sys:String x:Key="Density.Profile">medium</sys:String>
 
     <sys:Double x:Key="Layout.ControlHeight">28</sys:Double>
     <sys:Double x:Key="Layout.ControlHeight.Small">24</sys:Double>
     <sys:Double x:Key="Layout.ControlHeight.Large">32</sys:Double>
-    <!-- 日志/代码 TextBox 的可选高度上限（见 R9：只对日志限制 MaxHeight，
-         不强制 MinHeight，避免撑爆小窗口）。 -->
     <sys:Double x:Key="Layout.LogMaxHeight">220</sys:Double>
     <sys:Double x:Key="Layout.TagHeight">20</sys:Double>
     <sys:Double x:Key="Layout.IconButton.Micro">22</sys:Double>
@@ -223,41 +178,23 @@
     <sys:Double x:Key="Layout.IconButton.Large">32</sys:Double>
     <sys:Double x:Key="Layout.RowHeight">26</sys:Double>
     <sys:Double x:Key="Layout.HeaderHeight">28</sys:Double>
-    <!-- 单元格内控件高度 = 行高 - 2：数据行底部有 1px 网格线，控件撑满整行时
-         描边会压到分隔线上（hover/展开时看起来像溢出行高）。 -->
     <sys:Double x:Key="Layout.CellControlHeight">24</sys:Double>
-    <!-- 复选框/单选框靶心固定 16，不随密度缩小（可访问性下限）。 -->
     <sys:Double x:Key="Layout.CheckBox.Size">16</sys:Double>
     <sys:Double x:Key="Layout.RadioButton.Size">16</sys:Double>
 
-    <!-- 表单骨架尺寸（防截断 / 防遮挡，见 R14）
-         FormLabelMinWidth：标签列最小宽度。标签列用 Auto + MinWidth，
-         长标签靠换行或缩短文案展示，绝不用固定像素列宽硬裁。
-         InputMinWidth：输入列最小宽度。输入列用 * + MinWidth，
-         保证窄窗口下输入框仍有可用宽度。 -->
     <sys:Double x:Key="Layout.FormLabelMinWidth">80</sys:Double>
-    <!-- 标签列最大宽度：Auto 列里的长标签如果不设上限，会按单行文字宽度撑开，
-         把右侧输入列挤出可视区（窗口只有 820 宽时尤其明显）。
-         设上限后长标签正常换行，输入列仍保留 * 宽度。 -->
     <sys:Double x:Key="Layout.FormLabelMaxWidth">132</sys:Double>
     <sys:Double x:Key="Layout.InputMinWidth">140</sys:Double>
-    <!-- 两列表单之间的间距。注意：ColumnDefinition.Width 需要 GridLength，
-         不能用 sys:Double（StaticResource 解析成 Double 会抛 XamlParseException）。 -->
     <GridLength x:Key="Layout.ColumnGap">10</GridLength>
-    <!-- 窗口最小宽度基线，配合 SizeToContent="Height" 使用 -->
     <sys:Double x:Key="Layout.WindowMinWidth">520</sys:Double>
-    <!-- 折叠面板内容区最大高度：超出后内容区自身出现滚动条，
-         而不是把外层窗口撑高、把底部按钮栏顶出可视区。 -->
     <sys:Double x:Key="Layout.ExpanderMaxHeight">260</sys:Double>
 
-    <!-- 图标标准尺寸阶梯 (Icon Sizing Hierarchy) -->
     <sys:Double x:Key="Icon.Size.Micro">12</sys:Double>
     <sys:Double x:Key="Icon.Size.Small">14</sys:Double>
     <sys:Double x:Key="Icon.Size.Regular">16</sys:Double>
     <sys:Double x:Key="Icon.Size.Medium">20</sys:Double>
     <sys:Double x:Key="Icon.Size.Large">24</sys:Double>
     <sys:Double x:Key="Icon.Size.Hero">32</sys:Double>
-
 
     <Thickness x:Key="Layout.WindowPadding">12</Thickness>
     <Thickness x:Key="Layout.GroupPadding">8</Thickness>
@@ -285,18 +222,11 @@
     <sys:Double x:Key="Layout.ToolBarHeight">40</sys:Double>
     <sys:Double x:Key="Layout.ProgressBarHeight">4</sys:Double>
 
-
     <CornerRadius x:Key="Radius.Small">4</CornerRadius>
     <CornerRadius x:Key="Radius.Card">6</CornerRadius>
     <CornerRadius x:Key="Radius.Input">4</CornerRadius>
     <CornerRadius x:Key="Radius.Pill">12</CornerRadius>
 
-    <!-- ============================================================
-         5. 文本样式（仅用于静态文本）
-         注意：这些样式带显式 Foreground，禁止用在按钮/标签页/
-         选中项等会随状态改变前景的控件内部；那里使用隐式 TextBlock
-         （由内容宿主继承 Foreground）或直接绑定 TextElement.Foreground。
-         ============================================================ -->
     <Style x:Key="Text.Title" TargetType="{x:Type TextBlock}">
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Title}" />
@@ -339,8 +269,6 @@
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
         <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
         <Setter Property="VerticalAlignment" Value="Center" />
-        <!-- R14：标签默认不裁切。标签过长时换行或缩短文案；
-             若确需省略号，必须同时提供 ToolTip。 -->
         <Setter Property="TextTrimming" Value="None" />
     </Style>
 
@@ -364,7 +292,6 @@
         <Setter Property="LineHeight" Value="{StaticResource LineHeight.Caption}" />
     </Style>
 
-    <!-- 窄面板/单列表单的字段标签：标签在上，控件在下，两者左对齐。 -->
     <Style x:Key="Text.FieldLabel" TargetType="{x:Type TextBlock}" BasedOn="{StaticResource Text.Label}">
         <Setter Property="FontSize" Value="{StaticResource FontSize.Caption}" />
         <Setter Property="Foreground" Value="{StaticResource Brush.Text.Secondary}" />

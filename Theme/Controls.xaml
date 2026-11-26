@@ -24,7 +24,6 @@
         <Setter Property="TextOptions.TextFormattingMode" Value="Display" />
     </Style>
 
-    <!-- 关键：默认前景跟随 ContentPresenter 继承的 Foreground。 -->
     <Style TargetType="{x:Type TextBlock}">
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
@@ -58,9 +57,6 @@
         </Style.Triggers>
     </Style>
 
-    <!-- ============================================================
-         1. Button
-         ============================================================ -->
     <ControlTemplate x:Key="Button.Template" TargetType="{x:Type Button}">
         <Border x:Name="Bd"
                 Background="{TemplateBinding Background}"
@@ -85,24 +81,18 @@
         <Setter Property="MinWidth" Value="{DynamicResource Layout.ButtonMinWidth}" />
         <Setter Property="Padding" Value="{DynamicResource Layout.ButtonPadding}" />
         <Setter Property="Background" Value="{StaticResource Brush.Surface}" />
-        <!-- 默认按钮是「白底 + 清晰描边」。描边必须比分隔线更深（≥3:1），
-             否则在浅色窗口里按钮边界几乎不可见。 -->
         <Setter Property="BorderBrush" Value="{StaticResource Brush.Border.Control}" />
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="Foreground" Value="{StaticResource Brush.Text.Primary}" />
         <Setter Property="Cursor" Value="Hand" />
-        <!-- 焦点由描边表达；不要再叠一层系统虚线框。 -->
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <!-- 同一行里混用不同高度时，按钮要共用一条垂直中轴，
-             否则默认的 Stretch（带 Height 时等同顶对齐）会让图标/文字上下错位。 -->
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="Template" Value="{StaticResource Button.Template}" />
     </Style>
 
-    <!-- 次要按钮：默认按钮 -->
     <Style x:Key="Button.Secondary" TargetType="{x:Type Button}" BasedOn="{StaticResource Button.Base}">
         <Setter Property="Background" Value="{StaticResource Brush.Accent.Subtle}" />
         <Setter Property="BorderBrush" Value="Transparent" />
@@ -126,7 +116,6 @@
         </Style.Triggers>
     </Style>
 
-    <!-- 主操作按钮模板：蓝底白字下额外提供内圈亮色焦点线，保证键盘 Tab 焦点清晰可见。 -->
     <ControlTemplate x:Key="Button.Primary.Template" TargetType="{x:Type Button}">
         <Border x:Name="Bd"
                 Background="{TemplateBinding Background}"
@@ -157,7 +146,6 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
-    <!-- 主操作按钮：蓝底白字；任何状态都必须保持白字或禁用灰字。 -->
     <Style x:Key="Button.Primary" TargetType="{x:Type Button}" BasedOn="{StaticResource Button.Base}">
         <Setter Property="Background" Value="{StaticResource Brush.Accent}" />
         <Setter Property="BorderBrush" Value="{StaticResource Brush.Accent}" />
@@ -186,8 +174,6 @@
         </Style.Triggers>
     </Style>
 
-    <!-- 文本按钮：无边框、透明底；悬停才出现浅底。
-         默认保留 1px 透明边框，避免键盘聚焦时边框 0→1 导致文字跳动。 -->
     <Style x:Key="Button.Text" TargetType="{x:Type Button}" BasedOn="{StaticResource Button.Base}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
@@ -214,7 +200,6 @@
         </Style.Triggers>
     </Style>
 
-    <!-- 危险按钮：红边红字；悬停浅红底，仍用深红字，绝不白字压浅红底。 -->
     <Style x:Key="Button.Danger" TargetType="{x:Type Button}" BasedOn="{StaticResource Button.Base}">
         <Setter Property="Background" Value="{StaticResource Brush.Surface}" />
         <Setter Property="BorderBrush" Value="{StaticResource Brush.Danger}" />
@@ -242,7 +227,6 @@
         </Style.Triggers>
     </Style>
 
-    <!-- 小号按钮：工具条、表格行内、弹层底部 -->
     <Style x:Key="Button.Primary.Small" TargetType="{x:Type Button}" BasedOn="{StaticResource Button.Primary}">
         <Setter Property="Height" Value="{DynamicResource Layout.ControlHeight.Small}" />
         <Setter Property="MinWidth" Value="{DynamicResource Layout.ButtonMinWidth.Small}" />
@@ -267,7 +251,6 @@
         <Setter Property="FontSize" Value="{StaticResource FontSize.Caption}" />
     </Style>
 
-    <!-- 大号按钮：主操作区 / 触屏密度 -->
     <Style x:Key="Button.Primary.Large" TargetType="{x:Type Button}" BasedOn="{StaticResource Button.Primary}">
         <Setter Property="Height" Value="{DynamicResource Layout.ControlHeight.Large}" />
         <Setter Property="Padding" Value="{DynamicResource Layout.ButtonPadding}" />
@@ -279,15 +262,8 @@
         <Setter Property="MinWidth" Value="{DynamicResource Layout.ButtonMinWidth}" />
     </Style>
 
-
     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource Button.Secondary}" />
 
-    <!-- ============================================================
-         2. TextBox / PasswordBox
-         ============================================================ -->
-    <!-- 共享文本框模板：TextBox（单行/多行）与 PasswordBox 复用同一模板，
-         避免状态触发器（hover / focus / readonly / disabled）多处同步。
-         注意：模板 TargetType 为 Control，供跨控件类型共享。 -->
     <ControlTemplate x:Key="TextBox.Template" TargetType="{x:Type Control}">
         <Border x:Name="Bd"
                 Background="{TemplateBinding Background}"
@@ -295,16 +271,6 @@
                 BorderThickness="{TemplateBinding BorderThickness}"
                 CornerRadius="{StaticResource Radius.Input}"
                 SnapsToDevicePixels="True">
-            <!-- 关键：ScrollViewer 必须双向 Stretch。
-                 只跟随 HorizontalContentAlignment="Left" 会让文本宿主按内容宽度
-                 收缩，点击输入框右侧空白处无法进入编辑；只跟随
-                 VerticalContentAlignment 则会让高度收缩，上下留白点不进去。
-                 文本本身的对齐由 ScrollViewer 的 Horizontal/VerticalContentAlignment
-                 继续传递给内部 TextBoxView。
-
-                 这里**不能再加 Margin="{TemplateBinding Padding}"**：TextBox 自己已把
-                 Padding 交给 PART_ContentHost，再叠一层就是双倍左内边距，同一个表单里
-                 输入框文字会比下拉框多缩进一大截。 -->
             <Grid>
                 <ScrollViewer x:Name="PART_ContentHost"
                               Focusable="False"
@@ -359,7 +325,6 @@
         <Setter Property="MinHeight" Value="0" />
         <Setter Property="Padding" Value="{DynamicResource Layout.InputPadding}" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <!-- 输入区默认占满整行：文字、光标、点击热区都覆盖到右边界。 -->
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         <Setter Property="CaretBrush" Value="{StaticResource Brush.Text.Primary}" />
         <Setter Property="SelectionBrush" Value="{StaticResource Brush.Accent}" />
@@ -377,7 +342,6 @@
         <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
     </Style>
 
-
     <Style x:Key="TextBox.Code" TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBox.Multiline}">
         <Setter Property="Background" Value="{StaticResource Brush.SurfaceSunken}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Code}" />
@@ -388,9 +352,6 @@
 
     <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBox.Base}" />
 
-    <!-- 表单输入框（R14 防截断）：
-         输入列用 * + MinWidth，输入框自身不再写死 Width；
-         最小宽度保证窄窗口下仍然可读，长值靠 ToolTip / 横向滚动查看。 -->
     <Style x:Key="TextBox.Form" TargetType="{x:Type TextBox}" BasedOn="{StaticResource TextBox.Base}">
         <Setter Property="MinWidth" Value="{StaticResource Layout.InputMinWidth}" />
         <Setter Property="HorizontalScrollBarVisibility" Value="Auto" />
@@ -401,23 +362,17 @@
         <Setter Property="HorizontalScrollBarVisibility" Value="Auto" />
     </Style>
 
-    <!-- 表单行骨架（R14 防截断 / 防遮挡）：
-         一行 = 标签列(Auto + MinWidth) + 输入列(* + MinWidth)。
-         列定义写在业务 XAML 里（本样式只负责行间距与对齐）。 -->
     <Style x:Key="FormRow" TargetType="{x:Type Grid}">
         <Setter Property="Margin" Value="{DynamicResource Layout.FormRowMargin}" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="VerticalAlignment" Value="Top" />
     </Style>
 
-    <!-- 窄面板/单列表单骨架：标签在上、控件在下，全部左对齐。
-         适用于停靠窗、属性面板、宽度可能小于 520 DIP 的宿主。 -->
     <Style x:Key="FormStack" TargetType="{x:Type StackPanel}">
         <Setter Property="Margin" Value="{DynamicResource Layout.FormRowMargin}" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
     </Style>
 
-    <!-- PasswordBox 独立模板：PasswordBox 无 IsReadOnly 属性，避免共用 TextBox.Template 产生 Binding 警告。 -->
     <ControlTemplate x:Key="PasswordBox.Template" TargetType="{x:Type PasswordBox}">
         <Border x:Name="Bd"
                 Background="{TemplateBinding Background}"
@@ -470,9 +425,6 @@
 
     <Style TargetType="{x:Type PasswordBox}" BasedOn="{StaticResource PasswordBox.Base}" />
 
-    <!-- ============================================================
-         3. ComboBox
-         ============================================================ -->
     <ControlTemplate x:Key="ComboBox.Toggle.Template" TargetType="{x:Type ToggleButton}">
         <Border x:Name="Bd"
                 Background="{TemplateBinding Background}"
@@ -498,9 +450,6 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
-    <!-- 可编辑 ComboBox 内部的文本框样式：
-         去除外框、背景透明、无独立外边框高亮（由外层 ComboBox 统一展示 focus/hover 边框），
-         保留完整选区、光标和滚动的文本宿主能力。 -->
     <Style x:Key="ComboBox.EditableTextBox" TargetType="{x:Type TextBox}">
         <Setter Property="OverridesDefaultStyle" Value="True" />
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
@@ -561,9 +510,6 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ComboBox}">
                     <Grid>
-                        <!-- 覆盖全局隐式 ToggleButton 的 Height=32 和 MinWidth=72，
-                             确保 ToggleButton 100% 随宿主 ComboBox 的尺寸伸展，
-                             彻底杜绝在 28px/紧凑尺寸下边框被挤出可视区或截断的恶性 Bug。 -->
                         <ToggleButton x:Name="ToggleButton"
                                       Height="Auto"
                                       MinHeight="0"
@@ -579,12 +525,6 @@
                                       ClickMode="Press"
                                       Focusable="False"
                                       Template="{StaticResource ComboBox.Toggle.Template}" />
-                        <!-- 内容区要绕开 1px 边框：ToggleButton 只负责画边框，它下面的
-                             Grid 从 0 开始。ContentPresenter 直接叠在 Grid 上、只吃 Padding，
-                             文字会比 TextBox（Border 1 + Padding 6 = 7）少 1px，
-                             同一行的输入框和下拉框左边缘就对不齐。
-                             再补 2px 是因为 TextBox 的文字由 TextBoxView 渲染，它自带
-                             约 2px 内缩；这里不补的话，下拉框文字会比输入框靠左 2px。 -->
                         <Border BorderThickness="{TemplateBinding BorderThickness}"
                                 Padding="{TemplateBinding Padding}"
                                 Margin="2,0,0,0"
@@ -663,8 +603,6 @@
                             <Setter TargetName="ToggleButton" Property="Background" Value="{StaticResource Brush.SurfaceAlt}" />
                             <Setter Property="Foreground" Value="{StaticResource Brush.Text.Secondary}" />
                         </MultiTrigger>
-                        <!-- 数据还没到（ItemsSource 绑定失败或异步加载中）时不要画出空壳：
-                             Border 只剩 Padding + 边框，会在光标下方留下一条 6px 的空胶囊。 -->
                         <Trigger Property="HasItems" Value="False">
                             <Setter TargetName="DropDownBorder" Property="Visibility" Value="Collapsed" />
                         </Trigger>
@@ -676,7 +614,6 @@
 
     <Style TargetType="{x:Type ComboBox}" BasedOn="{StaticResource ComboBox.Base}" />
 
-    <!-- 紧凑型下拉框：适配工具栏、属性栏与紧凑表单 -->
     <Style x:Key="ComboBox.Small" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource ComboBox.Base}">
         <Setter Property="Height" Value="{DynamicResource Layout.ControlHeight.Small}" />
         <Setter Property="MinHeight" Value="0" />
@@ -727,9 +664,6 @@
         </Setter>
     </Style>
 
-    <!-- ============================================================
-         4. CheckBox / RadioButton
-         ============================================================ -->
     <Style TargetType="{x:Type CheckBox}">
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
@@ -758,22 +692,12 @@
                                 BorderThickness="1"
                                 VerticalAlignment="Center">
                             <Grid>
-                                <!-- 对勾用“填充多边形”而不是细描边：
-                                     16px 靶心下描边会发虚、显细；填充路径边缘更实、更锐利。
-                                     几何必须从 (0,0) 起笔：Path 的 DesiredSize 取的是“到原点的外包”
-                                     而不是外包尺寸，Data 若从 2.6/3.8 起笔，居中对齐后整块墨迹
-                                     会右下偏移（约 1.3px / 1.9px），看起来就不居中。
-                                     外包取偶数 10×8：内容区 14×14，SnapsToDevicePixels 取整后
-                                     偏移为 (14-10)/2=2、(14-8)/2=3，墨迹正好落在 3~13 / 4~12，
-                                     四条 45° 边与臂端切面等宽，缩放后不歪不虚。 -->
                                 <Path x:Name="Check"
                                       Data="M 0 4.5 L 3.5 8 L 10 1.5 L 8.5 0 L 3.5 5 L 1.5 3 Z"
                                       Fill="{StaticResource Brush.OnAccent}"
                                       HorizontalAlignment="Center"
                                       VerticalAlignment="Center"
                                       Visibility="Collapsed" />
-                                <!-- 不确定态（IsChecked = null）：全选框部分选中时显示横杠，
-                                     而不是退化成“空框”，避免与“一个都没选”混淆。 -->
                                 <Rectangle x:Name="Dash"
                                            Width="8" Height="2"
                                            RadiusX="1" RadiusY="1"
@@ -804,13 +728,11 @@
                             <Setter TargetName="Box" Property="BorderBrush" Value="{StaticResource Brush.Accent}" />
                             <Setter TargetName="Check" Property="Visibility" Value="Visible" />
                         </Trigger>
-                        <!-- 未确定态：勾选块 + 横杠 -->
                         <Trigger Property="IsChecked" Value="{x:Null}">
                             <Setter TargetName="Box" Property="Background" Value="{StaticResource Brush.Accent}" />
                             <Setter TargetName="Box" Property="BorderBrush" Value="{StaticResource Brush.Accent}" />
                             <Setter TargetName="Dash" Property="Visibility" Value="Visible" />
                         </Trigger>
-                        <!-- 已勾选 + 悬停：加深填充，给出明确反馈（白勾仍然清晰） -->
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="IsChecked" Value="True" />
@@ -840,9 +762,6 @@
             </Setter.Value>
         </Setter>
         <Style.Triggers>
-            <!-- 没有文字的就不要留“文字间距”：表头全选框、表格单元格里的独立复选框
-                 没有 Content，右边那 12px 会把它们整体推离中心（表头那个就偏左 3px，
-                 和下面的行复选框对不上一条竖线）。 -->
             <Trigger Property="HasContent" Value="False">
                 <Setter Property="Margin" Value="0" />
             </Trigger>
@@ -921,16 +840,12 @@
             </Setter.Value>
         </Setter>
         <Style.Triggers>
-            <!-- 同上：无文字的独立单选框不要留 14px 文字间距 -->
             <Trigger Property="HasContent" Value="False">
                 <Setter Property="Margin" Value="0" />
             </Trigger>
         </Style.Triggers>
     </Style>
 
-    <!-- ============================================================
-         5. GroupBox / Expander
-         ============================================================ -->
     <Style TargetType="{x:Type GroupBox}">
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Section}" />
@@ -944,9 +859,6 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type GroupBox}">
-                    <!-- 标题与内容放在同一张卡片、同一内边距里：
-                         标题、标签、输入控件共享同一条左基线，避免
-                         “标题贴边、内容缩进 10px”被误读为没有左对齐。 -->
                     <Border Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
@@ -1052,8 +964,6 @@
                                     Padding="{DynamicResource Layout.ExpanderContentPadding}"
                                     BorderBrush="{StaticResource Brush.Border}"
                                     BorderThickness="0,1,0,0">
-                                <!-- 内容过长时由内容区自己滚动（最多 ExpanderMaxHeight），
-                                     不再把外层窗口撑高、也不会被窗口裁掉。 -->
                                 <ScrollViewer VerticalScrollBarVisibility="Auto"
                                               HorizontalScrollBarVisibility="Disabled"
                                               MaxHeight="{StaticResource Layout.ExpanderMaxHeight}">
@@ -1072,23 +982,6 @@
         </Setter>
     </Style>
 
-    <!-- ============================================================
-         6. TabControl / TabItem
-         ============================================================
-         原生方角标签（贴近 Win32 经典页签），不使用圆角、不使用底部强调条：
-           - 每个标签都是一个 1px 实线描边的方框，未选中也有可见边界，
-             一眼能看出「这是一个可点击的页签」；
-           - 未选中：SurfaceAlt 底 + Border.Tab 描边（含下边，与基线同色）；
-           - 选中：Surface 底 + Border.Tab 描边 + 去掉下边框，
-             落到基线上并盖住它，与右侧内容区连成一体；
-           - 悬停给 Control.Hover 底 + Accent 描边；
-           - 内容区是一整个 1px 方框（Border.Tab + Surface），
-             与选中的标签共用同一条上边线。
-           - 描边用比 Border.Control 浅一档的 Border.Tab：页签靠文字识别，
-             方框只做分组轮廓，整块框线比按钮/输入框轻一档。
-         注意：在固定高度或弹性布局（* 行）窗口中可正常使用 TabControl 做多页签导航或分组；
-         在 SizeToContent="Height" 的自适应窗口中需指定固定高度（R12），防止切换时窗口跳变。
-         ============================================================ -->
     <Style TargetType="{x:Type TabControl}">
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
@@ -1101,7 +994,6 @@
                 <ControlTemplate TargetType="{x:Type TabControl}">
                     <DockPanel>
                         <Grid x:Name="HeaderContainer" DockPanel.Dock="Top">
-                            <!-- 标签栏基线：未选中标签的贴边线、以及内容区接缝线都落在这一行上 -->
                             <Border x:Name="BaselineBorder"
                                     VerticalAlignment="Bottom"
                                     BorderBrush="{StaticResource Brush.Border.Tab}"
@@ -1112,7 +1004,6 @@
                                       IsItemsHost="True"
                                       KeyboardNavigation.TabIndex="1" />
                         </Grid>
-                        <!-- 内容区：与选中标签共用接缝边，形成完整的方框 -->
                         <Border x:Name="ContentBorder"
                                 Background="{StaticResource Brush.Surface}"
                                 BorderBrush="{StaticResource Brush.Border.Tab}"
@@ -1166,9 +1057,6 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TabItem}">
-                    <!-- 方角页签：没有圆角、没有底部强调条。
-                         未选中标签下边框用 Border.Tab，与基线同色，标签栏是一条连续的线；
-                         选中标签去掉贴合内容区的边框并铺满到底，盖住基线，与内容区连成一体。 -->
                     <Border x:Name="Bd"
                             Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
@@ -1234,7 +1122,6 @@
                         <Trigger Property="IsKeyboardFocused" Value="True">
                             <Setter TargetName="Bd" Property="BorderBrush" Value="{StaticResource Brush.Focus}" />
                         </Trigger>
-                        <!-- 禁用优先：选中但禁用时回到灰底灰字 -->
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="IsSelected" Value="True" />
@@ -1257,9 +1144,6 @@
         </Setter>
     </Style>
 
-    <!-- ============================================================
-         7. ToolTip
-         ============================================================ -->
     <Style TargetType="{x:Type ToolTip}">
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Caption}" />
@@ -1277,10 +1161,6 @@
                             BorderThickness="{TemplateBinding BorderThickness}"
                             CornerRadius="{StaticResource Radius.Small}"
                             Padding="{TemplateBinding Padding}">
-                        <!-- 长文本按 MaxWidth 换行：字符串内容由 ContentPresenter
-                             自动生成 TextBlock，这里给内容宿主挂一条只加
-                             TextWrapping 的隐式 TextBlock 样式；它同时让字号/行高
-                             回落到 ToolTip 自身的继承值（Caption）。 -->
                         <ContentPresenter TextElement.Foreground="{TemplateBinding Foreground}">
                             <ContentPresenter.Resources>
                                 <Style TargetType="{x:Type TextBlock}">
@@ -1294,9 +1174,6 @@
         </Setter>
     </Style>
 
-    <!-- ============================================================
-         8. ProgressBar / StatusBar / Separator
-         ============================================================ -->
     <Style TargetType="{x:Type ProgressBar}">
         <Setter Property="Height" Value="{DynamicResource Layout.ProgressBarHeight}" />
         <Setter Property="Foreground" Value="{StaticResource Brush.Accent}" />
@@ -1390,9 +1267,6 @@
         <Setter Property="Margin" Value="0,12,0,8" />
     </Style>
 
-    <!-- ============================================================
-         9. ScrollBar（细窄扁平）
-         ============================================================ -->
     <Style x:Key="ScrollBar.Thumb" TargetType="{x:Type Thumb}">
         <Setter Property="IsTabStop" Value="False" />
         <Setter Property="Template">
@@ -1436,8 +1310,6 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ScrollBar}">
                     <Grid Background="Transparent" SnapsToDevicePixels="True">
-                        <!-- Track 必须跟随 ScrollBar 的方向：默认是 Horizontal，
-                             不绑定的话竖向滚动条的滑块会横着排，滚动条几乎看不见。 -->
                         <Track x:Name="PART_Track"
                                Orientation="{TemplateBinding Orientation}"
                                IsDirectionReversed="True">
@@ -1470,9 +1342,6 @@
         </Setter>
     </Style>
 
-    <!-- ============================================================
-         10. GridSplitter
-         ============================================================ -->
     <Style TargetType="{x:Type GridSplitter}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="ShowsPreview" Value="True" />
@@ -1498,9 +1367,6 @@
         </Style.Triggers>
     </Style>
 
-    <!-- ============================================================
-         11. Menu / ContextMenu（含子菜单弹层；复杂键盘导航请单独测试）
-         ============================================================ -->
     <Style TargetType="{x:Type ContextMenu}">
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
@@ -1538,7 +1404,6 @@
         <Setter Property="SnapsToDevicePixels" Value="True" />
     </Style>
 
-    <!-- MenuItem 唯一权威样式：支持顶层与子菜单、Icon/勾选槽、快捷键、向右展开箭头与禁用态。 -->
     <Style x:Key="MenuItem.Base" TargetType="{x:Type MenuItem}">
         <Setter Property="FontFamily" Value="{StaticResource Font.Ui}" />
         <Setter Property="FontSize" Value="{StaticResource FontSize.Body}" />
@@ -1648,7 +1513,5 @@
     </Style>
 
     <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource MenuItem.Base}" />
-
-    <!-- 子菜单弹层直接内联在 MenuItem 模板中（PART_Popup）。 -->
 
 </ResourceDictionary>
